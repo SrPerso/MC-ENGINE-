@@ -81,6 +81,7 @@
     <ClInclude Include="imGUI\imgui_impl_sdl_gl3.h" />
     <ClInclude Include="imGUI\imgui_internal.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="Math.h" />
     <ClInclude Include="ModuleCamera3D.h" />
     <ClInclude Include="ModulePhysics3D.h" />
     <ClInclude Include="ModulePlayer.h" />

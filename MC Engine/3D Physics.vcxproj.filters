@@ -96,6 +96,9 @@
     <ClInclude Include="imGUI\imgui_impl_sdl_gl3.h">
       <Filter>Sources\Tools\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
