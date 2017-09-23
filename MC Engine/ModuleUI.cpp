@@ -23,7 +23,10 @@ bool ModuleUI::Start()
 	glewInit();
 	ImGui_ImplSdlGL3_Init(App->window->window);
 
+	//Windows ;
 
+
+	openConsoleW = true;
 
 
 	return ret;
@@ -50,6 +53,52 @@ update_status ModuleUI::Update(float dt)
 
 	if (ImGui::BeginMainMenuBar())
 	{
+	
+		
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::MenuItem("Quit", "ESC"))
+					return UPDATE_STOP;			
+
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("View"))
+		{
+
+
+			ImGui::Checkbox("test window", &show_test_window);
+
+
+			if (ImGui::MenuItem("Console"))
+			{
+
+			}
+
+			if (ImGui::MenuItem("Configuration"))
+			{
+
+			}
+
+			ImGui::EndMenu();
+		}
+
+
+
+		if (ImGui::BeginMenu("Team"))
+		{
+			ImGui::Checkbox("Team", &show_test_window);
+			ImGui::Checkbox("Project", &show_test_window);
+			ImGui::EndMenu();
+		}
+
+	
+
+		if (ImGui::BeginMenu("Window"))
+		{
+			ImGui::EndMenu();
+		}
+
 		if (ImGui::BeginMenu("MathTest"))
 		{
 			ImGui::Text("Sphere1 (1,1,0) with 2 radius and Sphere2(2,2,0) with radius 1");
@@ -122,35 +171,6 @@ update_status ModuleUI::Update(float dt)
 			}
 			ImGui::EndMenu();
 		}
-		
-		if (ImGui::BeginMenu("File"))
-		{
-			if (ImGui::MenuItem("Quit", "ESC"))
-					return UPDATE_STOP;			
-
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Team"))
-		{
-			ImGui::Checkbox("Team", &show_test_window);
-			ImGui::Checkbox("Project", &show_test_window);
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("View"))
-		{
-			ImGui::Checkbox("test window", &show_test_window);
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Window"))
-		{
-
-			ImGui::EndMenu();
-		}
-
-
 
 		ImGui::EndMainMenuBar();
 
@@ -167,4 +187,44 @@ bool ModuleUI::CleanUp()
 	ImGui_ImplSdlGL3_Shutdown();
 
 	return ret;
+}
+
+IMGUI_API void ModuleUI::ShowConsoleWindow(bool * p_open)
+{
+	// Demonstrate the various window flags. Typically you would just use the default.
+	ImGuiWindowFlags window_flags = 0;
+
+	if (!ImGui::Begin("Console", p_open, window_flags))
+	{
+		// Early out if the window is collapsed, as an optimization.
+		ImGui::End();
+
+		return;
+	}
+
+
+	//ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.65f);    // 2/3 of the space for widget and 1/3 for labels
+	ImGui::PushItemWidth(-140);                                 // Right align, keep 140 pixels for labels
+
+																//ImGui::Text("%s", consoleText);
+
+	if (ImGui::Button("Clear"))
+	{
+		consoleTxt.clear();
+	}
+
+	for (int i = consoleTxt.size() - 1; i >= 0; i--)
+	{
+		ImGui::Text("%s", consoleTxt[i].c_str());
+	}
+
+	ImGui::End();
+
+	return IMGUI_API void();
+}
+
+void ModuleUI::AddLogToConsole(std::string toAdd)
+{
+	consoleTxt.push_back(toAdd);
+
 }

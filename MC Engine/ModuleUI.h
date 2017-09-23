@@ -3,7 +3,9 @@
 
 #include "Module.h"
 #include "Globals.h"
-
+#include "imGUI\imgui.h"
+#include <string>
+#include <vector>
 class ModuleUI : public Module
 {
 public:
@@ -14,9 +16,18 @@ public:
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	bool CleanUp();
-
 public:
+	IMGUI_API void ShowConsoleWindow(bool* p_open = NULL);
+	void AddLogToConsole(std::string toAdd);
+
+public://math
 	bool intersects = false;
+
+private:// open Windows
+	bool openConsoleW;
+
+private:
+	std::vector<std::string> consoleTxt;
 
 };
 

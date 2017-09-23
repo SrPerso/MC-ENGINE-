@@ -14,7 +14,7 @@ ModulePlayer::~ModulePlayer()
 bool ModulePlayer::Start()
 {
 	LOG("Loading player");
-
+	App->ui->AddLogToConsole("Loading player");
 	
 	return true;
 }
