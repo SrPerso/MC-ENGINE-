@@ -23,7 +23,7 @@ bool ModulePlayer::Start()
 bool ModulePlayer::CleanUp()
 {
 	LOG("Unloading player");
-
+	App->ui->AddLogToConsole("Unloading player");
 	return true;
 }
 

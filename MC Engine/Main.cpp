@@ -18,7 +18,7 @@ enum main_states
 
 int main(int argc, char ** argv)
 {
-	LOG("Starting game '%s'...", TITLE);
+	LOG("Starting  '%s'...", TITLE);
 
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
@@ -32,21 +32,25 @@ int main(int argc, char ** argv)
 
 			LOG("-------------- Application Creation --------------");
 			App = new Application();
+			App->ui->AddLogToConsole("Creating Aplication");
 			state = MAIN_START;
 			break;
 
 		case MAIN_START:
 
 			LOG("-------------- Application Init --------------");
+			App->ui->AddLogToConsole("-------------- Application Init --------------");
 			if (App->Init() == false)
 			{
 				LOG("Application Init exits with ERROR");
+				App->ui->AddLogToConsole("Application Init exits with ERROR");
 				state = MAIN_EXIT;
 			}
 			else
 			{
 				state = MAIN_UPDATE;
 				LOG("-------------- Application Update --------------");
+				App->ui->AddLogToConsole("-------------- Application Update --------------");
 			}
 
 			break;
@@ -58,6 +62,7 @@ int main(int argc, char ** argv)
 			if (update_return == UPDATE_ERROR)
 			{
 				LOG("Application Update exits with ERROR");
+				App->ui->AddLogToConsole("Application Update exits with ERROR");
 				state = MAIN_EXIT;
 			}
 
@@ -69,9 +74,11 @@ int main(int argc, char ** argv)
 		case MAIN_FINISH:
 
 			LOG("-------------- Application CleanUp --------------");
+			App->ui->AddLogToConsole("-------------- Application CleanUp --------------");
 			if (App->CleanUp() == false)
 			{
 				LOG("Application CleanUp exits with ERROR");
+				App->ui->AddLogToConsole("Application CleanUp exits with ERROR");
 			}
 			else
 				main_return = EXIT_SUCCESS;
@@ -84,6 +91,6 @@ int main(int argc, char ** argv)
 	}
 
 	delete App;
-	LOG("Exiting game '%s'...\n", TITLE);
+	LOG("Exiting '%s'...\n", TITLE);
 	return main_return;
 }

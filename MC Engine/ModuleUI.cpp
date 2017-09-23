@@ -19,7 +19,7 @@ ModuleUI::~ModuleUI()
 bool ModuleUI::Start()
 {
 	bool ret = true;
-
+	App->ui->AddLogToConsole("Loading UI Engine");
 	glewInit();
 	ImGui_ImplSdlGL3_Init(App->window->window);
 
@@ -185,7 +185,7 @@ bool ModuleUI::CleanUp()
 {
 	bool ret = true;
 	ImGui_ImplSdlGL3_Shutdown();
-
+	App->ui->AddLogToConsole("Unloading UI Engine");
 	return ret;
 }
 

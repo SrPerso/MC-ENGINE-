@@ -22,6 +22,7 @@ ModuleSceneIntro::~ModuleSceneIntro()
 bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
+	App->ui->AddLogToConsole("Loading Intro assets");
 	bool ret = true;
 
 	
@@ -36,7 +37,7 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
-
+	App->ui->AddLogToConsole("Unloading Intro scene");
 	
 	return true;
 }
