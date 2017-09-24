@@ -7,8 +7,6 @@
 #include "Math.h"
 #include "SDL/include/SDL_cpuinfo.h"
 
-
-
 #pragma comment( lib, "Glew/libx86/glew32.lib" )
 
 ModuleUI::ModuleUI(Application * app, bool start_enabled) : Module(app, start_enabled)
@@ -53,10 +51,7 @@ update_status ModuleUI::Update(float dt)
 	static bool show_MathTest_window = false;
 	static bool show_Config_window = true;
 	
-	if (show_test_window)
-	{
-		ImGui::ShowTestWindow();
-	}
+
 
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -70,30 +65,26 @@ update_status ModuleUI::Update(float dt)
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("View"))
+
+		if (ImGui::BeginMenu("Edit"))
 		{
+			if (ImGui::MenuItem("Undo", "Ctrl + Z")) {}
+			if (ImGui::MenuItem("Redo", "Ctrl + Y")) {}
 
-			if (ImGui::Checkbox("test window", &show_test_window))
+			ImGui::Separator;
+			if (ImGui::MenuItem("Cut", "Ctrl + X")){}
+			if (ImGui::MenuItem("Copy", "Ctrl + C")) {}
+			if (ImGui::MenuItem("Paste", "Ctrl + V")) {}
+			ImGui::Separator;
+
+			if (ImGui::MenuItem("Preferences"))
 			{
-				openTestW = !openTestW;
-				mathTestActive = !mathTestActive;
 			}
-			
-
-			if (ImGui::Checkbox("Console", &show_Console_window)) 
-			{
-				openConsoleW = !openConsoleW;
-				consoleActive = !consoleActive;
-			}
-
-			if (ImGui::Checkbox("Configuration", &show_Configuration_window)) 
-			{
-				openConfigurationW = !openConfigurationW;
-				configActive = !configActive;
-			}			
 
 			ImGui::EndMenu();
 		}
+
+	
 		
 		if (ImGui::BeginMenu("Help"))
 		{
@@ -127,11 +118,28 @@ update_status ModuleUI::Update(float dt)
 
 			ImGui::EndMenu();
 		}
-
-	
-
+			
 		if (ImGui::BeginMenu("Window"))
 		{
+			if (ImGui::Checkbox("test window", &show_test_window))
+			{
+				openTestW = !openTestW;
+			
+			}
+
+			if (ImGui::MenuItem("Console", "Ctrl + Shift + C")) 
+			{
+				openConsoleW = !openConsoleW;
+				consoleActive = !consoleActive;
+			}
+
+			if (ImGui::Checkbox("Configuration", &show_Configuration_window))
+			{
+				openConfigurationW = !openConfigurationW;
+				configActive = !configActive;
+			}
+
+			ImGui::Separator;
 			ImGui::Checkbox("MathTest", &show_MathTest_window);
 			ImGui::EndMenu();
 		}
@@ -139,6 +147,9 @@ update_status ModuleUI::Update(float dt)
 		ImGui::EndMainMenuBar();
 	}
 
+	if (show_test_window)
+		ImGui::ShowTestWindow();
+	
 
 	if (openConfigurationW)
 		ShowConfigWindow();
@@ -172,6 +183,9 @@ IMGUI_API void ModuleUI::ShowConsoleWindow(bool * p_open)
 	// Demonstrate the various window flags. Typically you would just use the default.
 	ImGuiWindowFlags window_flags = 0;
 
+
+	window_flags = window_flags << ImGuiWindowFlags_NoMove;
+
 	if (!ImGui::Begin("Console", p_open, window_flags))
 	{
 		// Early out if the window is collapsed, as an optimization.
@@ -179,11 +193,10 @@ IMGUI_API void ModuleUI::ShowConsoleWindow(bool * p_open)
 
 		return;
 	}
-
-
-	//ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.65f);    // 2/3 of the space for widget and 1/3 for labels
-	ImGui::PushItemWidth(-140);                                 // Right align, keep 140 pixels for labels
-
+	
+	ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.65f);    // 2/3 of the space for widget and 1/3 for labels
+	//ImGui::PushItemWidth(-140);                                 // Right align, keep 140 pixels for labels
+	
 																//ImGui::Text("%s", consoleText);
 
 	if (ImGui::Button("Clear"))
@@ -228,7 +241,7 @@ IMGUI_API void ModuleUI::ShowTeamInfoWindow(bool * p_open)
 	ImGui::Text("Bullet 2.x");
 	ImGui::Text("SDL 2.0.3");
 	ImGui::Separator();
-	ImGui::Text("Apache License 2.0");
+	ImGui::Text("Software licence: Apache License 2.0");
 	ImGui::Separator();
 	ImGui::Text("\n This engine is made by:\n ");
 
@@ -544,8 +557,6 @@ IMGUI_API void ModuleUI::ShowMathWindow(bool * p_open)
 		ImGui::End();
 	return IMGUI_API void();
 }
-
-
 
 void ModuleUI::AddLogToConsole(std::string toAdd)
 {

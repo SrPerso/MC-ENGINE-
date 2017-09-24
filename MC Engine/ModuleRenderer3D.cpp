@@ -139,6 +139,7 @@ bool ModuleRenderer3D::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
 	App->ui->AddLogToConsole("Destroying 3D Renderer");
+
 	SDL_GL_DeleteContext(context);
 
 	return true;

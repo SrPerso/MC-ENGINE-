@@ -21,10 +21,11 @@ public:
 	ModuleInput* input;
 	ModuleAudio* audio;
 	ModuleSceneIntro* scene_intro;
+	ModuleUI* ui;
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModulePhysics3D* physics;
-	ModuleUI* ui;
+
 	ModulePlayer* player;
 
 private:

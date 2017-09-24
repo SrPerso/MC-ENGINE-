@@ -2,7 +2,7 @@
 #pragma once
 #include "glmath.h"
 #include "Color.h"
-
+#include "p2List.h"
 enum PrimitiveTypes
 {
 	Primitive_Point,
@@ -83,11 +83,11 @@ public:
 };
 
 // ============================================
-class Plane : public Primitive
+class PrimitivePlane : public Primitive
 {
 public:
-	Plane();
-	Plane(float x, float y, float z, float d);
+	PrimitivePlane();
+	PrimitivePlane(float x, float y, float z, float d);
 	void InnerRender() const;
 public:
 	vec3 normal;

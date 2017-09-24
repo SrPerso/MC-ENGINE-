@@ -3,6 +3,7 @@
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
 #include "PhysBody3D.h"
+
 #include "imGUI\imgui.h"
 #include "imGUI\imgui_impl_sdl_gl3.h"
 #include "Glew\include\glew.h"
@@ -22,13 +23,13 @@ ModuleSceneIntro::~ModuleSceneIntro()
 bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
-	App->ui->AddLogToConsole("Loading Intro assets");
+
 	bool ret = true;
 
 	
 
-	//App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
-	//App->camera->LookAt(vec3(0, 0, 0));
+	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
+	App->camera->LookAt(vec3(0, 0, 0));
 
 	return ret;
 }
@@ -37,7 +38,7 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
-	App->ui->AddLogToConsole("Unloading Intro scene");
+
 	
 	return true;
 }
@@ -51,9 +52,13 @@ update_status ModuleSceneIntro::PreUpdate(float dt)
 
 // Update
 update_status ModuleSceneIntro::Update(float dt)
-
 {	
+	
 
+	PrimitivePlane p(0, -1, 0, 200);
+	p.color = White;
+	p.axis = false;
+	p.Render();
 
 	return UPDATE_CONTINUE;
 }
