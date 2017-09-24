@@ -4,6 +4,8 @@
 #include "Module.h"
 #include "SDL/include/SDL.h"
 
+
+
 class Application;
 
 class ModuleWindow : public Module
@@ -14,11 +16,18 @@ public:
 
 	// Destructor
 	virtual ~ModuleWindow();
-
 	bool Init();
 	bool CleanUp();
-
 	void SetTitle(const char* title);
+
+
+public:
+	SDL_Window* GetWindow() const;
+	void ResizeWindow(int width, int height);
+	void SetFullscreen(bool fullscreen);
+	void SetBrightness(float value);
+	void SetBorderless(bool borderless);
+	void SetFullDesktop(bool fullDesktop);
 
 public:
 	//The window we'll be rendering to

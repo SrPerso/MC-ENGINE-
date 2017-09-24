@@ -8,6 +8,8 @@
 #include <vector>
 
 
+#define MAX_FPS_MS_COUNT 80
+
 template<class TYPE>
 struct sphereTest {
 	
@@ -62,6 +64,37 @@ struct capsuleTest{
 	TYPE capsuleTopZ = 0;
 };
 
+struct WindowSetings {
+	WindowSetings(){
+		fullscreen = false;
+		fullDesktop = false;
+		windowWidth = SCREEN_WIDTH;
+		brightness = BRIGHTNESS;
+		borderless = WIN_BORDERLESS;
+		windowHeight = SCREEN_HEIGHT;
+		vsync = VSYNC;
+	}
+	~WindowSetings() {
+		fullscreen = false;
+		fullDesktop = false;
+		windowWidth = SCREEN_WIDTH;
+		brightness = BRIGHTNESS;
+		windowHeight = SCREEN_HEIGHT;
+		vsync = VSYNC;
+		borderless = WIN_BORDERLESS;
+	}
+
+	bool fullscreen;
+	bool fullDesktop;
+	bool borderless;
+	int windowWidth;
+	int windowHeight;
+	float brightness;
+	bool vsync;
+};
+
+class Win32_VideoController;
+
 
 class ModuleUI : public Module
 {
@@ -76,23 +109,32 @@ public:
 public:
 	IMGUI_API void ShowConsoleWindow(bool* p_open = NULL);
 	IMGUI_API void ShowTeamInfoWindow(bool* p_open = NULL);
+	IMGUI_API void ShowConfigWindow(bool* p_open = NULL);
+
+
 	IMGUI_API void ShowMathWindow(bool* p_open = NULL);
 	void AddLogToConsole(std::string toAdd);
 
 public://math
 	bool intersects = false;
 
-private:// open Windows
+private:
+
 	bool openConsoleW;
-	bool OpenTeamInfoW;
-	bool OpenMathW;
+	bool openConfigurationW;
+	bool openMathW;
+	bool openTestW;
+
 private: // Active
-	bool TeamInfoActive = false;
+	bool teamInfoActive = false;
+	bool TimerActive = true;
 	bool consoleActive = false;
-	bool MathTestActive = false;
+	bool mathTestActive = false;
+	bool configActive = false;
 private:
 	std::vector<std::string> consoleTxt;
-
+	std::vector<float> FPSData;
+	std::vector<float> MsData;
 
 
 //---------Math
@@ -101,8 +143,8 @@ private:
 	sphereTest<int> sphere1;
 	sphereTest<int> sphere2;
 	capsuleTest<int> capsule1;
-
-
+	WindowSetings windowConfig;
+	//Win32_VideoController VC_GPU;
 };
 
 

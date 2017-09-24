@@ -29,9 +29,11 @@ public:
 
 private:
 
-	Timer	ms_timer;
-	float	dt;
+	Timer	ms_timer;	
 	p2List<Module*> list_modules;
+	float	dt;
+	float lastFPS = 0;
+	float lastMs = 0;
 
 public:
 
@@ -42,6 +44,9 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+public:
+	float GetFPS();
+	float GetMs();
 private:
 
 	void AddModule(Module* mod);

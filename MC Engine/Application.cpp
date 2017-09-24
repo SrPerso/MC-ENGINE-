@@ -78,6 +78,10 @@ void Application::PrepareUpdate()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+
+	dt = (float)ms_timer.Read() / 1000.0f - dt;
+	lastFPS = 1.0f / dt;
+	lastMs = (float)ms_timer.Read();
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
@@ -125,6 +129,16 @@ bool Application::CleanUp()
 		item = item->prev;
 	}
 	return ret;
+}
+
+float Application::GetFPS()
+{
+	return float(lastFPS);
+}
+
+float Application::GetMs()
+{
+	return float(lastMs);
 }
 
 void Application::AddModule(Module* mod)
