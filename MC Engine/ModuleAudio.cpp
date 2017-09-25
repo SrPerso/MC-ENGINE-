@@ -44,7 +44,7 @@ bool ModuleAudio::Init(JSON_Object* data = nullptr)
 	{
 		LOG("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
 		App->ui->AddLogToConsole("SDL_mixer could not initialize!");
-		ret = false;
+		ret = true;
 	}
 
 	return ret;
