@@ -6,6 +6,7 @@ ModuleWindow::ModuleWindow(Application* app, bool start_enabled) : Module(app, s
 {
 	window = NULL;
 	screen_surface = NULL;
+	name = "window";
 }
 
 // Destructor
@@ -14,7 +15,7 @@ ModuleWindow::~ModuleWindow()
 }
 
 // Called before render is available
-bool ModuleWindow::Init()
+bool ModuleWindow::Init(JSON_Object* data = nullptr)
 {
 	LOG("Init SDL window & surface");
 	App->ui->AddLogToConsole("Init SDL window & surface");

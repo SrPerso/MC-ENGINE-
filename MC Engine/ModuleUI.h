@@ -73,6 +73,7 @@ struct WindowSetings {
 		borderless = WIN_BORDERLESS;
 		windowHeight = SCREEN_HEIGHT;
 		vsync = VSYNC;
+		FPSLimit = 0;
 	}
 	~WindowSetings() {
 		fullscreen = false;
@@ -82,6 +83,7 @@ struct WindowSetings {
 		windowHeight = SCREEN_HEIGHT;
 		vsync = VSYNC;
 		borderless = WIN_BORDERLESS;
+		FPSLimit = 0;
 	}
 
 	bool fullscreen;
@@ -91,8 +93,9 @@ struct WindowSetings {
 	int windowHeight;
 	float brightness;
 	bool vsync;
+	int* FPSLimit;
 };
-
+ 
 class Win32_VideoController;
 
 

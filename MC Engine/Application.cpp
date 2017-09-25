@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "parson\parson.h"
 
 Application::Application()
 {
@@ -51,9 +52,12 @@ bool Application::Init()
 	// Call Init() in all modules
 	p2List_item<Module*>* item = list_modules.getFirst();
 
-	while(item != NULL && ret == true)
+	JSON_Value * configValue = json_parse_file("config.json");
+	JSON_Object * configObject = json_value_get_object(configValue);
+
+	while (item != NULL && ret == true)
 	{
-		ret = item->data->Init();
+		ret = item->data->Init(json_object_dotget_object(configObject, item->data->name.c_str()));
 		item = item->next;
 	}
 

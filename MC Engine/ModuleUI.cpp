@@ -11,6 +11,7 @@
 
 ModuleUI::ModuleUI(Application * app, bool start_enabled) : Module(app, start_enabled)
 {
+	name = "UI";
 }
 
 ModuleUI::~ModuleUI()
@@ -51,8 +52,6 @@ update_status ModuleUI::Update(float dt)
 	static bool show_MathTest_window = false;
 	static bool show_Config_window = true;
 	
-
-
 	if (ImGui::BeginMainMenuBar())
 	{
 
@@ -83,8 +82,7 @@ update_status ModuleUI::Update(float dt)
 
 			ImGui::EndMenu();
 		}
-
-	
+		
 		
 		if (ImGui::BeginMenu("Help"))
 		{
@@ -157,7 +155,7 @@ update_status ModuleUI::Update(float dt)
 	if (show_MathTest_window)
 		ShowMathWindow();
 
-	if (show_Console_window)
+	if (openConsoleW)
 		ShowConsoleWindow();
 
 	if (teamInfoActive)
@@ -255,7 +253,6 @@ IMGUI_API void ModuleUI::ShowTeamInfoWindow(bool * p_open)
 	}
 
 
-
 	ImGui::End();
 
 	return IMGUI_API void();
@@ -277,8 +274,18 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 
 	ImGui::Text("Configuration");
 
-	if (ImGui::CollapsingHeader("Timer"))
+	if (ImGui::CollapsingHeader("Aplication"))
 	{
+
+	/*	ImGui::InputText(*/
+
+		static char buf1[64] = ""; ImGui::InputText("App Name", buf1, 64);
+		static char buf2[64] = ""; ImGui::InputText("Organization", buf1, 64);
+		
+	/*	if (ImGui::SliderFloat("Max FPS", &windowConfig.FPSLimit, 0.0f, 2.0f, "%.2f"))
+		{
+		
+		}*/
 
 			//FPS
 			if (FPSData.size() >= MAX_FPS_MS_COUNT)

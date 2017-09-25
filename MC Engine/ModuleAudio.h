@@ -1,6 +1,7 @@
 #ifndef __ModuleAudio_H__
 #define __ModuleAudio_H__
 
+#include "Application.h"
 #include "Module.h"
 #include "SDL_mixer\include\SDL_mixer.h"
 
@@ -13,7 +14,7 @@ public:
 	ModuleAudio(Application* app, bool start_enabled = true);
 	~ModuleAudio();
 
-	bool Init();
+	bool Init(JSON_Object* data = nullptr);
 	bool CleanUp();
 
 	// Play a music file
