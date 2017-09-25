@@ -4,7 +4,7 @@
 #include "PhysBody3D.h"
 #include "PhysVehicle3D.h"
 #include "Primitive.h"
-
+#include "parson\parson.h"
 #ifdef _DEBUG
 	#pragma comment (lib, "Bullet/libx86/BulletDynamics_debug.lib")
 	#pragma comment (lib, "Bullet/libx86/BulletCollision_debug.lib")
@@ -38,7 +38,7 @@ ModulePhysics3D::~ModulePhysics3D()
 }
 
 // Render not available yet----------------------------------
-bool ModulePhysics3D::Init(JSON_Object* data = nullptr)
+bool ModulePhysics3D::Init(JSON_Object* data)
 {
 	LOG("Creating 3D Physics simulation");
 	App->ui->AddLogToConsole("Creating 3D Physics simulation");

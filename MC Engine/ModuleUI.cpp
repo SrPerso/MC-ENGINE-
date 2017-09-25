@@ -192,10 +192,11 @@ IMGUI_API void ModuleUI::ShowConsoleWindow(bool * p_open)
 		return;
 	}
 	
-	ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.65f);    // 2/3 of the space for widget and 1/3 for labels
-	//ImGui::PushItemWidth(-140);                                 // Right align, keep 140 pixels for labels
+	ImGui::PushItemWidth(ImGui::GetWindowWidth()); 
+                        
 	
-																//ImGui::Text("%s", consoleText);
+	const char * test = "aaA";
+	ImGui::Text("%s", test);
 
 	if (ImGui::Button("Clear"))
 	{
@@ -224,11 +225,9 @@ IMGUI_API void ModuleUI::ShowTeamInfoWindow(bool * p_open)
 		return;
 	}
 
-	//ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.65f);    // 2/3 of the space for widget and 1/3 for labels
-	ImGui::PushItemWidth(-140);                                 // Right align, keep 140 pixels for labels
-
-						
-										//ImGui::Text("%s", consoleText);
+	
+	ImGui::PushItemWidth(-140);            						
+									
 	ImGui::Text("\t MC ENGINE ");
 
 	ImGui::Text("This is MC Engine and we will try to create \n a full working engine for the subject Engines \n in te university \n ");
@@ -269,46 +268,36 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 		return;
 	}
 
-	//ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.65f);    // 2/3 of the space for widget and 1/3 for labels
-	ImGui::PushItemWidth(-140);                                 // Right align, keep 140 pixels for labels
+	ImGui::PushItemWidth(-100);                                
 
 	ImGui::Text("Configuration");
 
 	if (ImGui::CollapsingHeader("Aplication"))
 	{
 
-	/*	ImGui::InputText(*/
-
 		static char buf1[64] = ""; ImGui::InputText("App Name", buf1, 64);
 		static char buf2[64] = ""; ImGui::InputText("Organization", buf1, 64);
-		
-	/*	if (ImGui::SliderFloat("Max FPS", &windowConfig.FPSLimit, 0.0f, 2.0f, "%.2f"))
-		{
-		
-		}*/
 
-			//FPS
-			if (FPSData.size() >= MAX_FPS_MS_COUNT)
+			if (FPSData.size() >= MAX_FPSMS_COUNT)
 			{
-				for (int i = 0; i < MAX_FPS_MS_COUNT - 2; i++)
+				for (int i = 0; i < MAX_FPSMS_COUNT - 2; i++)
 				{
 					FPSData[i] = FPSData[i + 1];
 				}
-				FPSData[MAX_FPS_MS_COUNT - 1] = App->GetFPS();
+				FPSData[MAX_FPSMS_COUNT - 1] = App->GetFPS();
 			}
 			else
 			{
 				FPSData.push_back(App->GetFPS());
 			}
 
-			//MS
-			if (MsData.size() >= MAX_FPS_MS_COUNT)
+			if (MsData.size() >= MAX_FPSMS_COUNT)
 			{
-				for (int i = 0; i < MAX_FPS_MS_COUNT - 2; i++)
+				for (int i = 0; i < MAX_FPSMS_COUNT - 2; i++)
 				{
 					MsData[i] = MsData[i + 1];
 				}
-				MsData[MAX_FPS_MS_COUNT - 1] = App->GetMs();
+				MsData[MAX_FPSMS_COUNT - 1] = App->GetMs();
 			}
 			else
 			{
@@ -419,11 +408,7 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 		ImGui::SameLine();
 		if (SDL_HasAVX())
 			ImGui::TextColoredV(ImVec4{0,100,0,255 }, " ,AVX",nullptr);
-		/*
-		ImGui::SameLine();
-		if (SDL_HasAVX2())
-			ImGui::Text(",AVX2");   　　　　 WHYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY!!!!!!!!!
-			*/
+
 		ImGui::SameLine();
 		if (SDL_HasAltiVec())
 			ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,AltiVec", nullptr);

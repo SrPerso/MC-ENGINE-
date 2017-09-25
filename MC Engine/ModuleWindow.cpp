@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 
+
 ModuleWindow::ModuleWindow(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	window = NULL;
@@ -15,7 +16,7 @@ ModuleWindow::~ModuleWindow()
 }
 
 // Called before render is available
-bool ModuleWindow::Init(JSON_Object* data = nullptr)
+bool ModuleWindow::Init(JSON_Object* data)
 {
 	LOG("Init SDL window & surface");
 	App->ui->AddLogToConsole("Init SDL window & surface");
@@ -121,6 +122,7 @@ void ModuleWindow::SetBrightness(float value)
 void ModuleWindow::SetBorderless(bool borderless)
 {
 	Uint32 flags;
+
 	if (borderless == true)
 	{
 		SDL_SetWindowBordered(window, SDL_FALSE);

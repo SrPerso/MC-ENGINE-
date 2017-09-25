@@ -14,7 +14,7 @@ ModuleAudio::~ModuleAudio()
 {}
 
 // Called before render is available
-bool ModuleAudio::Init(JSON_Object* data = nullptr)
+bool ModuleAudio::Init(JSON_Object* data )
 {
 	LOG("Loading Audio Mixer");
 	App->ui->AddLogToConsole("Loading Audio Mixer");

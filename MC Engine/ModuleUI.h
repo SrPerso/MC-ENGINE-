@@ -8,7 +8,7 @@
 #include <vector>
 
 
-#define MAX_FPS_MS_COUNT 80
+#define MAX_FPSMS_COUNT 80
 
 template<class TYPE>
 struct sphereTest {

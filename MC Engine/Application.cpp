@@ -1,6 +1,8 @@
-#include "Application.h"
-#include "parson\parson.h"
 
+#pragma once
+#include "Application.h"
+
+#include "parson\parson.h"
 Application::Application()
 {
 	window = new ModuleWindow(this);
@@ -52,12 +54,14 @@ bool Application::Init()
 	// Call Init() in all modules
 	p2List_item<Module*>* item = list_modules.getFirst();
 
-	JSON_Value * configValue = json_parse_file("config.json");
-	JSON_Object * configObject = json_value_get_object(configValue);
+	//JSON_Value * configValue = json_parse_file("config.json"); TODO
+	//JSON_Object * configObject = json_value_get_object(configValue); TODO
 
 	while (item != NULL && ret == true)
 	{
-		ret = item->data->Init(json_object_dotget_object(configObject, item->data->name.c_str()));
+	//	ret = item->data->Init(json_object_dotget_object(configObject, item->data->name.c_str())); TODO
+		ret = item->data->Init();
+		
 		item = item->next;
 	}
 
@@ -86,7 +90,7 @@ void Application::PrepareUpdate()
 void Application::FinishUpdate()
 {
 
-	dt = (float)ms_timer.Read() / 1000.0f - dt;
+	dt = (float)ms_timer.Read() / 1000.0f;
 	lastFPS = 1.0f / dt;
 	lastMs = (float)ms_timer.Read();
 }
