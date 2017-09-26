@@ -109,6 +109,11 @@ public:
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	bool CleanUp();
+
+	void HardwareSetingsC();
+	void WindowSetingsC();
+	void AplicationSetingsC();
+
 public:
 	IMGUI_API void ShowConsoleWindow(bool* p_open = NULL);
 	IMGUI_API void ShowTeamInfoWindow(bool* p_open = NULL);

@@ -176,6 +176,8 @@ bool ModuleUI::CleanUp()
 	return ret;
 }
 
+
+
 IMGUI_API void ModuleUI::ShowConsoleWindow(bool * p_open)
 {
 	// Demonstrate the various window flags. Typically you would just use the default.
@@ -186,7 +188,7 @@ IMGUI_API void ModuleUI::ShowConsoleWindow(bool * p_open)
 
 	if (!ImGui::Begin("Console", p_open, window_flags))
 	{
-		// Early out if the window is collapsed, as an optimization.
+		//todo
 		ImGui::End();
 
 		return;
@@ -274,152 +276,17 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 
 	if (ImGui::CollapsingHeader("Aplication"))
 	{
-
-		static char buf1[64] = ""; ImGui::InputText("App Name", buf1, 64);
-		static char buf2[64] = ""; ImGui::InputText("Organization", buf1, 64);
-
-			if (FPSData.size() >= MAX_FPSMS_COUNT)
-			{
-				for (int i = 0; i < MAX_FPSMS_COUNT - 2; i++)
-				{
-					FPSData[i] = FPSData[i + 1];
-				}
-				FPSData[MAX_FPSMS_COUNT - 1] = App->GetFPS();
-			}
-			else
-			{
-				FPSData.push_back(App->GetFPS());
-			}
-
-			if (MsData.size() >= MAX_FPSMS_COUNT)
-			{
-				for (int i = 0; i < MAX_FPSMS_COUNT - 2; i++)
-				{
-					MsData[i] = MsData[i + 1];
-				}
-				MsData[MAX_FPSMS_COUNT - 1] = App->GetMs();
-			}
-			else
-			{
-				MsData.push_back(App->GetMs());
-			}
-
-
-			char title[25];
-			sprintf_s(title, 25, "Framerate %.1f", FPSData[FPSData.size() - 1]);
-			ImGui::PlotHistogram("##framerate", &FPSData[0], FPSData.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
-			sprintf_s(title, 25, "Milliseconds %0.1f", MsData[MsData.size() - 1]);
-			ImGui::PlotHistogram("##milliseconds", &MsData[0], MsData.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
-		
+		AplicationSetingsC();		
 	}
 
 	if (ImGui::CollapsingHeader("Window"))
 	{
-		if (ImGui::SliderFloat("Brightness", &windowConfig.brightness, 0.0f, 2.0f, "%.2f"))
-		{
-			App->window->SetBrightness(windowConfig.brightness);
-		}
-		if (ImGui::SliderInt("Width", &windowConfig.windowWidth, 1, 1920))
-		{
-			App->window->ResizeWindow(windowConfig.windowWidth, windowConfig.windowHeight);
-		}
-		if (ImGui::SliderInt("Height", &windowConfig.windowHeight, 1, 1080))
-		{
-			App->window->ResizeWindow(windowConfig.windowWidth, windowConfig.windowHeight);
-		}
-		if (ImGui::Checkbox("Fullscreen", &windowConfig.fullscreen))
-		{
-			App->window->SetFullscreen(windowConfig.fullscreen);
-		}
-		ImGui::SameLine();
-		if (ImGui::Checkbox("Borderless", &windowConfig.borderless))
-		{
-			App->window->SetBorderless(windowConfig.borderless);
-		}		
-		ImGui::SameLine();
-		if (ImGui::Checkbox("Full Desktop", &windowConfig.fullDesktop))
-		{
-			App->window->SetFullDesktop(windowConfig.fullDesktop);
-		}
-
-		if (ImGui::Button("Reset"))
-		{
-			App->window->ResizeWindow(SCREEN_WIDTH, SCREEN_HEIGHT);
-			App->window->SetBrightness(BRIGHTNESS);
-			App->window->SetFullscreen(WIN_FULLSCREEN);
-			App->window->SetBorderless(WIN_BORDERLESS);
-			App->window->SetFullDesktop(WIN_FULLSCREEN_DESKTOP);
-			windowConfig.~WindowSetings();
-		}
+		WindowSetingsC();
 	}
 
 	if (ImGui::CollapsingHeader("Hardware")) {
 		
-		SDL_version compiled;
-		SDL_GetVersion(&compiled);
-		ImGui::Text("SDL Version:");
-		ImGui::SameLine();	
-		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(compiled.major).c_str(), nullptr);
-		ImGui::SameLine();	ImGui::Text(".");ImGui::SameLine();
-		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(compiled.minor).c_str(), nullptr);
-		ImGui::SameLine();	ImGui::Text("."); ImGui::SameLine();
-		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(compiled.patch).c_str(), nullptr);
-		ImGui::Text(" ");
-		ImGui::Separator();
-	
-
-		ImGui::Text("CPUs:");
-		ImGui::SameLine();
-		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(SDL_GetCPUCount()).c_str(), nullptr);
-
-
-		ImGui::Text(" System RAM:");
-		ImGui::SameLine();
-		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(SDL_GetSystemRAM()).c_str(), nullptr);
-	
-		ImGui::Text(" Caps:");
-		ImGui::SameLine();
-		if(SDL_HasRDTSC())
-			ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " RDTSC", nullptr);
-
-		ImGui::SameLine();
-		if (SDL_HasMMX())
-			ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,MMX", nullptr);
-
-		ImGui::SameLine();
-		if (SDL_HasSSE())
-			ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,SSE", nullptr);
-
-		ImGui::SameLine();
-		if (SDL_HasSSE2())
-			ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,SSE2", nullptr);
-
-		if (SDL_HasSSE3())
-			ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,SS3", nullptr);
-
-		ImGui::SameLine();
-		if (SDL_HasSSE41())
-			ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,SS41", nullptr);
-
-		ImGui::SameLine();
-		if (SDL_HasSSE42())
-			ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,SS42", nullptr);
-
-		ImGui::SameLine();
-		if (SDL_HasAVX())
-			ImGui::TextColoredV(ImVec4{0,100,0,255 }, " ,AVX",nullptr);
-
-		ImGui::SameLine();
-		if (SDL_HasAltiVec())
-			ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,AltiVec", nullptr);
-	
-
-
-
-
-
-		ImGui::Text("\n");
-		ImGui::Separator();
+		HardwareSetingsC();
 	}
 
 	ImGui::End();
@@ -554,4 +421,149 @@ void ModuleUI::AddLogToConsole(std::string toAdd)
 {
 	consoleTxt.push_back(toAdd);
 
+}
+
+void ModuleUI::HardwareSetingsC()
+{
+	SDL_version compiled;
+	SDL_GetVersion(&compiled);
+	ImGui::Text("SDL Version:");
+	ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(compiled.major).c_str(), nullptr);
+	ImGui::SameLine();	ImGui::Text("."); ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(compiled.minor).c_str(), nullptr);
+	ImGui::SameLine();	ImGui::Text("."); ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(compiled.patch).c_str(), nullptr);
+	ImGui::Text(" ");
+	ImGui::Separator();
+
+
+	ImGui::Text("CPUs:");
+	ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(SDL_GetCPUCount()).c_str(), nullptr);
+
+
+	ImGui::Text(" System RAM:");
+	ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(SDL_GetSystemRAM()).c_str(), nullptr);
+
+	ImGui::Text(" Caps:");
+	ImGui::SameLine();
+	if (SDL_HasRDTSC())
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " RDTSC", nullptr);
+
+	ImGui::SameLine();
+	if (SDL_HasMMX())
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,MMX", nullptr);
+
+	ImGui::SameLine();
+	if (SDL_HasSSE())
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,SSE", nullptr);
+
+	ImGui::SameLine();
+	if (SDL_HasSSE2())
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,SSE2", nullptr);
+
+	if (SDL_HasSSE3())
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,SS3", nullptr);
+
+	ImGui::SameLine();
+	if (SDL_HasSSE41())
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,SS41", nullptr);
+
+	ImGui::SameLine();
+	if (SDL_HasSSE42())
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,SS42", nullptr);
+
+	ImGui::SameLine();
+	if (SDL_HasAVX())
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,AVX", nullptr);
+
+	ImGui::SameLine();
+	if (SDL_HasAltiVec())
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,AltiVec", nullptr);
+	
+
+	ImGui::Text("\n");
+	ImGui::Separator();
+}
+
+void ModuleUI::WindowSetingsC()
+{
+	if (ImGui::SliderFloat("Brightness", &windowConfig.brightness, 0.0f, 2.0f, "%.2f"))
+	{
+		App->window->SetBrightness(windowConfig.brightness);
+	}
+	if (ImGui::SliderInt("Width", &windowConfig.windowWidth, 1, 1920))
+	{
+		App->window->ResizeWindow(windowConfig.windowWidth, windowConfig.windowHeight);
+	}
+	if (ImGui::SliderInt("Height", &windowConfig.windowHeight, 1, 1080))
+	{
+		App->window->ResizeWindow(windowConfig.windowWidth, windowConfig.windowHeight);
+	}
+	if (ImGui::Checkbox("Fullscreen", &windowConfig.fullscreen))
+	{
+		App->window->SetFullscreen(windowConfig.fullscreen);
+	}
+	ImGui::SameLine();
+	if (ImGui::Checkbox("Borderless", &windowConfig.borderless))
+	{
+		App->window->SetBorderless(windowConfig.borderless);
+	}
+	ImGui::SameLine();
+	if (ImGui::Checkbox("Full Desktop", &windowConfig.fullDesktop))
+	{
+		App->window->SetFullDesktop(windowConfig.fullDesktop);
+	}
+
+	if (ImGui::Button("Reset"))
+	{
+		App->window->ResizeWindow(SCREEN_WIDTH, SCREEN_HEIGHT);
+		App->window->SetBrightness(BRIGHTNESS);
+		App->window->SetFullscreen(WIN_FULLSCREEN);
+		App->window->SetBorderless(WIN_BORDERLESS);
+		App->window->SetFullDesktop(WIN_FULLSCREEN_DESKTOP);
+		windowConfig.~WindowSetings();
+	}
+
+}
+
+void ModuleUI::AplicationSetingsC()
+{
+	static char buf1[64] = ""; ImGui::InputText("App Name", buf1, 64);
+	static char buf2[64] = ""; ImGui::InputText("Organization", buf1, 64);
+
+	if (FPSData.size() >= MAX_FPSMS_COUNT)
+	{
+		for (int i = 0; i < MAX_FPSMS_COUNT - 2; i++)
+		{
+			FPSData[i] = FPSData[i + 1];
+		}
+		FPSData[MAX_FPSMS_COUNT - 1] = App->GetFPS();
+	}
+	else
+	{
+		FPSData.push_back(App->GetFPS());
+	}
+
+	if (MsData.size() >= MAX_FPSMS_COUNT)
+	{
+		for (int i = 0; i < MAX_FPSMS_COUNT - 2; i++)
+		{
+			MsData[i] = MsData[i + 1];
+		}
+		MsData[MAX_FPSMS_COUNT - 1] = App->GetMs();
+	}
+	else
+	{
+		MsData.push_back(App->GetMs());
+	}
+
+
+	char title[25];
+	sprintf_s(title, 25, "Framerate %.1f", FPSData[FPSData.size() - 1]);
+	ImGui::PlotHistogram("##framerate", &FPSData[0], FPSData.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+	sprintf_s(title, 25, "Milliseconds %0.1f", MsData[MsData.size() - 1]);
+	ImGui::PlotHistogram("##milliseconds", &MsData[0], MsData.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 }
