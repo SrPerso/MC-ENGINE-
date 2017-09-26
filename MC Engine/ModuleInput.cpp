@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "parson\parson.h"
+#include "Brofiler\Brofiler.h"
 #define MAX_KEYS 300
 
 ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -38,7 +39,9 @@ bool ModuleInput::Init(JSON_Object* data)
 
 // Called every draw update
 update_status ModuleInput::PreUpdate(float dt)
-{
+{	
+
+	
 	SDL_PumpEvents();
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
