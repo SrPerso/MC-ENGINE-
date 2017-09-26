@@ -6,7 +6,8 @@
 #include "Glew\include\glew.h"
 #include "Math.h"
 #include "SDL/include/SDL_cpuinfo.h"
-
+#define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
+#define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #pragma comment( lib, "Glew/libx86/glew32.lib" )
 
 ModuleUI::ModuleUI(Application * app, bool start_enabled) : Module(app, start_enabled)
@@ -266,6 +267,7 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 		return;
 	}
 
+
 	ImGui::PushItemWidth(-100);                                
 
 	ImGui::Text("Configuration");
@@ -281,6 +283,10 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 	
 	if (ImGui::CollapsingHeader("Audio"))
 		AudioSetingsC();
+
+	if (ImGui::CollapsingHeader("Devices"))
+		DevicesSetingsC();
+
 
 	ImGui::End();
 
@@ -477,8 +483,32 @@ void ModuleUI::HardwareSetingsC()
 		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,AltiVec", nullptr);
 	
 
+
+
 	ImGui::Text("\n");
 	ImGui::Separator();
+
+	ImGui::Text("GPU:");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(0, 100, 0, 255), "%s", (const char*)glGetString(GL_RENDERER));
+
+	int VRAM = 0;
+	glGetIntegerv(GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX, &VRAM);
+	ImGui::Text("VRAM capacity:");	
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(0, 100, 0, 255), "%i", VRAM / 1000);
+
+	int VRAMRemaining = 0;
+	glGetIntegerv(GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX, &VRAMRemaining);
+	ImGui::Text("VRAM available:");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(0, 100, 0, 255), "%i", VRAMRemaining / 1000);
+
+	int VRAMWorking = VRAM- VRAMRemaining;
+	ImGui::Text("VRAM Working:");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(0, 100, 0, 255), "%i", VRAMWorking / 1000);
+
 }
 
 void ModuleUI::WindowSetingsC()
@@ -569,7 +599,7 @@ void ModuleUI::AudioSetingsC()
 	}
 	if (ImGui::SliderFloat("FX Volume", &AudioSetingsS.FXVolume, 0, 128))
 	{
-
+		//TODO AUDIO
 	}
 	if (ImGui::SliderFloat("BSO Volume", &AudioSetingsS.BSOVolume, 0, 128))
 	{
@@ -577,8 +607,7 @@ void ModuleUI::AudioSetingsC()
 	}
 	if (ImGui::TreeNode("Global")) 
 	{
-		if (ImGui::Button("Mute", { 50,20 })) 
-		{
+		if (ImGui::Button("Mute", { 50,20 })) 	{
 		
 			AudioSetingsS.MasterVolume = 0;
 			Mix_Volume(-1, AudioSetingsS.MasterVolume);
@@ -636,4 +665,9 @@ void ModuleUI::AudioSetingsC()
 		}
 		ImGui::TreePop();
 	}
+}
+
+void ModuleUI::DevicesSetingsC()
+{
+
 }

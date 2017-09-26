@@ -3,6 +3,7 @@
 #include "ModuleInput.h"
 #include "parson\parson.h"
 #include "Brofiler\Brofiler.h"
+#include "SDL\include\SDL_keyboard.h"
 #define MAX_KEYS 300
 
 ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -11,6 +12,7 @@ ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, sta
 	memset(keyboard, KEY_IDLE, sizeof(KEY_STATE) * MAX_KEYS);
 	memset(mouse_buttons, KEY_IDLE, sizeof(KEY_STATE) * MAX_MOUSE_BUTTONS);
 	name = "input";
+
 }
 
 // Destructor
@@ -40,7 +42,6 @@ bool ModuleInput::Init(JSON_Object* data)
 // Called every draw update
 update_status ModuleInput::PreUpdate(float dt)
 {	
-
 	
 	SDL_PumpEvents();
 
@@ -134,4 +135,28 @@ bool ModuleInput::CleanUp()
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 
 	return true;
+}
+
+bool ModuleInput::KeyBoardConected()
+{
+	bool ret = false;
+	return ret;
+}
+
+bool ModuleInput::SpeakersConected()
+{
+	bool ret = false;
+	return ret;
+}
+
+bool ModuleInput::HeadphonesConected()
+{
+	bool ret = false;
+	return ret;
+}
+
+bool ModuleInput::MouseConected()
+{
+	bool ret = false;
+	return ret;
 }

@@ -57,7 +57,11 @@ public:
 	{
 		return mouse_y_motion;
 	}
-
+public: //devices
+	bool KeyBoardConected();
+	bool SpeakersConected();
+	bool HeadphonesConected();
+	bool MouseConected();
 private:
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];

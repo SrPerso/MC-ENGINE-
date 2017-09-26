@@ -140,7 +140,7 @@ public:
 	void WindowSetingsC();
 	void AplicationSetingsC();
 	void AudioSetingsC();
-
+	void DevicesSetingsC();
 public:
 	IMGUI_API void ShowConsoleWindow(bool* p_open = NULL);
 	IMGUI_API void ShowTeamInfoWindow(bool* p_open = NULL);
