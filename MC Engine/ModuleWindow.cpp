@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleWindow.h"
+#include "parson\parson.h"
 
 
 ModuleWindow::ModuleWindow(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -29,40 +30,83 @@ bool ModuleWindow::Init(JSON_Object* data)
 
 		ret = false;
 	}
-	else
-	{
-		//Create window
-		int width = SCREEN_WIDTH * SCREEN_SIZE;
-		int height = SCREEN_HEIGHT * SCREEN_SIZE;
-		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
+	
+	else {
 
-		//Use OpenGL 2.1
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
-		if(WIN_FULLSCREEN == true)
+		if (data == nullptr)
 		{
-			flags |= SDL_WINDOW_FULLSCREEN;
-		}
+			//Create window
+			width = SCREEN_WIDTH * SCREEN_SIZE;
+			height = SCREEN_HEIGHT * SCREEN_SIZE;
+			Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
-		if(WIN_RESIZABLE == true)
+			//Use OpenGL 2.1
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+
+			if (WIN_FULLSCREEN == true)
+			{
+				flags |= SDL_WINDOW_FULLSCREEN;
+			}
+
+			if (WIN_RESIZABLE == true)
+			{
+				flags |= SDL_WINDOW_RESIZABLE;
+			}
+
+			if (WIN_BORDERLESS == true)
+			{
+				flags |= SDL_WINDOW_BORDERLESS;
+			}
+
+			if (WIN_FULLSCREEN_DESKTOP == true)
+			{
+				flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+			}
+
+			window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+
+
+		}
+		else
 		{
-			flags |= SDL_WINDOW_RESIZABLE;
+
+			width = json_object_dotget_number(data, "width")*SCREEN_SIZE;
+			height = json_object_dotget_number(data, "height")*SCREEN_SIZE;
+			fullscreen = json_object_dotget_boolean(data, "fullscreen");
+
+			Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
+
+			//Use OpenGL 2.1
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+
+			if (fullscreen == true)
+			{
+				flags |= SDL_WINDOW_FULLSCREEN;
+			}
+
+			if (WIN_RESIZABLE == true)
+			{
+				flags |= SDL_WINDOW_RESIZABLE;
+			}
+
+			if (WIN_BORDERLESS == true)
+			{
+				flags |= SDL_WINDOW_BORDERLESS;
+			}
+
+			if (WIN_FULLSCREEN_DESKTOP == true)
+			{
+				flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+			}
+
+			window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+
+
 		}
-
-		if(WIN_BORDERLESS == true)
-		{
-			flags |= SDL_WINDOW_BORDERLESS;
-		}
-
-		if(WIN_FULLSCREEN_DESKTOP == true)
-		{
-			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
-		}
-
-		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
-
-		if(window == NULL)
+		if (window == NULL)
 		{
 			LOG("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			App->ui->AddLogToConsole("Window could not be created!");
@@ -73,8 +117,11 @@ bool ModuleWindow::Init(JSON_Object* data)
 			//Get window surface
 			screen_surface = SDL_GetWindowSurface(window);
 		}
+
 	}
 
+
+	
 	return ret;
 }
 

@@ -158,6 +158,7 @@
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="p2DynArray.h" />
     <ClInclude Include="p2Point.h" />
+    <ClInclude Include="parson\parson.h" />
     <ClInclude Include="PhysBody3D.h" />
     <ClInclude Include="PhysVehicle3D.h" />
     <ClInclude Include="Primitive.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="ModuleSceneIntro.cpp" />
     <ClCompile Include="ModuleUI.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
+    <ClCompile Include="parson\parson.c" />
     <ClCompile Include="PhysBody3D.cpp" />
     <ClCompile Include="PhysVehicle3D.cpp" />
     <ClCompile Include="Primitive.cpp" />
