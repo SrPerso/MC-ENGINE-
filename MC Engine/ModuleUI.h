@@ -95,9 +95,35 @@ struct WindowSetings {
 	bool vsync;
 	int* FPSLimit;
 };
- 
-class Win32_VideoController;
 
+struct AudioSetings {
+
+	AudioSetings() {
+		MasterVolume = 50;
+		FXVolume = 50;
+		BSOVolume = 50;
+		Padding = 0;
+		Mute = false;
+	}
+
+	~AudioSetings() {
+		MasterVolume = 50;
+		FXVolume = 50;
+		BSOVolume = 50;
+		Padding = 0;
+		Mute = false;
+	}
+
+	float MasterVolume;
+	float FXVolume;
+	float BSOVolume;
+	float Padding;
+	bool Mute;
+
+};
+
+
+class Win32_VideoController;
 
 class ModuleUI : public Module
 {
@@ -113,6 +139,7 @@ public:
 	void HardwareSetingsC();
 	void WindowSetingsC();
 	void AplicationSetingsC();
+	void AudioSetingsC();
 
 public:
 	IMGUI_API void ShowConsoleWindow(bool* p_open = NULL);
@@ -151,7 +178,11 @@ private:
 	sphereTest<int> sphere1;
 	sphereTest<int> sphere2;
 	capsuleTest<int> capsule1;
-	WindowSetings windowConfig;
+
+private: //setings structure
+	WindowSetings WindowSetingsS;
+	AudioSetings AudioSetingsS;
+
 	//Win32_VideoController VC_GPU;
 };
 

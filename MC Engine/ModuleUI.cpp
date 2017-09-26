@@ -31,7 +31,7 @@ bool ModuleUI::Start()
 	openConfigurationW = true;
 	openConsoleW = false;
 	
-	windowConfig.brightness = 1.0f;
+	WindowSetingsS.brightness = 1.0f;
 
 	return ret;
 }
@@ -44,7 +44,6 @@ update_status ModuleUI::PreUpdate(float dt)
 
 update_status ModuleUI::Update(float dt)
 {
-
 
 	static bool show_test_window = false;
 	static bool show_Console_window = true;
@@ -148,7 +147,6 @@ update_status ModuleUI::Update(float dt)
 	if (show_test_window)
 		ImGui::ShowTestWindow();
 	
-
 	if (openConfigurationW)
 		ShowConfigWindow();
 
@@ -160,8 +158,6 @@ update_status ModuleUI::Update(float dt)
 
 	if (teamInfoActive)
 		ShowTeamInfoWindow();
-
-
 
 	ImGui::Render();
 
@@ -275,19 +271,16 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 	ImGui::Text("Configuration");
 
 	if (ImGui::CollapsingHeader("Aplication"))
-	{
 		AplicationSetingsC();		
-	}
 
 	if (ImGui::CollapsingHeader("Window"))
-	{
 		WindowSetingsC();
-	}
 
-	if (ImGui::CollapsingHeader("Hardware")) {
-		
+	if (ImGui::CollapsingHeader("Hardware"))
 		HardwareSetingsC();
-	}
+	
+	if (ImGui::CollapsingHeader("Audio"))
+		AudioSetingsC();
 
 	ImGui::End();
 
@@ -490,31 +483,31 @@ void ModuleUI::HardwareSetingsC()
 
 void ModuleUI::WindowSetingsC()
 {
-	if (ImGui::SliderFloat("Brightness", &windowConfig.brightness, 0.0f, 2.0f, "%.2f"))
+	if (ImGui::SliderFloat("Brightness", &WindowSetingsS.brightness, 0.0f, 2.0f, "%.2f"))
 	{
-		App->window->SetBrightness(windowConfig.brightness);
+		App->window->SetBrightness(WindowSetingsS.brightness);
 	}
-	if (ImGui::SliderInt("Width", &windowConfig.windowWidth, 1, 1920))
+	if (ImGui::SliderInt("Width", &WindowSetingsS.windowWidth, 1, 1920))
 	{
-		App->window->ResizeWindow(windowConfig.windowWidth, windowConfig.windowHeight);
+		App->window->ResizeWindow(WindowSetingsS.windowWidth, WindowSetingsS.windowHeight);
 	}
-	if (ImGui::SliderInt("Height", &windowConfig.windowHeight, 1, 1080))
+	if (ImGui::SliderInt("Height", &WindowSetingsS.windowHeight, 1, 1080))
 	{
-		App->window->ResizeWindow(windowConfig.windowWidth, windowConfig.windowHeight);
+		App->window->ResizeWindow(WindowSetingsS.windowWidth, WindowSetingsS.windowHeight);
 	}
-	if (ImGui::Checkbox("Fullscreen", &windowConfig.fullscreen))
+	if (ImGui::Checkbox("Fullscreen", &WindowSetingsS.fullscreen))
 	{
-		App->window->SetFullscreen(windowConfig.fullscreen);
-	}
-	ImGui::SameLine();
-	if (ImGui::Checkbox("Borderless", &windowConfig.borderless))
-	{
-		App->window->SetBorderless(windowConfig.borderless);
+		App->window->SetFullscreen(WindowSetingsS.fullscreen);
 	}
 	ImGui::SameLine();
-	if (ImGui::Checkbox("Full Desktop", &windowConfig.fullDesktop))
+	if (ImGui::Checkbox("Borderless", &WindowSetingsS.borderless))
 	{
-		App->window->SetFullDesktop(windowConfig.fullDesktop);
+		App->window->SetBorderless(WindowSetingsS.borderless);
+	}
+	ImGui::SameLine();
+	if (ImGui::Checkbox("Full Desktop", &WindowSetingsS.fullDesktop))
+	{
+		App->window->SetFullDesktop(WindowSetingsS.fullDesktop);
 	}
 
 	if (ImGui::Button("Reset"))
@@ -524,7 +517,7 @@ void ModuleUI::WindowSetingsC()
 		App->window->SetFullscreen(WIN_FULLSCREEN);
 		App->window->SetBorderless(WIN_BORDERLESS);
 		App->window->SetFullDesktop(WIN_FULLSCREEN_DESKTOP);
-		windowConfig.~WindowSetings();
+		WindowSetingsS.~WindowSetings();
 	}
 
 }
@@ -566,4 +559,37 @@ void ModuleUI::AplicationSetingsC()
 	ImGui::PlotHistogram("##framerate", &FPSData[0], FPSData.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
 	sprintf_s(title, 25, "Milliseconds %0.1f", MsData[MsData.size() - 1]);
 	ImGui::PlotHistogram("##milliseconds", &MsData[0], MsData.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+}
+
+void ModuleUI::AudioSetingsC()
+{
+	if (ImGui::SliderFloat("Volume", &AudioSetingsS.MasterVolume, 0, 128)) 
+	{
+		Mix_Volume(-1, AudioSetingsS.MasterVolume);
+	}
+	if (ImGui::SliderFloat("FX Volume", &AudioSetingsS.FXVolume, 0, 128))
+	{
+
+	}
+	if (ImGui::SliderFloat("BSO Volume", &AudioSetingsS.BSOVolume, 0, 128))
+	{
+		Mix_VolumeMusic(AudioSetingsS.MasterVolume);
+	}
+
+	if (ImGui::Button("Mute", { 50,20 })) {
+		
+	}	
+	ImGui::SameLine();
+	if (ImGui::Button("Play", { 50,20 })) {
+		
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Pause", { 50,20 })) {
+		
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Stop", { 50,20 })) {
+	
+	}
+
 }
