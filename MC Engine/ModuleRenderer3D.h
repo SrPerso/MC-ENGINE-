@@ -17,6 +17,8 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	void EDglView();
+
 	void OnResize(int width, int height);
 
 public:

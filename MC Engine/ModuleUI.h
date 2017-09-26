@@ -126,11 +126,11 @@ struct MenuBooleans {
 public:
 
 // OPEN GL
-	bool DepthTest=true;
-	bool CullFace = true;
-	bool Lighting = true;
-	bool ColorMaterial = true;
-	bool Texture2D = true;
+	bool DepthTest=false;
+	bool CullFace = false;
+	bool Lighting = false;
+	bool ColorMaterial = false;
+	bool Texture2D = false;
 //Open windows
 	bool openConsoleW;
 	bool openConfigurationW;
@@ -158,6 +158,7 @@ public:	//setings
 	void AplicationSetingsC();
 	void AudioSetingsC();
 	void DevicesSetingsC();
+
 public:
 	IMGUI_API void ShowConsoleWindow(bool* p_open = NULL);
 	IMGUI_API void ShowTeamInfoWindow(bool* p_open = NULL);
@@ -168,7 +169,7 @@ public:
 
 public://math
 	bool intersects = false;
-
+	MenuBooleans MenuBool;
 private: // Active
 	bool teamInfoActive = false;
 	bool TimerActive = true;
@@ -178,7 +179,7 @@ private: // Active
 	bool ImageViewWActive = false;
 //menu GL__-
 
-	MenuBooleans MenuBool;
+	
 private:
 	std::vector<std::string> consoleTxt;
 	std::vector<float> FPSData;
@@ -198,13 +199,5 @@ private: //setings structure
 
 	//Win32_VideoController VC_GPU;
 };
-
-
-
-
-
-
-
-
 
 #endif // __ModuleUI_H__

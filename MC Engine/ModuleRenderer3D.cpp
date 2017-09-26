@@ -8,8 +8,12 @@
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
+#include "ModuleUI.h"
+
+
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+
 	name = "Render";
 }
 
@@ -23,7 +27,14 @@ bool ModuleRenderer3D::Init(JSON_Object* data)
 	LOG("Creating 3D Renderer context");
 	App->ui->AddLogToConsole("Creating 3D Renderer context");
 	bool ret = true;
-	
+
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
 	if(context == NULL)
@@ -96,12 +107,9 @@ bool ModuleRenderer3D::Init(JSON_Object* data)
 
 		GLfloat MaterialDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, MaterialDiffuse);
-		
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
-		lights[0].Active(true);
-		glEnable(GL_LIGHTING);
-		glEnable(GL_COLOR_MATERIAL);
+
+		EDglView();
+
 	}
 
 	// Projection matrix for
@@ -141,9 +149,42 @@ bool ModuleRenderer3D::CleanUp()
 	LOG("Destroying 3D Renderer");
 	App->ui->AddLogToConsole("Destroying 3D Renderer");
 
+
 	SDL_GL_DeleteContext(context);
 
 	return true;
+}
+
+void ModuleRenderer3D::EDglView()
+{
+	if (App->ui->MenuBool.DepthTest)
+		glEnable(GL_DEPTH_TEST);
+	else if (!App->ui->MenuBool.DepthTest)
+		glDisable(GL_DEPTH_TEST);
+
+	if (App->ui->MenuBool.CullFace)
+		glEnable(GL_CULL_FACE);
+	else if (!App->ui->MenuBool.CullFace)
+		glDisable(GL_CULL_FACE);
+
+
+	if (App->ui->MenuBool.Lighting)
+		glEnable(GL_LIGHTING);
+	else if (!App->ui->MenuBool.Lighting)
+		glDisable(GL_LIGHTING);
+
+	lights[0].Active(true);
+
+	if (App->ui->MenuBool.ColorMaterial)
+		glEnable(GL_COLOR_MATERIAL);
+	else if (!App->ui->MenuBool.ColorMaterial)
+		glDisable(GL_COLOR_MATERIAL);
+
+	if (App->ui->MenuBool.Texture2D)
+		glEnable(GL_TEXTURE_2D);
+	else if (!App->ui->MenuBool.Texture2D)
+		glDisable(GL_TEXTURE_2D);
+
 }
 
 

@@ -151,8 +151,6 @@ update_status ModuleUI::Update(float dt)
 		ImGui::EndMainMenuBar();
 	}
 
-
-
 	/* 
 	*Execute 
 	*/
@@ -438,9 +436,8 @@ IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 	window_flags |= ImGuiWindowFlags_NoResize;
 
 	if (ImGui::Begin("Image View", p_open, window_flags))
-	{
-		
-	
+	{		
+
 
 		static bool sb_Depth_Test = true;
 		static bool sb_Cull_Face = true;
@@ -448,26 +445,38 @@ IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 		static bool sb_Color_Material = true;
 		static bool sb_Texture_2D = true;
 
-		if (ImGui::Checkbox("LIGHTING", &sb_Lighting))
-			MenuBool.Lighting = !MenuBool.Lighting;
+		if (ImGui::Checkbox("LIGHTING", &sb_Lighting)) {
+			App->renderer3D->EDglView();
+				MenuBool.Lighting = !MenuBool.Lighting;
+		}	
 
 		ImGui::SameLine();
-		if (ImGui::Checkbox("COLOR MATERIAL", &sb_Color_Material))
+		if (ImGui::Checkbox("COLOR MATERIAL", &sb_Color_Material)) 
+		{
+			App->renderer3D->EDglView();
 			MenuBool.ColorMaterial = !MenuBool.ColorMaterial;
-
+		}
 		ImGui::SameLine();
-		if (ImGui::Checkbox("TEXTURE 2D", &sb_Texture_2D))
+		if (ImGui::Checkbox("TEXTURE 2D", &sb_Texture_2D)) 
+		{
+			App->renderer3D->EDglView();
 			MenuBool.Texture2D = !MenuBool.Texture2D;
-
+		}
 		ImGui::SameLine();
-		if (ImGui::Checkbox("DEPTH TEST", &sb_Depth_Test))
+		if (ImGui::Checkbox("DEPTH TEST", &sb_Depth_Test)) 
+		{
+			App->renderer3D->EDglView();
 			MenuBool.DepthTest = !MenuBool.DepthTest;
-
+		}
 		ImGui::SameLine();
 		if (ImGui::Checkbox("CULL FACE", &sb_Cull_Face))
+		{
+			App->renderer3D->EDglView();
 			MenuBool.CullFace = !MenuBool.CullFace;
-		ImGui::End();
-	}
+		}
+		
+		ImGui::End();}
+	
 
 	return IMGUI_API void();
 }

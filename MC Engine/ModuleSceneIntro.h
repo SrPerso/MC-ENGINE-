@@ -22,5 +22,5 @@ public:
 	bool intersects = false;
 
 public:
-
+	void CreateTree(const float x, const float y, const float z, const float tall, const float radious);
 };

@@ -60,5 +60,13 @@ update_status ModuleSceneIntro::Update(float dt)
 	p.axis = false;
 	p.Render();
 
+	Cube Poste( 1,1,1);
+	Poste.SetRotation(90, vec3(0, 0, 1));
+	Poste.SetPos(0, 0,0);
+	Poste.color = Green;
+	Poste.Render();
+
 	return UPDATE_CONTINUE;
+
 }
+
