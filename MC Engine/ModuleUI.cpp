@@ -459,7 +459,7 @@ IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 		ImGui::SameLine();
 		if (ImGui::Checkbox("TEXTURE 2D", &sb_Texture_2D)) 
 		{
-			App->renderer3D->EDglView();
+			App->renderer3D->TextureView();
 			MenuBool.Texture2D = !MenuBool.Texture2D;
 		}
 		ImGui::SameLine();

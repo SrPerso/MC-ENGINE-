@@ -54,6 +54,10 @@ update_status ModuleSceneIntro::PreUpdate(float dt)
 update_status ModuleSceneIntro::Update(float dt)
 {	
 	
+	PrimitiveSphere sp(2);
+	sp.SetPos(0, 3, 0);
+	sp.color = Red;
+	sp.Render();
 
 	PrimitivePlane p(0, -1, 0, 200);
 	p.color = White;
@@ -63,7 +67,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	Cube Poste( 1,1,1);
 	Poste.SetRotation(90, vec3(0, 0, 1));
 	Poste.SetPos(0, 0,0);
-	Poste.color = Green;
+	Poste.color = White;
 	Poste.Render();
 
 	return UPDATE_CONTINUE;

@@ -21,6 +21,8 @@ public:
 
 	void OnResize(int width, int height);
 
+
+	void TextureView();
 public:
 
 	Light lights[MAX_LIGHTS];

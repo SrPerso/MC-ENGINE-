@@ -130,7 +130,7 @@ public:
 	bool CullFace = false;
 	bool Lighting = false;
 	bool ColorMaterial = false;
-	bool Texture2D = false;
+	bool Texture2D = true;
 //Open windows
 	bool openConsoleW;
 	bool openConfigurationW;
@@ -176,7 +176,7 @@ private: // Active
 	bool consoleActive = false;
 	bool mathTestActive = false;
 	bool configActive = false;
-	bool ImageViewWActive = false;
+	bool ImageViewWActive = true;
 //menu GL__-
 
 	

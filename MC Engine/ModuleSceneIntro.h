@@ -21,6 +21,7 @@ public:
 	bool CleanUp();
 	bool intersects = false;
 
+	PrimitiveSphere sp;
 public:
 	void CreateTree(const float x, const float y, const float z, const float tall, const float radious);
 };

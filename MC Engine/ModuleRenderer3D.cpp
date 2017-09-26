@@ -157,6 +157,7 @@ bool ModuleRenderer3D::CleanUp()
 
 void ModuleRenderer3D::EDglView()
 {
+
 	if (App->ui->MenuBool.DepthTest)
 		glEnable(GL_DEPTH_TEST);
 	else if (!App->ui->MenuBool.DepthTest)
@@ -166,14 +167,11 @@ void ModuleRenderer3D::EDglView()
 		glEnable(GL_CULL_FACE);
 	else if (!App->ui->MenuBool.CullFace)
 		glDisable(GL_CULL_FACE);
-
-
+	
 	if (App->ui->MenuBool.Lighting)
 		glEnable(GL_LIGHTING);
 	else if (!App->ui->MenuBool.Lighting)
 		glDisable(GL_LIGHTING);
-
-	lights[0].Active(true);
 
 	if (App->ui->MenuBool.ColorMaterial)
 		glEnable(GL_COLOR_MATERIAL);
@@ -188,6 +186,9 @@ void ModuleRenderer3D::EDglView()
 }
 
 
+
+
+
 void ModuleRenderer3D::OnResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
@@ -199,4 +200,13 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+void ModuleRenderer3D::TextureView()
+{
+
+	if (App->ui->MenuBool.Texture2D)
+		glEnable(GL_LINE);
+	else if (!App->ui->MenuBool.Texture2D)
+		glDisable(GL_LINE);
 }
