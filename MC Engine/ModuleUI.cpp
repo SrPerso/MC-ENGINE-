@@ -575,21 +575,65 @@ void ModuleUI::AudioSetingsC()
 	{
 		Mix_VolumeMusic(AudioSetingsS.MasterVolume);
 	}
+	if (ImGui::TreeNode("Global")) 
+	{
+		if (ImGui::Button("Mute", { 50,20 })) 
+		{
+		
+			AudioSetingsS.MasterVolume = 0;
+			Mix_Volume(-1, AudioSetingsS.MasterVolume);
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Play", { 50,20 })) 
+		{
+			App->audio->PlayMusic();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Pause", { 50,20 })) 
+		{
+			for(int i =0;i<5;i++)
+				Mix_Pause(i);
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Stop", { 50,20 }))
+		{
+			Mix_CloseAudio();
+		}
+		ImGui::TreePop();
+	}
 
-	if (ImGui::Button("Mute", { 50,20 })) {
+	if (ImGui::TreeNode("Music"))
+	{
+		if (ImGui::Button("Mute", { 50,20 }))
+		{
+			Mix_VolumeMusic( 0);
+			AudioSetingsS.BSOVolume = 0;
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Play", { 50,20 }))
+		{
+			App->audio->PlayMusic();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Pause", { 50,20 }))
+		{
+			Mix_PauseMusic();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Resume", { 50,20 }))
+		{
+			Mix_ResumeMusic();
+		}
 		
-	}	
-	ImGui::SameLine();
-	if (ImGui::Button("Play", { 50,20 })) {
-		
+		if (ImGui::Button("Rewind", { 50,20 }))
+		{
+			Mix_RewindMusic();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Stop", { 50,20 }))
+		{
+			Mix_HaltMusic();
+		}
+		ImGui::TreePop();
 	}
-	ImGui::SameLine();
-	if (ImGui::Button("Pause", { 50,20 })) {
-		
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("Stop", { 50,20 })) {
-	
-	}
-
 }
