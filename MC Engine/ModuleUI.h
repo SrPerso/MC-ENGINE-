@@ -122,6 +122,22 @@ struct AudioSetings {
 
 };
 
+struct MenuBooleans {
+public:
+
+// OPEN GL
+	bool DepthTest=true;
+	bool CullFace = true;
+	bool Lighting = true;
+	bool ColorMaterial = true;
+	bool Texture2D = true;
+//Open windows
+	bool openConsoleW;
+	bool openConfigurationW;
+	bool openMathW;
+	bool openTestW;
+	bool openImageViewW;
+};
 
 class Win32_VideoController;
 
@@ -136,6 +152,7 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
+public:	//setings
 	void HardwareSetingsC();
 	void WindowSetingsC();
 	void AplicationSetingsC();
@@ -145,20 +162,12 @@ public:
 	IMGUI_API void ShowConsoleWindow(bool* p_open = NULL);
 	IMGUI_API void ShowTeamInfoWindow(bool* p_open = NULL);
 	IMGUI_API void ShowConfigWindow(bool* p_open = NULL);
-
-
 	IMGUI_API void ShowMathWindow(bool* p_open = NULL);
+	IMGUI_API void ShowImageViewWindow(bool* p_open = NULL);
 	void AddLogToConsole(std::string toAdd);
 
 public://math
 	bool intersects = false;
-
-private:
-
-	bool openConsoleW;
-	bool openConfigurationW;
-	bool openMathW;
-	bool openTestW;
 
 private: // Active
 	bool teamInfoActive = false;
@@ -166,6 +175,10 @@ private: // Active
 	bool consoleActive = false;
 	bool mathTestActive = false;
 	bool configActive = false;
+	bool ImageViewWActive = false;
+//menu GL__-
+
+	MenuBooleans MenuBool;
 private:
 	std::vector<std::string> consoleTxt;
 	std::vector<float> FPSData;

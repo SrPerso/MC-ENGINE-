@@ -27,11 +27,11 @@ bool ModuleUI::Start()
 	ImGui_ImplSdlGL3_Init(App->window->window);
 
 	//Windows ;
-	openTestW = false;
-	openMathW = false;
-	openConfigurationW = true;
-	openConsoleW = false;
-	
+	MenuBool.openTestW = false;
+	MenuBool.openMathW = false;
+	MenuBool.openConfigurationW = true;
+	MenuBool.openConsoleW = false;
+	MenuBool.openImageViewW = false;
 	WindowSetingsS.brightness = 1.0f;
 
 	return ret;
@@ -50,8 +50,9 @@ update_status ModuleUI::Update(float dt)
 	static bool show_Console_window = true;
 	static bool show_Configuration_window = false;
 	static bool show_MathTest_window = false;
-	static bool show_Config_window = true;
-	
+	static bool show_Config_window = false;
+	static bool show_ImageView_window = false;
+
 	if (ImGui::BeginMainMenuBar())
 	{
 
@@ -63,8 +64,7 @@ update_status ModuleUI::Update(float dt)
 
 			ImGui::EndMenu();
 		}
-
-
+		
 		if (ImGui::BeginMenu("Edit"))
 		{
 			if (ImGui::MenuItem("Undo", "Ctrl + Z")) {}
@@ -82,7 +82,6 @@ update_status ModuleUI::Update(float dt)
 
 			ImGui::EndMenu();
 		}
-		
 		
 		if (ImGui::BeginMenu("Help"))
 		{
@@ -121,21 +120,28 @@ update_status ModuleUI::Update(float dt)
 		{
 			if (ImGui::Checkbox("test window", &show_test_window))
 			{
-				openTestW = !openTestW;
+				MenuBool.openTestW = !MenuBool.openTestW;
 			
 			}
 
 			if (ImGui::MenuItem("Console", "Ctrl + Shift + C")) 
 			{
-				openConsoleW = !openConsoleW;
+				MenuBool.openConsoleW = !MenuBool.openConsoleW;
 				consoleActive = !consoleActive;
 			}
 
 			if (ImGui::Checkbox("Configuration", &show_Configuration_window))
 			{
-				openConfigurationW = !openConfigurationW;
+				MenuBool.openConfigurationW = !MenuBool.openConfigurationW;
 				configActive = !configActive;
 			}
+
+			if (ImGui::Checkbox("Image Views", &show_ImageView_window))
+			{
+				MenuBool.openImageViewW = !MenuBool.openImageViewW;
+				ImageViewWActive = !ImageViewWActive;
+			}
+
 
 			ImGui::Separator;
 			ImGui::Checkbox("MathTest", &show_MathTest_window);
@@ -145,20 +151,29 @@ update_status ModuleUI::Update(float dt)
 		ImGui::EndMainMenuBar();
 	}
 
+
+
+	/* 
+	*Execute 
+	*/
+	if (ImageViewWActive)
+		ShowImageViewWindow();
+
 	if (show_test_window)
 		ImGui::ShowTestWindow();
 	
-	if (openConfigurationW)
+	if (MenuBool.openConfigurationW)
 		ShowConfigWindow();
 
 	if (show_MathTest_window)
 		ShowMathWindow();
 
-	if (openConsoleW)
+	if (MenuBool.openConsoleW)
 		ShowConsoleWindow();
 
 	if (teamInfoActive)
 		ShowTeamInfoWindow();
+
 
 	ImGui::Render();
 
@@ -172,8 +187,6 @@ bool ModuleUI::CleanUp()
 	App->ui->AddLogToConsole("Unloading UI Engine");
 	return ret;
 }
-
-
 
 IMGUI_API void ModuleUI::ShowConsoleWindow(bool * p_open)
 {
@@ -223,7 +236,6 @@ IMGUI_API void ModuleUI::ShowTeamInfoWindow(bool * p_open)
 
 		return;
 	}
-
 	
 	ImGui::PushItemWidth(-140);            						
 									
@@ -236,6 +248,7 @@ IMGUI_API void ModuleUI::ShowTeamInfoWindow(bool * p_open)
 	ImGui::Text("MathGeoLib 1.5");
 	ImGui::Text("Bullet 2.x");
 	ImGui::Text("SDL 2.0.3");
+	ImGui::Text("Glew 2.1.0");
 	ImGui::Separator();
 	ImGui::Text("Software licence: Apache License 2.0");
 	ImGui::Separator();
@@ -259,7 +272,6 @@ IMGUI_API void ModuleUI::ShowTeamInfoWindow(bool * p_open)
 IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 {
 
-
 	if (!ImGui::Begin("Configuration", p_open))
 	{
 		// Early out if the window is collapsed, as an optimization.
@@ -272,6 +284,7 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 
 	ImGui::Text("Configuration");
 
+
 	if (ImGui::CollapsingHeader("Aplication"))
 		AplicationSetingsC();		
 
@@ -280,7 +293,7 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 
 	if (ImGui::CollapsingHeader("Hardware"))
 		HardwareSetingsC();
-	
+
 	if (ImGui::CollapsingHeader("Audio"))
 		AudioSetingsC();
 
@@ -413,6 +426,49 @@ IMGUI_API void ModuleUI::ShowMathWindow(bool * p_open)
 
 
 		ImGui::End();
+	return IMGUI_API void();
+}
+
+IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
+{
+	ImGuiWindowFlags window_flags = 0;
+	
+	window_flags |= ImGuiWindowFlags_NoTitleBar;
+	window_flags |= ImGuiWindowFlags_NoMove;
+	window_flags |= ImGuiWindowFlags_NoResize;
+
+	if (ImGui::Begin("Image View", p_open, window_flags))
+	{
+		
+	
+
+		static bool sb_Depth_Test = true;
+		static bool sb_Cull_Face = true;
+		static bool sb_Lighting = true;
+		static bool sb_Color_Material = true;
+		static bool sb_Texture_2D = true;
+
+		if (ImGui::Checkbox("LIGHTING", &sb_Lighting))
+			MenuBool.Lighting = !MenuBool.Lighting;
+
+		ImGui::SameLine();
+		if (ImGui::Checkbox("COLOR MATERIAL", &sb_Color_Material))
+			MenuBool.ColorMaterial = !MenuBool.ColorMaterial;
+
+		ImGui::SameLine();
+		if (ImGui::Checkbox("TEXTURE 2D", &sb_Texture_2D))
+			MenuBool.Texture2D = !MenuBool.Texture2D;
+
+		ImGui::SameLine();
+		if (ImGui::Checkbox("DEPTH TEST", &sb_Depth_Test))
+			MenuBool.DepthTest = !MenuBool.DepthTest;
+
+		ImGui::SameLine();
+		if (ImGui::Checkbox("CULL FACE", &sb_Cull_Face))
+			MenuBool.CullFace = !MenuBool.CullFace;
+		ImGui::End();
+	}
+
 	return IMGUI_API void();
 }
 
@@ -593,7 +649,7 @@ void ModuleUI::AplicationSetingsC()
 
 void ModuleUI::AudioSetingsC()
 {
-	if (ImGui::SliderFloat("Volume", &AudioSetingsS.MasterVolume, 0, 128)) 
+	if (ImGui::SliderFloat("Volume", &AudioSetingsS.MasterVolume, 0, 128))
 	{
 		Mix_Volume(-1, AudioSetingsS.MasterVolume);
 	}
@@ -605,22 +661,22 @@ void ModuleUI::AudioSetingsC()
 	{
 		Mix_VolumeMusic(AudioSetingsS.MasterVolume);
 	}
-	if (ImGui::TreeNode("Global")) 
+	if (ImGui::TreeNode("Global"))
 	{
-		if (ImGui::Button("Mute", { 50,20 })) 	{
-		
+		if (ImGui::Button("Mute", { 50,20 })) {
+
 			AudioSetingsS.MasterVolume = 0;
 			Mix_Volume(-1, AudioSetingsS.MasterVolume);
 		}
 		ImGui::SameLine();
-		if (ImGui::Button("Play", { 50,20 })) 
+		if (ImGui::Button("Play", { 50,20 }))
 		{
 			App->audio->PlayMusic();
 		}
 		ImGui::SameLine();
-		if (ImGui::Button("Pause", { 50,20 })) 
+		if (ImGui::Button("Pause", { 50,20 }))
 		{
-			for(int i =0;i<5;i++)
+			for (int i = 0; i < 5; i++)
 				Mix_Pause(i);
 		}
 		ImGui::SameLine();
