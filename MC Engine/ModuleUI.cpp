@@ -34,6 +34,14 @@ bool ModuleUI::Start()
 	MenuBool.openImageViewW = false;
 	WindowSetingsS.brightness = 1.0f;
 
+
+	MenuBool.Lighting = false;
+	MenuBool.DepthTest = false;
+	MenuBool.CullFace = false;
+	MenuBool.ColorMaterial = false;
+	MenuBool.Texture2D = true;
+	MenuBool.Wire = false;
+
 	return ret;
 }
 
@@ -171,6 +179,8 @@ update_status ModuleUI::Update(float dt)
 
 	if (teamInfoActive)
 		ShowTeamInfoWindow();
+
+
 
 
 	ImGui::Render();
@@ -442,11 +452,12 @@ IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 	{		
 
 
-		static bool sb_Depth_Test = true;
-		static bool sb_Cull_Face = true;
-		static bool sb_Lighting = true;
-		static bool sb_Color_Material = true;
-		static bool sb_Texture_2D = true;
+		static bool sb_Depth_Test = false;
+		static bool sb_Cull_Face = false;
+		static bool sb_Wire_Face = false;
+		static bool sb_Lighting = false;
+		static bool sb_Color_Material = false;
+		static bool sb_Texture_2D = false;
 
 		if (ImGui::Checkbox("LIGHTING", &sb_Lighting)) {
 			App->renderer3D->EDglView();
@@ -477,7 +488,13 @@ IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 			App->renderer3D->EDglView();
 			MenuBool.CullFace = !MenuBool.CullFace;
 		}
-		
+		ImGui::SameLine();
+		if (ImGui::Checkbox("WIRE", &sb_Wire_Face))
+		{
+			App->renderer3D->EDglView();
+			MenuBool.Wire = !MenuBool.Wire;
+
+		}
 		ImGui::End();}
 	
 

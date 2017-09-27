@@ -183,6 +183,14 @@ void ModuleRenderer3D::EDglView()
 	else if (!App->ui->MenuBool.Texture2D)
 		glDisable(GL_TEXTURE_2D);
 
+	
+	if (App->ui->MenuBool.Wire)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else if (!App->ui->MenuBool.Wire)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+
+
 }
 
 
