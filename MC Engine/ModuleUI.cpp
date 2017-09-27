@@ -10,6 +10,8 @@
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #pragma comment( lib, "Glew/libx86/glew32.lib" )
 
+
+
 ModuleUI::ModuleUI(Application * app, bool start_enabled) : Module(app, start_enabled)
 {
 	name = "UI";
@@ -26,22 +28,6 @@ bool ModuleUI::Start()
 	glewInit();
 	ImGui_ImplSdlGL3_Init(App->window->window);
 
-	//Windows ;
-	MenuBool.openTestW = false;
-	MenuBool.openMathW = false;
-	MenuBool.openConfigurationW = true;
-	MenuBool.openConsoleW = false;
-	MenuBool.openImageViewW = false;
-	WindowSetingsS.brightness = 1.0f;
-
-
-	MenuBool.Lighting = false;
-	MenuBool.DepthTest = false;
-	MenuBool.CullFace = false;
-	MenuBool.ColorMaterial = false;
-	MenuBool.Texture2D = true;
-	MenuBool.Wire = false;
-
 	return ret;
 }
 
@@ -54,138 +40,65 @@ update_status ModuleUI::PreUpdate(float dt)
 update_status ModuleUI::Update(float dt)
 {
 
-	static bool show_test_window = false;
-	static bool show_Console_window = true;
-	static bool show_Configuration_window = false;
-	static bool show_MathTest_window = false;
-	static bool show_Config_window = false;
-	static bool show_ImageView_window = false;
+	update_status ret = UPDATE_CONTINUE;
+
+	/*  MENU **************************************	*/
 
 	if (ImGui::BeginMainMenuBar())
 	{
 
 		if (ImGui::BeginMenu("File"))
 		{
-
-			if (ImGui::MenuItem("Quit", "ESC"))
-				return UPDATE_STOP;
-
+			ret = FileMenuBar();
 			ImGui::EndMenu();
 		}
 		
 		if (ImGui::BeginMenu("Edit"))
 		{
-			if (ImGui::MenuItem("Undo", "Ctrl + Z")) {}
-			if (ImGui::MenuItem("Redo", "Ctrl + Y")) {}
-
-			ImGui::Separator;
-			if (ImGui::MenuItem("Cut", "Ctrl + X")){}
-			if (ImGui::MenuItem("Copy", "Ctrl + C")) {}
-			if (ImGui::MenuItem("Paste", "Ctrl + V")) {}
-			ImGui::Separator;
-
-			if (ImGui::MenuItem("Preferences"))
-			{
-			}
-
+			EditMenuBar();
 			ImGui::EndMenu();
 		}
 		
 		if (ImGui::BeginMenu("Help"))
 		{
-			if (ImGui::MenuItem("About..")) {
-				teamInfoActive = !teamInfoActive;
-			}
-
-			if (ImGui::BeginMenu("Project..."))
-			{					
-
-				if (ImGui::MenuItem("Github repository"))
-				{
-					ShellExecuteA(NULL, "open", "https://github.com/SrPerso/MC-ENGINE-", NULL, NULL, SW_SHOWNORMAL);
-				}
-			
-				if (ImGui::MenuItem("Documentation"))
-				{
-					ShellExecuteA(NULL, "open", "https://github.com/SrPerso/MC-ENGINE-/wiki", NULL, NULL, SW_SHOWNORMAL);
-				}
-				if (ImGui::MenuItem("Releases"))
-				{
-					ShellExecuteA(NULL, "open", "https://github.com/SrPerso/MC-ENGINE-/releases", NULL, NULL, SW_SHOWNORMAL);
-				}
-				ImGui::EndMenu();
-			}
-	
-			if (ImGui::MenuItem("Report a bug"))
-			{
-				ShellExecuteA(NULL, "open", "https://github.com/SrPerso/MC-ENGINE-/issues", NULL, NULL, SW_SHOWNORMAL);
-			}
-
+			HelpMenuBar();
 			ImGui::EndMenu();
 		}
 			
 		if (ImGui::BeginMenu("Window"))
 		{
-			if (ImGui::Checkbox("test window", &show_test_window))
-			{
-				MenuBool.openTestW = !MenuBool.openTestW;
-			
-			}
-
-			if (ImGui::MenuItem("Console", "Ctrl + Shift + C")) 
-			{
-				MenuBool.openConsoleW = !MenuBool.openConsoleW;
-				consoleActive = !consoleActive;
-			}
-
-			if (ImGui::Checkbox("Configuration", &show_Configuration_window))
-			{
-				MenuBool.openConfigurationW = !MenuBool.openConfigurationW;
-				configActive = !configActive;
-			}
-
-			if (ImGui::Checkbox("Image Views", &show_ImageView_window))
-			{
-				MenuBool.openImageViewW = !MenuBool.openImageViewW;
-				ImageViewWActive = !ImageViewWActive;
-			}
-
-
-			ImGui::Separator;
-			ImGui::Checkbox("MathTest", &show_MathTest_window);
+			WindowMenuBar();
 			ImGui::EndMenu();
 		}
 			
 		ImGui::EndMainMenuBar();
 	}
 
-	/* 
-	*Execute 
-	*/
-	if (ImageViewWActive)
-		ShowImageViewWindow();
+
+	/*  *Execute Windows**************************************	*/
+
 
 	if (show_test_window)
 		ImGui::ShowTestWindow();
 	
-	if (MenuBool.openConfigurationW)
+	if (show_ImageView_window)
+		ShowImageViewWindow();
+	
+	if (show_Console_window)
+		ShowConsoleWindow();
+	
+	if (show_Configuration_window)
 		ShowConfigWindow();
+
+	if (show_TeamInfo_window)
+		ShowTeamInfoWindow();
 
 	if (show_MathTest_window)
 		ShowMathWindow();
 
-	if (MenuBool.openConsoleW)
-		ShowConsoleWindow();
-
-	if (teamInfoActive)
-		ShowTeamInfoWindow();
-
-
-
-
 	ImGui::Render();
 
-	return update_status(UPDATE_CONTINUE);
+	return update_status(ret);
 }
 
 bool ModuleUI::CleanUp()
@@ -193,16 +106,19 @@ bool ModuleUI::CleanUp()
 	bool ret = true;
 	ImGui_ImplSdlGL3_Shutdown();
 	App->ui->AddLogToConsole("Unloading UI Engine");
+
 	return ret;
 }
 
 IMGUI_API void ModuleUI::ShowConsoleWindow(bool * p_open)
 {
-	// Demonstrate the various window flags. Typically you would just use the default.
+
 	ImGuiWindowFlags window_flags = 0;
 
+	window_flags |= ImGuiWindowFlags_NoTitleBar;
+	//window_flags |= ImGuiWindowFlags_NoMove;
+	//window_flags |= ImGuiWindowFlags_NoResize;
 
-	window_flags = window_flags << ImGuiWindowFlags_NoMove;
 
 	if (!ImGui::Begin("Console", p_open, window_flags))
 	{
@@ -211,8 +127,6 @@ IMGUI_API void ModuleUI::ShowConsoleWindow(bool * p_open)
 
 		return;
 	}
-	
-	ImGui::PushItemWidth(ImGui::GetWindowWidth()); 
                         
 	
 	const char * test = "aaA";
@@ -300,7 +214,7 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 		WindowSetingsC();
 
 	if (ImGui::CollapsingHeader("Hardware"))
-		HardwareSetingsC();
+		//menu.HardwareConfig();
 
 	if (ImGui::CollapsingHeader("Audio"))
 		AudioSetingsC();
@@ -451,61 +365,44 @@ IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 	if (ImGui::Begin("Image View", p_open, window_flags))
 	{		
 
-
-		static bool sb_Depth_Test = false;
-		static bool sb_Cull_Face = false;
-		static bool sb_Wire_Face = false;
-		static bool sb_Lighting = false;
-		static bool sb_Color_Material = false;
-		static bool sb_Texture_2D = false;
-
-		if (ImGui::Checkbox("LIGHTING", &sb_Lighting)) {
-			App->renderer3D->EDglView();
-				MenuBool.Lighting = !MenuBool.Lighting;
-		}	
-
+		if (ImGui::Checkbox("LIGHTING", &sb_Lighting)) 
+			App->renderer3D->EDglView();		
+		
 		ImGui::SameLine();
-		if (ImGui::Checkbox("COLOR MATERIAL", &sb_Color_Material)) 
-		{
+		if (ImGui::Checkbox("COLOR MATERIAL", &sb_Color_Material))
 			App->renderer3D->EDglView();
-			MenuBool.ColorMaterial = !MenuBool.ColorMaterial;
-		}
+		
 		ImGui::SameLine();
 		if (ImGui::Checkbox("TEXTURE 2D", &sb_Texture_2D)) 
-		{
 			App->renderer3D->TextureView();
-			MenuBool.Texture2D = !MenuBool.Texture2D;
-		}
+		
 		ImGui::SameLine();
 		if (ImGui::Checkbox("DEPTH TEST", &sb_Depth_Test)) 
-		{
 			App->renderer3D->EDglView();
-			MenuBool.DepthTest = !MenuBool.DepthTest;
-		}
+		
 		ImGui::SameLine();
 		if (ImGui::Checkbox("CULL FACE", &sb_Cull_Face))
-		{
 			App->renderer3D->EDglView();
-			MenuBool.CullFace = !MenuBool.CullFace;
-		}
+
 		ImGui::SameLine();
 		if (ImGui::Checkbox("WIRE", &sb_Wire_Face))
-		{
 			App->renderer3D->EDglView();
-			MenuBool.Wire = !MenuBool.Wire;
 
-		}
-		ImGui::End();}
-	
+		ImGui::End();
+	}	
 
 	return IMGUI_API void();
 }
 
+
+//show the logs on Console..................................................
 void ModuleUI::AddLogToConsole(std::string toAdd)
 {
 	consoleTxt.push_back(toAdd);
 
 }
+
+//Config Window.............................................................
 
 void ModuleUI::HardwareSetingsC()
 {
@@ -566,8 +463,6 @@ void ModuleUI::HardwareSetingsC()
 	ImGui::SameLine();
 	if (SDL_HasAltiVec())
 		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, " ,AltiVec", nullptr);
-	
-
 
 
 	ImGui::Text("\n");
@@ -579,7 +474,7 @@ void ModuleUI::HardwareSetingsC()
 
 	int VRAM = 0;
 	glGetIntegerv(GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX, &VRAM);
-	ImGui::Text("VRAM capacity:");	
+	ImGui::Text("VRAM capacity:");
 	ImGui::SameLine();
 	ImGui::TextColored(ImVec4(0, 100, 0, 255), "%i", VRAM / 1000);
 
@@ -589,10 +484,11 @@ void ModuleUI::HardwareSetingsC()
 	ImGui::SameLine();
 	ImGui::TextColored(ImVec4(0, 100, 0, 255), "%i", VRAMRemaining / 1000);
 
-	int VRAMWorking = VRAM- VRAMRemaining;
+	int VRAMWorking = VRAM - VRAMRemaining;
 	ImGui::Text("VRAM Working:");
 	ImGui::SameLine();
 	ImGui::TextColored(ImVec4(0, 100, 0, 255), "%i", VRAMWorking / 1000);
+
 
 }
 
@@ -755,4 +651,80 @@ void ModuleUI::AudioSetingsC()
 void ModuleUI::DevicesSetingsC()
 {
 
+}
+
+
+//MENU BAR,.................................................................
+
+void ModuleUI::HelpMenuBar()
+{
+	if (ImGui::MenuItem("About..")) {
+		show_TeamInfo_window = !show_TeamInfo_window;
+	}
+
+	if (ImGui::BeginMenu("Project..."))
+	{
+
+		if (ImGui::MenuItem("Github repository"))
+		{
+			ShellExecuteA(NULL, "open", "https://github.com/SrPerso/MC-ENGINE-", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		if (ImGui::MenuItem("Documentation"))
+		{
+			ShellExecuteA(NULL, "open", "https://github.com/SrPerso/MC-ENGINE-/wiki", NULL, NULL, SW_SHOWNORMAL);
+		}
+		if (ImGui::MenuItem("Releases"))
+		{
+			ShellExecuteA(NULL, "open", "https://github.com/SrPerso/MC-ENGINE-/releases", NULL, NULL, SW_SHOWNORMAL);
+		}
+		ImGui::EndMenu();
+	}
+
+	if (ImGui::MenuItem("Report a bug"))
+	{
+		ShellExecuteA(NULL, "open", "https://github.com/SrPerso/MC-ENGINE-/issues", NULL, NULL, SW_SHOWNORMAL);
+	}
+}
+
+void ModuleUI::WindowMenuBar()
+{
+	ImGui::Checkbox("test window", &show_test_window);
+
+	ImGui::Checkbox("Image Views", &show_ImageView_window);
+	
+	if (ImGui::MenuItem("Console", "Ctrl + Shift + C"))
+		show_Console_window = !show_Console_window;
+	
+	ImGui::Checkbox("Configuration", &show_Configuration_window);
+	
+	ImGui::Checkbox("MathTest", &show_MathTest_window);
+
+}
+
+update_status ModuleUI::FileMenuBar()
+{
+	update_status ret = UPDATE_CONTINUE;
+
+	if (ImGui::MenuItem("Quit", "ESC"))
+		return UPDATE_STOP;
+
+
+	return update_status(ret);
+}
+
+void ModuleUI::EditMenuBar()
+{
+	if (ImGui::MenuItem("Undo", "Ctrl + Z")) {} //conect to IObjects
+	if (ImGui::MenuItem("Redo", "Ctrl + Y")) {}
+
+	ImGui::Separator;
+	if (ImGui::MenuItem("Cut", "Ctrl + X")) {}
+	if (ImGui::MenuItem("Copy", "Ctrl + C")) {}
+	if (ImGui::MenuItem("Paste", "Ctrl + V")) {}
+	ImGui::Separator;
+
+	if (ImGui::MenuItem("Preferences"))
+	{
+	}
 }

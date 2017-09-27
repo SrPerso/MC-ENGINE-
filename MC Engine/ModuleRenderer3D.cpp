@@ -158,35 +158,35 @@ bool ModuleRenderer3D::CleanUp()
 void ModuleRenderer3D::EDglView()
 {
 
-	if (App->ui->MenuBool.DepthTest)
+	if (App->ui->sb_Depth_Test)
 		glEnable(GL_DEPTH_TEST);
-	else if (!App->ui->MenuBool.DepthTest)
+	else if (!App->ui->sb_Depth_Test)
 		glDisable(GL_DEPTH_TEST);
 
-	if (App->ui->MenuBool.CullFace)
+	if (App->ui->sb_Cull_Face)
 		glEnable(GL_CULL_FACE);
-	else if (!App->ui->MenuBool.CullFace)
+	else if (!App->ui->sb_Cull_Face)
 		glDisable(GL_CULL_FACE);
 	
-	if (App->ui->MenuBool.Lighting)
+	if (App->ui->sb_Lighting)
 		glEnable(GL_LIGHTING);
-	else if (!App->ui->MenuBool.Lighting)
+	else if (!App->ui->sb_Lighting)
 		glDisable(GL_LIGHTING);
 
-	if (App->ui->MenuBool.ColorMaterial)
+	if (App->ui->sb_Color_Material)
 		glEnable(GL_COLOR_MATERIAL);
-	else if (!App->ui->MenuBool.ColorMaterial)
+	else if (!App->ui->sb_Color_Material)
 		glDisable(GL_COLOR_MATERIAL);
 
-	if (App->ui->MenuBool.Texture2D)
+	if (App->ui->sb_Texture_2D)
 		glEnable(GL_TEXTURE_2D);
-	else if (!App->ui->MenuBool.Texture2D)
+	else if (!App->ui->sb_Texture_2D)
 		glDisable(GL_TEXTURE_2D);
 
 	
-	if (App->ui->MenuBool.Wire)
+	if (App->ui->sb_Wire_Face)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	else if (!App->ui->MenuBool.Wire)
+	else if (!App->ui->sb_Wire_Face)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 
@@ -213,8 +213,8 @@ void ModuleRenderer3D::OnResize(int width, int height)
 void ModuleRenderer3D::TextureView()
 {
 
-	if (App->ui->MenuBool.Texture2D)
+	if (App->ui->sb_Texture_2D)
 		glEnable(GL_LINE);
-	else if (!App->ui->MenuBool.Texture2D)
+	else if (!App->ui->sb_Texture_2D)
 		glDisable(GL_LINE);
 }

@@ -7,9 +7,11 @@
 #include <string>
 #include <vector>
 
-
 #define MAX_FPSMS_COUNT 80
 
+class UIMenu;
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------//to delete
 template<class TYPE>
 struct sphereTest {
 	
@@ -19,6 +21,7 @@ struct sphereTest {
 		sphereY = 0;
 		sphereZ = 0;
 	}
+
 	~sphereTest() {
 		sphereRadius = 0;
 		sphereX = 0;
@@ -30,9 +33,9 @@ struct sphereTest {
 	TYPE sphereX = 0;
 	TYPE sphereY = 0;
 	TYPE sphereZ = 0;
-
 };
-
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------//to delete
 template<class TYPE>
 struct capsuleTest{
 
@@ -63,18 +66,11 @@ struct capsuleTest{
 	TYPE capsuleTopY = 0;
 	TYPE capsuleTopZ = 0;
 };
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
 
 struct WindowSetings {
-	WindowSetings(){
-		fullscreen = false;
-		fullDesktop = false;
-		windowWidth = SCREEN_WIDTH;
-		brightness = BRIGHTNESS;
-		borderless = WIN_BORDERLESS;
-		windowHeight = SCREEN_HEIGHT;
-		vsync = VSYNC;
-		FPSLimit = 0;
-	}
+	WindowSetings() {}
 	~WindowSetings() {
 		fullscreen = false;
 		fullDesktop = false;
@@ -86,16 +82,17 @@ struct WindowSetings {
 		FPSLimit = 0;
 	}
 
-	bool fullscreen;
-	bool fullDesktop;
-	bool borderless;
-	int windowWidth;
-	int windowHeight;
-	float brightness;
-	bool vsync;
-	int* FPSLimit;
+	bool fullscreen = false;
+	bool fullDesktop = false;
+	bool borderless = WIN_BORDERLESS;
+	int windowWidth = SCREEN_WIDTH;
+	int windowHeight = SCREEN_HEIGHT;
+	float brightness = BRIGHTNESS;
+	bool vsync = VSYNC;
+	int* FPSLimit = 0;
 };
-
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
 struct AudioSetings {
 
 	AudioSetings() {
@@ -121,26 +118,20 @@ struct AudioSetings {
 	bool Mute;
 
 };
-
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
 struct MenuBooleans {
 public:
 
 // OPEN GL
-	bool DepthTest=false;
-	bool CullFace = false;
-	bool Lighting = false;
-	bool ColorMaterial = false;
-	bool Texture2D = false;
-	bool Wire = false;
-//Open windows
-	bool openConsoleW;
-	bool openConfigurationW;
-	bool openMathW;
-	bool openTestW;
-	bool openImageViewW;
+
+
 };
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
 
 class Win32_VideoController;
+
 
 class ModuleUI : public Module
 {
@@ -168,21 +159,6 @@ public:
 	IMGUI_API void ShowImageViewWindow(bool* p_open = NULL);
 	void AddLogToConsole(std::string toAdd);
 
-public://math
-	bool intersects = false;
-	MenuBooleans MenuBool;
-private: // Active
-	bool teamInfoActive = false;
-	bool TimerActive = true;
-	bool consoleActive = false;
-	bool mathTestActive = false;
-	bool configActive = false;
-	bool ImageViewWActive = true;
-
-	bool wireActive = false;
-//menu GL__-
-
-	
 private:
 	std::vector<std::string> consoleTxt;
 	std::vector<float> FPSData;
@@ -195,12 +171,45 @@ private:
 	sphereTest<int> sphere1;
 	sphereTest<int> sphere2;
 	capsuleTest<int> capsule1;
+public:
+	bool intersects = false;
+	MenuBooleans MenuBool;
+//-----------------
 
 private: //setings structure
 	WindowSetings WindowSetingsS;
 	AudioSetings AudioSetingsS;
 
 	//Win32_VideoController VC_GPU;
+
+
+
+private:
+	// engine main menu bar
+	update_status FileMenuBar();
+	void EditMenuBar();
+	void HelpMenuBar();
+	void WindowMenuBar();
+	//Execute
+
+//	UIMenu menuu;
+private:
+	bool show_test_window = false;
+	bool show_Console_window = true;
+	bool show_Configuration_window = false;
+	bool show_MathTest_window = false;
+	bool show_Config_window = false;
+	bool show_ImageView_window = false;
+	bool show_TeamInfo_window = false;
+
+public: //
+	bool sb_Depth_Test = false;
+	bool sb_Cull_Face = false;
+	bool sb_Wire_Face = false;
+	bool sb_Lighting = false;
+	bool sb_Color_Material = false;
+	bool sb_Texture_2D = false;
+
 };
 
 #endif // __ModuleUI_H__
