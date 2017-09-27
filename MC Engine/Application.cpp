@@ -91,7 +91,6 @@ void Application::PrepareUpdate()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
-
 	dt = (float)ms_timer.Read() / 1000.0f;
 	lastFPS = 1.0f / dt;
 	lastMs = (float)ms_timer.Read();

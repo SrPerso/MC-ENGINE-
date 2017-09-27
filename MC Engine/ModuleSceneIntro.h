@@ -3,7 +3,7 @@
 #include "p2DynArray.h"
 #include "Globals.h"
 #include "Primitive.h"
-
+#include <list>
 
 struct PhysBody3D;
 struct PhysMotor3D;
@@ -21,7 +21,8 @@ public:
 	bool CleanUp();
 	bool intersects = false;
 
-	PrimitiveSphere sp;
+	std::list<PrimitiveSphere*> test;
+
 public:
-	void CreateTree(const float x, const float y, const float z, const float tall, const float radious);
+	void CreateCylinder(const float x, const float y, const float z, const float radious, const float h);
 };

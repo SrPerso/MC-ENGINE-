@@ -336,6 +336,9 @@ IMGUI_API void ModuleUI::ShowMathWindow(bool * p_open)
 		ImGui::InputInt("X", &sphere1.sphereX);
 		ImGui::InputInt("Y", &sphere1.sphereY);
 		ImGui::InputInt("Z", &sphere1.sphereZ);
+
+		
+	
 	}
 	if (sphere2selected) {
 		ImGui::Text("Sphere 2:");

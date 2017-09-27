@@ -43,6 +43,14 @@ bool ModuleSceneIntro::CleanUp()
 	return true;
 }
 
+void ModuleSceneIntro::CreateCylinder(const float x, const float y, const float z, const float radious, const float h)
+{
+	PrimitiveCylinder* toCreate = new PrimitiveCylinder(radious, h);
+	toCreate->SetPos(x, y, z);
+	toCreate->color = White;
+	//test->push_front(toCreate);
+}
+
 // PreUpdate
 update_status ModuleSceneIntro::PreUpdate(float dt)
 {
@@ -54,6 +62,8 @@ update_status ModuleSceneIntro::PreUpdate(float dt)
 update_status ModuleSceneIntro::Update(float dt)
 {	
 	
+
+
 	PrimitiveSphere sp(2);
 	sp.SetPos(0, 3, 0);
 	sp.color = Red;
