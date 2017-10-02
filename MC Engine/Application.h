@@ -43,7 +43,7 @@ public:
 
 	bool Init();
 	update_status Update();
-	bool CleanUp();
+	bool CleanUp(JSON_Object* data = nullptr);
 
 public:
 	float GetFPS();

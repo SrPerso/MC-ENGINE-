@@ -71,7 +71,7 @@ bool ModuleWindow::Init(JSON_Object* data)
 		}
 		else
 		{
-
+		
 			width = json_object_dotget_number(data, "width")*SCREEN_SIZE;
 			height = json_object_dotget_number(data, "height")*SCREEN_SIZE;
 			fullscreen = json_object_dotget_boolean(data, "fullscreen");
@@ -126,7 +126,7 @@ bool ModuleWindow::Init(JSON_Object* data)
 }
 
 // Called before quitting
-bool ModuleWindow::CleanUp()
+bool ModuleWindow::CleanUp(JSON_Object* data)
 {
 	LOG("Destroying SDL window and quitting all SDL systems");
 	App->ui->AddLogToConsole("Destroying SDL window and quitting all SDL systems");

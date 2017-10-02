@@ -149,7 +149,7 @@ update_status ModulePhysics3D::PostUpdate(float dt)
 }
 
 // Called before quitting
-bool ModulePhysics3D::CleanUp()
+bool ModulePhysics3D::CleanUp(JSON_Object* data)
 {
 	LOG("Destroying 3D Physics simulation");
 	App->ui->AddLogToConsole("Destroying 3D Physics simulation");

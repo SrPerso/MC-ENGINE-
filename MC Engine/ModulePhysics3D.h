@@ -25,7 +25,7 @@ public:
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
-	bool CleanUp();
+	bool CleanUp(JSON_Object* data);
 
 	PhysBody3D* AddBody(const PrimitiveSphere& sphere, float mass = 1.0f);
 	PhysBody3D* AddBody(const Cube& cube, float mass = 1.0f);

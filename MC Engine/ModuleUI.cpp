@@ -93,19 +93,88 @@ update_status ModuleUI::Update(float dt)
 	if (show_TeamInfo_window)
 		ShowTeamInfoWindow();
 
+	if (show_Style_window)
+		ShowStyleWindow();
 
 	ImGui::Render();
 
 	return update_status(ret);
 }
 
-bool ModuleUI::CleanUp()
+bool ModuleUI::CleanUp(JSON_Object* data)
 {
 	bool ret = true;
 	ImGui_ImplSdlGL3_Shutdown();
+
+	SaveStyle();
+
 	App->ui->AddLogToConsole("Unloading UI Engine");
 
 	return ret;
+}
+
+void ModuleUI::SaveStyle(JSON_Object * data)
+{
+	json_object_dotset_number(data, "Alpha", ImGui::GetStyle().Alpha);
+
+	json_object_dotset_number(data, "WindowPadding_x", ImGui::GetStyle().WindowPadding.x);
+	json_object_dotset_number(data, "WindowPadding_y", ImGui::GetStyle().WindowPadding.y);
+
+	json_object_dotset_number(data, "WindowMinSize_x", ImGui::GetStyle().WindowMinSize.x);
+	json_object_dotset_number(data, "WindowMinSize_y", ImGui::GetStyle().WindowMinSize.y);
+
+	json_object_dotset_number(data, "WindowRounding", ImGui::GetStyle().WindowRounding);
+
+	json_object_dotset_number(data, "WindowTitleAlign_x", ImGui::GetStyle().WindowTitleAlign.x);
+	json_object_dotset_number(data, "WindowTitleAlign_y", ImGui::GetStyle().WindowTitleAlign.y);
+	
+	json_object_dotset_number(data, "ChildWindowRounding", ImGui::GetStyle().ChildWindowRounding);
+
+	json_object_dotset_number(data, "FramePadding_x", ImGui::GetStyle().FramePadding.x);
+	json_object_dotset_number(data, "FramePadding_y", ImGui::GetStyle().FramePadding.y);
+
+	json_object_dotset_number(data, "FrameRounding", ImGui::GetStyle().FrameRounding);
+
+	json_object_dotset_number(data, "ItemSpacing_x", ImGui::GetStyle().ItemSpacing.x);
+	json_object_dotset_number(data, "ItemSpacing_y", ImGui::GetStyle().ItemSpacing.y);
+	
+	json_object_dotset_number(data, "ItemInnerSpacing_x", ImGui::GetStyle().ItemInnerSpacing.x);
+	json_object_dotset_number(data, "ItemInnerSpacing_y", ImGui::GetStyle().ItemInnerSpacing.y);
+
+	json_object_dotset_number(data, "TouchExtraPadding", ImGui::GetStyle().TouchExtraPadding.x);
+	json_object_dotset_number(data, "TouchExtraPadding", ImGui::GetStyle().TouchExtraPadding.y);
+
+	json_object_dotset_number(data, "IndentSpacing", ImGui::GetStyle().IndentSpacing);
+	json_object_dotset_number(data, "ColumnsMinSpacing", ImGui::GetStyle().ColumnsMinSpacing);
+	json_object_dotset_number(data, "ScrollbarSize", ImGui::GetStyle().ScrollbarSize);
+	json_object_dotset_number(data, "ScrollbarRounding", ImGui::GetStyle().ScrollbarRounding);
+	json_object_dotset_number(data, "GrabMinSize", ImGui::GetStyle().GrabMinSize);
+	json_object_dotset_number(data, "GrabRounding", ImGui::GetStyle().GrabRounding);
+
+	json_object_dotset_number(data, "ButtonTextAlign_x", ImGui::GetStyle().ButtonTextAlign.x);
+	json_object_dotset_number(data, "ButtonTextAlign_y", ImGui::GetStyle().ButtonTextAlign.y);
+
+	json_object_dotset_number(data, "DisplayWindowPadding_x", ImGui::GetStyle().DisplayWindowPadding.x);
+	json_object_dotset_number(data, "DisplayWindowPadding_y", ImGui::GetStyle().DisplayWindowPadding.y);
+
+	json_object_dotset_number(data, "DisplaySafeAreaPadding_x", ImGui::GetStyle().DisplaySafeAreaPadding.x);
+	json_object_dotset_number(data, "DisplaySafeAreaPadding_y", ImGui::GetStyle().DisplaySafeAreaPadding.y);
+
+	json_object_dotset_boolean(data, "AntiAliasedLines", ImGui::GetStyle().AntiAliasedLines);
+	json_object_dotset_boolean(data, "AntiAliasedShapes", ImGui::GetStyle().AntiAliasedShapes);
+
+	json_object_dotset_number(data, "CurveTessellationTol", ImGui::GetStyle().CurveTessellationTol);
+	
+	for (int i = 0; i < ImGuiCol_COUNT; i++)
+	{
+		json_object_dotset_string(data, "ColorName", ImGui::GetStyleColorName(i));
+		const char* name = ImGui::GetStyleColorName(i);
+		json_object_dotset_number(data, ("%s w", name), ImGui::GetStyle().Colors->w);
+		json_object_dotset_number(data, ("%s x", name), ImGui::GetStyle().Colors->x	);
+		json_object_dotset_number(data, ("%s y", name), ImGui::GetStyle().Colors->y);
+		json_object_dotset_number(data, ("%s z", name), ImGui::GetStyle().Colors->y);
+	}
+
 }
 
 IMGUI_API void ModuleUI::ShowConsoleWindow(bool * p_open)
@@ -225,6 +294,7 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 
 	return IMGUI_API void();
 }
+
 /*
 IMGUI_API void ModuleUI::ShowMathWindow(bool * p_open)
 {
@@ -388,12 +458,29 @@ IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 	return IMGUI_API void();
 }
 
-
 //show the logs on Console..................................................
 void ModuleUI::AddLogToConsole(std::string toAdd)
 {
 	consoleTxt.push_back(toAdd);
 
+}
+
+IMGUI_API void ModuleUI::ShowStyleWindow(bool * p_open)
+{
+
+	ImGuiWindowFlags window_flags = 0;
+
+	window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	window_flags |= ImGuiWindowFlags_NoCollapse;
+	window_flags |= ImGuiWindowFlags_ShowBorders;
+
+	ImGui::Begin("Style ", p_open, window_flags);
+
+	ImGui::ShowStyleEditor();
+
+	ImGui::End();
+
+	return IMGUI_API void();
 }
 
 //Config Window.............................................................
@@ -689,6 +776,8 @@ void ModuleUI::WindowMenuBar()
 	
 	//ImGui::Checkbox("MathTest", &show_MathTest_window);
 
+	ImGui::Checkbox("Style Window", &show_Style_window);
+
 }
 
 update_status ModuleUI::FileMenuBar()
@@ -717,3 +806,4 @@ void ModuleUI::EditMenuBar()
 	{
 	}
 }
+

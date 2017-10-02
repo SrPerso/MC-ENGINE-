@@ -33,6 +33,8 @@
 #include <stdint.h>         // intptr_t
 #endif
 
+#include "../parson/parson.h"
+
 #ifdef _MSC_VER
 #pragma warning (disable: 4996) // 'This function or variable may be unsafe': strcpy, strdup, sprintf, vsnprintf, sscanf, fopen
 #define snprintf _snprintf
@@ -1795,12 +1797,14 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
     if (ImGui::Button("Revert Style"))
         style = ref ? *ref : default_style;
 
-    if (ref)
+    /*if (ref)
     {
         ImGui::SameLine();
         if (ImGui::Button("Save Style"))
             *ref = style;
-    }
+    }*/
+
+
 
     ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.55f);
 

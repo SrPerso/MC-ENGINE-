@@ -130,14 +130,14 @@ update_status Application::Update()
 	return ret;
 }
 
-bool Application::CleanUp()
+bool Application::CleanUp(JSON_Object* data)
 {
 	bool ret = true;
 	p2List_item<Module*>* item = list_modules.getLast();
 
 	while(item != NULL && ret == true)
 	{
-		ret = item->data->CleanUp();
+		ret = item->data->CleanUp(data);
 		item = item->prev;
 	}
 	return ret;
