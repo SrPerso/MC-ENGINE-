@@ -93,8 +93,6 @@ update_status ModuleUI::Update(float dt)
 	if (show_TeamInfo_window)
 		ShowTeamInfoWindow();
 
-	if (show_MathTest_window)
-		ShowMathWindow();
 
 	ImGui::Render();
 
@@ -213,21 +211,21 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 	if (ImGui::CollapsingHeader("Window"))
 		WindowSetingsC();
 
-	if (ImGui::CollapsingHeader("Hardware"))
+	if (ImGui::CollapsingHeader("Hardware")) {}
 		//menu.HardwareConfig();
 
 	if (ImGui::CollapsingHeader("Audio"))
 		AudioSetingsC();
 
-	if (ImGui::CollapsingHeader("Devices"))
-		DevicesSetingsC();
+	//if (ImGui::CollapsingHeader("Devices"))
+	//	DevicesSetingsC();
 
 
 	ImGui::End();
 
 	return IMGUI_API void();
 }
-
+/*
 IMGUI_API void ModuleUI::ShowMathWindow(bool * p_open)
 {
 	// Demonstrate the various window flags. Typically you would just use the default.
@@ -248,22 +246,18 @@ IMGUI_API void ModuleUI::ShowMathWindow(bool * p_open)
 	static bool sphere2selected = false;
 	static bool Capsuleselected = false;
 
-
 	ImGui::Checkbox("Sphere1", &sphere1selected);
 	ImGui::Checkbox("Sphere2", &sphere2selected);
 	ImGui::Checkbox("Capsule1", &Capsuleselected);
-
 
 	if (sphere1selected){
 		ImGui::Text("Sphere 1:");
 		ImGui::InputInt("Radius", &sphere1.sphereRadius);
 		ImGui::InputInt("X", &sphere1.sphereX);
 		ImGui::InputInt("Y", &sphere1.sphereY);
-		ImGui::InputInt("Z", &sphere1.sphereZ);
-
-		
-	
+		ImGui::InputInt("Z", &sphere1.sphereZ);			
 	}
+
 	if (sphere2selected) {
 		ImGui::Text("Sphere 2:");
 		ImGui::InputInt("Radius 2", &sphere2.sphereRadius);
@@ -352,7 +346,7 @@ IMGUI_API void ModuleUI::ShowMathWindow(bool * p_open)
 
 		ImGui::End();
 	return IMGUI_API void();
-}
+}*/
 
 IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 {
@@ -648,11 +642,6 @@ void ModuleUI::AudioSetingsC()
 	}
 }
 
-void ModuleUI::DevicesSetingsC()
-{
-
-}
-
 
 //MENU BAR,.................................................................
 
@@ -698,7 +687,7 @@ void ModuleUI::WindowMenuBar()
 	
 	ImGui::Checkbox("Configuration", &show_Configuration_window);
 	
-	ImGui::Checkbox("MathTest", &show_MathTest_window);
+	//ImGui::Checkbox("MathTest", &show_MathTest_window);
 
 }
 

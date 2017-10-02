@@ -7,6 +7,26 @@
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
 
+struct AudioSetings {
+
+	AudioSetings(){}
+
+	~AudioSetings(){
+		MasterVolume = 50;
+		FXVolume = 50;
+		BSOVolume = 50;
+		Padding = 0;
+		Mute = false;
+	}
+
+	float MasterVolume = 50;
+	float FXVolume = 50;
+	float BSOVolume = 50;
+	float Padding = 0;
+	bool Mute = false;
+
+};
+
 class ModuleAudio : public Module
 {
 public:
@@ -27,9 +47,9 @@ public:
 	bool PlayFx(unsigned int fx, int repeat = 0);
 
 private:
-
 	Mix_Music*			music;
 	p2List<Mix_Chunk*>	fx;
+
 };
 
 #endif // __ModuleAudio_H__

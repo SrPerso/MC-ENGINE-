@@ -4,6 +4,29 @@
 #include "Module.h"
 #include "SDL/include/SDL.h"
 
+struct WindowSetings {
+
+	WindowSetings() {}
+	~WindowSetings() {
+		fullscreen = false;
+		fullDesktop = false;
+		windowWidth = SCREEN_WIDTH;
+		brightness = BRIGHTNESS;
+		windowHeight = SCREEN_HEIGHT;
+		vsync = VSYNC;
+		borderless = WIN_BORDERLESS;
+		FPSLimit = 0;
+	}
+
+	bool fullscreen = false;
+	bool fullDesktop = false;
+	bool borderless = WIN_BORDERLESS;
+	int windowWidth = SCREEN_WIDTH;
+	int windowHeight = SCREEN_HEIGHT;
+	float brightness = BRIGHTNESS;
+	bool vsync = VSYNC;
+	int* FPSLimit = 0;
+};
 
 
 class Application;
