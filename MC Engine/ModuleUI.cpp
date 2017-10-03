@@ -10,15 +10,39 @@
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #pragma comment( lib, "Glew/libx86/glew32.lib" )
 
+#include "parson\parson.h"
 
 
 ModuleUI::ModuleUI(Application * app, bool start_enabled) : Module(app, start_enabled)
 {
+	uiStyle = new ImGuiStyle();	
 	name = "UI";
 }
 
 ModuleUI::~ModuleUI()
 {
+}
+
+bool ModuleUI::Init()
+{
+	LOG("Init UI");
+	App->ui->AddLogToConsole("Init UI");
+
+	bool ret = true;
+	
+	//TO DO
+
+	JSON_Value* saveValue = json_parse_file("UISave.json");
+	JSON_Object* saveObject = json_value_get_object(saveValue);
+	JSON_Object* data = json_object_dotget_object(saveObject, this->name.c_str());
+
+	SaveStyle(data);
+	//if (data != nullptr) 
+	//{	
+	//	LoadStyle(data);
+	//}
+
+	return ret;
 }
 
 bool ModuleUI::Start()
@@ -101,81 +125,19 @@ update_status ModuleUI::Update(float dt)
 	return update_status(ret);
 }
 
-bool ModuleUI::CleanUp(JSON_Object* data)
+bool ModuleUI::CleanUp()
 {
 	bool ret = true;
 	ImGui_ImplSdlGL3_Shutdown();
 
-	SaveStyle();
+
 
 	App->ui->AddLogToConsole("Unloading UI Engine");
 
 	return ret;
 }
 
-void ModuleUI::SaveStyle(JSON_Object * data)
-{
-	json_object_dotset_number(data, "Alpha", ImGui::GetStyle().Alpha);
 
-	json_object_dotset_number(data, "WindowPadding_x", ImGui::GetStyle().WindowPadding.x);
-	json_object_dotset_number(data, "WindowPadding_y", ImGui::GetStyle().WindowPadding.y);
-
-	json_object_dotset_number(data, "WindowMinSize_x", ImGui::GetStyle().WindowMinSize.x);
-	json_object_dotset_number(data, "WindowMinSize_y", ImGui::GetStyle().WindowMinSize.y);
-
-	json_object_dotset_number(data, "WindowRounding", ImGui::GetStyle().WindowRounding);
-
-	json_object_dotset_number(data, "WindowTitleAlign_x", ImGui::GetStyle().WindowTitleAlign.x);
-	json_object_dotset_number(data, "WindowTitleAlign_y", ImGui::GetStyle().WindowTitleAlign.y);
-	
-	json_object_dotset_number(data, "ChildWindowRounding", ImGui::GetStyle().ChildWindowRounding);
-
-	json_object_dotset_number(data, "FramePadding_x", ImGui::GetStyle().FramePadding.x);
-	json_object_dotset_number(data, "FramePadding_y", ImGui::GetStyle().FramePadding.y);
-
-	json_object_dotset_number(data, "FrameRounding", ImGui::GetStyle().FrameRounding);
-
-	json_object_dotset_number(data, "ItemSpacing_x", ImGui::GetStyle().ItemSpacing.x);
-	json_object_dotset_number(data, "ItemSpacing_y", ImGui::GetStyle().ItemSpacing.y);
-	
-	json_object_dotset_number(data, "ItemInnerSpacing_x", ImGui::GetStyle().ItemInnerSpacing.x);
-	json_object_dotset_number(data, "ItemInnerSpacing_y", ImGui::GetStyle().ItemInnerSpacing.y);
-
-	json_object_dotset_number(data, "TouchExtraPadding", ImGui::GetStyle().TouchExtraPadding.x);
-	json_object_dotset_number(data, "TouchExtraPadding", ImGui::GetStyle().TouchExtraPadding.y);
-
-	json_object_dotset_number(data, "IndentSpacing", ImGui::GetStyle().IndentSpacing);
-	json_object_dotset_number(data, "ColumnsMinSpacing", ImGui::GetStyle().ColumnsMinSpacing);
-	json_object_dotset_number(data, "ScrollbarSize", ImGui::GetStyle().ScrollbarSize);
-	json_object_dotset_number(data, "ScrollbarRounding", ImGui::GetStyle().ScrollbarRounding);
-	json_object_dotset_number(data, "GrabMinSize", ImGui::GetStyle().GrabMinSize);
-	json_object_dotset_number(data, "GrabRounding", ImGui::GetStyle().GrabRounding);
-
-	json_object_dotset_number(data, "ButtonTextAlign_x", ImGui::GetStyle().ButtonTextAlign.x);
-	json_object_dotset_number(data, "ButtonTextAlign_y", ImGui::GetStyle().ButtonTextAlign.y);
-
-	json_object_dotset_number(data, "DisplayWindowPadding_x", ImGui::GetStyle().DisplayWindowPadding.x);
-	json_object_dotset_number(data, "DisplayWindowPadding_y", ImGui::GetStyle().DisplayWindowPadding.y);
-
-	json_object_dotset_number(data, "DisplaySafeAreaPadding_x", ImGui::GetStyle().DisplaySafeAreaPadding.x);
-	json_object_dotset_number(data, "DisplaySafeAreaPadding_y", ImGui::GetStyle().DisplaySafeAreaPadding.y);
-
-	json_object_dotset_boolean(data, "AntiAliasedLines", ImGui::GetStyle().AntiAliasedLines);
-	json_object_dotset_boolean(data, "AntiAliasedShapes", ImGui::GetStyle().AntiAliasedShapes);
-
-	json_object_dotset_number(data, "CurveTessellationTol", ImGui::GetStyle().CurveTessellationTol);
-	
-	for (int i = 0; i < ImGuiCol_COUNT; i++)
-	{
-		json_object_dotset_string(data, "ColorName", ImGui::GetStyleColorName(i));
-		const char* name = ImGui::GetStyleColorName(i);
-		json_object_dotset_number(data, ("%s w", name), ImGui::GetStyle().Colors->w);
-		json_object_dotset_number(data, ("%s x", name), ImGui::GetStyle().Colors->x	);
-		json_object_dotset_number(data, ("%s y", name), ImGui::GetStyle().Colors->y);
-		json_object_dotset_number(data, ("%s z", name), ImGui::GetStyle().Colors->y);
-	}
-
-}
 
 IMGUI_API void ModuleUI::ShowConsoleWindow(bool * p_open)
 {
@@ -462,7 +424,6 @@ IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 void ModuleUI::AddLogToConsole(std::string toAdd)
 {
 	consoleTxt.push_back(toAdd);
-
 }
 
 IMGUI_API void ModuleUI::ShowStyleWindow(bool * p_open)
@@ -476,7 +437,7 @@ IMGUI_API void ModuleUI::ShowStyleWindow(bool * p_open)
 
 	ImGui::Begin("Style ", p_open, window_flags);
 
-	ImGui::ShowStyleEditor();
+	ImGui::ShowStyleEditor(uiStyle); //TODO
 
 	ImGui::End();
 
@@ -805,5 +766,139 @@ void ModuleUI::EditMenuBar()
 	if (ImGui::MenuItem("Preferences"))
 	{
 	}
+}
+
+void ModuleUI::LoadStyle(JSON_Object * data)
+{
+
+	uiStyle->Alpha = json_object_dotget_number(data, "Alpha");
+
+	uiStyle->WindowPadding.x = json_object_dotget_number(data, "WindowPadding_x");
+	uiStyle->WindowPadding.y = json_object_dotget_number(data, "WindowPadding_y");
+
+	uiStyle->WindowMinSize.x = json_object_dotget_number(data, "WindowMinSize_x");
+	uiStyle->WindowMinSize.y = json_object_dotget_number(data, "WindowMinSize_y");
+
+
+	uiStyle->WindowRounding = json_object_dotget_number(data, "WindowRounding");
+
+	uiStyle->WindowTitleAlign.x = json_object_dotget_number(data, "WindowTitleAlign_x");
+	uiStyle->WindowTitleAlign.y = json_object_dotget_number(data, "WindowTitleAlign_y");
+
+	uiStyle->ChildWindowRounding = json_object_dotget_number(data, "ChildWindowRounding");
+
+	uiStyle->FramePadding.x = json_object_dotget_number(data, "FramePadding_x");
+	uiStyle->FramePadding.y = json_object_dotget_number(data, "FramePadding_y");
+
+	uiStyle->FrameRounding = json_object_dotget_number(data, "FrameRounding");
+
+	uiStyle->ItemSpacing.x = json_object_dotget_number(data, "ItemSpacing_x");
+	uiStyle->ItemSpacing.y = json_object_dotget_number(data, "ItemSpacing_y");
+
+	uiStyle->ItemInnerSpacing.x = json_object_dotget_number(data, "ItemInnerSpacing_x");
+	uiStyle->ItemInnerSpacing.y = json_object_dotget_number(data, "ItemInnerSpacing_y");
+
+	uiStyle->TouchExtraPadding.x = json_object_dotget_number(data, "TouchExtraPadding_x");
+	uiStyle->TouchExtraPadding.y = json_object_dotget_number(data, "TouchExtraPadding_y");
+
+	uiStyle->IndentSpacing = json_object_dotget_number(data, "IndentSpacing");
+	uiStyle->ColumnsMinSpacing = json_object_dotget_number(data, "ColumnsMinSpacing");
+
+	uiStyle->ScrollbarSize = json_object_dotget_number(data, "ScrollbarSize");
+	uiStyle->ScrollbarRounding = json_object_dotget_number(data, "ScrollbarRounding");
+	uiStyle->GrabMinSize = json_object_dotget_number(data, "GrabMinSize");
+	uiStyle->GrabRounding = json_object_dotget_number(data, "GrabRounding");
+
+	uiStyle->ButtonTextAlign.x = json_object_dotget_number(data, "ButtonTextAlign_x");
+	uiStyle->ButtonTextAlign.y = json_object_dotget_number(data, "ButtonTextAlign_y");
+
+	uiStyle->DisplayWindowPadding.x = json_object_dotget_number(data, "DisplayWindowPadding_x");
+	uiStyle->DisplayWindowPadding.y = json_object_dotget_number(data, "DisplayWindowPadding_y");
+
+	uiStyle->DisplaySafeAreaPadding.x = json_object_dotget_number(data, "DisplaySafeAreaPadding_x");
+	uiStyle->DisplaySafeAreaPadding.y = json_object_dotget_number(data, "DisplaySafeAreaPadding_y");
+
+	uiStyle->AntiAliasedLines = json_object_dotget_boolean(data, "AntiAliasedLines");
+	uiStyle->AntiAliasedShapes = json_object_dotget_boolean(data, "AntiAliasedShapes");
+
+	uiStyle->CurveTessellationTol = json_object_dotget_number(data, "CurveTessellationTol");
+
+
+	for (int i = 0; i < ImGuiCol_COUNT; i++)
+	{
+		json_object_dotset_string(data, "ColorName", ImGui::GetStyleColorName(i));
+		const char* name = ImGui::GetStyleColorName(i);
+		json_object_dotset_number(data, ("%s w", name), ImGui::GetStyle().Colors->w);
+		json_object_dotset_number(data, ("%s x", name), ImGui::GetStyle().Colors->x);
+		json_object_dotset_number(data, ("%s y", name), ImGui::GetStyle().Colors->y);
+		json_object_dotset_number(data, ("%s z", name), ImGui::GetStyle().Colors->y);
+	}
+}
+
+void ModuleUI::SaveStyle(JSON_Object * data)
+{
+
+	//json_value_init_object();
+
+	json_object_set_number(data, "Alpha", ImGui::GetStyle().Alpha);
+
+	json_object_set_number(data, "WindowPadding_x", ImGui::GetStyle().WindowPadding.x);
+	json_object_set_number(data, "WindowPadding_y", ImGui::GetStyle().WindowPadding.y);
+
+	json_object_set_number(data, "WindowMinSize_x", ImGui::GetStyle().WindowMinSize.x);
+	json_object_set_number(data, "WindowMinSize_y", ImGui::GetStyle().WindowMinSize.y);
+
+	json_object_dotset_number(data, "WindowRounding", ImGui::GetStyle().WindowRounding);
+
+	json_object_dotset_number(data, "WindowTitleAlign_x", ImGui::GetStyle().WindowTitleAlign.x);
+	json_object_dotset_number(data, "WindowTitleAlign_y", ImGui::GetStyle().WindowTitleAlign.y);
+
+	json_object_dotset_number(data, "ChildWindowRounding", ImGui::GetStyle().ChildWindowRounding);
+
+	json_object_dotset_number(data, "FramePadding_x", ImGui::GetStyle().FramePadding.x);
+	json_object_dotset_number(data, "FramePadding_y", ImGui::GetStyle().FramePadding.y);
+
+	json_object_dotset_number(data, "FrameRounding", ImGui::GetStyle().FrameRounding);
+
+	json_object_dotset_number(data, "ItemSpacing_x", ImGui::GetStyle().ItemSpacing.x);
+	json_object_dotset_number(data, "ItemSpacing_y", ImGui::GetStyle().ItemSpacing.y);
+
+	json_object_dotset_number(data, "ItemInnerSpacing_x", ImGui::GetStyle().ItemInnerSpacing.x);
+	json_object_dotset_number(data, "ItemInnerSpacing_y", ImGui::GetStyle().ItemInnerSpacing.y);
+
+	json_object_dotset_number(data, "TouchExtraPadding_x", ImGui::GetStyle().TouchExtraPadding.x);
+	json_object_dotset_number(data, "TouchExtraPadding_y", ImGui::GetStyle().TouchExtraPadding.y);
+
+	json_object_dotset_number(data, "IndentSpacing", ImGui::GetStyle().IndentSpacing);
+	json_object_dotset_number(data, "ColumnsMinSpacing", ImGui::GetStyle().ColumnsMinSpacing);
+	json_object_dotset_number(data, "ScrollbarSize", ImGui::GetStyle().ScrollbarSize);
+	json_object_dotset_number(data, "ScrollbarRounding", ImGui::GetStyle().ScrollbarRounding);
+	json_object_dotset_number(data, "GrabMinSize", ImGui::GetStyle().GrabMinSize);
+	json_object_dotset_number(data, "GrabRounding", ImGui::GetStyle().GrabRounding);
+
+	json_object_dotset_number(data, "ButtonTextAlign_x", ImGui::GetStyle().ButtonTextAlign.x);
+	json_object_dotset_number(data, "ButtonTextAlign_y", ImGui::GetStyle().ButtonTextAlign.y);
+
+	json_object_dotset_number(data, "DisplayWindowPadding_x", ImGui::GetStyle().DisplayWindowPadding.x);
+	json_object_dotset_number(data, "DisplayWindowPadding_y", ImGui::GetStyle().DisplayWindowPadding.y);
+
+	json_object_dotset_number(data, "DisplaySafeAreaPadding_x", ImGui::GetStyle().DisplaySafeAreaPadding.x);
+	json_object_dotset_number(data, "DisplaySafeAreaPadding_y", ImGui::GetStyle().DisplaySafeAreaPadding.y);
+
+	json_object_dotset_boolean(data, "AntiAliasedLines", ImGui::GetStyle().AntiAliasedLines);
+	json_object_dotset_boolean(data, "AntiAliasedShapes", ImGui::GetStyle().AntiAliasedShapes);
+
+	json_object_dotset_number(data, "CurveTessellationTol", ImGui::GetStyle().CurveTessellationTol);
+
+	//for (int i = 0; i < ImGuiCol_COUNT; i++)
+	//{
+	//	json_object_dotset_string(data, "ColorName", ImGui::GetStyleColorName(i));
+	//	const char* name = ImGui::GetStyleColorName(i);
+	//	json_object_dotset_number(data, ("%s w", name), ImGui::GetStyle().Colors->w);
+	//	json_object_dotset_number(data, ("%s x", name), ImGui::GetStyle().Colors->x);
+	//	json_object_dotset_number(data, ("%s y", name), ImGui::GetStyle().Colors->y);
+	//	json_object_dotset_number(data, ("%s z", name), ImGui::GetStyle().Colors->y);
+	//}
+
 }
 

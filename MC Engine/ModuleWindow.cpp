@@ -17,11 +17,15 @@ ModuleWindow::~ModuleWindow()
 }
 
 // Called before render is available
-bool ModuleWindow::Init(JSON_Object* data)
+bool ModuleWindow::Init()
 {
 	LOG("Init SDL window & surface");
 	App->ui->AddLogToConsole("Init SDL window & surface");
 	bool ret = true;
+
+	JSON_Value* configValue = json_parse_file("config.json");
+	JSON_Object* configObject = json_value_get_object(configValue);
+	JSON_Object* data = json_object_dotget_object(configObject, this->name.c_str());
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -32,10 +36,8 @@ bool ModuleWindow::Init(JSON_Object* data)
 	}
 	
 	else {
+		if (configObject == nullptr) {
 
-
-		if (data == nullptr)
-		{
 			//Create window
 			width = SCREEN_WIDTH * SCREEN_SIZE;
 			height = SCREEN_HEIGHT * SCREEN_SIZE;
@@ -67,11 +69,10 @@ bool ModuleWindow::Init(JSON_Object* data)
 
 			window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 
-
 		}
-		else
-		{
-		
+
+		else {
+
 			width = json_object_dotget_number(data, "width")*SCREEN_SIZE;
 			height = json_object_dotget_number(data, "height")*SCREEN_SIZE;
 			fullscreen = json_object_dotget_boolean(data, "fullscreen");
@@ -82,7 +83,7 @@ bool ModuleWindow::Init(JSON_Object* data)
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
-			if (fullscreen == true)
+			if (WIN_FULLSCREEN == true)
 			{
 				flags |= SDL_WINDOW_FULLSCREEN;
 			}
@@ -117,16 +118,13 @@ bool ModuleWindow::Init(JSON_Object* data)
 			//Get window surface
 			screen_surface = SDL_GetWindowSurface(window);
 		}
-
 	}
-
-
 	
 	return ret;
 }
 
 // Called before quitting
-bool ModuleWindow::CleanUp(JSON_Object* data)
+bool ModuleWindow::CleanUp()
 {
 	LOG("Destroying SDL window and quitting all SDL systems");
 	App->ui->AddLogToConsole("Destroying SDL window and quitting all SDL systems");

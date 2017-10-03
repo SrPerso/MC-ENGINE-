@@ -30,7 +30,7 @@ bool ModuleCamera3D::Start()
 }
 
 // -----------------------------------------------------------------
-bool ModuleCamera3D::CleanUp(JSON_Object* data)
+bool ModuleCamera3D::CleanUp()
 {
 	LOG("Cleaning camera");
 	App->ui->AddLogToConsole("Cleaning camera");

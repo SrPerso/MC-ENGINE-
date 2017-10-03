@@ -1794,17 +1794,16 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
 
     // You can pass in a reference ImGuiStyle structure to compare to, revert to and save to (else it compares to the default style)
     const ImGuiStyle default_style; // Default style
-    if (ImGui::Button("Revert Style"))
-        style = ref ? *ref : default_style;
 
-    /*if (ref)
-    {
-        ImGui::SameLine();
-        if (ImGui::Button("Save Style"))
-            *ref = style;
-    }*/
+	if (ImGui::Button("Revert Style"))
+		style = ref ? *ref : default_style;
 
-
+	if (ref)
+	{
+		ImGui::SameLine();
+		if (ImGui::Button("Save Style"))
+			*ref = style;
+	}
 
     ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.55f);
 
@@ -1841,60 +1840,60 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
         ImGui::TreePop();
     }
 
-    if (ImGui::TreeNode("Colors"))
-    {
-        static int output_dest = 0;
-        static bool output_only_modified = false;
-        if (ImGui::Button("Copy Colors"))
-        {
-            if (output_dest == 0)
-                ImGui::LogToClipboard();
-            else
-                ImGui::LogToTTY();
-            ImGui::LogText("ImGuiStyle& style = ImGui::GetStyle();" IM_NEWLINE);
-            for (int i = 0; i < ImGuiCol_COUNT; i++)
-            {
-                const ImVec4& col = style.Colors[i];
-                const char* name = ImGui::GetStyleColorName(i);
-                if (!output_only_modified || memcmp(&col, (ref ? &ref->Colors[i] : &default_style.Colors[i]), sizeof(ImVec4)) != 0)
-                    ImGui::LogText("style.Colors[ImGuiCol_%s]%*s= ImVec4(%.2ff, %.2ff, %.2ff, %.2ff);" IM_NEWLINE, name, 22 - (int)strlen(name), "", col.x, col.y, col.z, col.w);
-            }
-            ImGui::LogFinish();
-        }
-        ImGui::SameLine(); ImGui::PushItemWidth(120); ImGui::Combo("##output_type", &output_dest, "To Clipboard\0To TTY\0"); ImGui::PopItemWidth();
-        ImGui::SameLine(); ImGui::Checkbox("Only Modified Fields", &output_only_modified);
+	if (ImGui::TreeNode("Colors"))
+	{
+		static int output_dest = 0;
+		static bool output_only_modified = false;
+		if (ImGui::Button("Copy Colors"))
+		{
+			if (output_dest == 0)
+				ImGui::LogToClipboard();
+			else
+				ImGui::LogToTTY();
+			ImGui::LogText("ImGuiStyle& style = ImGui::GetStyle();" IM_NEWLINE);
+			for (int i = 0; i < ImGuiCol_COUNT; i++)
+			{
+				const ImVec4& col = style.Colors[i];
+				const char* name = ImGui::GetStyleColorName(i);
+				if (!output_only_modified || memcmp(&col, (ref ? &ref->Colors[i] : &default_style.Colors[i]), sizeof(ImVec4)) != 0)
+					ImGui::LogText("style.Colors[ImGuiCol_%s]%*s= ImVec4(%.2ff, %.2ff, %.2ff, %.2ff);" IM_NEWLINE, name, 22 - (int)strlen(name), "", col.x, col.y, col.z, col.w);
+			}
+			ImGui::LogFinish();
+		}
+		ImGui::SameLine(); ImGui::PushItemWidth(120); ImGui::Combo("##output_type", &output_dest, "To Clipboard\0To TTY\0"); ImGui::PopItemWidth();
+		ImGui::SameLine(); ImGui::Checkbox("Only Modified Fields", &output_only_modified);
 
-        ImGui::Text("Tip: Left-click on colored square to open color picker,\nRight-click to open edit options menu.");
+		ImGui::Text("Tip: Left-click on colored square to open color picker,\nRight-click to open edit options menu.");
 
-        static ImGuiTextFilter filter;
-        filter.Draw("Filter colors", 200);
+		static ImGuiTextFilter filter;
+		filter.Draw("Filter colors", 200);
 
-        static ImGuiColorEditFlags alpha_flags = 0;
-        ImGui::RadioButton("Opaque", &alpha_flags, 0); ImGui::SameLine(); 
-        ImGui::RadioButton("Alpha", &alpha_flags, ImGuiColorEditFlags_AlphaPreview); ImGui::SameLine(); 
-        ImGui::RadioButton("Both", &alpha_flags, ImGuiColorEditFlags_AlphaPreviewHalf);
+		static ImGuiColorEditFlags alpha_flags = 0;
+		ImGui::RadioButton("Opaque", &alpha_flags, 0); ImGui::SameLine();
+		ImGui::RadioButton("Alpha", &alpha_flags, ImGuiColorEditFlags_AlphaPreview); ImGui::SameLine();
+		ImGui::RadioButton("Both", &alpha_flags, ImGuiColorEditFlags_AlphaPreviewHalf);
 
-        ImGui::BeginChild("#colors", ImVec2(0, 300), true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
-        ImGui::PushItemWidth(-160);
-        for (int i = 0; i < ImGuiCol_COUNT; i++)
-        {
-            const char* name = ImGui::GetStyleColorName(i);
-            if (!filter.PassFilter(name))
-                continue;
-            ImGui::PushID(i);
-            ImGui::ColorEdit4(name, (float*)&style.Colors[i], ImGuiColorEditFlags_AlphaBar | alpha_flags);
-            if (memcmp(&style.Colors[i], (ref ? &ref->Colors[i] : &default_style.Colors[i]), sizeof(ImVec4)) != 0)
-            {
-                ImGui::SameLine(); if (ImGui::Button("Revert")) style.Colors[i] = ref ? ref->Colors[i] : default_style.Colors[i];
-                if (ref) { ImGui::SameLine(); if (ImGui::Button("Save")) ref->Colors[i] = style.Colors[i]; }
-            }
-            ImGui::PopID();
-        }
-        ImGui::PopItemWidth();
-        ImGui::EndChild();
+		ImGui::BeginChild("#colors", ImVec2(0, 300), true, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+		ImGui::PushItemWidth(-160);
+		for (int i = 0; i < ImGuiCol_COUNT; i++)
+		{
+			const char* name = ImGui::GetStyleColorName(i);
+			if (!filter.PassFilter(name))
+				continue;
+			ImGui::PushID(i);
+			ImGui::ColorEdit4(name, (float*)&style.Colors[i], ImGuiColorEditFlags_AlphaBar | alpha_flags);
+			if (memcmp(&style.Colors[i], (ref ? &ref->Colors[i] : &default_style.Colors[i]), sizeof(ImVec4)) != 0)
+			{
+				ImGui::SameLine(); if (ImGui::Button("Revert")) style.Colors[i] = ref ? ref->Colors[i] : default_style.Colors[i];
+				if (ref) { ImGui::SameLine(); if (ImGui::Button("Save")) ref->Colors[i] = style.Colors[i]; }
+			}
+			ImGui::PopID();
+		}
+		ImGui::PopItemWidth();
+		ImGui::EndChild();
 
-        ImGui::TreePop();
-    }
+		ImGui::TreePop();
+	}
 
     bool fonts_opened = ImGui::TreeNode("Fonts", "Fonts (%d)", ImGui::GetIO().Fonts->Fonts.Size);
     ImGui::SameLine(); ShowHelpMarker("Tip: Load fonts with io.Fonts->AddFontFromFileTTF()\nbefore calling io.Fonts->GetTex* functions.");

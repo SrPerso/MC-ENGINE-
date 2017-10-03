@@ -21,7 +21,7 @@ public:
 	virtual ~Module()
 	{}
 
-	virtual bool Init(JSON_Object* data = nullptr)
+	virtual bool Init()
 	{
 		return true; 
 	}
@@ -46,7 +46,7 @@ public:
 		return UPDATE_CONTINUE;
 	}
 
-	virtual bool CleanUp(JSON_Object* data)
+	virtual bool CleanUp()
 	{ 
 		return true; 
 	}

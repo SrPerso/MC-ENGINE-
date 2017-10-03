@@ -1,7 +1,8 @@
 {
-  "window": {
-    "width": 1580,
+  "window":
+ {
+    "width": 1200,
     "height": 720,
-    "fullscreen": false
+    "fullscreen": true
   }
 }

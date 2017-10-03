@@ -16,6 +16,7 @@ Application::Application()
 	physics = new ModulePhysics3D(this);
 	player = new ModulePlayer(this);
 
+
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
@@ -55,15 +56,13 @@ bool Application::Init()
 	// Call Init() in all modules
 	p2List_item<Module*>* item = list_modules.getFirst();
 
-	JSON_Value * configValue = json_parse_file("config.json");
-	JSON_Object * configObject = json_value_get_object(configValue);
+	//JSON_Value * configValue = json_parse_file("config.json");
+	//JSON_Object * configObject = json_value_get_object(configValue);
 
 
 	while (item != NULL && ret == true)
 	{
-		
-		ret = item->data->Init(json_object_dotget_object(configObject, item->data->name.c_str()));		
-		
+		ret = item->data->Init();
 		item = item->next;
 	}
 
@@ -130,16 +129,21 @@ update_status Application::Update()
 	return ret;
 }
 
-bool Application::CleanUp(JSON_Object* data)
+bool Application::CleanUp()
 {
 	bool ret = true;
 	p2List_item<Module*>* item = list_modules.getLast();
 
+	//JSON_Value * configValue = json_parse_file("config.json");
+	//JSON_Object * configObject = json_value_get_object(configValue);
+
 	while(item != NULL && ret == true)
 	{
-		ret = item->data->CleanUp(data);
+		ret = item->data->Init();
 		item = item->prev;
 	}
+
+
 	return ret;
 }
 

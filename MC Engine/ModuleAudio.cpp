@@ -14,7 +14,7 @@ ModuleAudio::~ModuleAudio()
 {}
 
 // Called before render is available
-bool ModuleAudio::Init(JSON_Object* data )
+bool ModuleAudio::Init( )
 {
 	LOG("Loading Audio Mixer");
 	App->ui->AddLogToConsole("Loading Audio Mixer");
@@ -51,7 +51,7 @@ bool ModuleAudio::Init(JSON_Object* data )
 }
 
 // Called before quitting
-bool ModuleAudio::CleanUp(JSON_Object* data)
+bool ModuleAudio::CleanUp()
 {
 	LOG("Freeing sound FX, closing Mixer and Audio subsystem");
 	App->ui->AddLogToConsole("Freeing sound FX, closing Mixer and Audio subsystem");

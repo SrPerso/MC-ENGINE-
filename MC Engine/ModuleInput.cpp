@@ -22,7 +22,7 @@ ModuleInput::~ModuleInput()
 }
 
 // Called before render is available
-bool ModuleInput::Init(JSON_Object* data)
+bool ModuleInput::Init()
 {
 	LOG("Init SDL input event system");
 	App->ui->AddLogToConsole("Init SDL input event system");
@@ -128,7 +128,7 @@ update_status ModuleInput::PreUpdate(float dt)
 }
 
 // Called before quitting
-bool ModuleInput::CleanUp(JSON_Object* data)
+bool ModuleInput::CleanUp()
 {
 	LOG("Quitting SDL input event subsystem");
 	App->ui->AddLogToConsole("Quitting SDL input event subsystem");

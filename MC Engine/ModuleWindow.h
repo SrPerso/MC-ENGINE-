@@ -39,8 +39,8 @@ public:
 
 	// Destructor
 	virtual ~ModuleWindow();
-	bool Init(JSON_Object* data = nullptr);
-	bool CleanUp(JSON_Object* data = nullptr);
+	bool Init();
+	bool CleanUp();
 	void SetTitle(const char* title);
 
 

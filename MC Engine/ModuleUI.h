@@ -24,9 +24,11 @@ public:
 	bool Start();
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
-	bool CleanUp(JSON_Object* data = nullptr);
-
+	bool CleanUp();
+	bool Init();
 	//style
+
+	void LoadStyle(JSON_Object* data = nullptr);
 	void SaveStyle(JSON_Object* data = nullptr);
 
 public:	//setings
@@ -55,7 +57,8 @@ private: //setings structure
 
 	WindowSetings WindowSetingsS;
 	AudioSetings AudioSetingsS;
-	
+public:
+	ImGuiStyle* uiStyle;
 private:// engine main menu bar
 
 	update_status FileMenuBar();

@@ -22,7 +22,7 @@ ModuleRenderer3D::~ModuleRenderer3D()
 {}
 
 // Called before render is available
-bool ModuleRenderer3D::Init(JSON_Object* data)
+bool ModuleRenderer3D::Init()
 {
 	LOG("Creating 3D Renderer context");
 	App->ui->AddLogToConsole("Creating 3D Renderer context");
@@ -144,7 +144,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 }
 
 // Called before quitting
-bool ModuleRenderer3D::CleanUp(JSON_Object* data)
+bool ModuleRenderer3D::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
 	App->ui->AddLogToConsole("Destroying 3D Renderer");

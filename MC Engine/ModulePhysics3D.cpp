@@ -38,7 +38,7 @@ ModulePhysics3D::~ModulePhysics3D()
 }
 
 // Render not available yet----------------------------------
-bool ModulePhysics3D::Init(JSON_Object* data)
+bool ModulePhysics3D::Init()
 {
 	LOG("Creating 3D Physics simulation");
 	App->ui->AddLogToConsole("Creating 3D Physics simulation");
@@ -149,7 +149,7 @@ update_status ModulePhysics3D::PostUpdate(float dt)
 }
 
 // Called before quitting
-bool ModulePhysics3D::CleanUp(JSON_Object* data)
+bool ModulePhysics3D::CleanUp()
 {
 	LOG("Destroying 3D Physics simulation");
 	App->ui->AddLogToConsole("Destroying 3D Physics simulation");

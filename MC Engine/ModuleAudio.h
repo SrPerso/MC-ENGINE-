@@ -34,8 +34,8 @@ public:
 	ModuleAudio(Application* app, bool start_enabled = true);
 	~ModuleAudio();
 
-	bool Init(JSON_Object* data = nullptr);
-	bool CleanUp(JSON_Object* data = nullptr);
+	bool Init();
+	bool CleanUp();
 
 	// Play a music file
 	bool PlayMusic(const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME);
