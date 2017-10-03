@@ -6,13 +6,32 @@
 #include "Globals.h"
 #include "parson\parson.h"
 
+#include "imgui\imgui.h"
+
 class DataJSON {
 public:
 	DataJSON();
 	~DataJSON();
-	//todo Get & set of int, float, double, vec4 & string
+
+	//todo Get & add vec4 & vec 2
+
+	//get
+	int GetInt(JSON_Object*  object, const char* name)const;
+	float GetFloat(JSON_Object*  object, const char* name)const;
+	double GetDouble(JSON_Object*  object, const char* name)const;
+	bool GetBoolean(JSON_Object*  object, const char* name)const;
+	const char*  GetString(JSON_Object*  object, const char* name)const;
+	//ImVec2 GetVec2(JSON_Object * object,std::string name);
+	//ImVec4 GetVec4(std::string name);
+
 	//Style & config load and save
 
+	//add
+	void AddInt(JSON_Object*  object, const char* name, int number);
+	void AddFloat(JSON_Object*  object, const char* name, float number);
+	void AddDouble(JSON_Object*  object, const char* name, double number);
+	void AddBool(JSON_Object*  object, const char* name, bool boolean);
+	void AddString(JSON_Object*  object, const char* name, const char* string);
 
 private: 
 

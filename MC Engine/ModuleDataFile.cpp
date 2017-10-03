@@ -13,3 +13,109 @@ DataJSON::~DataJSON()
 {
 	json_value_free(value_json);
 }
+
+int DataJSON::GetInt(JSON_Object * object, const char * name) const
+{
+	int ret = 0;
+
+	JSON_Value* value = json_object_get_value(object, name);
+
+	if (value && json_value_get_type(value) == JSONNumber) 
+		ret = json_value_get_number(value);
+
+	return (int)ret;
+}
+
+float DataJSON::GetFloat(JSON_Object * object, const char * name) const
+{
+	float ret = 0.0f;
+
+	JSON_Value* value = json_object_get_value(object, name);
+
+	if (value && json_value_get_type(value) == JSONNumber)
+		ret = json_value_get_number(value);
+
+	return (float)ret;
+}
+
+double DataJSON::GetDouble(JSON_Object * object, const char * name) const
+{
+	double ret = 0;
+
+	JSON_Value* value = json_object_get_value(object, name);
+
+	if (value && json_value_get_type(value) == JSONNumber)
+		ret = json_value_get_number(value);
+
+	return (double)ret;
+}
+
+bool DataJSON::GetBoolean(JSON_Object * object, const char * name) const
+{
+	bool ret = true;
+
+	JSON_Value* value = json_object_get_value(object, name);
+
+	if (value && json_value_get_type(value) == JSONBoolean)
+		ret = json_value_get_boolean(value);
+
+	return (bool)ret;
+}
+
+const char * DataJSON::GetString(JSON_Object * object, const char * name) const
+{
+	const char * ret = nullptr;
+
+	JSON_Value* value = json_object_get_value(object, name);
+
+	if (value && json_value_get_type(value) == JSONString)
+		ret = json_value_get_string(value);
+
+	return ret;
+}
+
+void DataJSON::AddInt(JSON_Object * object, const char * name, int number)
+{
+	json_object_set_number(object, name, (int)number);
+}
+
+void DataJSON::AddFloat(JSON_Object * object, const char * name, float number)
+{
+	json_object_set_number(object, name, (float)number);
+}
+
+void DataJSON::AddDouble(JSON_Object * object, const char * name, double number)
+{
+	json_object_set_number(object, name, (double)number);
+}
+
+void DataJSON::AddBool(JSON_Object * object, const char * name, bool boolean)
+{
+	json_object_set_boolean(object, name, (bool)boolean);
+}
+
+void DataJSON::AddString(JSON_Object * object, const char * name, const char * string)
+{
+	json_object_set_string(object, name, (const char *)string);
+}
+
+
+
+
+
+
+
+
+
+//TO DO
+//ImVec2 DataJSON::GetVec2(JSON_Object * object, std::string name)
+//{
+//	ImVec2 ret;
+//
+//
+//	JSON_Value* value = json_object_get_value(object, name.c_str());
+//	if (value && json_value_get_type(value) == JSONNumber)
+//		retX = json_value_get_number(value);
+//
+//	return ImVec2();
+//}
