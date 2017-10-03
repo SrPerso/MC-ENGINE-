@@ -43,6 +43,44 @@ bool ModuleSceneIntro::CleanUp()
 	return true;
 }
 
+void ModuleSceneIntro::CreateCube(vec3 size, vec3 pos)
+{
+	Cube* cube = new Cube;
+	cube->size.Set(size.x, size.y, size.z);
+	cube->SetPos(pos.x, pos.y, pos.z);
+
+	//wireframe mirar
+	
+	GeometryObjects.push_back(cube);
+	App->physics->AddBody(*cube);
+
+}
+
+void ModuleSceneIntro::CreateSphere(float radius, vec3 pos)
+{
+	PrimitiveSphere* sphere = new PrimitiveSphere;
+
+	sphere->radius = radius;
+	sphere->SetPos(pos.x, pos.y, pos.z);
+
+	GeometryObjects.push_back(sphere);
+	App->physics->AddBody(*sphere);
+
+}
+
+void ModuleSceneIntro::Draw()
+{
+	for (std::list<Primitive*>::iterator it = GeometryObjects.begin(); it != GeometryObjects.end(); ++it)
+	{
+		(*it)->Render();
+	}
+
+	PrimitivePlane plane(0, -1, 0, 200);
+	plane.color = White;
+	plane.axis = true;
+	plane.Render();
+}
+
 void ModuleSceneIntro::CreateCylinder(const float x, const float y, const float z, const float radious, const float h)
 {
 	PrimitiveCylinder* toCreate = new PrimitiveCylinder(radious, h);
@@ -64,7 +102,7 @@ update_status ModuleSceneIntro::Update(float dt)
 {	
 
 
-	float sx = 1 * 0.5f;
+	/*float sx = 1 * 0.5f;
 	float sy = 1 * 0.5f;
 	float sz = 1 * 0.5f;
 
@@ -138,7 +176,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	//Poste.SetRotation(90, vec3(0, 0, 1));
 	//Poste.SetPos(0, 0,0);
 	//Poste.color = White;
-	//Poste.Render();
+	//Poste.Render();*/
 
 	return UPDATE_CONTINUE;
 

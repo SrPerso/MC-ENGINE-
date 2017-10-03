@@ -6,6 +6,7 @@
 #include "Glew\include\glew.h"
 #include "Math.h"
 #include "SDL/include/SDL_cpuinfo.h"
+#include "Primitive.h"
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #pragma comment( lib, "Glew/libx86/glew32.lib" )
@@ -92,6 +93,9 @@ update_status ModuleUI::Update(float dt)
 
 	if (show_TeamInfo_window)
 		ShowTeamInfoWindow();
+	if (show_Geometry_window)
+		ShowGeometryWindow();
+	
 
 
 	ImGui::Render();
@@ -385,6 +389,75 @@ IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 		ImGui::End();
 	}	
 
+	return IMGUI_API void();
+}
+
+IMGUI_API void ModuleUI::ShowGeometryWindow(bool * p_open)
+{
+	ImGuiWindowFlags window_flags = 0;
+
+	if (!ImGui::Begin("Geometry", p_open))
+	{
+		// Early out if the window is collapsed, as an optimization.
+		ImGui::End();
+		return;
+	}
+
+	ImGui::PushItemWidth(-100);
+
+	ImGui::Text("Geometry");
+
+	if (ImGui::CollapsingHeader("Cube"))
+	{	
+		GeometryMenuCube();	
+
+		if (ImGui::Button("Build Cube") && cubex>0.0f && cubey>0.0f && cubez>0.0f) 
+		{
+			App->scene_intro->CreateCube(vec3(cubex,cubey,cubez),vec3(cubeposX,cubeposY,cubeposZ));
+
+			cubex = 0;
+			cubey = 0;
+			cubez = 0;
+			cubeposX = 0;
+			cubeposY = 0;
+			cubeposZ = 0;
+		}
+
+	}
+
+	if (ImGui::CollapsingHeader("Sphere"))
+	{
+		GeometryMenuSphere();
+
+		if (ImGui::Button("Build Sphere") && sphereRad > 0) 
+		{
+			App->scene_intro->CreateSphere(sphereRad, vec3(sphereposX, sphereposY, sphereposZ));
+
+			sphereRad = 0;
+			sphereposX = 0;
+			sphereposY = 0;
+			sphereposZ = 0;
+		}
+	}
+
+	if (ImGui::CollapsingHeader("Cylinder")) 
+	{
+
+	}
+	
+
+	if (ImGui::CollapsingHeader("Plane"))
+	{
+
+	}
+	
+
+	if (ImGui::CollapsingHeader("Capsule"))
+	{
+
+	}
+
+	ImGui::End();
 	return IMGUI_API void();
 }
 
@@ -687,8 +760,104 @@ void ModuleUI::WindowMenuBar()
 	
 	ImGui::Checkbox("Configuration", &show_Configuration_window);
 	
+	ImGui::Checkbox("Geometry", &show_Geometry_window);
 	//ImGui::Checkbox("MathTest", &show_MathTest_window);
 
+}
+
+void ModuleUI::GeometryMenuSphere()
+{
+	
+	if (ImGui::Button("Sphere PosX +"))
+	{
+		sphereposX += 0.1f;
+	}
+	ImGui::InputFloat("Sphere PosX", &sphereposX, 0, 0, 2);
+	if (ImGui::Button("Sphere PosX -"))
+	{
+		sphereposX -= 0.1f;
+	}
+	if (ImGui::Button("Sphere PosY +"))
+	{
+		sphereposY += 0.1f;
+	}
+	ImGui::InputFloat("Sphere PosY", &sphereposY, 0, 0, 2);
+	if (ImGui::Button("Sphere PosY -"))
+	{
+		sphereposY -= 0.1f;
+	}
+	if (ImGui::Button("Sphere PosZ +"))
+	{
+		sphereposZ += 0.1f;
+	}
+	ImGui::InputFloat("Sphere PosZ", &sphereposZ, 0, 0, 2);
+	if (ImGui::Button("Sphere PosZ -"))
+	{
+		sphereposZ -= 0.1f;
+	}
+
+		 
+}
+
+void ModuleUI::GeometryMenuCube()
+{
+	//CUBEXYZ
+	if (ImGui::Button("Cube X +"))
+	{
+		cubex += 0.1f;
+	}
+	ImGui::InputFloat("Cube X", &cubex, 0, 0, 2);
+	if (ImGui::Button("Cube X -"))
+	{
+		cubex -= 0.1f;
+	}
+	if (ImGui::Button("Cube Y +"))
+	{
+		cubey += 0.1f;
+	}
+	ImGui::InputFloat("Cube Y", &cubey, 0, 0, 2);
+	if (ImGui::Button("Cube Y -"))
+	{
+		cubey -= 0.1f;
+	}
+	if (ImGui::Button("Cube Z +"))
+	{
+		cubez += 0.1f;
+	}
+	ImGui::InputFloat("Cube Z", &cubez, 0, 0, 2);
+	if (ImGui::Button("Cube Z -"))
+	{
+		cubez -= 0.1f;
+	}
+
+	//CUBEPOSXYZ
+	if (ImGui::Button("Cube PosX +"))
+	{
+		cubeposX += 0.1f;
+	}
+	ImGui::InputFloat("Cube PosX", &cubeposX, 0, 0, 2);
+	if (ImGui::Button("Cube PosX -"))
+	{
+		cubeposX -= 0.1f;
+	}
+	if (ImGui::Button("Cube PosY +"))
+	{
+		cubeposY += 0.1f;
+	}
+	ImGui::InputFloat("Cube PosY", &cubeposY, 0, 0, 2);
+	if (ImGui::Button("Cube PosY -"))
+	{
+		cubeposY -= 0.1f;
+	}
+	if (ImGui::Button("Cube PosZ +"))
+	{
+		cubeposZ += 0.1f;
+	}
+	ImGui::InputFloat("Cube PosZ", &cubeposZ, 0, 0, 2);
+	if (ImGui::Button("Cube PosZ -"))
+	{
+		cubeposZ -= 0.1f;
+	}
 }
 
 update_status ModuleUI::FileMenuBar()

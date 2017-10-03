@@ -38,6 +38,7 @@ public:
 	IMGUI_API void ShowConfigWindow(bool* p_open = NULL);
 //	IMGUI_API void ShowMathWindow(bool* p_open = NULL);
 	IMGUI_API void ShowImageViewWindow(bool* p_open = NULL);
+	IMGUI_API void ShowGeometryWindow(bool* p_open = NULL);
 	void AddLogToConsole(std::string toAdd);
 
 private:
@@ -55,6 +56,8 @@ private:
 	void EditMenuBar();
 	void HelpMenuBar();
 	void WindowMenuBar();
+	void GeometryMenuCube();
+	void GeometryMenuSphere();
 	//Execute
 
 //	UIMenu menuu;
@@ -65,6 +68,14 @@ private:
 	bool show_Config_window = false;
 	bool show_ImageView_window = false;
 	bool show_TeamInfo_window = false;
+	bool show_Geometry_window = false;
+
+	//Geometry Test
+	float cubex = 0, cubey = 0, cubez = 0;
+	float cubeposX = 0, cubeposY = 0, cubeposZ = 0;
+
+	float sphereRad = 0;
+	float sphereposX = 0, sphereposY = 0, sphereposZ = 0;
 
 public: //
 	bool sb_Depth_Test = false;

@@ -19,9 +19,14 @@ public:
 	update_status Update(float dt);
 	update_status PreUpdate(float dt);
 	bool CleanUp();
+
+	void Draw();
 	bool intersects = false;
 
-	std::list<PrimitiveSphere*> test;
+
+	void CreateCube(vec3 size, vec3 pos=vec3(0,0,0));
+	void CreateSphere(float radius, vec3 pos = vec3(0, 0, 0));
+	std::list<Primitive*> GeometryObjects;
 
 public:
 	void CreateCylinder(const float x, const float y, const float z, const float radious, const float h);
