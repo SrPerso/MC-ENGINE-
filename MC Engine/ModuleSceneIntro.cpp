@@ -49,7 +49,7 @@ void ModuleSceneIntro::CreateCube(vec3 size, vec3 pos)
 	cube->size.Set(size.x, size.y, size.z);
 	cube->SetPos(pos.x, pos.y, pos.z);
 
-	//wireframe mirar
+	cube->wire = true;
 	
 	GeometryObjects.push_back(cube);
 	App->physics->AddBody(*cube);
@@ -63,10 +63,28 @@ void ModuleSceneIntro::CreateSphere(float radius, vec3 pos)
 	sphere->radius = radius;
 	sphere->SetPos(pos.x, pos.y, pos.z);
 
+	sphere->wire = true;
+	
 	GeometryObjects.push_back(sphere);
 	App->physics->AddBody(*sphere);
 
 }
+
+void ModuleSceneIntro::CreateCylinder(float radius,float height, vec3 pos)
+{
+	PrimitiveCylinder* cylinder = new PrimitiveCylinder;
+
+	cylinder->radius = radius;
+	cylinder->height = height;
+	cylinder->SetPos(pos.x,pos.y,pos.z);
+
+	cylinder->wire = true;
+	GeometryObjects.push_back(cylinder);
+	App->physics->AddBody(*cylinder);
+	
+
+}
+
 
 void ModuleSceneIntro::Draw()
 {
@@ -75,10 +93,7 @@ void ModuleSceneIntro::Draw()
 		(*it)->Render();
 	}
 
-	PrimitivePlane plane(0, -1, 0, 200);
-	plane.color = White;
-	plane.axis = true;
-	plane.Render();
+	
 }
 
 void ModuleSceneIntro::CreateCylinder(const float x, const float y, const float z, const float radious, const float h)
@@ -102,64 +117,10 @@ update_status ModuleSceneIntro::Update(float dt)
 {	
 
 
-	/*float sx = 1 * 0.5f;
+	float sx = 1 * 0.5f;
 	float sy = 1 * 0.5f;
 	float sz = 1 * 0.5f;
-
-
-
-	glLineWidth(2.0f);
-	glBegin(GL_TRIANGLES);
-	glVertex3f(0, 1, 0);
-	glVertex3f(0, 0, 0);
-	glVertex3f(0, 0, 1);//c
-
-	glVertex3f(0, 0, 1);//c
-	glVertex3f(0, 1, 1);//d
-	glVertex3f(0, 1, 0);//a
-
-	glVertex3f(1, 1, 1);//e
-	glVertex3f(0, 1, 1);//d
-	glVertex3f(0, 0, 1);//c
-
-	glVertex3f(0, 0, 1);//c
-	glVertex3f(1, 0, 1);//f
-	glVertex3f(1, 1, 1);//e
-
-	glVertex3f(1, 0, 1);//f
-	glVertex3f(1, 1, 1);//e
-	glVertex3f(1, 1, 0);//g
-
-	glVertex3f(1, 0, 1);//f
-	glVertex3f(1, 0, 0);//h
-	glVertex3f(1, 1, 0);//g
-
-	glVertex3f(1, 1, 0);//g
-	glVertex3f(1, 0, 0);//h
-	glVertex3f(0, 0, 0);//bc
-
-	glVertex3f(0, 0, 0);//bc
-	glVertex3f(1, 1, 0);//g
-	glVertex3f(0, 1, 0);//a
- 
-	glVertex3f(1, 1, 1);//e
-	glVertex3f(1, 1, 0);//g
-	glVertex3f(0, 1, 0);//a
-
-	glVertex3f(0, 1, 0);//a
-	glVertex3f(0, 1, 1);//d
-	glVertex3f(1, 1, 1);//e
-
-	glVertex3f(1, 0, 1);//f
-	glVertex3f(1, 0, 0);//h
-	glVertex3f(0, 0, 0);//b
-
-	glVertex3f(0, 0, 0);//b
-	glVertex3f(0, 0, 1);//c
-	glVertex3f(1, 0, 1);//f
-	glEnd();
-
-	glLineWidth(1.0f);
+		
 
 
 	//PrimitiveSphere sp(2);

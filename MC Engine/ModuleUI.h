@@ -58,6 +58,8 @@ private:
 	void WindowMenuBar();
 	void GeometryMenuCube();
 	void GeometryMenuSphere();
+	void GeometryMenuCylinder();
+	void GeometryMenuCube1();
 	//Execute
 
 //	UIMenu menuu;
@@ -76,6 +78,11 @@ private:
 
 	float sphereRad = 0;
 	float sphereposX = 0, sphereposY = 0, sphereposZ = 0;
+
+	float cylinderRad = 0, cylinderHeight = 0;
+	float cylinderposX = 0, cylinderposY = 0, cylinderposZ = 0;
+
+	float Cube1size = 0;
 
 public: //
 	bool sb_Depth_Test = false;

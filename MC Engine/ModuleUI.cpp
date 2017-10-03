@@ -431,6 +431,7 @@ IMGUI_API void ModuleUI::ShowGeometryWindow(bool * p_open)
 
 		if (ImGui::Button("Build Sphere") && sphereRad > 0) 
 		{
+
 			App->scene_intro->CreateSphere(sphereRad, vec3(sphereposX, sphereposY, sphereposZ));
 
 			sphereRad = 0;
@@ -442,13 +443,32 @@ IMGUI_API void ModuleUI::ShowGeometryWindow(bool * p_open)
 
 	if (ImGui::CollapsingHeader("Cylinder")) 
 	{
+		GeometryMenuCylinder();
+		if (ImGui::Button("Build Cylinder") && cylinderRad > 0)
+		{
 
+			App->scene_intro->CreateCylinder(cylinderRad,cylinderHeight, vec3(cylinderposX, cylinderposY, cylinderposZ));
+
+			cylinderRad = 0;
+			cylinderHeight = 0;
+			cylinderposX = 0;
+			cylinderposY = 0;
+			cylinderposZ = 0;
+		}
 	}
 	
 
-	if (ImGui::CollapsingHeader("Plane"))
+	if (ImGui::CollapsingHeader("Cube1"))
 	{
+		GeometryMenuCube1();
 
+		if (ImGui::Button("Build Cube1"))
+		{
+			
+			Cube1size = 0;
+		}
+		
+		
 	}
 	
 
@@ -767,7 +787,17 @@ void ModuleUI::WindowMenuBar()
 
 void ModuleUI::GeometryMenuSphere()
 {
-	
+
+	if (ImGui::Button("Sphere Rad +"))
+	{
+		sphereRad += 0.1f;
+	}
+	ImGui::InputFloat("Sphere Radius", &sphereRad, 0, 0, 2);
+	if (ImGui::Button("Sphere Rad -"))
+	{
+		sphereRad -= 0.1f;
+	}
+
 	if (ImGui::Button("Sphere PosX +"))
 	{
 		sphereposX += 0.1f;
@@ -797,6 +827,71 @@ void ModuleUI::GeometryMenuSphere()
 	}
 
 		 
+}
+
+void ModuleUI::GeometryMenuCylinder()
+{
+	if (ImGui::Button("Cylinder Rad +"))
+	{
+		cylinderRad += 0.1f;
+	}
+	ImGui::InputFloat("Cylinder Radius", &cylinderRad, 0, 0, 2);
+	if (ImGui::Button("Cylinder Rad -"))
+	{
+		cylinderRad -= 0.1f;
+	}
+	if (ImGui::Button("Cylinder Height +"))
+	{
+		cylinderHeight += 0.1f;
+	}
+	ImGui::InputFloat("Cylinder Height", &cylinderHeight, 0, 0, 2);
+	if (ImGui::Button("Cylinder Height -"))
+	{
+		cylinderHeight -= 0.1f;
+	}
+
+	if (ImGui::Button("Cylinder PosX +"))
+	{
+		cylinderposX += 0.1f;
+	}
+	ImGui::InputFloat("Cylinder PosX", &cylinderposX, 0, 0, 2);
+	if (ImGui::Button("Cylinder PosX -"))
+	{
+		cylinderposX -= 0.1f;
+	}
+	if (ImGui::Button("Sphere PosY +"))
+	{
+		cylinderposY += 0.1f;
+	}
+	ImGui::InputFloat("Cylinder PosY", &cylinderposY, 0, 0, 2);
+	if (ImGui::Button("Cylinder PosY -"))
+	{
+		cylinderposY -= 0.1f;
+	}
+	if (ImGui::Button("Cylinder PosZ +"))
+	{
+		cylinderposZ += 0.1f;
+	}
+	ImGui::InputFloat("Cylinder PosZ", &cylinderposZ, 0, 0, 2);
+	if (ImGui::Button("Cylinder PosZ -"))
+	{
+		cylinderposZ -= 0.1f;
+	}
+}
+
+void ModuleUI::GeometryMenuCube1()
+{
+	if (ImGui::Button("Size +")) 
+	{
+		Cube1size += 0.1f;
+	}
+	ImGui::InputFloat("Cube1 Size", &Cube1size, 0, 0, 2);
+	if (ImGui::Button("Size -"))
+	{
+		Cube1size -= 0.1f;
+	}	
+	
+
 }
 
 void ModuleUI::GeometryMenuCube()

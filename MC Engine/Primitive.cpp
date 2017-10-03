@@ -5,6 +5,7 @@
 #include "Primitive.h"
 #include "glut/glut.h"
 
+
 #pragma comment (lib, "glut/glut32.lib")
 
 // ------------------------------------------------------------
@@ -275,3 +276,5 @@ void PrimitivePlane::InnerRender() const
 
 	glEnd();
 }
+
+

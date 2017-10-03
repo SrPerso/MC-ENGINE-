@@ -26,6 +26,9 @@ public:
 
 	void CreateCube(vec3 size, vec3 pos=vec3(0,0,0));
 	void CreateSphere(float radius, vec3 pos = vec3(0, 0, 0));
+	void CreateCylinder(float radius,float height, vec3 pos= vec3(0,0,0));
+	
+
 	std::list<Primitive*> GeometryObjects;
 
 public:
