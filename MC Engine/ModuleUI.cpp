@@ -754,7 +754,7 @@ update_status ModuleUI::FileMenuBar()
 
 void ModuleUI::EditMenuBar()
 {
-	if (ImGui::MenuItem("Undo", "Ctrl + Z")) {} 
+	if (ImGui::MenuItem("Undo", "Ctrl + Z")) {} //conect to IObjects
 	if (ImGui::MenuItem("Redo", "Ctrl + Y")) {}
 
 	ImGui::Separator;
