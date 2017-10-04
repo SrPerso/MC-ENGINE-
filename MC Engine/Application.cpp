@@ -146,6 +146,11 @@ bool Application::CleanUp()
 	return ret;
 }
 
+const std::list<Module*>* Application::GetModuleList() const
+{
+	return &list_modules;
+}
+
 float Application::GetFPS()
 {
 	return float(lastFPS);

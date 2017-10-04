@@ -1,7 +1,8 @@
 #include "ModuleDataFile.h"
-#include <list>
-#include "Application.h"
 #include "Module.h"
+#include "Globals.h"
+#include "Application.h"
+
 
 DataJSON::DataJSON()
 {
@@ -10,6 +11,7 @@ DataJSON::DataJSON()
 	
 	files.push_back("config.json");
 	files.push_back("uisave.json");
+
 }
 
 DataJSON::~DataJSON()
@@ -22,7 +24,7 @@ bool DataJSON::Init()
 	bool ret = true;
 	
 
-	for (std::list<std::string>::iterator  file = files.begin(); file != files.end(); ++file)
+	/*for (std::list<std::string>::const_reverse_iterator  file = files.rbegin(); file != files.crend(); ++file)
 	{
 		value_json = json_parse_file(file->c_str());
 
@@ -35,14 +37,38 @@ bool DataJSON::Init()
 		{
 			object_json = json_value_get_object(value_json);
 		}
+	
+		for (std::list<Module*>::const_reverse_iterator item = App->GetModuleList()->rbegin(); item != App->GetModuleList()->crend(); ++item)
+		{
+			if (json_object_get_object(object_json, (*item)->name.c_str()) == nullptr)
+			{
+				json_object_set_value(object_json, (*item)->name.c_str(), json_value_init_object());
+			}			
+		}
+	
 
-	//	for (std::list<Module*>::const_reverse_iterator item = App->GetModuleList()->rbegin(); item != App->GetModuleList()->crend(); ++item)
-
-
-
-	}//for
+	}//for	*/
 
 	return ret;
+}
+
+void DataJSON::SaveAll() const
+{
+	
+	/*for (std::list<std::string>::const_reverse_iterator file = files.rbegin(); file != files.crend(); ++file) {
+
+
+		JSON_Object* object = nullptr;
+
+		for (std::list<Module*>::const_reverse_iterator item = App->GetModuleList()->rbegin(); item != App->GetModuleList()->crend(); ++item)
+		{
+			object = json_object_get_object(object_json, (*item)->name.c_str());
+			(*item)->SaveJson(object);		
+		}
+
+		json_serialize_to_string_pretty(value_json);		
+		json_serialize_to_file(value_json, file->c_str());
+	}*/
 }
 
 

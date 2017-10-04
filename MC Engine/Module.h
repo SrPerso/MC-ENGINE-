@@ -51,6 +51,11 @@ public:
 		return true; 
 	}
 
+	virtual bool SaveJson(JSON_Object* object)const 
+	{
+		return true;
+	}
+
 	virtual void OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	{}
 };
