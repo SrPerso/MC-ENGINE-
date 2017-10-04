@@ -3,7 +3,6 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include "Primitive.h"
-#include "glut/glut.h"
 
 
 #pragma comment (lib, "glut/glut32.lib")
@@ -159,19 +158,101 @@ void Cube::InnerRender() const
 }
 
 // SPHERE ============================================
-PrimitiveSphere::PrimitiveSphere() : Primitive(), radius(1.0f)
+PrimitiveSphere::PrimitiveSphere() : Primitive(), radius(1.0f), numStacks(0), numSides(0)
 {
 	type = PrimitiveTypes::Primitive_Sphere;
 }
 
-PrimitiveSphere::PrimitiveSphere(float radius) : Primitive(), radius(radius)
+PrimitiveSphere::PrimitiveSphere(float radius,  int numStacks, int numSides) : Primitive(), radius(radius), numStacks(numStacks),numSides(numSides)
 {
 	type = PrimitiveTypes::Primitive_Sphere;
 }
 
 void PrimitiveSphere::InnerRender() const
 {
-	glutSolidSphere(radius, 25, 25);
+
+	/*GLfloat curRadius, curTheta, curRho, deltaTheta, deltaRho, curX, curY, curZ;
+	int curStack, curSlice, 
+	int numVerts = (numStacks -1)*numSides;
+	vec3 points[50];
+	int curVert = 0;
+	int t;
+
+	deltaTheta = (2 * M_PI) / numSides;
+	deltaRho = M_PI / numStacks;
+
+	for (curStack = 1; curStack<numStacks; curStack++)
+	{
+		curRho = (3.141 / 2.0) - curStack*deltaRho;
+		curY = sin(curRho) * radius;
+		curRadius = cos(curRho) * radius;
+		for (curSlice = 0; curSlice<numSides; curSlice++)
+		{
+			curTheta = curSlice * deltaTheta;
+			curX = curRadius * cos(curTheta);
+			curZ = -curRadius * sin(curTheta);
+			points[curVert++] = vec3{ curX,curY,curZ };
+		}
+	}
+	glBegin(GL_TRIANGLE_FAN);
+	glNormal3d(0, 1, 0);
+	glVertex3d(0, radius, 0);
+	for (t = 0; t<numSides; t++)
+	{
+		curX = points[t].x;
+		curY = points[t].y;
+		curZ = points[t].z;
+		glNormal3d(curX, curY, curZ);
+		glVertex3d(curX, curY, curZ);
+	}
+	curX = points[0].x;
+	curY = points[0].y;
+	curZ = points[0].z;
+	glNormal3d(curX, curY, curZ);
+	glVertex3d(curX, curY, curZ);
+	glEnd();
+
+	// part B - draw the 'sides' (quads)
+	int vertIndex;
+	for (curStack = 0; curStack<numStacks - 2; curStack++)
+	{
+		vertIndex = curStack * numSides;
+		glBegin(GL_QUAD_STRIP);
+		for (curSlice = 0; curSlice<numSides; curSlice++)
+		{
+			glNormal3d(points[vertIndex + curSlice].x, points[vertIndex + curSlice].y, points[vertIndex + curSlice].z);
+			glVertex3d(points[vertIndex + curSlice].x, points[vertIndex + curSlice].y, points[vertIndex + curSlice].z);
+
+			glNormal3d(points[vertIndex + numSides + curSlice].x, points[vertIndex + numSides + curSlice].y, points[vertIndex + numSides + curSlice].z);
+			glVertex3d(points[vertIndex + numSides + curSlice].x, points[vertIndex + numSides + curSlice].y, points[vertIndex + numSides + curSlice].z);
+		}
+		glNormal3d(points[vertIndex].x, points[vertIndex].y, points[vertIndex].z);
+		glVertex3d(points[vertIndex].x, points[vertIndex].y, points[vertIndex].z);
+		glNormal3d(points[vertIndex + numSides].x, points[vertIndex + numSides].y, points[vertIndex + numSides].z);
+		glVertex3d(points[vertIndex + numSides].x, points[vertIndex + numSides].y, points[vertIndex + numSides].z);
+		glEnd();
+	}
+
+	// part C - draw the bottom 'lid' (tris)
+	glBegin(GL_TRIANGLE_FAN);
+	glNormal3d(0, -1, 0);
+	glVertex3d(0, -radius, 0);
+	for (t = 0; t<numSides - 1; t++)
+	{
+		curX = points[numVerts - 1 - t].x;
+		curY = points[numVerts - 1 - t].y;
+		curZ = points[numVerts - 1 - t].z;
+		glNormal3d(curX, curY, curZ);
+		glVertex3d(curX, curY, curZ);
+	}
+	curX = points[numVerts - 1].x;
+	curY = points[numVerts - 1].y;
+	curZ = points[numVerts - 1].z;
+	glNormal3d(curX, curY, curZ);
+	glVertex3d(curX, curY, curZ);
+	glEnd();*/
+
+	
 }
 
 

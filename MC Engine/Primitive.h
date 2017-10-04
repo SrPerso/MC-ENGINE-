@@ -63,10 +63,12 @@ class PrimitiveSphere : public Primitive
 {
 public:
 	PrimitiveSphere();
-	PrimitiveSphere(float radius);
+	PrimitiveSphere(float radius, const int numStacks, const int numSides);
 	void InnerRender() const;
 public:
 	float radius;
+	int numStacks;
+	int numSides;
 };
 
 // ============================================
