@@ -25,6 +25,7 @@ public:
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	bool CleanUp();
+	void Draw();
 
 public:	//setings
 	void HardwareSetingsC();

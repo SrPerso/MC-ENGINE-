@@ -96,10 +96,7 @@ update_status ModuleUI::Update(float dt)
 	if (show_Geometry_window)
 		ShowGeometryWindow();
 	
-
-
-	ImGui::Render();
-
+	
 	return update_status(ret);
 }
 
@@ -980,4 +977,10 @@ void ModuleUI::EditMenuBar()
 	if (ImGui::MenuItem("Preferences"))
 	{
 	}
+}
+
+void ModuleUI::Draw()
+{
+
+	ImGui::Render();
 }

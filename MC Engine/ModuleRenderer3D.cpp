@@ -142,6 +142,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	App->scene_intro->Draw();
 	
+	App->ui->Draw();
 	GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
 		for (int j = 0; j < CHECKERS_WIDTH; j++) {
