@@ -141,8 +141,100 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	App->scene_intro->Draw();
-	SDL_GL_SwapWindow(App->window->window);
 	
+	GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
+		for (int j = 0; j < CHECKERS_WIDTH; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkImage[i][j][0] = (GLubyte)c;
+			checkImage[i][j][1] = (GLubyte)c;  checkImage[i][j][2] = (GLubyte)c;
+			checkImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
+	uint ImageName = 0;
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &ImageName);
+	glBindTexture(GL_TEXTURE_2D, ImageName);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+
+
+
+	glLineWidth(2.0f);
+	glBegin(GL_TRIANGLES);
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, ImageName);
+	//front
+	glVertex3f(0, 1, 0);//(1,1)
+	glVertex3f(0, 0, 0);//(0,1)
+	glVertex3f(1, 0, 0);//(0,0)
+	glVertex3f(0, 1, 0);//(1,1)
+	glVertex3f(1, 0, 0);//(0,0)
+	glVertex3f(1, 1, 0);//(0,1)
+						//right
+	glVertex3f(1, 1, 0);//(0,0)
+	glVertex3f(1, 0, 0);//(0,1)
+	glVertex3f(1, 1, 1);//(1,0)
+	glVertex3f(1, 1, 1);//(1,0)
+	glVertex3f(1, 0, 0);//(0,1)
+	glVertex3f(1, 0, 1);//(1,1)
+						//left
+	glVertex3f(0, 0, 1);
+	glVertex3f(0, 1, 0);
+	glVertex3f(0, 1, 1);
+	glVertex3f(0, 0, 1);
+	glVertex3f(0, 0, 0);
+	glVertex3f(0, 1, 0);
+	//up
+	glVertex3f(0, 1, 0);
+	glVertex3f(1, 1, 0);
+	glVertex3f(1, 1, 1);
+	glVertex3f(0, 1, 0);
+	glVertex3f(1, 1, 1);
+	glVertex3f(0, 1, 1);
+	//down
+	glVertex3f(1, 0, 0);
+	glVertex3f(0, 0, 0);
+	glVertex3f(0, 0, 1);
+	glVertex3f(1, 0, 1);
+	glVertex3f(1, 0, 0);
+	glVertex3f(0, 0, 1);
+	//back
+	glVertex3f(0, 0, 1);
+	glVertex3f(0, 1, 1);
+	glVertex3f(1, 1, 1);
+	glVertex3f(1, 0, 1);
+	glVertex3f(0, 0, 1);
+	glVertex3f(1, 1, 1);
+
+
+	//front
+	glTexCoord2f(1.0f, 1.0f);
+	glTexCoord2f(0.0f, 1.0f);
+	glTexCoord2f(0.0f, 0.0f);
+	glTexCoord2f(1.0f, 1.0f);
+	glTexCoord2f(0.0f, 0.0f);
+	glTexCoord2f(0.0f, 1.0f);
+
+	glTexCoord2f(0.0f, 0.0f);
+	glTexCoord2f(0.0f, 1.0f);
+	glTexCoord2f(1.0f, 0.0f);
+	glTexCoord2f(1.0f, 0.0f);
+	glTexCoord2f(0.0f, 1.0f);
+	glTexCoord2f(1.0f, 1.0f);
+
+	glEnd();
+	glLineWidth(1.0f);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
 }
 

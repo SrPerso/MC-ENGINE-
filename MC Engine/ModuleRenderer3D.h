@@ -5,7 +5,8 @@
 #include "Light.h"
 
 #define MAX_LIGHTS 8
-
+#define CHECKERS_HEIGHT 128
+#define CHECKERS_WIDTH 128
 class ModuleRenderer3D : public Module
 {
 public:
