@@ -10,7 +10,8 @@ enum PrimitiveTypes
 	Primitive_Plane,
 	Primitive_Cube,
 	Primitive_Sphere,
-	Primitive_Cylinder
+	Primitive_Cylinder,
+	Primitive_Capsule
 };
 
 class Primitive
@@ -42,6 +43,16 @@ class Cube : public Primitive
 public :
 	Cube();
 	Cube(float sizeX, float sizeY, float sizeZ);
+	void InnerRender() const;
+public:
+	vec3 size;
+};
+
+class Cube1 : public Primitive
+{
+public:
+	Cube1();
+	Cube1(float sizeX, float sizeY, float sizeZ);
 	void InnerRender() const;
 public:
 	vec3 size;
@@ -93,4 +104,5 @@ public:
 	vec3 normal;
 	float constant;
 };
+
 
