@@ -13,6 +13,7 @@
 #include "ModulePhysics3D.h"
 #include "ModulePlayer.h"
 #include "ModuleUI.h"
+#include "ModuleDataFile.h"
 #include <list>
 
 class Application
@@ -28,7 +29,7 @@ public:
 	ModulePhysics3D* physics;
 	ModuleSceneIntro* scene_intro;
 	ModulePlayer* player;
-
+	DataJSON* jtsonData;
 private:
 
 	Timer	ms_timer;	
@@ -46,6 +47,8 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	const std::list<Module*>* GetModuleList()const;
+
 public:
 	float GetFPS();
 	float GetMs();
@@ -55,3 +58,5 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 };
+
+extern Application* App;
