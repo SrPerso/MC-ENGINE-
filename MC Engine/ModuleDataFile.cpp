@@ -1,4 +1,7 @@
 #include "ModuleDataFile.h"
+#include <list>
+#include "Application.h"
+#include "Module.h"
 
 DataJSON::DataJSON()
 {
@@ -13,6 +16,35 @@ DataJSON::~DataJSON()
 {
 	json_value_free(value_json);
 }
+
+bool DataJSON::Init()
+{
+	bool ret = true;
+	
+
+	for (std::list<std::string>::iterator  file = files.begin(); file != files.end(); ++file)
+	{
+		value_json = json_parse_file(file->c_str());
+
+		if (value_json == nullptr) 
+		{
+			value_json = json_value_init_object();
+			json_serialize_to_file(value_json,file->c_str());
+		}
+		else
+		{
+			object_json = json_value_get_object(value_json);
+		}
+
+	//	for (std::list<Module*>::const_reverse_iterator item = App->GetModuleList()->rbegin(); item != App->GetModuleList()->crend(); ++item)
+
+
+
+	}//for
+
+	return ret;
+}
+
 
 int DataJSON::GetInt(JSON_Object * object, const char * name) const
 {
@@ -98,14 +130,6 @@ void DataJSON::AddString(JSON_Object * object, const char * name, const char * s
 {
 	json_object_set_string(object, name, (const char *)string);
 }
-
-
-
-
-
-
-
-
 
 //TO DO
 //ImVec2 DataJSON::GetVec2(JSON_Object * object, std::string name)

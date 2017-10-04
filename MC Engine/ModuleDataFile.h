@@ -2,7 +2,7 @@
 #define __ModuleData_H__
 
 #include <string>
-#include <vector>
+#include <list>
 #include "Globals.h"
 #include "parson\parson.h"
 
@@ -13,7 +13,11 @@ public:
 	DataJSON();
 	~DataJSON();
 
-	//todo Get & add vec4 & vec 2
+	bool Init();
+	void SaveAll() const;
+	void LoadAll() const;
+
+	//TODO Get & add vec4 & vec 2
 
 	//get
 	int GetInt(JSON_Object*  object, const char* name)const;
@@ -35,9 +39,9 @@ public:
 
 private: 
 
-
-	std::vector<std::string> files;
+	std::list<std::string> files;
 	JSON_Value* value_json = nullptr;
 	JSON_Object* object_json = nullptr;
+
 };
 #endif

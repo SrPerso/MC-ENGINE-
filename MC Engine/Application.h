@@ -13,6 +13,7 @@
 #include "ModulePhysics3D.h"
 #include "ModulePlayer.h"
 #include "ModuleUI.h"
+#include <list>
 
 class Application
 {
@@ -31,7 +32,7 @@ public:
 private:
 
 	Timer	ms_timer;	
-	p2List<Module*> list_modules;
+	std::list<Module*> list_modules;
 	float	dt;
 	float lastFPS = 0;
 	float lastMs = 0;
