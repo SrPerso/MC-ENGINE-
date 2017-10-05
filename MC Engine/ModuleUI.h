@@ -83,6 +83,9 @@ private:
 	float cylinderRad = 0, cylinderHeight = 0;
 	float cylinderposX = 0, cylinderposY = 0, cylinderposZ = 0;
 
+	int numStacks = 0;
+	int numSides=0;
+
 	float Cube1size = 0;
 
 public: //

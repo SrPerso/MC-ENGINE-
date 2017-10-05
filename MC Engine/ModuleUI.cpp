@@ -429,12 +429,14 @@ IMGUI_API void ModuleUI::ShowGeometryWindow(bool * p_open)
 		if (ImGui::Button("Build Sphere") && sphereRad > 0) 
 		{
 
-			App->scene_intro->CreateSphere(sphereRad, vec3(sphereposX, sphereposY, sphereposZ));
+			App->scene_intro->CreateSphere(sphereRad, vec3(sphereposX, sphereposY, sphereposZ), numStacks, numSides);
 
 			sphereRad = 0;
 			sphereposX = 0;
 			sphereposY = 0;
 			sphereposZ = 0;
+			numSides = 0;
+			numStacks = 0;
 		}
 	}
 
@@ -795,6 +797,25 @@ void ModuleUI::GeometryMenuSphere()
 		sphereRad -= 0.1f;
 	}
 
+	if (ImGui::Button("Sphere Sides +"))
+	{
+		numSides += 1;
+	}
+	ImGui::InputInt("Sphere PosZ", &numSides, 0, 0, 2);
+	if (ImGui::Button("Sphere Sides -"))
+	{
+		numSides -= 1;
+	}
+
+	if (ImGui::Button("Sphere Stacks +"))
+	{
+		numStacks += 1;
+	}
+	ImGui::InputInt("Sphere PosZ", &numStacks, 0, 0, 2);
+	if (ImGui::Button("Sphere Stacks -"))
+	{
+		numStacks -= 1;
+	}
 	if (ImGui::Button("Sphere PosX +"))
 	{
 		sphereposX += 0.1f;

@@ -171,10 +171,10 @@ PrimitiveSphere::PrimitiveSphere(float radius,  int numStacks, int numSides) : P
 void PrimitiveSphere::InnerRender() const
 {
 
-	/*GLfloat curRadius, curTheta, curRho, deltaTheta, deltaRho, curX, curY, curZ;
-	int curStack, curSlice, 
+	GLfloat curRadius, curTheta, curRho, deltaTheta, deltaRho, curX, curY, curZ;
+	int curStack, curSlice ;
 	int numVerts = (numStacks -1)*numSides;
-	vec3 points[50];
+	vec3* points = new vec3[numVerts];
 	int curVert = 0;
 	int t;
 
@@ -250,7 +250,7 @@ void PrimitiveSphere::InnerRender() const
 	curZ = points[numVerts - 1].z;
 	glNormal3d(curX, curY, curZ);
 	glVertex3d(curX, curY, curZ);
-	glEnd();*/
+	glEnd();
 
 	
 }

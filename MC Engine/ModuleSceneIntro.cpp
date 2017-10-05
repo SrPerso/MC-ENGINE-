@@ -56,12 +56,14 @@ void ModuleSceneIntro::CreateCube(vec3 size, vec3 pos)
 
 }
 
-void ModuleSceneIntro::CreateSphere(float radius, vec3 pos)
+void ModuleSceneIntro::CreateSphere(float radius, vec3 pos, int numStacks, int numSides)
 {
 	PrimitiveSphere* sphere = new PrimitiveSphere;
 
 	sphere->radius = radius;
 	sphere->SetPos(pos.x, pos.y, pos.z);
+	sphere->numSides = numSides;
+	sphere->numStacks = numStacks;
 
 	sphere->wire = true;
 	
