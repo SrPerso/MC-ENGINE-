@@ -4,10 +4,17 @@
 #include <string>
 #include <list>
 #include "Globals.h"
-
+#include "Module.h"
 #include "parson\parson.h"
 
 #include "imgui\imgui.h"
+
+
+#include "Assimp/include/cimport.h"
+#include "Assimp/include/scene.h"
+#include "Assimp/include/postprocess.h"
+#include "Assimp/include/cfileio.h"
+#pragma comment (lib, "Assimp/libx86/assimp.lib")
 
 class DataJSON {
 public:
@@ -45,4 +52,19 @@ private:
 	JSON_Object* object_json = nullptr;
 
 };
+
+class DataFBX:public Module {
+public:
+	DataFBX(Application* app, bool start_enabled);
+	~DataFBX();
+
+	bool Init();
+	bool Start();
+	bool CleanUp();
+public:
+	bool LoadMesh(const char* path);
+
+};
+
+
 #endif

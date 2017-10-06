@@ -3,6 +3,12 @@
 #include "Globals.h"
 #include "Application.h"
 
+#include "Assimp/include/cimport.h"
+#include "Assimp/include/scene.h"
+#include "Assimp/include/postprocess.h"
+#include "Assimp/include/cfileio.h"
+
+#pragma comment (lib, "Assimp/libx86/assimp.lib")
 
 DataJSON::DataJSON()
 {
@@ -70,7 +76,6 @@ void DataJSON::SaveAll() const
 		json_serialize_to_file(value_json, file->c_str());
 	}*/
 }
-
 
 int DataJSON::GetInt(JSON_Object * object, const char * name) const
 {
@@ -169,3 +174,69 @@ void DataJSON::AddString(JSON_Object * object, const char * name, const char * s
 //
 //	return ImVec2();
 //}
+//--------------------------------------------------------------------------------------------------------------------------------
+DataFBX::DataFBX(Application* app, bool start_enabled): Module(app, start_enabled)
+{
+	name = "Loader FBX";
+}
+
+DataFBX::~DataFBX()
+{
+
+}
+
+
+bool DataFBX::Init()
+{
+	bool ret;
+
+	LOG("Init FBXLoader")
+	App->ui->AddLogToConsole("Init FBXLoader");
+
+	struct aiLogStream stream;
+	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
+	aiAttachLogStream(&stream);
+
+	return ret;
+}
+
+bool DataFBX::Start()
+{
+	bool ret = true;
+	
+	return ret;
+}
+
+bool DataFBX::CleanUp()
+{
+	bool ret = true;
+	aiDetachAllLogStreams();
+	return ret;
+}
+
+bool DataFBX::LoadMesh(const char * path)
+{
+	bool ret = true;
+	float* vertex = nullptr;
+
+
+	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
+	
+	if (scene != nullptr && scene->HasMeshes())
+	{
+
+	//	aiReleaseImport(scene);
+	
+	//TODO FBX
+	
+	}
+
+	else 
+	{
+
+		//LOG(“Error loading scene %s”, path);
+
+	}
+
+	return ret;
+}
