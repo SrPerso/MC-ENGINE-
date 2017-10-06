@@ -170,6 +170,7 @@ IMGUI_API void ModuleUI::ShowTeamInfoWindow(bool * p_open)
 	ImGui::Text("Bullet 2.x");
 	ImGui::Text("SDL 2.0.3");
 	ImGui::Text("Glew 2.1.0");
+	ImGui::Text("assimp-4.0.1");
 	ImGui::Separator();
 	ImGui::Text("Software licence: Apache License 2.0");
 	ImGui::Separator();
@@ -218,6 +219,8 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 	if (ImGui::CollapsingHeader("Audio"))
 		AudioSetingsC();
 
+	if (ImGui::CollapsingHeader("Render"))
+		RenderSetings();
 	//if (ImGui::CollapsingHeader("Devices"))
 	//	DevicesSetingsC();
 
@@ -1000,6 +1003,10 @@ void ModuleUI::EditMenuBar()
 	}
 }
 
+void ModuleUI::RenderSetings() 
+{
+	
+}
 void ModuleUI::Draw()
 {
 

@@ -134,15 +134,8 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
-	return UPDATE_CONTINUE;
-}
+	glLineWidth(2.0f);
 
-// PostUpdate present buffer to screen
-update_status ModuleRenderer3D::PostUpdate(float dt)
-{
-	App->scene_intro->Draw();
-	
-	App->ui->Draw();
 	GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
 		for (int j = 0; j < CHECKERS_WIDTH; j++) {
@@ -165,75 +158,113 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 
 
-	glLineWidth(2.0f);
+	
 	glBegin(GL_TRIANGLES);
 
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);
+
 	glBindTexture(GL_TEXTURE_2D, ImageName);
+
+
 	//front
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(0, 1, 0);//(1,1)
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(0, 0, 0);//(0,1)
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(1, 0, 0);//(0,0)
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(0, 1, 0);//(1,1)
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(1, 0, 0);//(0,0)
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(1, 1, 0);//(0,1)
 						//right
+
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(1, 1, 0);//(0,0)
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(1, 0, 0);//(0,1)
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(1, 1, 1);//(1,0)
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(1, 1, 1);//(1,0)
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(1, 0, 0);//(0,1)
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(1, 0, 1);//(1,1)
+
 						//left
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(0, 0, 1);
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(0, 1, 0);
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(0, 1, 1);
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(0, 0, 1);
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(0, 0, 0);
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(0, 1, 0);
 	//up
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(0, 1, 0);
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(1, 1, 0);
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(1, 1, 1);
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(0, 1, 0);
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(1, 1, 1);
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(0, 1, 1);
 	//down
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(1, 0, 0);
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(0, 0, 0);
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(0, 0, 1);
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(1, 0, 1);
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(1, 0, 0);
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(0, 0, 1);
 	//back
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(0, 0, 1);
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(0, 1, 1);
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(1, 1, 1);
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(1, 0, 1);
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(0, 0, 1);
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(1, 1, 1);
 
 
-	//front
-	glTexCoord2f(1.0f, 1.0f);
-	glTexCoord2f(0.0f, 1.0f);
-	glTexCoord2f(0.0f, 0.0f);
-	glTexCoord2f(1.0f, 1.0f);
-	glTexCoord2f(0.0f, 0.0f);
-	glTexCoord2f(0.0f, 1.0f);
-
-	glTexCoord2f(0.0f, 0.0f);
-	glTexCoord2f(0.0f, 1.0f);
-	glTexCoord2f(1.0f, 0.0f);
-	glTexCoord2f(1.0f, 0.0f);
-	glTexCoord2f(0.0f, 1.0f);
-	glTexCoord2f(1.0f, 1.0f);
 
 	glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glLineWidth(1.0f);
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	return UPDATE_CONTINUE;
+}
+
+// PostUpdate present buffer to screen
+update_status ModuleRenderer3D::PostUpdate(float dt)
+{
+	App->scene_intro->Draw();
+	
+	App->ui->Draw();
+	
+
+	
 
 	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;

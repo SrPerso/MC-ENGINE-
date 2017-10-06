@@ -32,6 +32,7 @@ public:	//setings
 	void WindowSetingsC();
 	void AplicationSetingsC();
 	void AudioSetingsC();
+	void RenderSetings();
 
 public:
 	IMGUI_API void ShowConsoleWindow(bool* p_open = NULL);
@@ -89,12 +90,12 @@ private:
 	float Cube1size = 0;
 
 public: //
-	bool sb_Depth_Test = false;
+	bool sb_Depth_Test = true;
 	bool sb_Cull_Face = false;
 	bool sb_Wire_Face = false;
 	bool sb_Lighting = false;
 	bool sb_Color_Material = false;
-	bool sb_Texture_2D = false;
+	bool sb_Texture_2D = true;
 
 };
 
