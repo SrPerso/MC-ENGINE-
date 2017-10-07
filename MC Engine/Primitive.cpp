@@ -1,11 +1,12 @@
 
 #include "Globals.h"
+#include "Glew\include\glew.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include "Primitive.h"
 
 
-#pragma comment (lib, "glut/glut32.lib")
+//#pragma comment (lib, "glut/glut32.lib")
 
 // ------------------------------------------------------------
 Primitive::Primitive() : transform(IdentityMatrix), color(White), wire(false), axis(false), type(PrimitiveTypes::Primitive_Point)
@@ -358,4 +359,39 @@ void PrimitivePlane::InnerRender() const
 	glEnd();
 }
 
+Cube1::Cube1()
+{
+	type = PrimitiveTypes::Primitive_Cube1;
+}
 
+Cube1::Cube1(vec3 size)
+{
+	type = PrimitiveTypes::Primitive_Cube1;
+
+	float sx = size.x * 0.5f;
+	float sy = size.y * 0.5f;
+	float sz = size.z * 0.5f;
+
+	float vertex[108] = { sx, sy, sz, -sx, sy, sz, -sx, -sy, sz, -sx, -sy, sz,sx,
+		-sy, sz,sx, sy, sz,sx, sy, sz,sx, -sy, sz,sx, -sy, -sz,sx, -sy,
+		-sz,sx, sy, -sz, sx, sy, sz ,sx, sy, sz ,sx, sy, -sz,-sx, sy, -sz ,
+		-sx, sy, -sz,-sx, sy, sz,sx, sy, sz ,-sx, sy, sz ,-sx, sy, -sz ,-sx,
+		-sy, -sz ,-sx, -sy, -sz ,-sx, -sy, sz ,-sx, sy, sz,-sx, -sy, -sz,sx, 
+		-sy, -sz      ,sx, -sy, sz,sx, -sy, sz,-sx, -sy, sz,-sx, -sy, -sz,sx, -sy,
+		-sz,-sx, -sy, -sz,-sx, sy, -sz,-sx, sy, -sz,sx, sy, -sz,sx, -sy, -sz };
+
+	
+	glGenBuffers(1, (GLuint*) &(my_id));
+	glBindBuffer(GL_ARRAY_BUFFER, my_id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*36 * 3, &vertex, GL_STATIC_DRAW);
+}
+
+
+void Cube1::InnerRender() const
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, my_id);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glDrawArrays(GL_TRIANGLES, 0, 36 * 3);
+	glDisableClientState(GL_VERTEX_ARRAY);
+}

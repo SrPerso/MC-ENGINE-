@@ -87,7 +87,8 @@ private:
 	int numStacks = 0;
 	int numSides=0;
 
-	float Cube1size = 0;
+	vec3 Cube1size;
+	vec3 Cube1pos;
 
 public: //
 	bool sb_Depth_Test = true;

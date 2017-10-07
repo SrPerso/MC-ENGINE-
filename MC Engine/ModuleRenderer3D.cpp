@@ -136,7 +136,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	glLineWidth(2.0f);
 
-	GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+	/*GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
 		for (int j = 0; j < CHECKERS_WIDTH; j++) {
 			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
@@ -251,7 +251,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	glEnd();
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glLineWidth(1.0f);
+	glLineWidth(1.0f);*/
 
 	return UPDATE_CONTINUE;
 }

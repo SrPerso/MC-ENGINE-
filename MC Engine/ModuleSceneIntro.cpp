@@ -87,6 +87,20 @@ void ModuleSceneIntro::CreateCylinder(float radius,float height, vec3 pos)
 
 }
 
+void ModuleSceneIntro::CreateCube1(vec3 size, vec3 pos)
+{
+	Cube1* cube1 = new Cube1(size);
+	cube1->size.x= size.x;
+	cube1->size.y = size.y;
+	cube1->size.z = size.z;
+	cube1->SetPos(pos.x, pos.y, pos.z);
+
+	GeometryObjects.push_back(cube1);
+	App->physics->AddBody(*cube1);
+	
+
+}
+
 
 void ModuleSceneIntro::Draw()
 {
@@ -103,7 +117,6 @@ void ModuleSceneIntro::CreateCylinder(const float x, const float y, const float 
 	PrimitiveCylinder* toCreate = new PrimitiveCylinder(radious, h);
 	toCreate->SetPos(x, y, z);
 	toCreate->color = White;
-	//test->push_front(toCreate);
 }
 
 // PreUpdate
@@ -124,22 +137,10 @@ update_status ModuleSceneIntro::Update(float dt)
 	float sz = 1 * 0.5f;
 		
 
-
-	//PrimitiveSphere sp(2);
-	//sp.SetPos(0, 3, 0);
-	//sp.color = Red;
-	//sp.Render();
-
 	PrimitivePlane p(0, -1, 0, 200);
 	p.color = White;
 	p.axis = false;
 	p.Render();
-
-	//Cube Poste( 1,1,1);
-	//Poste.SetRotation(90, vec3(0, 0, 1));
-	//Poste.SetPos(0, 0,0);
-	//Poste.color = White;
-	//Poste.Render();*/
 
 	return UPDATE_CONTINUE;
 
