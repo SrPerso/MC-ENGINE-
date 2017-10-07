@@ -1,15 +1,23 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "Glew\include\glew.h"
 #include "SDL\include\SDL_opengl.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
 #include "parson\parson.h"
 #include "ModuleSceneIntro.h"
-#pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
-#pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
-
 #include "ModuleUI.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
+
+
+#pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
+
+#pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
+#pragma comment (lib, "Glew/libx86/glew32.lib") /* link Microsoft OpenGL lib   */
+
+
+
+
 
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -339,14 +347,30 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::Draw(ObjectMesh meshToDraw)
 {
+	glPushMatrix();
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_ELEMENT_ARRAY_BUFFER);
+	glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idVertex);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshToDraw.idIndex);
+	glDrawElements(GL_TRIANGLES, meshToDraw.nIndex, GL_UNSIGNED_INT, NULL);
+
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_ELEMENT_ARRAY_BUFFER);
+
+	glPopMatrix();
+	glUseProgram(0);
 
 }
 
 void ModuleRenderer3D::TextureView()
 {
-
 	if (App->ui->sb_Texture_2D)
 		glEnable(GL_LINE);
 	else if (!App->ui->sb_Texture_2D)
 		glDisable(GL_LINE);
+
 }

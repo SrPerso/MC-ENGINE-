@@ -1,18 +1,17 @@
 #include "ModuleDataFile.h"
-#include "Module.h"
-#include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 
-#include "Assimp/include/cimport.h"
-#include "Assimp/include/scene.h"
-#include "Assimp/include/postprocess.h"
-#include "Assimp/include/cfileio.h"
+
+#include "Assimp\include\cimport.h"
+#include "Assimp\include\scene.h"
+#include "Assimp\include\postprocess.h"
+#include "Assimp\include\cfileio.h"
 
 #include "Glew\include\glew.h"
 
-
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
+
 
 DataJSON::DataJSON()
 {
@@ -218,17 +217,16 @@ bool DataFBX::CleanUp()
 	return ret;
 }
 
-bool DataFBX::LoadMesh(const char * path)
+bool DataFBX::LoadMesh(const char* path)
 {
 	bool ret = true;
-	float* vertex = nullptr;
-
-
+ 
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		for (int i = 0; i < scene->mNumMeshes; i++)
+	//	LOG("Scene %s loaded succesfully", path);
+		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
 
 			//create mesh
@@ -244,12 +242,12 @@ bool DataFBX::LoadMesh(const char * path)
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->Vertex, GL_STATIC_DRAW);
 
 			App->ui->AddLogToConsole("Load Mesh");
-			LOG("loaded mesh %s vertex", mesh->nVertex);
+		//	LOG("loaded mesh %s vertex", mesh->nVertex);
 
 			if (newMesh->HasFaces()) 
 			{
 				mesh->nIndex = newMesh->mNumFaces * 3;
-				mesh->Index = new uint[mesh->idIndex]; //every face is a triangle.
+				mesh->Index = new uint[mesh->nIndex]; //every face is a triangle.
 
 				for (uint i = 0; i < newMesh->mNumFaces; ++i)
 				{
