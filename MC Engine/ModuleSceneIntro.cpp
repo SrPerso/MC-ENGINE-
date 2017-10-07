@@ -101,6 +101,12 @@ void ModuleSceneIntro::CreateCube1(vec3 size, vec3 pos)
 
 }
 
+void ModuleSceneIntro::CreateMesh(ObjectMesh* Mesh)
+{
+	MeshObjects.push_back(Mesh);
+
+}
+
 
 void ModuleSceneIntro::Draw()
 {
@@ -108,7 +114,10 @@ void ModuleSceneIntro::Draw()
 	{
 		(*it)->Render();
 	}
-
+	for (std::list<ObjectMesh*>::iterator it = MeshObjects.begin(); it != MeshObjects.end(); ++it)
+	{
+		App->renderer3D->Draw((**it));
+	}
 	
 }
 

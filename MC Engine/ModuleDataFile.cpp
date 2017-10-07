@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleSceneIntro.h"
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
@@ -191,7 +192,7 @@ DataFBX::~DataFBX()
 
 bool DataFBX::Init()
 {
-	bool ret;
+	bool ret= true;
 
 	LOG("Init FBXLoader")
 	App->ui->AddLogToConsole("Init FBXLoader");
@@ -238,6 +239,11 @@ bool DataFBX::LoadMesh(const char * path)
 			mesh->Vertex = new float(mesh->nVertex * 3);
 			memcpy(mesh->Vertex, newMesh->mVertices, sizeof(float)* mesh->nVertex * 3);
 
+			glGenBuffers(1, (GLuint*)&mesh->idVertex);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->idVertex);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->Vertex, GL_STATIC_DRAW);
+
+			App->ui->AddLogToConsole("Load Mesh");
 			LOG("loaded mesh %s vertex", mesh->nVertex);
 
 			if (newMesh->HasFaces()) 
@@ -256,9 +262,14 @@ bool DataFBX::LoadMesh(const char * path)
 						memcpy(&mesh->Index[i * 3], newMesh->mFaces[i].mIndices, 3 * sizeof(uint));
 					}
 				}
+
+				glGenBuffers(1, (GLuint*)&mesh->idIndex);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->idIndex);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->nIndex, mesh->Index, GL_STATIC_DRAW);
+
 			}// has faces
 
-
+			App->scene_intro->CreateMesh(mesh);
 			// TODO on renderer make a Draw(Mesh);
 
 		}//for	

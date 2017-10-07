@@ -53,22 +53,10 @@ private:
 
 };
 
-struct ObjectMesh {
-
-
-
-	uint nVertex=0;
-	uint idVertex = 0;//id RAM
-	float* Vertex = nullptr;
-
-	uint nIndex = 0;
-	uint idIndex = 0;//id RAM
-	uint* Index = nullptr;
-};
 
 class DataFBX:public Module {
 public:
-	DataFBX(Application* app, bool start_enabled);
+	DataFBX(Application* app, bool start_enabled = true);
 	~DataFBX();
 
 	bool Init();

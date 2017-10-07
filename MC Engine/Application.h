@@ -30,6 +30,7 @@ public:
 	ModuleSceneIntro* scene_intro;
 	ModulePlayer* player;
 	DataJSON* jtsonData;
+	DataFBX* fbxdata;
 private:
 
 	Timer	ms_timer;	

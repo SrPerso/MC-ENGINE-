@@ -8,6 +8,19 @@
 struct PhysBody3D;
 struct PhysMotor3D;
 
+
+struct ObjectMesh {
+
+	uint nVertex = 0;
+	uint idVertex = 0;//id RAM
+	float* Vertex = nullptr;
+
+	uint nIndex = 0;
+	uint idIndex = 0;//id RAM
+	uint* Index = nullptr;
+};
+
+
 class ModuleSceneIntro : public Module
 {
 public:
@@ -29,8 +42,10 @@ public:
 	void CreateCylinder(float radius,float height, vec3 pos= vec3(0,0,0));
 	void CreateCube1(vec3 size, vec3 pos);
 	
+	void CreateMesh(ObjectMesh*Mesh);
 
 	std::list<Primitive*> GeometryObjects;
+	std::list<ObjectMesh*> MeshObjects;
 
 public:
 	void CreateCylinder(const float x, const float y, const float z, const float radious, const float h);

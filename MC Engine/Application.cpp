@@ -16,7 +16,7 @@ Application::Application()
 	physics = new ModulePhysics3D(this);
 	player = new ModulePlayer(this);
 	scene_intro = new ModuleSceneIntro(this);
-
+	fbxdata = new DataFBX(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -33,7 +33,9 @@ Application::Application()
 	// Scenes
 	
 	AddModule(player);
+	AddModule(fbxdata);
 	AddModule(scene_intro);
+
 	// Renderer last!
 	AddModule(renderer3D);
 
@@ -62,7 +64,6 @@ bool Application::Init()
 
 	//JSON_Value * configValue = json_parse_file("config.json");
 	//JSON_Object * configObject = json_value_get_object(configValue);
-
 
 	while (item != list_modules.end() && ret == true)
 	{

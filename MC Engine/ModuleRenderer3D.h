@@ -22,7 +22,7 @@ public:
 
 	void OnResize(int width, int height);
 
-
+	void Draw(ObjectMesh meshToDraw);
 	void TextureView();
 public:
 

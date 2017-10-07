@@ -337,6 +337,11 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
+void ModuleRenderer3D::Draw(ObjectMesh meshToDraw)
+{
+
+}
+
 void ModuleRenderer3D::TextureView()
 {
 
