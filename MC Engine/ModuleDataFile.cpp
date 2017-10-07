@@ -8,6 +8,9 @@
 #include "Assimp/include/postprocess.h"
 #include "Assimp/include/cfileio.h"
 
+#include "Glew\include\glew.h"
+
+
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
 DataJSON::DataJSON()
@@ -224,18 +227,50 @@ bool DataFBX::LoadMesh(const char * path)
 	
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		for (int i = 0; i < scene->mNumMeshes; i++)
+		{
 
-	//	aiReleaseImport(scene);
-	
-	//TODO FBX
-	
-	}
+			//create mesh
+			aiMesh* newMesh = scene->mMeshes[i];
+			ObjectMesh* mesh = new ObjectMesh();
+
+			mesh->nVertex = newMesh->mNumVertices;
+			mesh->Vertex = new float(mesh->nVertex * 3);
+			memcpy(mesh->Vertex, newMesh->mVertices, sizeof(float)* mesh->nVertex * 3);
+
+			LOG("loaded mesh %s vertex", mesh->nVertex);
+
+			if (newMesh->HasFaces()) 
+			{
+				mesh->nIndex = newMesh->mNumFaces * 3;
+				mesh->Index = new uint[mesh->idIndex]; //every face is a triangle.
+
+				for (uint i = 0; i < newMesh->mNumFaces; ++i)
+				{
+					if (newMesh->mFaces[i].mNumIndices != 3)
+					{
+						LOG("WARNING, geometry face with != 3 indices!");
+					}
+					else
+					{
+						memcpy(&mesh->Index[i * 3], newMesh->mFaces[i].mIndices, 3 * sizeof(uint));
+					}
+				}
+			}// has faces
+
+
+			// TODO on renderer make a Draw(Mesh);
+
+		}//for	
+		aiReleaseImport(scene);
+
+		LOG("Mesh %s loaded Ok", path);
+	}//if scene
 
 	else 
 	{
-
-		//LOG(“Error loading scene %s”, path);
-
+		ret = false;
+		LOG("Error loading scene %s", path);
 	}
 
 	return ret;
