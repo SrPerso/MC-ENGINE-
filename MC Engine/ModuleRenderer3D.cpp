@@ -154,6 +154,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 		}
 	}
 
+	
 	uint ImageName = 0;
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glGenTextures(1, &ImageName);
@@ -162,18 +163,18 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);*/
 
 
-
+	//GLuint image = loadBMP_custom("lena.bmp");
 	
 	glBegin(GL_TRIANGLES);
 
 	glEnable(GL_TEXTURE_2D);
 
-	glBindTexture(GL_TEXTURE_2D, ImageName);
+	//glBindTexture(GL_TEXTURE_2D, image);
 
-
+	//Direct Mode
 	//front
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(0, 1, 0);//(1,1)
@@ -254,12 +255,18 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glVertex3f(0, 0, 1);
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(1, 1, 1);
+	
+
+	//Indices Mode:
 
 
+	
+	
 
 	glEnd();
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glLineWidth(1.0f);*/
+	glLineWidth(1.0f);
+
 
 	return UPDATE_CONTINUE;
 }
@@ -289,6 +296,70 @@ bool ModuleRenderer3D::CleanUp()
 
 	return true;
 }
+
+GLuint ModuleRenderer3D::loadBMP_custom(const char * imagepath)
+{
+	unsigned char header[54]; // Each BMP file begins by a 54-bytes header
+	unsigned int dataPos;     // Position in the file where the actual data begins
+	unsigned int width, height;
+	unsigned int imageSize;
+
+	unsigned char * data;
+
+
+	FILE * file = fopen(imagepath, "rb");
+	if (!file)
+	{ 
+		printf("Image could not be opened\n");
+		return 0;
+	}
+
+	if (fread(header, 1, 54, file) != 54) 
+	{ 
+		printf("Not a correct BMP file\n");
+		return false;
+	}
+
+	if (header[0] != 'B' || header[1] != 'M') 
+	{
+		printf("Not a correct BMP file\n");
+		return 0;
+	}
+
+	dataPos = *(int*)&(header[0x0A]);
+	imageSize = *(int*)&(header[0x22]);
+	width = *(int*)&(header[0x12]);
+	height = *(int*)&(header[0x16]);
+
+	if (imageSize == 0)    
+		imageSize = width*height * 3; // 3 : one byte for each Red, Green and Blue component
+	if (dataPos == 0)      
+		dataPos = 54;
+
+
+	data = new unsigned char[imageSize];
+	fread(data, 1, imageSize, file);
+	fclose(file);
+
+
+	GLuint textureID;
+	glGenTextures(1, &textureID);
+
+	// "Bind" the newly created texture : all future texture functions will modify this texture
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	// Give the image to OpenGL
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+
+	return GLuint(data);
+	
+}
+
+
 
 void ModuleRenderer3D::EDglView()
 {

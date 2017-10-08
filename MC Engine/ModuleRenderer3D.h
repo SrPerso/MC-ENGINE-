@@ -3,6 +3,9 @@
 #include "Globals.h"
 #include "glmath.h"
 #include "Light.h"
+#include "Glew\include\glew.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 
 #define MAX_LIGHTS 8
 #define CHECKERS_HEIGHT 128
@@ -17,6 +20,7 @@ public:
 	update_status PreUpdate(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
+	GLuint loadBMP_custom(const char *imagepath);
 
 	void EDglView();
 
