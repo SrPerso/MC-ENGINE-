@@ -194,7 +194,8 @@ bool DataFBX::Init()
 {
 	bool ret= true;
 
-	LOG("Init FBXLoader")
+	LOG("Init FBXLoader");
+
 	App->ui->AddLogToConsole("Init FBXLoader");
 
 	struct aiLogStream stream;
@@ -235,7 +236,7 @@ bool DataFBX::LoadMesh(const char* path)
 			ObjectMesh* mesh = new ObjectMesh;
 
 			mesh->nVertex = newMesh->mNumVertices;
-			mesh->Vertex = new float(mesh->nVertex * 3);
+			mesh->Vertex = new float[mesh->nVertex * 3];
 			memcpy(mesh->Vertex, newMesh->mVertices, sizeof(float)* mesh->nVertex * 3);
 
 			glGenBuffers(1, (GLuint*)&mesh->idVertex);
@@ -267,13 +268,15 @@ bool DataFBX::LoadMesh(const char* path)
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->nIndex, mesh->Index, GL_STATIC_DRAW);
 
 			}// has faces			
+
+
 		
 			App->scene_intro->CreateMesh(mesh);
 		}//for	
 		//scene.
 
 		aiReleaseImport(scene); //--- /!\ read access memory
-
+		return true;
 		LOG("Mesh %s loaded Ok", path);
 	}//if scene
 

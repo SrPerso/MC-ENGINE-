@@ -9,8 +9,8 @@ struct PhysBody3D;
 struct PhysMotor3D;
 
 
-struct ObjectMesh {
-
+class ObjectMesh {
+public:
 	uint nVertex = 0;
 	uint idVertex = 0;//id RAM
 	float* Vertex = nullptr;
