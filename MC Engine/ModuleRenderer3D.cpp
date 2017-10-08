@@ -111,6 +111,8 @@ bool ModuleRenderer3D::Init()
 		lights[0].SetPos(0.0f, 0.0f, 2.5f);
 		lights[0].Init();
 		
+		lights[0].Active(true);
+
 		GLfloat MaterialAmbient[] = {1.0f, 1.0f, 1.0f, 1.0f};
 		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, MaterialAmbient);
 
@@ -169,7 +171,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	//GLuint image = loadBMP_custom("lena.bmp");
 	
 	glBegin(GL_TRIANGLES);
-
 	glEnable(GL_TEXTURE_2D);
 
 	//glBindTexture(GL_TEXTURE_2D, image);
@@ -274,12 +275,14 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	App->scene_intro->Draw();
-	
 	App->ui->Draw();
-	
 
-	
+	//if (App->ui->sb_Texture_2D)
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//else if (!App->ui->sb_Texture_2D)
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	App->scene_intro->Draw();
 
 	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
@@ -359,8 +362,6 @@ GLuint ModuleRenderer3D::loadBMP_custom(const char * imagepath)
 	
 }
 
-
-
 void ModuleRenderer3D::EDglView()
 {
 
@@ -369,14 +370,14 @@ void ModuleRenderer3D::EDglView()
 	else if (!App->ui->sb_Depth_Test)
 		glDisable(GL_DEPTH_TEST);
 
-	if (App->ui->sb_Cull_Face)
+	if (!App->ui->sb_Cull_Face)
 		glEnable(GL_CULL_FACE);
-	else if (!App->ui->sb_Cull_Face)
+	else if (App->ui->sb_Cull_Face)
 		glDisable(GL_CULL_FACE);
 	
-	if (App->ui->sb_Lighting)
+	if (!App->ui->sb_Lighting)
 		glEnable(GL_LIGHTING);
-	else if (!App->ui->sb_Lighting)
+	else if (App->ui->sb_Lighting)
 		glDisable(GL_LIGHTING);
 
 	if (App->ui->sb_Color_Material)
@@ -389,19 +390,8 @@ void ModuleRenderer3D::EDglView()
 	else if (!App->ui->sb_Texture_2D)
 		glDisable(GL_TEXTURE_2D);
 
-	
-	if (App->ui->sb_Wire_Face)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	else if (!App->ui->sb_Wire_Face)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-
 
 }
-
-
-
-
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
@@ -418,22 +408,29 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::Draw(ObjectMesh meshToDraw)
 {
-	glPushMatrix();
+	
+	if (meshToDraw.wire == true)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_ELEMENT_ARRAY_BUFFER);
-	glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idVertex);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
+		glPushMatrix();
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshToDraw.idIndex);
-	glDrawElements(GL_TRIANGLES, meshToDraw.nIndex, GL_UNSIGNED_INT, NULL);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_ELEMENT_ARRAY_BUFFER);
+		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idVertex);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_ELEMENT_ARRAY_BUFFER);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshToDraw.idIndex);
+		glDrawElements(GL_TRIANGLES, meshToDraw.nIndex, GL_UNSIGNED_INT, NULL);
 
-	glPopMatrix();
-	glUseProgram(0);
+		glDisableClientState(GL_NORMAL_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_ELEMENT_ARRAY_BUFFER);
+		
+		glPopMatrix();
+		glEnd();
+		glUseProgram(0);
 
 }
 
@@ -443,5 +440,20 @@ void ModuleRenderer3D::TextureView()
 		glEnable(GL_LINE);
 	else if (!App->ui->sb_Texture_2D)
 		glDisable(GL_LINE);
+
+}
+
+void ModuleRenderer3D::WireSet(bool wireon)
+{
+
+	for (std::list<Primitive*>::iterator it = App->scene_intro->GeometryObjects.begin(); it != App->scene_intro->GeometryObjects.end(); ++it)
+	{
+		(*it)->wire = wireon;
+	}
+	for (std::list<ObjectMesh*>::iterator it = App->scene_intro->MeshObjects.begin(); it != App->scene_intro->MeshObjects.end(); ++it)
+	{
+		(*it)->wire = wireon;
+	}
+
 
 }

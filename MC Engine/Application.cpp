@@ -35,11 +35,11 @@ Application::Application()
 	AddModule(player);
 	AddModule(fbxdata);
 	AddModule(scene_intro);
-
+	AddModule(ui);//maybe the ui must be the last
 	// Renderer last!
 	AddModule(renderer3D);
 
-	AddModule(ui);//maybe the ui must be the last
+
 }
 
 Application::~Application()

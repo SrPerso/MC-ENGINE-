@@ -27,7 +27,11 @@ public:
 	void OnResize(int width, int height);
 
 	void Draw(ObjectMesh meshToDraw);
+
+public: // View Modes
 	void TextureView();
+	void WireSet(bool wireon=false);
+
 public:
 
 	Light lights[MAX_LIGHTS];

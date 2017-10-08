@@ -96,9 +96,9 @@ private:
 
 public: //
 	bool sb_Depth_Test = true;
-	bool sb_Cull_Face = false;
+	bool sb_Cull_Face = true;
 	bool sb_Wire_Face = false;
-	bool sb_Lighting = false;
+	bool sb_Lighting = true;
 	bool sb_Color_Material = false;
 	bool sb_Texture_2D = true;
 

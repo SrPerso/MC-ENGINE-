@@ -93,6 +93,7 @@ update_status ModuleUI::Update(float dt)
 
 	if (show_TeamInfo_window)
 		ShowTeamInfoWindow();
+
 	if (show_Geometry_window)
 		ShowGeometryWindow();
 	
@@ -383,8 +384,10 @@ IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 			App->renderer3D->EDglView();
 
 		ImGui::SameLine();
-		if (ImGui::Checkbox("WIRE", &sb_Wire_Face))
+		if (ImGui::Checkbox("WIRE", &sb_Wire_Face)) {
 			App->renderer3D->EDglView();
+		}
+		//	App->renderer3D->WireSet(sb_Wire_Face);
 
 		ImGui::End();
 	}	
@@ -492,10 +495,7 @@ IMGUI_API void ModuleUI::ShowGeometryWindow(bool * p_open)
 			Cube2pos.x = 0;
 			Cube2pos.y = 0;
 			Cube2pos.z = 0;
-
 		}
-
-
 	}
 
 	if (ImGui::CollapsingHeader("Capsule"))

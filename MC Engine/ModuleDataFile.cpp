@@ -275,7 +275,7 @@ bool DataFBX::LoadMesh(const char* path)
 		}//for	
 		//scene.
 
-		aiReleaseImport(scene); //--- /!\ read access memory
+		aiReleaseImport(scene); 
 		return true;
 		LOG("Mesh %s loaded Ok", path);
 	}//if scene
