@@ -479,6 +479,24 @@ IMGUI_API void ModuleUI::ShowGeometryWindow(bool * p_open)
 		
 	}
 	
+	if (ImGui::CollapsingHeader("Cube2"))
+	{
+		GeometryMenuCube2();
+
+		if (ImGui::Button("Build Cube2"))
+		{
+			App->scene_intro->CreateCube2(Cube2size, Cube2pos);
+			Cube2size.x = 0;
+			Cube2size.y = 0;
+			Cube2size.z = 0;
+			Cube2pos.x = 0;
+			Cube2pos.y = 0;
+			Cube2pos.z = 0;
+
+		}
+
+
+	}
 
 	if (ImGui::CollapsingHeader("Capsule"))
 	{
@@ -964,6 +982,67 @@ void ModuleUI::GeometryMenuCube1()
 		Cube1pos.z -= 0.1f;
 	}
 	
+
+}
+
+void ModuleUI::GeometryMenuCube2()
+{
+	if (ImGui::Button("Size X +"))
+	{
+		Cube2size.x += 0.1f;
+	}
+	ImGui::InputFloat("Cube2 Size X", &Cube2size.x, 0, 0, 2);
+	if (ImGui::Button("Size X -"))
+	{
+		Cube2size.x -= 0.1f;
+	}
+	if (ImGui::Button("Size Y +"))
+	{
+		Cube2size.y += 0.1f;
+	}
+	ImGui::InputFloat("Cube2 Size Y", &Cube2size.y, 0, 0, 2);
+	if (ImGui::Button("Size Y -"))
+	{
+		Cube2size.y -= 0.1f;
+	}
+	if (ImGui::Button("Size Z +"))
+	{
+		Cube2size.z += 0.1f;
+	}
+	ImGui::InputFloat("Cube2 Size Z", &Cube2size.z, 0, 0, 2);
+	if (ImGui::Button("Size Z -"))
+	{
+		Cube2size.z -= 0.1f;
+	}
+
+	if (ImGui::Button("Pos X +"))
+	{
+		Cube2pos.x += 0.1f;
+	}
+	ImGui::InputFloat("Cube2 Pos X", &Cube2pos.x, 0, 0, 2);
+	if (ImGui::Button("Pos X -"))
+	{
+		Cube2pos.x -= 0.1f;
+	}
+	if (ImGui::Button("Pos Y +"))
+	{
+		Cube2pos.y += 0.1f;
+	}
+	ImGui::InputFloat("Cube2 Pos Y", &Cube2pos.y, 0, 0, 2);
+	if (ImGui::Button("Pos Y -"))
+	{
+		Cube2pos.y -= 0.1f;
+	}
+	if (ImGui::Button("Pos Z +"))
+	{
+		Cube2pos.z += 0.1f;
+	}
+	ImGui::InputFloat("Cube2 Pos Z", &Cube2pos.z, 0, 0, 2);
+	if (ImGui::Button("Pos Z -"))
+	{
+		Cube2pos.z -= 0.1f;
+	}
+
 
 }
 

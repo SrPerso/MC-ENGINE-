@@ -395,3 +395,63 @@ void Cube1::InnerRender() const
 	glDrawArrays(GL_TRIANGLES, 0, 36 * 3);
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
+
+Cube2::Cube2()
+{
+	type = PrimitiveTypes::Primitive_Cube1;
+}
+
+Cube2::Cube2(vec3 size)
+{
+	type = PrimitiveTypes::Primitive_Cube2;
+	
+	float sx = size.x * 0.5f;
+	float sy = size.y * 0.5f;
+	float sz = size.z * 0.5f;
+
+	//sx,sy,sz
+	
+
+	float vertices[24] = 
+	{ 
+		sx,sy,sz,//v0
+		-sx,sy,sz,//v1
+		-sx,-sy,sz,//v2 
+		sx,-sy,sz,//v3 
+		sx,-sy,-sz,//v4 
+		sx,sy,-sz,//v5 
+		-sx,sy,-sz,//v6 
+		-sx,-sy,sz,//v7
+	};
+
+	glGenBuffers(1, &my_id_v);
+	glBindBuffer(GL_ARRAY_BUFFER, my_id_v);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	GLushort indices[36] = {0,1,2,  2,3,0,   0,3,4,   4,5,0,  0,5,6,  6,1,0,  1,6,7,  7,2,1,  7,4,3,  3,2,7,  4,7,6,  6,5,4    };
+	
+
+	glGenBuffers(1, &my_id);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_id);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	
+	
+}
+
+
+void Cube2::InnerRender()const 
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_ELEMENT_ARRAY_BUFFER);
+
+	glBindBuffer(GL_ARRAY_BUFFER, my_id_v);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_id);	
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT,NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glDisableClientState(GL_ELEMENT_ARRAY_BUFFER);
+	glDisableClientState(GL_VERTEX_ARRAY);
+}

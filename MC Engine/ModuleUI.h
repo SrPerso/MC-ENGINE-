@@ -62,6 +62,7 @@ private:
 	void GeometryMenuSphere();
 	void GeometryMenuCylinder();
 	void GeometryMenuCube1();
+	void GeometryMenuCube2();
 	//Execute
 
 //	UIMenu menuu;
@@ -89,6 +90,9 @@ private:
 
 	vec3 Cube1size;
 	vec3 Cube1pos;
+
+	vec3 Cube2size;
+	vec3 Cube2pos;
 
 public: //
 	bool sb_Depth_Test = true;

@@ -12,7 +12,8 @@ enum PrimitiveTypes
 	Primitive_Sphere,
 	Primitive_Cylinder,
 	Primitive_Capsule,
-	Primitive_Cube1
+	Primitive_Cube1,
+	Primitive_Cube2
 };
 
 class Primitive
@@ -61,6 +62,23 @@ public:
 
 	
 };
+
+class Cube2 : public Primitive
+{
+public:
+	Cube2();
+	Cube2(vec3 size);
+	void InnerRender() const;
+public:
+	vec3 size;
+	uint my_id_v=0;
+	uint my_id=0;
+	
+	
+
+
+};
+
 
 // ============================================
 class PrimitiveSphere : public Primitive

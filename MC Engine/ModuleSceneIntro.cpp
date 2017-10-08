@@ -39,6 +39,21 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
+	LOG("Cleaning scene Objects");
+	App->ui->AddLogToConsole("Cleaning scene Objects");
+
+
+	while (!GeometryObjects.empty()) {
+
+		delete GeometryObjects.front();
+		GeometryObjects.pop_front();
+	}
+
+	while (!MeshObjects.empty()) {
+
+		delete MeshObjects.front();
+		MeshObjects.pop_front();
+	}
 	
 	return true;
 }
@@ -101,6 +116,20 @@ void ModuleSceneIntro::CreateCube1(vec3 size, vec3 pos)
 
 }
 
+void ModuleSceneIntro::CreateCube2(vec3 size, vec3 pos)
+{
+	Cube2* cube2 = new Cube2(size);
+	cube2->size.x = size.x;
+	cube2->size.y = size.y;
+	cube2->size.z = size.z;
+	cube2->SetPos(pos.x, pos.y, pos.z);
+
+	
+	GeometryObjects.push_back(cube2);
+	App->physics->AddBody(*cube2);
+
+
+}
 void ModuleSceneIntro::CreateMesh(ObjectMesh* Mesh)
 {
 	MeshObjects.push_back(Mesh);
@@ -155,3 +184,14 @@ update_status ModuleSceneIntro::Update(float dt)
 
 }
 
+ObjectMesh::~ObjectMesh()
+{
+	if (Vertex != nullptr) {
+		delete[] Vertex;
+		Vertex = nullptr;
+	}
+	if (Index != nullptr) {
+		delete[] Index;
+		Index = nullptr;
+	}
+}

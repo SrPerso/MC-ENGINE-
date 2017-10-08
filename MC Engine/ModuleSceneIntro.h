@@ -14,10 +14,12 @@ struct ObjectMesh {
 	uint nVertex = 0;
 	uint idVertex = 0;//id RAM
 	float* Vertex = nullptr;
+	bool wire = false;
 
 	uint nIndex = 0;
 	uint idIndex = 0;//id RAM
 	uint* Index = nullptr;
+	ObjectMesh::~ObjectMesh();
 };
 
 
@@ -41,6 +43,7 @@ public:
 	void CreateSphere(float radius, vec3 pos, int numStacks, int numSides);
 	void CreateCylinder(float radius,float height, vec3 pos= vec3(0,0,0));
 	void CreateCube1(vec3 size, vec3 pos);
+	void CreateCube2(vec3 size, vec3 pos);
 	
 	void CreateMesh(ObjectMesh*Mesh);
 
