@@ -3,6 +3,7 @@
 #include "ModuleSceneIntro.h"
 
 
+
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
 #include "Assimp\include\postprocess.h"
@@ -225,13 +226,13 @@ bool DataFBX::LoadMesh(const char* path)
 	
 	if (scene != nullptr && scene->HasMeshes())
 	{
-	//	LOG("Scene %s loaded succesfully", path);
+
 		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
 
 			//create mesh
 			aiMesh* newMesh = scene->mMeshes[i];
-			ObjectMesh* mesh = new ObjectMesh();
+			ObjectMesh* mesh = new ObjectMesh;
 
 			mesh->nVertex = newMesh->mNumVertices;
 			mesh->Vertex = new float(mesh->nVertex * 3);
@@ -257,7 +258,7 @@ bool DataFBX::LoadMesh(const char* path)
 					}
 					else
 					{
-						memcpy(&mesh->Index[i * 3], newMesh->mFaces[i].mIndices, 3 * sizeof(uint));
+						memcpy(&mesh->Index[i * 3], newMesh->mFaces[i].mIndices, sizeof(uint)* 3);
 					}
 				}
 
@@ -265,13 +266,13 @@ bool DataFBX::LoadMesh(const char* path)
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->idIndex);
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->nIndex, mesh->Index, GL_STATIC_DRAW);
 
-			}// has faces
-
+			}// has faces			
+		
 			App->scene_intro->CreateMesh(mesh);
-			// TODO on renderer make a Draw(Mesh);
-
 		}//for	
-		aiReleaseImport(scene);
+		//scene.
+
+		aiReleaseImport(scene); //--- /!\ read access memory
 
 		LOG("Mesh %s loaded Ok", path);
 	}//if scene

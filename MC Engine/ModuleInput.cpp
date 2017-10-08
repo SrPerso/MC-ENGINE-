@@ -1,9 +1,9 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
-#include "parson\parson.h"
 #include "Brofiler\Brofiler.h"
-#include "SDL\include\SDL_keyboard.h"
+
+
 #define MAX_KEYS 300
 
 ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -94,6 +94,8 @@ update_status ModuleInput::PreUpdate(float dt)
 	bool quit = false;
 	char* fileDir = nullptr;
 	SDL_Event e;
+	uint size;
+
 	while(SDL_PollEvent(&e))
 	{
 		switch(e.type)
@@ -115,8 +117,22 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_DROPFILE:
+
 				fileDir = e.drop.file;
-				App->fbxdata->LoadMesh(fileDir);
+
+				LOG("%s dropped on window.", fileDir);
+				size = strlen(fileDir);
+
+				if (strcmp(&fileDir[size - 4], ".fbx") == 0 || strcmp(&fileDir[size - 4], ".FBX") == 0)
+				{
+					App->fbxdata->LoadMesh(fileDir);
+				}
+
+				else 
+				{
+					LOG("File unknown");
+					App->ui->AddLogToConsole("File unknown");
+				}
 				SDL_free(fileDir);    // Free dropped_filedir memory
 			break;
 
@@ -125,7 +141,7 @@ update_status ModuleInput::PreUpdate(float dt)
 				if(e.window.event == SDL_WINDOWEVENT_RESIZED)
 					App->renderer3D->OnResize(e.window.data1, e.window.data2);
 			}
-
+			break;
 	
 
 
