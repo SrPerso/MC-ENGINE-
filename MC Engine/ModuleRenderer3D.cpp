@@ -414,14 +414,17 @@ void ModuleRenderer3D::Draw(ObjectMesh meshToDraw)
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	if (meshToDraw.nNormals != 0)
+	if (meshToDraw.nNormals != 0 && App->scene_intro->debugMode)
 	{
 		glEnable(GL_LIGHTING);
+		App->ui->sb_Lighting = true;
+
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idNormals);
 		glNormalPointer(GL_FLOAT, 0, NULL);
-	}
 
+		App->scene_intro->CreateLine(vec3{}, vec3{});
+	}
 	
 		glPushMatrix();
 

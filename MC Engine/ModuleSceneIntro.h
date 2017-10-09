@@ -51,12 +51,14 @@ public:
 	void CreateCylinder(float radius,float height, vec3 pos= vec3(0,0,0));
 	void CreateCube1(vec3 size, vec3 pos);
 	void CreateCube2(vec3 size, vec3 pos);
-	
+	void CreateLine(vec3 Origin, vec3 destintation);
+
 	void CreateMesh(ObjectMesh*Mesh);
 
+public:
 	std::list<Primitive*> GeometryObjects;
 	std::list<ObjectMesh*> MeshObjects;
-
+	bool debugMode=false;
 public:
 	void CreateCylinder(const float x, const float y, const float z, const float radious, const float h);
 };

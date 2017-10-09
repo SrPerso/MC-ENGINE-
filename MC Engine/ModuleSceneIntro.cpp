@@ -130,6 +130,12 @@ void ModuleSceneIntro::CreateCube2(vec3 size, vec3 pos)
 
 
 }
+void ModuleSceneIntro::CreateLine(vec3 Origin, vec3 destintation)
+{
+	PrimitiveLine line = PrimitiveLine()
+
+}
+
 void ModuleSceneIntro::CreateMesh(ObjectMesh* Mesh)
 {
 	MeshObjects.push_back(Mesh);
@@ -147,7 +153,7 @@ void ModuleSceneIntro::Draw()
 	{
 		App->renderer3D->Draw((**it));
 	}
-	
+
 }
 
 void ModuleSceneIntro::CreateCylinder(const float x, const float y, const float z, const float radious, const float h)

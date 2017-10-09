@@ -110,7 +110,7 @@ class PrimitiveLine : public Primitive
 {
 public:
 	PrimitiveLine();
-	PrimitiveLine(float x, float y, float z);
+	PrimitiveLine(vec3 origin, vec3 dest);
 	void InnerRender() const;
 public:
 	vec3 origin;

@@ -310,7 +310,7 @@ PrimitiveLine::PrimitiveLine() : Primitive(), origin(0, 0, 0), destination(1, 1,
 	type = PrimitiveTypes::Primitive_Line;
 }
 
-PrimitiveLine::PrimitiveLine(float x, float y, float z) : Primitive(), origin(0, 0, 0), destination(x, y, z)
+PrimitiveLine::PrimitiveLine(vec3 origin, vec3 Dest) : Primitive(), origin(origin.x, origin.y, origin.z), destination(Dest.x, Dest.y, Dest.z)
 {
 	type = PrimitiveTypes::Primitive_Line;
 }
