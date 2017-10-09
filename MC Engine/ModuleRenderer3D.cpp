@@ -414,6 +414,15 @@ void ModuleRenderer3D::Draw(ObjectMesh meshToDraw)
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+	if (meshToDraw.nNormals != 0)
+	{
+		glEnable(GL_LIGHTING);
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idNormals);
+		glNormalPointer(GL_FLOAT, 0, NULL);
+	}
+
+	
 		glPushMatrix();
 
 		glEnableClientState(GL_VERTEX_ARRAY);

@@ -14,12 +14,19 @@ public:
 	uint nVertex = 0;
 	uint idVertex = 0;//id RAM
 	float* Vertex = nullptr;
+	
 	bool wire = false;
 
 	uint nIndex = 0;
 	uint idIndex = 0;//id RAM
 	uint* Index = nullptr;
+	
+	float* normals = nullptr;
+	uint idNormals = 0;
+	uint nNormals = 0;
+
 	ObjectMesh::~ObjectMesh();
+
 };
 
 

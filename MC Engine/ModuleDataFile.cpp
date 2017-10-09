@@ -2,8 +2,6 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 
-
-
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
 #include "Assimp\include\postprocess.h"
@@ -227,7 +225,6 @@ bool DataFBX::LoadMesh(const char* path)
 	
 	if (scene != nullptr && scene->HasMeshes())
 	{
-
 		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
 
@@ -263,15 +260,26 @@ bool DataFBX::LoadMesh(const char* path)
 					}
 				}
 
-				glGenBuffers(1, (GLuint*)&mesh->idIndex);
+				glGenBuffers(1, (GLuint*)&(mesh->idIndex));
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->idIndex);
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->nIndex, mesh->Index, GL_STATIC_DRAW);
 
 			}// has faces			
+			if (newMesh->HasNormals())
+			{
+				mesh->nNormals = mesh->nVertex*3;
 
+				mesh->normals = new float[mesh->nNormals];
+				memcpy(mesh->normals, newMesh->mNormals, (mesh->nNormals/* *sizeof(float)*/  ));
+				
+				glGenBuffers(1, (GLuint*)&(mesh->idNormals)); // 
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->idNormals);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nNormals, mesh->normals, GL_STATIC_DRAW);
 
-		
+			}// has normals
+			
 			App->scene_intro->CreateMesh(mesh);
+
 		}//for	
 		//scene.
 
@@ -279,6 +287,7 @@ bool DataFBX::LoadMesh(const char* path)
 		return true;
 		LOG("Mesh %s loaded Ok", path);
 	}//if scene
+
 
 	else 
 	{

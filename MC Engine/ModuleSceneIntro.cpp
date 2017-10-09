@@ -187,11 +187,15 @@ update_status ModuleSceneIntro::Update(float dt)
 ObjectMesh::~ObjectMesh()
 {
 	//if (Vertex != nullptr) {
-	//	delete[] Vertex;
+	//	delete Vertex;
 	//	Vertex = nullptr;
 	//}
 	//if (Index != nullptr) {
-	//	delete[] Index;
+	//	delete Index;
 	//	Index = nullptr;
+	//}
+	//if (normals != nullptr) {
+	//	delete normals;
+	//	normals = nullptr;
 	//}
 }
