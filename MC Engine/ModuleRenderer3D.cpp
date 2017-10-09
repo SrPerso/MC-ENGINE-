@@ -1,28 +1,24 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+
 #include "Glew\include\glew.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 #include "SDL\include\SDL_opengl.h"
 #include "parson\parson.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleUI.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
+#pragma comment (lib, "Glew/libx86/glew32.lib") 
 
-
-#pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
-
-#pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
-#pragma comment (lib, "Glew/libx86/glew32.lib") /* link Microsoft OpenGL lib   */
-
-
+#pragma comment (lib, "glu32.lib") 
+#pragma comment (lib, "opengl32.lib") 
 
 
 
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-
 	name = "Render";
 }
 
@@ -169,11 +165,12 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 
 	//GLuint image = loadBMP_custom("lena.bmp");
-	
+	GLuint image = App->txtdata->LoadTexture("Lenna.png");
+
 	glBegin(GL_TRIANGLES);
 	glEnable(GL_TEXTURE_2D);
 
-	//glBindTexture(GL_TEXTURE_2D, image);
+	glBindTexture(GL_TEXTURE_2D, image);
 
 	//Direct Mode
 	//front
@@ -361,6 +358,8 @@ GLuint ModuleRenderer3D::loadBMP_custom(const char * imagepath)
 	return GLuint(data);
 	
 }
+
+
 
 void ModuleRenderer3D::EDglView()
 {

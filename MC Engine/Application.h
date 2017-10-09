@@ -31,6 +31,7 @@ public:
 	ModulePlayer* player;
 	DataJSON* jtsonData;
 	DataFBX* fbxdata;
+	DataTexture* txtdata;
 private:
 
 	Timer	ms_timer;	
