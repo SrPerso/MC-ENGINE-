@@ -6,12 +6,10 @@
 #include "Globals.h"
 #include "Module.h"
 #include "parson\parson.h"
-#include "Devil\include\il.h"
-#include "Devil\include\ilu.h"
-#include "Devil\include\ilut.h"
-#pragma comment (lib, "Devil/libx86/DevIL.lib" ) 
-#pragma comment (lib, "Devil/libx86/ILU.lib" ) 
-#pragma comment (lib, "Devil/libx86/ILUT.lib" ) 
+
+#include "Glew\include\glew.h"
+
+
 #include "imgui\imgui.h"
 
 class DataJSON {
@@ -75,7 +73,7 @@ public:
 	bool Innit(JSON_Object * data);
 	bool CleanUp(JSON_Object * data);
 
-	GLuint LoadTexture(const char* imagepath);
+	uint LoadTexture(const char* imagepath);
 };
 
 #endif

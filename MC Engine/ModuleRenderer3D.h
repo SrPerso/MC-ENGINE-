@@ -4,9 +4,11 @@
 #include "glmath.h"
 #include "Light.h"
 #include "Glew\include\glew.h"
+#pragma comment (lib, "Glew/libx86/glew32.lib") 
+
 #include <gl/GL.h>
 #include <gl/GLU.h>
-#pragma comment (lib, "Glew/libx86/glew32.lib") 
+
 
 #define MAX_LIGHTS 8
 #define CHECKERS_HEIGHT 128

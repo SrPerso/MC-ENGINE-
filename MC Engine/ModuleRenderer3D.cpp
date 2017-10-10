@@ -9,6 +9,8 @@
 #include "parson\parson.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleUI.h"
+
+
 #pragma comment (lib, "Glew/libx86/glew32.lib") 
 
 #pragma comment (lib, "glu32.lib") 
@@ -165,12 +167,13 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 
 	//GLuint image = loadBMP_custom("lena.bmp");
-	GLuint image = App->txtdata->LoadTexture("Lenna.png");
+
+	//GLuint image = App->txtdata->LoadTexture("Game\Lenna.png");
 
 	glBegin(GL_TRIANGLES);
 	glEnable(GL_TEXTURE_2D);
 
-	glBindTexture(GL_TEXTURE_2D, image);
+	//glBindTexture(GL_TEXTURE_2D, image);
 
 	//Direct Mode
 	//front

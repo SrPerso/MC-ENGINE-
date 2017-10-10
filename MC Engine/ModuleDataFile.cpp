@@ -3,13 +3,21 @@
 #include "ModuleSceneIntro.h"
 
 
-
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
 #include "Assimp\include\postprocess.h"
 #include "Assimp\include\cfileio.h"
 
+
+
 #include "Glew\include\glew.h"
+
+#include "Devil\include\il.h"
+#include "Devil\include\ilu.h"
+#include "Devil\include\ilut.h"
+#pragma comment (lib, "Devil/libx86/DevIL.lib" ) 
+#pragma comment (lib, "Devil/libx86/ILU.lib" ) 
+#pragma comment (lib, "Devil/libx86/ILUT.lib" ) 
 
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
@@ -289,7 +297,7 @@ bool DataFBX::LoadMesh(const char* path)
 	return ret;
 }
 
-DataTexture::DataTexture(Application * app, bool start_enabled)
+DataTexture::DataTexture(Application * app, bool start_enabled):Module(app,start_enabled)
 {
 	name = "Data Texture";
 }
@@ -313,7 +321,7 @@ bool DataTexture::CleanUp(JSON_Object * data)
 	return false;
 }
 
-GLuint DataTexture::LoadTexture(const char * imagepath)
+uint DataTexture::LoadTexture(const char * imagepath)
 {
 	ILuint imageID;				// Create an image ID as a ULuint
 
