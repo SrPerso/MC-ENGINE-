@@ -41,6 +41,7 @@ public:
 //	IMGUI_API void ShowMathWindow(bool* p_open = NULL);
 	IMGUI_API void ShowImageViewWindow(bool* p_open = NULL);
 	IMGUI_API void ShowGeometryWindow(bool* p_open = NULL);
+	IMGUI_API void ShowDebugWindow(bool* p_open = NULL);
 	void AddLogToConsole(std::string toAdd);
 
 private:
@@ -74,6 +75,7 @@ private:
 	bool show_ImageView_window = false;
 	bool show_TeamInfo_window = false;
 	bool show_Geometry_window = false;
+	bool show_Debug_window = false;
 
 	//Geometry Test
 	float cubex = 0, cubey = 0, cubez = 0;
@@ -101,7 +103,11 @@ public: //
 	bool sb_Lighting = true;
 	bool sb_Color_Material = false;
 	bool sb_Texture_2D = true;
-
+	
+//debug
+	bool debug_active = true;
+	bool debug_Tri_Normals = true;
+	bool debug_Vertex_Normals = true;
 };
 
 #endif // __ModuleUI_H__

@@ -96,7 +96,9 @@ update_status ModuleUI::Update(float dt)
 
 	if (show_Geometry_window)
 		ShowGeometryWindow();
-	
+	if (show_Debug_window)
+		ShowDebugWindow();
+
 	
 	return update_status(ret);
 }
@@ -507,6 +509,30 @@ IMGUI_API void ModuleUI::ShowGeometryWindow(bool * p_open)
 	return IMGUI_API void();
 }
 
+IMGUI_API void ModuleUI::ShowDebugWindow(bool * p_open)
+{
+
+	ImGuiWindowFlags window_flags = 0;
+
+	//window_flags |= ImGuiWindowFlags_NoTitleBar;
+	window_flags |= ImGuiWindowFlags_NoMove;
+	window_flags |= ImGuiWindowFlags_NoResize;
+
+	if (ImGui::Begin("Debug Window", p_open, window_flags))
+	{
+		ImGui::Checkbox("Debug ON", &debug_active);
+		ImGui::SameLine();
+		ImGui::Checkbox("Tri Normals", &debug_Tri_Normals);
+		ImGui::SameLine();
+		ImGui::Checkbox("Vertex Normals", &debug_Vertex_Normals);
+	
+		ImGui::End();
+	}
+
+
+	return IMGUI_API void();
+}
+
 
 //show the logs on Console..................................................
 void ModuleUI::AddLogToConsole(std::string toAdd)
@@ -809,6 +835,7 @@ void ModuleUI::WindowMenuBar()
 	ImGui::Checkbox("Geometry", &show_Geometry_window);
 	//ImGui::Checkbox("MathTest", &show_MathTest_window);
 
+	ImGui::Checkbox("Debug Mode", &show_Debug_window);
 }
 
 void ModuleUI::GeometryMenuSphere()

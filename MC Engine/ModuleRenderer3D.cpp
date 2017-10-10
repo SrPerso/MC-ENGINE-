@@ -451,9 +451,11 @@ void ModuleRenderer3D::Draw(ObjectMesh meshToDraw)
 
 void ModuleRenderer3D::DrawDebug(ObjectMesh meshToDraw)
 {
-	if (meshToDraw.debugMode==true && meshToDraw.idNormals >0)
+	if (meshToDraw.debugMode==true && meshToDraw.idNormals >0 && App->ui->debug_active == true)
 	{
-			for (int i = 0; i < meshToDraw.nVertex; i ++)
+		if (App->ui->debug_Tri_Normals == true)
+		{
+			for (int i = 0; i < meshToDraw.nVertex; ++i)
 			{
 
 				float destX = meshToDraw.normals[i] + meshToDraw.Vertex[i];
@@ -466,8 +468,10 @@ void ModuleRenderer3D::DrawDebug(ObjectMesh meshToDraw)
 				normal.Render();
 				i += 2;
 			}
-
-			for (int i = 0; i < meshToDraw.nVertex; i++)
+		}//debug_Tri_Normals
+		if (App->ui->debug_Vertex_Normals == true)
+		{
+			for (int i = 0; i < meshToDraw.nVertex; ++i)
 			{
 				float3 a = float3(meshToDraw.Vertex[i], meshToDraw.Vertex[i + 1], meshToDraw.Vertex[i + 2]);
 				float3 b = float3(meshToDraw.Vertex[i + 3], meshToDraw.Vertex[i + 4], meshToDraw.Vertex[i + 5]);
@@ -475,7 +479,7 @@ void ModuleRenderer3D::DrawDebug(ObjectMesh meshToDraw)
 
 				Triangle face(float3(a), float3(b), float3(c));
 
-				float3 center = (a + b + c) / 3.f;
+				float3 center = (a + b + c) / (float)3;
 				float3 normalized = Cross(b - a, c - a);
 				normalized = normalized.Normalized();
 
@@ -489,6 +493,7 @@ void ModuleRenderer3D::DrawDebug(ObjectMesh meshToDraw)
 
 				i += 8;
 			}
+		}//debug_Vertex_Normals		
 	}
 
 
