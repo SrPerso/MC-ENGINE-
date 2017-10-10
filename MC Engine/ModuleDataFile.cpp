@@ -241,12 +241,12 @@ bool DataFBX::LoadMesh(const char* path)
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->Vertex, GL_STATIC_DRAW);
 
 			App->ui->AddLogToConsole("Load Mesh");
-		//	LOG("loaded mesh %s vertex", mesh->nVertex);
+			LOG("loaded mesh %i vertex", mesh->nVertex);
 
 			if (newMesh->HasFaces()) 
 			{
 				mesh->nIndex = newMesh->mNumFaces * 3;
-				mesh->Index = new uint[mesh->nIndex]; //every face is a triangle.
+				mesh->Index = new float[mesh->nIndex]; //every face is a triangle.
 
 				for (uint i = 0; i < newMesh->mNumFaces; ++i)
 				{
@@ -256,7 +256,7 @@ bool DataFBX::LoadMesh(const char* path)
 					}
 					else
 					{
-						memcpy(&mesh->Index[i * 3], newMesh->mFaces[i].mIndices, sizeof(uint)* 3);
+						memcpy(&mesh->Index[i * 3], newMesh->mFaces[i].mIndices, sizeof(float)* 3);					
 					}
 				}
 
@@ -265,20 +265,26 @@ bool DataFBX::LoadMesh(const char* path)
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->nIndex, mesh->Index, GL_STATIC_DRAW);
 
 			}// has faces			
+
 			if (newMesh->HasNormals())
 			{
 				mesh->nNormals = mesh->nVertex*3;
 
 				mesh->normals = new float[mesh->nNormals];
-				memcpy(mesh->normals, newMesh->mNormals, (mesh->nNormals/* *sizeof(float)*/  ));
-				
+				memcpy(mesh->normals, newMesh->mNormals, (mesh->nNormals/* *sizeof(float)*/  ));				
+
 				glGenBuffers(1, (GLuint*)&(mesh->idNormals)); // 
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->idNormals);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nNormals, mesh->normals, GL_STATIC_DRAW);
 
 			}// has normals
-			
+	
 			App->scene_intro->CreateMesh(mesh);
+
+			for (uint i = 0; i < mesh->nVertex; ++i)
+			{
+				App->scene_intro->CreateLine(vec3{ mesh->Vertex[i],mesh->Vertex[i + 1],mesh->Vertex[i + 2] }, vec3{ mesh->Vertex[i],mesh->Vertex[i + 1],mesh->Vertex[i + 2] });
+			}
 
 		}//for	
 		//scene.

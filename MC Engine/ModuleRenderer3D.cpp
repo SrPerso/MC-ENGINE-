@@ -9,6 +9,9 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include "MathGeolib\Geometry\Triangle.h"
+#include "MathGeolib\Math\float4x4.h"
+
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 
@@ -22,7 +25,6 @@
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-
 	name = "Render";
 }
 
@@ -414,7 +416,7 @@ void ModuleRenderer3D::Draw(ObjectMesh meshToDraw)
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	if (meshToDraw.nNormals != 0 && App->scene_intro->debugMode)
+	if (meshToDraw.nNormals != 0 /*&& App->scene_intro->debugMode*/)
 	{
 		glEnable(GL_LIGHTING);
 		App->ui->sb_Lighting = true;
@@ -423,7 +425,8 @@ void ModuleRenderer3D::Draw(ObjectMesh meshToDraw)
 		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idNormals);
 		glNormalPointer(GL_FLOAT, 0, NULL);
 
-		App->scene_intro->CreateLine(vec3{}, vec3{});
+	
+
 	}
 	
 		glPushMatrix();
@@ -443,6 +446,51 @@ void ModuleRenderer3D::Draw(ObjectMesh meshToDraw)
 		glPopMatrix();
 		glEnd();
 		glUseProgram(0);
+
+}
+
+void ModuleRenderer3D::DrawDebug(ObjectMesh meshToDraw)
+{
+	if (meshToDraw.debugMode==true && meshToDraw.idNormals >0)
+	{
+			for (int i = 0; i < meshToDraw.nVertex; i ++)
+			{
+
+				float destX = meshToDraw.normals[i] + meshToDraw.Vertex[i];
+				float destY = meshToDraw.normals[i + 1] + meshToDraw.Vertex[i + 1];
+				float destZ = meshToDraw.normals[i + 2] + meshToDraw.Vertex[i + 2];
+
+				PrimitiveLine normal(vec3{ meshToDraw.Vertex[i], meshToDraw.Vertex[i + 1], meshToDraw.Vertex[i + 2] }, vec3{ destX, destY, destZ });
+
+				normal.color = Red;
+				normal.Render();
+				i += 2;
+			}
+
+			for (int i = 0; i < meshToDraw.nVertex; i++)
+			{
+				float3 a = float3(meshToDraw.Vertex[i], meshToDraw.Vertex[i + 1], meshToDraw.Vertex[i + 2]);
+				float3 b = float3(meshToDraw.Vertex[i + 3], meshToDraw.Vertex[i + 4], meshToDraw.Vertex[i + 5]);
+				float3 c = float3(meshToDraw.Vertex[i + 6], meshToDraw.Vertex[i + 7], meshToDraw.Vertex[i + 8]);
+
+				Triangle face(float3(a), float3(b), float3(c));
+
+				float3 center = (a + b + c) / 3.f;
+				float3 normalized = Cross(b - a, c - a);
+				normalized = normalized.Normalized();
+
+				float destX = center.x + normalized.x;
+				float destY = center.y + normalized.y;
+				float destZ = center.z + normalized.z;
+
+				PrimitiveLine normal(vec3{ center.x, center.y, center.z }, vec3{ destX,destY,destZ });
+				normal.color = Blue;
+				normal.Render();
+
+				i += 8;
+			}
+	}
+
 
 }
 

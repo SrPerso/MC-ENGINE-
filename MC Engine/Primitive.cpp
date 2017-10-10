@@ -307,11 +307,14 @@ void PrimitiveCylinder::InnerRender() const
 // LINE ==================================================
 PrimitiveLine::PrimitiveLine() : Primitive(), origin(0, 0, 0), destination(1, 1, 1)
 {
+
 	type = PrimitiveTypes::Primitive_Line;
+	lineType = NO_NORMAL;
 }
 
-PrimitiveLine::PrimitiveLine(vec3 origin, vec3 Dest) : Primitive(), origin(origin.x, origin.y, origin.z), destination(Dest.x, Dest.y, Dest.z)
+PrimitiveLine::PrimitiveLine(vec3 origin, vec3 Dest, LineType normalmode) : Primitive(), origin(origin.x, origin.y, origin.z), destination(Dest.x, Dest.y, Dest.z), lineType(normalmode)
 {
+
 	type = PrimitiveTypes::Primitive_Line;
 }
 
@@ -326,7 +329,7 @@ void PrimitiveLine::InnerRender() const
 
 	glEnd();
 
-	glLineWidth(1.0f);
+	glLineWidth(5.0f);
 }
 
 // PLANE ==================================================

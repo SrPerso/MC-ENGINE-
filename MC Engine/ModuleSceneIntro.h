@@ -16,10 +16,11 @@ public:
 	float* Vertex = nullptr;
 	
 	bool wire = false;
+	bool debugMode = true;
 
 	uint nIndex = 0;
 	uint idIndex = 0;//id RAM
-	uint* Index = nullptr;
+	float* Index = nullptr;
 	
 	float* normals = nullptr;
 	uint idNormals = 0;
@@ -51,14 +52,16 @@ public:
 	void CreateCylinder(float radius,float height, vec3 pos= vec3(0,0,0));
 	void CreateCube1(vec3 size, vec3 pos);
 	void CreateCube2(vec3 size, vec3 pos);
-	void CreateLine(vec3 Origin, vec3 destintation);
+	void CreateLine(vec3 Origin, vec3 destintation, Color color = Red);
 
 	void CreateMesh(ObjectMesh*Mesh);
 
 public:
 	std::list<Primitive*> GeometryObjects;
 	std::list<ObjectMesh*> MeshObjects;
-	bool debugMode=false;
+	std::list<PrimitiveLine*> NormalsLines;
+	
+	bool debugMode=true;
 public:
 	void CreateCylinder(const float x, const float y, const float z, const float radious, const float h);
 };
