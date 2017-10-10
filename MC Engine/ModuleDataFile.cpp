@@ -281,10 +281,10 @@ bool DataFBX::LoadMesh(const char* path)
 	
 			App->scene_intro->CreateMesh(mesh);
 
-			for (uint i = 0; i < mesh->nVertex; ++i)
+		/*	for (uint i = 0; i < mesh->nVertex; ++i)
 			{
 				App->scene_intro->CreateLine(vec3{ mesh->Vertex[i],mesh->Vertex[i + 1],mesh->Vertex[i + 2] }, vec3{ mesh->Vertex[i],mesh->Vertex[i + 1],mesh->Vertex[i + 2] });
-			}
+			}*/
 
 		}//for	
 		//scene.

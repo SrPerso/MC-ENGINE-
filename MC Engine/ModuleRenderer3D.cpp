@@ -455,14 +455,17 @@ void ModuleRenderer3D::DrawDebug(ObjectMesh meshToDraw)
 	{
 		if (App->ui->debug_Tri_Normals == true)
 		{
-			for (int i = 0; i < meshToDraw.nVertex; ++i)
+			for (int i = 0; i < meshToDraw.nVertex-50; ++i)
 			{
-
+				float originX = meshToDraw.Vertex[i];
+				float originY = meshToDraw.Vertex[i + 1];
+				float originZ = meshToDraw.Vertex[i + 2];
+				
 				float destX = meshToDraw.normals[i] + meshToDraw.Vertex[i];
 				float destY = meshToDraw.normals[i + 1] + meshToDraw.Vertex[i + 1];
 				float destZ = meshToDraw.normals[i + 2] + meshToDraw.Vertex[i + 2];
 
-				PrimitiveLine normal(vec3{ meshToDraw.Vertex[i], meshToDraw.Vertex[i + 1], meshToDraw.Vertex[i + 2] }, vec3{ destX, destY, destZ });
+				PrimitiveLine normal(vec3{ originX ,originY,originZ}, vec3{ destX, destY, destZ });
 
 				normal.color = Red;
 				normal.Render();
