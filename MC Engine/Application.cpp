@@ -17,7 +17,7 @@ Application::Application()
 	player = new ModulePlayer(this);
 	scene_intro = new ModuleSceneIntro(this);
 	fbxdata = new DataFBX(this);
-	txtdata = new DataTexture(this);
+	texture = new ModuleTexture(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -35,7 +35,7 @@ Application::Application()
 	
 	AddModule(player);
 	AddModule(fbxdata);
-	AddModule(txtdata);
+	AddModule(texture);
 	AddModule(scene_intro);
 	AddModule(ui);//maybe the ui must be the last
 	// Renderer last!

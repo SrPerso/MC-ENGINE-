@@ -65,15 +65,5 @@ public:
 
 };
 
-class DataTexture :public Module {
-
-public:
-	DataTexture(Application* app, bool start_enabled = true);
-	~DataTexture();
-	bool Innit(JSON_Object * data);
-	bool CleanUp(JSON_Object * data);
-
-	uint LoadTexture(const char* imagepath);
-};
 
 #endif

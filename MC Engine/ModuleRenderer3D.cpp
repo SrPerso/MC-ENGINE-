@@ -168,12 +168,12 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	//GLuint image = loadBMP_custom("lena.bmp");
 
-	//GLuint image = App->txtdata->LoadTexture("Game\Lenna.png");
+	GLuint image = App->texture->LoadTexture("Lenna.png");
 
 	glBegin(GL_TRIANGLES);
 	glEnable(GL_TEXTURE_2D);
 
-	//glBindTexture(GL_TEXTURE_2D, image);
+	glBindTexture(GL_TEXTURE_2D, image);
 
 	//Direct Mode
 	//front
