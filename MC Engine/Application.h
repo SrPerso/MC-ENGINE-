@@ -14,6 +14,7 @@
 #include "ModulePlayer.h"
 #include "ModuleUI.h"
 #include "ModuleDataFile.h"
+#include "ModuleTexture.h"
 #include <list>
 
 class Application
@@ -31,6 +32,8 @@ public:
 	ModulePlayer* player;
 	DataJSON* jtsonData;
 	DataFBX* fbxdata;
+	ModuleTexture* texture;
+
 private:
 
 	Timer	ms_timer;	

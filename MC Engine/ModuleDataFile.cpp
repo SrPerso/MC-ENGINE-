@@ -7,7 +7,16 @@
 #include "Assimp\include\postprocess.h"
 #include "Assimp\include\cfileio.h"
 
+
+
 #include "Glew\include\glew.h"
+
+#include "Devil\include\il.h"
+#include "Devil\include\ilu.h"
+#include "Devil\include\ilut.h"
+#pragma comment (lib, "Devil/libx86/DevIL.lib" ) 
+#pragma comment (lib, "Devil/libx86/ILU.lib" ) 
+#pragma comment (lib, "Devil/libx86/ILUT.lib" ) 
 
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
@@ -308,3 +317,7 @@ bool DataFBX::LoadMesh(const char* path)
 
 	return ret;
 }
+
+
+
+
