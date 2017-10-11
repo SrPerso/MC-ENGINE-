@@ -270,15 +270,12 @@ bool DataFBX::LoadMesh(const char* path)
 
 			if (newMesh->HasNormals())
 			{
-				
-				mesh->nNormals = mesh->nVertex*3;
-				
-				mesh->normals = new float[mesh->nNormals];
-				memcpy(mesh->normals, newMesh->mNormals, (mesh->nNormals/* *sizeof(float)*/  ));				
+				mesh->normals = new float[mesh->nVertex * 3];
+				memcpy(mesh->normals, newMesh->mNormals, (sizeof(float) * mesh->nVertex * 3));
 
 				glGenBuffers(1, (GLuint*)&(mesh->idNormals)); // 
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->idNormals);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nNormals, mesh->normals, GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->normals, GL_STATIC_DRAW);
 
 			}// has normals
 
