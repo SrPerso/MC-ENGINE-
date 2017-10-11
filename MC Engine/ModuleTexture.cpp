@@ -9,6 +9,8 @@
 #pragma comment (lib, "Devil/libx86/ILUT.lib" ) 
 
 
+#include <iostream>
+#include <fstream>
 
 
 ModuleTexture::ModuleTexture(Application * app, bool start_enabled): Module(app, start_enabled)
@@ -49,7 +51,25 @@ uint ModuleTexture::LoadTexture(const char * imagepath)
 
 	ilBindImage(imageID); 			// Bind the image
 
-	success = ilLoadImage(imagepath); 	// Load the image file
+	//success = ilLoadImage("Lenna.png"); 	// Load the image file
+
+	std::ifstream inputFile(imagepath, std::ifstream::binary);
+
+	inputFile.seekg(0, inputFile.end);
+
+	int length = inputFile.tellg();
+
+	inputFile.seekg(0, inputFile.beg);
+	
+	char * buffer = new char[length];
+	
+	inputFile.read(buffer, length);
+	inputFile.close();	
+	success = ilLoadL(IL_TYPE_UNKNOWN, buffer, length); 	// Load the image file
+
+
+	delete[] buffer;
+	//MEMORY LEAKS
 
 										// If we managed to load the image, then we can start to do things with it...
 	if (success)
