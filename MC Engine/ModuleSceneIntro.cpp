@@ -24,9 +24,7 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 
-	bool ret = true;
-
-	
+	bool ret = true;	
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
@@ -130,6 +128,13 @@ void ModuleSceneIntro::CreateCube2(vec3 size, vec3 pos)
 
 
 }
+void ModuleSceneIntro::CreateLine(vec3 Origin, vec3 destintation,Color color)
+{
+	PrimitiveLine* line = new PrimitiveLine(Origin, destintation);
+	line->color = color;
+	NormalsLines.push_back(line);
+}
+
 void ModuleSceneIntro::CreateMesh(ObjectMesh* Mesh)
 {
 	MeshObjects.push_back(Mesh);
@@ -146,8 +151,14 @@ void ModuleSceneIntro::Draw()
 	for (std::list<ObjectMesh*>::iterator it = MeshObjects.begin(); it != MeshObjects.end(); ++it)
 	{
 		App->renderer3D->Draw((**it));
+
+		if ((**it).debugMode == true) 
+			App->renderer3D->DrawDebug((*it));		
 	}
-	
+	for (std::list<PrimitiveLine*>::iterator it = NormalsLines.begin(); it != NormalsLines.end(); ++it)
+	{
+		(*it)->Render();
+	}
 }
 
 void ModuleSceneIntro::CreateCylinder(const float x, const float y, const float z, const float radious, const float h)
@@ -160,21 +171,16 @@ void ModuleSceneIntro::CreateCylinder(const float x, const float y, const float 
 // PreUpdate
 update_status ModuleSceneIntro::PreUpdate(float dt)
 {
-
-
 	return(UPDATE_CONTINUE);
 }
 
 // Update
 update_status ModuleSceneIntro::Update(float dt)
 {	
-
-
 	float sx = 1 * 0.5f;
 	float sy = 1 * 0.5f;
 	float sz = 1 * 0.5f;
-		
-
+	
 	PrimitivePlane p(0, -1, 0, 200);
 	p.color = White;
 	p.axis = false;
@@ -187,11 +193,15 @@ update_status ModuleSceneIntro::Update(float dt)
 ObjectMesh::~ObjectMesh()
 {
 	//if (Vertex != nullptr) {
-	//	delete[] Vertex;
+	//	delete Vertex;
 	//	Vertex = nullptr;
 	//}
 	//if (Index != nullptr) {
-	//	delete[] Index;
+	//	delete Index;
 	//	Index = nullptr;
+	//}
+	//if (normals != nullptr) {
+	//	delete normals;
+	//	normals = nullptr;
 	//}
 }

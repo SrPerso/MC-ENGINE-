@@ -3,6 +3,8 @@
 #include "glmath.h"
 #include "Color.h"
 #include "p2List.h"
+#include "MathGeoLib\Geometry\AABB.h"
+
 enum PrimitiveTypes
 {
 	Primitive_Point,
@@ -109,12 +111,15 @@ public:
 class PrimitiveLine : public Primitive
 {
 public:
+	enum LineType { VERTEX_NORMAL, TRISS_NORMAL, NO_NORMAL };
+public:
 	PrimitiveLine();
-	PrimitiveLine(float x, float y, float z);
+	PrimitiveLine(vec3 origin, vec3 dest, LineType normalmode = NO_NORMAL);
 	void InnerRender() const;
 public:
 	vec3 origin;
 	vec3 destination;
+	LineType lineType;
 };
 
 // ============================================

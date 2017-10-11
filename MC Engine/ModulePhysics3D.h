@@ -59,7 +59,7 @@ private:
 class DebugDrawer : public btIDebugDraw
 {
 public:
-	DebugDrawer() : line(0,0,0)
+	DebugDrawer() : line()
 	{}
 
 	void drawLine(const btVector3& from, const btVector3& to, const btVector3& color);

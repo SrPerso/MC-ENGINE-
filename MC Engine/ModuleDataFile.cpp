@@ -2,7 +2,6 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 
-
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
 #include "Assimp\include\postprocess.h"
@@ -235,7 +234,6 @@ bool DataFBX::LoadMesh(const char* path)
 	
 	if (scene != nullptr && scene->HasMeshes())
 	{
-
 		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
 
@@ -252,12 +250,14 @@ bool DataFBX::LoadMesh(const char* path)
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->Vertex, GL_STATIC_DRAW);
 
 			App->ui->AddLogToConsole("Load Mesh");
-		//	LOG("loaded mesh %s vertex", mesh->nVertex);
+			LOG("loaded mesh %i vertex", mesh->nVertex);
 
 			if (newMesh->HasFaces()) 
 			{
+				mesh->nFaces = newMesh->mNumFaces;
+
 				mesh->nIndex = newMesh->mNumFaces * 3;
-				mesh->Index = new uint[mesh->nIndex]; //every face is a triangle.
+				mesh->Index = new float[mesh->nIndex]; //every face is a triangle.
 
 				for (uint i = 0; i < newMesh->mNumFaces; ++i)
 				{
@@ -267,19 +267,39 @@ bool DataFBX::LoadMesh(const char* path)
 					}
 					else
 					{
-						memcpy(&mesh->Index[i * 3], newMesh->mFaces[i].mIndices, sizeof(uint)* 3);
+						memcpy(&mesh->Index[i * 3], newMesh->mFaces[i].mIndices, sizeof(float)* 3);					
 					}
 				}
 
-				glGenBuffers(1, (GLuint*)&mesh->idIndex);
+				glGenBuffers(1, (GLuint*)&(mesh->idIndex));
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->idIndex);
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->nIndex, mesh->Index, GL_STATIC_DRAW);
 
 			}// has faces			
 
+			if (newMesh->HasNormals())
+			{
+				mesh->normals = new float[mesh->nVertex * 3];
+				memcpy(mesh->normals, newMesh->mNormals, (sizeof(float) * mesh->nVertex * 3));
+
+				glGenBuffers(1, (GLuint*)&(mesh->idNormals)); // 
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->idNormals);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->normals, GL_STATIC_DRAW);
+
+			}// has normals
+
+
+
+			mesh->debugBox.SetNegativeInfinity();//
+			mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
+			App->scene_intro->CreateMesh(mesh);
+
+			App->scene_intro->sceneDebugInfo.faces += mesh->nFaces;
+			App->scene_intro->sceneDebugInfo.tris += mesh->nVertex/3;
+			App->scene_intro->sceneDebugInfo.vertex += mesh->nVertex;
 
 		
-			App->scene_intro->CreateMesh(mesh);
+
 		}//for	
 		//scene.
 
@@ -287,6 +307,7 @@ bool DataFBX::LoadMesh(const char* path)
 		return true;
 		LOG("Mesh %s loaded Ok", path);
 	}//if scene
+
 
 	else 
 	{
