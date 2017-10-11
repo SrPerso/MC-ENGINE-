@@ -24,9 +24,7 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 
-	bool ret = true;
-
-	
+	bool ret = true;	
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
@@ -155,7 +153,7 @@ void ModuleSceneIntro::Draw()
 		App->renderer3D->Draw((**it));
 
 		if ((**it).debugMode == true) 
-			App->renderer3D->DrawDebug((**it));		
+			App->renderer3D->DrawDebug((*it));		
 	}
 	for (std::list<PrimitiveLine*>::iterator it = NormalsLines.begin(); it != NormalsLines.end(); ++it)
 	{

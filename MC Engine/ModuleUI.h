@@ -101,13 +101,16 @@ public: //
 	bool sb_Cull_Face = true;
 	bool sb_Wire_Face = false;
 	bool sb_Lighting = true;
-	bool sb_Color_Material = false;
+	bool sb_Color_Material = true;
 	bool sb_Texture_2D = true;
 	
 //debug
 	bool debug_active = true;
+	bool debug_Object_Box = true;
 	bool debug_Tri_Normals = true;
 	bool debug_Vertex_Normals = true;
+	bool debug_Box = true;
+
 };
 
 #endif // __ModuleUI_H__

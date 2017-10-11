@@ -96,6 +96,7 @@ update_status ModuleUI::Update(float dt)
 
 	if (show_Geometry_window)
 		ShowGeometryWindow();
+
 	if (show_Debug_window)
 		ShowDebugWindow();
 
@@ -525,7 +526,18 @@ IMGUI_API void ModuleUI::ShowDebugWindow(bool * p_open)
 		ImGui::Checkbox("Tri Normals", &debug_Tri_Normals);
 		ImGui::SameLine();
 		ImGui::Checkbox("Vertex Normals", &debug_Vertex_Normals);
+		ImGui::SameLine();
+		ImGui::Checkbox("Eclosing Box", &debug_Box);
 	
+		ImGui::Text("Triss:");		ImGui::SameLine();
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(App->scene_intro->sceneDebugInfo.tris).c_str(), nullptr);
+		ImGui::SameLine();
+		ImGui::Text("Faces:");		ImGui::SameLine();
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(App->scene_intro->sceneDebugInfo.faces).c_str(), nullptr);
+		ImGui::SameLine();
+		ImGui::Text("Vertex:");		ImGui::SameLine();
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(App->scene_intro->sceneDebugInfo.vertex).c_str(), nullptr);
+
 		ImGui::End();
 	}
 

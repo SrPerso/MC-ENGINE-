@@ -245,6 +245,8 @@ bool DataFBX::LoadMesh(const char* path)
 
 			if (newMesh->HasFaces()) 
 			{
+				mesh->nFaces = newMesh->mNumFaces;
+
 				mesh->nIndex = newMesh->mNumFaces * 3;
 				mesh->Index = new float[mesh->nIndex]; //every face is a triangle.
 
@@ -268,8 +270,9 @@ bool DataFBX::LoadMesh(const char* path)
 
 			if (newMesh->HasNormals())
 			{
+				
 				mesh->nNormals = mesh->nVertex*3;
-
+				
 				mesh->normals = new float[mesh->nNormals];
 				memcpy(mesh->normals, newMesh->mNormals, (mesh->nNormals/* *sizeof(float)*/  ));				
 
@@ -278,13 +281,18 @@ bool DataFBX::LoadMesh(const char* path)
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nNormals, mesh->normals, GL_STATIC_DRAW);
 
 			}// has normals
-	
+
+
+
+			mesh->debugBox.SetNegativeInfinity();//
+			mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
 			App->scene_intro->CreateMesh(mesh);
 
-		/*	for (uint i = 0; i < mesh->nVertex; ++i)
-			{
-				App->scene_intro->CreateLine(vec3{ mesh->Vertex[i],mesh->Vertex[i + 1],mesh->Vertex[i + 2] }, vec3{ mesh->Vertex[i],mesh->Vertex[i + 1],mesh->Vertex[i + 2] });
-			}*/
+			App->scene_intro->sceneDebugInfo.faces += mesh->nFaces;
+			App->scene_intro->sceneDebugInfo.tris += mesh->nVertex/3;
+			App->scene_intro->sceneDebugInfo.vertex += mesh->nVertex;
+
+		
 
 		}//for	
 		//scene.

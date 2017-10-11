@@ -449,54 +449,112 @@ void ModuleRenderer3D::Draw(ObjectMesh meshToDraw)
 
 }
 
-void ModuleRenderer3D::DrawDebug(ObjectMesh meshToDraw)
+void ModuleRenderer3D::DrawDebug(ObjectMesh* meshToDraw)
 {
-	if (meshToDraw.debugMode==true && meshToDraw.idNormals >0 && App->ui->debug_active == true)
+	if (meshToDraw->debugMode==true && App->ui->debug_active == true)
 	{
-		if (App->ui->debug_Tri_Normals == true)
-		{
-			for (int i = 0; i < meshToDraw.nVertex-50; ++i)
+			if (App->ui->debug_Tri_Normals == true && meshToDraw->nVertex > 2)
 			{
-				float originX = meshToDraw.Vertex[i];
-				float originY = meshToDraw.Vertex[i + 1];
-				float originZ = meshToDraw.Vertex[i + 2];
+				for (int i = 0; i < meshToDraw->nVertex; ++i)
+				{
+					if (meshToDraw->normals[i] > -5000) {
+					
+					float originX = meshToDraw->Vertex[i];
+					float originY = meshToDraw->Vertex[i + 1];
+					float originZ = meshToDraw->Vertex[i + 2];
 				
-				float destX = meshToDraw.normals[i] + meshToDraw.Vertex[i];
-				float destY = meshToDraw.normals[i + 1] + meshToDraw.Vertex[i + 1];
-				float destZ = meshToDraw.normals[i + 2] + meshToDraw.Vertex[i + 2];
+					float destX = meshToDraw->normals[i] + meshToDraw->Vertex[i];
+					float destY = meshToDraw->normals[i + 1] + meshToDraw->Vertex[i + 1];
+					float destZ = meshToDraw->normals[i + 2] + meshToDraw->Vertex[i + 2];
 
-				PrimitiveLine normal(vec3{ originX ,originY,originZ}, vec3{ destX, destY, destZ });
+					PrimitiveLine normal(vec3{ originX ,originY,originZ}, vec3{ destX, destY, destZ });
 
-				normal.color = Red;
-				normal.Render();
-				i += 2;
-			}
-		}//debug_Tri_Normals
-		if (App->ui->debug_Vertex_Normals == true)
-		{
-			for (int i = 0; i < meshToDraw.nVertex; ++i)
+					normal.color = Red;
+					normal.Render();
+					}
+					i += 2;
+				}
+			}//debug_Tri_Normals
+			if (App->ui->debug_Vertex_Normals == true && meshToDraw->nVertex >0)
 			{
-				float3 a = float3(meshToDraw.Vertex[i], meshToDraw.Vertex[i + 1], meshToDraw.Vertex[i + 2]);
-				float3 b = float3(meshToDraw.Vertex[i + 3], meshToDraw.Vertex[i + 4], meshToDraw.Vertex[i + 5]);
-				float3 c = float3(meshToDraw.Vertex[i + 6], meshToDraw.Vertex[i + 7], meshToDraw.Vertex[i + 8]);
+				for (int i = 0; i < meshToDraw->nVertex; ++i)
+				{
+					float3 a = float3(meshToDraw->Vertex[i], meshToDraw->Vertex[i + 1], meshToDraw->Vertex[i + 2]);
+					float3 b = float3(meshToDraw->Vertex[i + 3], meshToDraw->Vertex[i + 4], meshToDraw->Vertex[i + 5]);
+					float3 c = float3(meshToDraw->Vertex[i + 6], meshToDraw->Vertex[i + 7], meshToDraw->Vertex[i + 8]);
 
-				Triangle face(float3(a), float3(b), float3(c));
+					Triangle face(float3(a), float3(b), float3(c));
 
-				float3 center = (a + b + c) / (float)3;
-				float3 normalized = Cross(b - a, c - a);
-				normalized = normalized.Normalized();
+					float3 center = (a + b + c) / (float)3;
+					float3 normalized = Cross(b - a, c - a);
+					normalized = normalized.Normalized();
 
-				float destX = center.x + normalized.x;
-				float destY = center.y + normalized.y;
-				float destZ = center.z + normalized.z;
+					float destX = center.x + normalized.x;
+					float destY = center.y + normalized.y;
+					float destZ = center.z + normalized.z;
 
-				PrimitiveLine normal(vec3{ center.x, center.y, center.z }, vec3{ destX,destY,destZ });
-				normal.color = Blue;
-				normal.Render();
+					PrimitiveLine normal(vec3{ center.x, center.y, center.z }, vec3{ destX,destY,destZ });
+					normal.color = Blue;
+					normal.Render();
 
-				i += 8;
-			}
-		}//debug_Vertex_Normals		
+					i += 8;
+				}
+			}//debug_Vertex_Normals		
+
+			if (App->ui->debug_Object_Box == true && App->ui->debug_Box == true)
+			{
+				float3 vertex[8];
+				meshToDraw->debugBox.GetCornerPoints(vertex);
+
+				glPushMatrix();
+
+				glMultMatrixf((float*)float4x4::identity.Transposed().ptr());
+	
+				glColor3f(Green.r, Green.g, Green.b);
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+				glBegin(GL_QUADS);
+
+				//1
+				glVertex3fv((float*)&vertex[1]);
+				glVertex3fv((float*)&vertex[5]);
+				glVertex3fv((float*)&vertex[7]);
+				glVertex3fv((float*)&vertex[3]);
+				//2
+				glVertex3fv((float*)&vertex[4]);
+				glVertex3fv((float*)&vertex[0]);
+				glVertex3fv((float*)&vertex[2]);
+				glVertex3fv((float*)&vertex[6]);
+				//3
+				glVertex3fv((float*)&vertex[5]);
+				glVertex3fv((float*)&vertex[4]);
+				glVertex3fv((float*)&vertex[6]);
+				glVertex3fv((float*)&vertex[7]);
+				//4
+				glVertex3fv((float*)&vertex[0]);
+				glVertex3fv((float*)&vertex[1]);
+				glVertex3fv((float*)&vertex[3]);
+				glVertex3fv((float*)&vertex[2]);
+				//5
+				glVertex3fv((float*)&vertex[3]);
+				glVertex3fv((float*)&vertex[7]);
+				glVertex3fv((float*)&vertex[6]);
+				glVertex3fv((float*)&vertex[2]);
+				//6
+				glVertex3fv((float*)&vertex[0]);
+				glVertex3fv((float*)&vertex[4]);
+				glVertex3fv((float*)&vertex[5]);
+				glVertex3fv((float*)&vertex[1]);
+
+				glEnd();
+
+				glPopMatrix();
+							
+				//glColor4d(Green.r, Green.g, Green.b,100);
+
+
+			}// box
+	
 	}
 
 

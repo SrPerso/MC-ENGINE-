@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "Primitive.h"
 #include <list>
+#include "MathGeolib\Geometry\AABB.h"
 
 struct PhysBody3D;
 struct PhysMotor3D;
@@ -16,20 +17,29 @@ public:
 	float* Vertex = nullptr;
 	
 	bool wire = false;
-	bool debugMode = true;
-
+	
 	uint nIndex = 0;
 	uint idIndex = 0;//id RAM
 	float* Index = nullptr;
 	
+	uint nFaces = 0;
+
 	float* normals = nullptr;
 	uint idNormals = 0;
 	uint nNormals = 0;
 
+	bool debugMode = true;
+	AABB debugBox;
+
 	ObjectMesh::~ObjectMesh();
 
 };
-
+struct GlobalDebugInfo
+{
+	uint tris = 0;
+	double vertex = 0;
+	uint faces = 0;
+};
 
 class ModuleSceneIntro : public Module
 {
@@ -61,6 +71,7 @@ public:
 	std::list<ObjectMesh*> MeshObjects;
 	std::list<PrimitiveLine*> NormalsLines;
 	
+	GlobalDebugInfo sceneDebugInfo;
 	bool debugMode=true;
 public:
 	void CreateCylinder(const float x, const float y, const float z, const float radious, const float h);
