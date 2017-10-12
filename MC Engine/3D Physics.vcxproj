@@ -81,6 +81,8 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Brofiler\Brofiler.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="imGUI\imgui.h" />
@@ -147,8 +149,8 @@
     <ClInclude Include="MathGeoLib\Time\Clock.h" />
     <ClInclude Include="ModuleCamera3D.h" />
     <ClInclude Include="ModuleDataFile.h" />
+    <ClInclude Include="ModuleGameObjectManager.h" />
     <ClInclude Include="ModulePhysics3D.h" />
-    <ClInclude Include="ModulePlayer.h" />
     <ClInclude Include="ModuleRenderer3D.h" />
     <ClInclude Include="ModuleTexture.h" />
     <ClInclude Include="ModuleUI.h" />
@@ -169,6 +171,8 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="imGUI\imgui.cpp" />
     <ClCompile Include="imGUI\imgui_demo.cpp" />
@@ -210,9 +214,9 @@
     <ClCompile Include="ModuleAudio.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
     <ClCompile Include="ModuleDataFile.cpp" />
+    <ClCompile Include="ModuleGameObjectManager.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
     <ClCompile Include="ModulePhysics3D.cpp" />
-    <ClCompile Include="ModulePlayer.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleSceneIntro.cpp" />
     <ClCompile Include="ModuleTexture.cpp" />

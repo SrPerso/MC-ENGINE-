@@ -14,8 +14,8 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	physics = new ModulePhysics3D(this);
-	player = new ModulePlayer(this);
 	scene_intro = new ModuleSceneIntro(this);
+	goManager = new GObjectManager(this);
 	fbxdata = new DataFBX(this);
 	texture = new ModuleTexture(this);
 
@@ -32,12 +32,12 @@ Application::Application()
 	AddModule(physics);
 
 	// Scenes
-	
-	AddModule(player);
+	AddModule(goManager);
+
 	AddModule(fbxdata);
 	AddModule(texture);
 	AddModule(scene_intro);
-	AddModule(ui);//maybe the ui must be the last
+	AddModule(ui);
 	// Renderer last!
 	AddModule(renderer3D);
 
@@ -63,9 +63,6 @@ bool Application::Init()
 
 	// Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
-
-	//JSON_Value * configValue = json_parse_file("config.json");
-	//JSON_Object * configObject = json_value_get_object(configValue);
 
 	while (item != list_modules.end() && ret == true)
 	{

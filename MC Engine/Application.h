@@ -4,35 +4,43 @@
 #include "Globals.h"
 #include "Timer.h"
 #include "Module.h"
+
+
+#include "ModuleGameObjectManager.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleAudio.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
+
 #include "ModulePhysics3D.h"
-#include "ModulePlayer.h"
 #include "ModuleUI.h"
+
 #include "ModuleDataFile.h"
 #include "ModuleTexture.h"
+
 #include <list>
+
 
 class Application
 {
 public:
-	ModuleWindow* window;
-	ModuleInput* input;
-	ModuleAudio* audio;
+	ModuleWindow* window = nullptr;
+	ModuleInput* input = nullptr;
+	ModuleAudio* audio = nullptr;
 	
-	ModuleUI* ui;
-	ModuleRenderer3D* renderer3D;
-	ModuleCamera3D* camera;
-	ModulePhysics3D* physics;
-	ModuleSceneIntro* scene_intro;
-	ModulePlayer* player;
-	DataJSON* jtsonData;
-	DataFBX* fbxdata;
-	ModuleTexture* texture;
+	ModuleUI* ui = nullptr;
+	ModuleRenderer3D* renderer3D = nullptr;
+	ModuleCamera3D* camera = nullptr;
+	ModulePhysics3D* physics = nullptr;
+	GObjectManager* goManager = nullptr;
+	ModuleSceneIntro* scene_intro = nullptr;
+	DataJSON* jtsonData = nullptr;
+	DataFBX* fbxdata = nullptr;
+	ModuleTexture* texture = nullptr;
+
+
 
 private:
 
