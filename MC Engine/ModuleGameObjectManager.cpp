@@ -1,6 +1,7 @@
 #include "ModuleGameObjectManager.h"
-#include "module.h"
+
 #include "Application.h"
+#include "GameObject.h"
 
 GObjectManager::GObjectManager(Application * app, bool start_enabled):Module(app, start_enabled)
 {

@@ -1,10 +1,10 @@
 #ifndef __Module_GAMEOBJECTMANAGER_H__
 #define __Module_GAMEOBJECTMANAGER_H__
 
-#include "Application.h"
+#include "Globals.h"
 #include "Module.h"
-#include "GameObject.h"
 
+class GameObject;
 
 class GObjectManager : public Module {
 public:
