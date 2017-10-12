@@ -43,7 +43,7 @@ uint ModuleTexture::LoadTexture(const char * imagepath)
 
 	GLuint textureID;			// Create a texture ID as a GLuint
 
-	ILboolean success;			// Create a flag to keep track of success/failure
+	ILboolean success = false;			// Create a flag to keep track of success/failure
 
 	ILenum error;				// Create a flag to keep track of the IL error state
 
@@ -60,16 +60,23 @@ uint ModuleTexture::LoadTexture(const char * imagepath)
 	int length = inputFile.tellg();
 
 	inputFile.seekg(0, inputFile.beg);
-	
-	char * buffer = new char[length];
-	
-	inputFile.read(buffer, length);
-	inputFile.close();	
-	success = ilLoadL(IL_TYPE_UNKNOWN, buffer, length); 	// Load the image file
+	if (length > 0)
+	{
+		LOG("Loading texture %s", imagepath);
+		char * buffer = new char[length];
+
+		inputFile.read(buffer, length);
+		inputFile.close();
+		success = ilLoadL(IL_TYPE_UNKNOWN, buffer, length); 	// Load the image file
 
 
-	delete[] buffer;
-	//MEMORY LEAKS
+		delete[] buffer;
+		//MEMORY LEAKS
+	}
+	else
+	{
+		LOG("Error loading texture %s", imagepath);
+	}
 
 										// If we managed to load the image, then we can start to do things with it...
 	if (success)
