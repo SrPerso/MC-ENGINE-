@@ -134,8 +134,11 @@ uint ModuleTexture::LoadTexture(const char * imagepath)
 	}
 
 	ilDeleteImages(1, &imageID); // Because we have already copied image data into texture data we can release memory used by image.
-
+	
+	if(correct)
 	App->ui->AddLogToConsole("Texture creation successful.");
+
+	correct = false;
 
 	return textureID;
 }

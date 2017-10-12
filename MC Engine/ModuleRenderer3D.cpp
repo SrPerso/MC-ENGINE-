@@ -176,7 +176,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	//GLuint image = loadBMP_custom("lena.bmp");
 
-	GLuint image = App->texture->LoadTexture("Lenna.png");
+	/*GLuint image = App->texture->LoadTexture("Baker_house.png");
 
 	glBegin(GL_TRIANGLES);
 	glEnable(GL_TEXTURE_2D);
@@ -264,7 +264,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glVertex3f(0, 0, 1);
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(1, 1, 1);
-	
+	*/
 
 	//Indices Mode:
 
@@ -418,7 +418,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::Draw(ObjectMesh meshToDraw)
 {
-	
+	GLuint image = App->texture->LoadTexture("Baker_house.png");
 	if (meshToDraw.wire == true)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
@@ -433,26 +433,47 @@ void ModuleRenderer3D::Draw(ObjectMesh meshToDraw)
 		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idNormals);
 		glNormalPointer(GL_FLOAT, 0, NULL);
 
-	
+	}
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_ELEMENT_ARRAY_BUFFER);
+	glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idVertex);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+
+	if (meshToDraw.texCoords != nullptr) 
+	{
+
+
+		glBindTexture(GL_TEXTURE_2D, image);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idTexCoords);
+		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 
 	}
+	if (meshToDraw.colors != nullptr) 
+	{
+		glEnableClientState(GL_COLOR_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idColors);
+		glColorPointer(3, GL_FLOAT, 0, NULL);
+	}
+
+	///
+
 	
-		glPushMatrix();
-
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_ELEMENT_ARRAY_BUFFER);
-		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idVertex);
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
-
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshToDraw.idIndex);
 		glDrawElements(GL_TRIANGLES, meshToDraw.nIndex, GL_UNSIGNED_INT, NULL);
 
+
+		glDisableClientState(GL_COLOR_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_ELEMENT_ARRAY_BUFFER);
 		
 		glPopMatrix();
 		glEnd();
+		glBindTexture(GL_TEXTURE_2D, 0);
 		glUseProgram(0);
 
 }

@@ -287,7 +287,26 @@ bool DataFBX::LoadMesh(const char* path)
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->normals, GL_STATIC_DRAW);
 
 			}// has normals
+			if (newMesh->HasVertexColors(0))
+			{
+				mesh->colors = new float[mesh->nVertex * 3];
+				memcpy(mesh->colors, newMesh->mColors, sizeof(float) * mesh->nVertex * 3);
 
+				glGenBuffers(1, (GLuint*) &(mesh->idColors));
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->idColors);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->colors, GL_STATIC_DRAW);
+			}
+
+			//TEXTURE COORDS
+			if (newMesh->HasTextureCoords(0))
+			{
+				mesh->texCoords = new float[mesh->nVertex * 3];
+				memcpy(mesh->texCoords, newMesh->mTextureCoords[0], sizeof(float) * mesh->nVertex * 3);
+
+				glGenBuffers(1, (GLuint*) &(mesh->idTexCoords));
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->idTexCoords);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->texCoords, GL_STATIC_DRAW);
+			}
 
 
 			mesh->debugBox.SetNegativeInfinity();//

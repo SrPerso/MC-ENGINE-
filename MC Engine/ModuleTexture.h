@@ -18,7 +18,7 @@ public:
 	bool CleanUp(JSON_Object * data);
 
 	uint LoadTexture(const char* imagepath);
-
+	bool correct=true;
 };
 
 
