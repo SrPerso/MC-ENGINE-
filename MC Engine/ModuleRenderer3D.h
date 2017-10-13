@@ -16,7 +16,7 @@
 #define CHECKERS_HEIGHT 128
 #define CHECKERS_WIDTH 128
 
-class DataMesh;
+class CMesh;
 
 class ModuleRenderer3D : public Module
 {
@@ -38,8 +38,8 @@ public:
 	void DrawGO(GameObject* GOToDraw);
 
 	
-	void Draw(DataMesh* meshToDraw);
-	void DrawDebug(DataMesh* meshToDraw);
+	void Draw(CMesh* meshToDraw);
+	void DrawDebug(CMesh* meshToDraw);
 
 public: // View Modes
 	void TextureView();

@@ -1,6 +1,7 @@
 #include "Component.h"
 
 
+#include "Application.h"
 Component::Component(GameObject * object, Component_Type type):object(object),type(type)
 {
 

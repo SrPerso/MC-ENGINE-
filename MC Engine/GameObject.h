@@ -1,12 +1,11 @@
 #ifndef __GAMEOBJECT_H__
 #define __GAMEOBJECT_H__
 
+#include "Globals.h"
 #include "Component.h"
+
 #include <string>
 #include <vector>
-#include "Globals.h"
-
-#include "MathGeolib\Geometry\AABB.h"
 
 class GameObject
 {
@@ -56,7 +55,7 @@ public:
 
 	//ACTIONS BASIC.............................
 
-	void PreUpdate();
+	//void PreUpdate();
 	void Update(float dt);
 	void cleanUp();
 	

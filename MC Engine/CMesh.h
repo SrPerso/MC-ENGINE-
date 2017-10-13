@@ -32,17 +32,13 @@ public:
 
 };
 
-class CMesh : public Component
+class CMesh : public Component, public DataMesh
 {
 public:
 	CMesh(GameObject* object);
 	~CMesh();
 
 	void OnUpdate(float dt);
-
-	
-public:
-	DataMesh* data;
 };
 
 #endif

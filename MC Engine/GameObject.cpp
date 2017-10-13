@@ -1,13 +1,17 @@
 #include "GameObject.h"
 #include "Application.h"
 
+#include "ModuleUI.h"
+#include "ModuleRenderer3D.h"
+#include <vector>
+
 #include "CMesh.h"
 #include "CTexture.h"
 
-GameObject::GameObject(GameObject * parent): parent(parent)
+GameObject::GameObject(GameObject* parent): parent(parent)
 {
 	name = "GameObject";
-	App->ui->AddLogToConsole("Constructor Game Object");
+	//App->ui->AddLogToConsole("Constructor Game Object");
 }
 
 GameObject::~GameObject()

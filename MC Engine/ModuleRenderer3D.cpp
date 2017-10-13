@@ -1,12 +1,15 @@
 #include "Globals.h"
 #include "Application.h"
+
 #include "ModuleRenderer3D.h"
+#include "ModuleSceneIntro.h"
+#include "ModuleUI.h"
 
 #include "Glew\include\glew.h"
 #include "SDL\include\SDL_opengl.h"
 #include "parson\parson.h"
-#include "ModuleSceneIntro.h"
-#include "ModuleUI.h"
+
+
 //
 #include "CMesh.h"
 #include "Component.h"
@@ -427,17 +430,17 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 	
 	if (component->IsEnable() == true)
 	{
-		Draw(component->data);
+		Draw(component);
 
 		if (GOToDraw->debugMode == true) {
-			DrawDebug(component->data);
+			DrawDebug(component);
 		}
 	}
 
 }
 
 
-void ModuleRenderer3D::Draw(DataMesh* meshToDraw)
+void ModuleRenderer3D::Draw(CMesh* meshToDraw)
 {
 	GLuint image = App->texture->LoadTexture("Baker_house.png");
 	if (meshToDraw->wire == true)
@@ -477,7 +480,6 @@ void ModuleRenderer3D::Draw(DataMesh* meshToDraw)
 	//	glColorPointer(3, GL_FLOAT, 0, NULL);
 	//}
 
-	///
 
 	
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshToDraw->idIndex);
@@ -497,7 +499,7 @@ void ModuleRenderer3D::Draw(DataMesh* meshToDraw)
 
 }
 
-void ModuleRenderer3D::DrawDebug(DataMesh* meshToDraw)
+void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 {
 	if (meshToDraw->debugMode==true && App->ui->debug_active == true)
 	{

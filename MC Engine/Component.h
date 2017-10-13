@@ -3,7 +3,7 @@
 
 #include "Globals.h"
 
-
+class GameObject;
 
 enum Component_Type {
 	COMP_UNKNOWN,
@@ -13,7 +13,7 @@ enum Component_Type {
 	COMP_SOUND
 };
 
-class GameObject;
+
 
 class Component{
 public:
@@ -36,7 +36,5 @@ protected:
 	
 
 };
-
-
 
 #endif

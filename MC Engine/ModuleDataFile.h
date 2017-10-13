@@ -9,7 +9,6 @@
 
 #include "Glew\include\glew.h"
 
-
 #include "imgui\imgui.h"
 
 class DataJSON {

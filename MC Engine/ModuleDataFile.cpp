@@ -1,6 +1,6 @@
 #include "ModuleDataFile.h"
 #include "Application.h"
-#include "ModuleSceneIntro.h"
+#include "Module.h"
 
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
@@ -12,7 +12,7 @@
 
 #include "CMesh.h"
 #include "CTexture.h"
-
+#include "ModuleUI.h"
 
 #include "Glew\include\glew.h"
 
@@ -244,7 +244,6 @@ bool DataFBX::LoadMesh(const char* path)
 	{
 		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
-
 			//create mesh
 			
 			CMesh* mesh = (CMesh*)gameObject->CreateComponent(COMP_MESH);
@@ -252,24 +251,24 @@ bool DataFBX::LoadMesh(const char* path)
 
 			aiMesh* newMesh = scene->mMeshes[i];
 			
-			mesh->data->nVertex = newMesh->mNumVertices;
-			mesh->data->Vertex = new float[mesh->data->nVertex * 3];
-			memcpy(mesh->data->Vertex, newMesh->mVertices, sizeof(float)* mesh->data->nVertex * 3);
+			mesh->nVertex = newMesh->mNumVertices;
+			mesh->Vertex = new float[mesh->nVertex * 3];
+			memcpy(mesh->Vertex, newMesh->mVertices, sizeof(float)* mesh->nVertex * 3);
 
 
-			glGenBuffers(1, (GLuint*)&mesh->data->idVertex);
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->data->idVertex);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->data->nVertex * 3, mesh->data->Vertex, GL_STATIC_DRAW);
+			glGenBuffers(1, (GLuint*)&mesh->idVertex);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->idVertex);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->Vertex, GL_STATIC_DRAW);
 
 			App->ui->AddLogToConsole("Load Mesh");
-			LOG("loaded mesh %i vertex", mesh->data->nVertex);
+			LOG("loaded mesh %i vertex", mesh->nVertex);
 
 			if (newMesh->HasFaces()) 
 			{
-				mesh->data->nFaces = newMesh->mNumFaces;
+				mesh->nFaces = newMesh->mNumFaces;
 
-				mesh->data->nIndex = newMesh->mNumFaces * 3;
-				mesh->data->Index = new float[mesh->data->nIndex]; //every face is a triangle.
+				mesh->nIndex = newMesh->mNumFaces * 3;
+				mesh->Index = new float[mesh->nIndex]; //every face is a triangle.
 
 				for (uint i = 0; i < newMesh->mNumFaces; ++i)
 				{
@@ -279,49 +278,47 @@ bool DataFBX::LoadMesh(const char* path)
 					}
 					else
 					{
-						memcpy(&mesh->data->Index[i * 3], newMesh->mFaces[i].mIndices, sizeof(float)* 3);
+						memcpy(&mesh->Index[i * 3], newMesh->mFaces[i].mIndices, sizeof(float)* 3);
 					}
 				}
 
-				glGenBuffers(1, (GLuint*)&(mesh->data->idIndex));
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->data->idIndex);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->data->nIndex, mesh->data->Index, GL_STATIC_DRAW);
+				glGenBuffers(1, (GLuint*)&(mesh->idIndex));
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->idIndex);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->nIndex, mesh->Index, GL_STATIC_DRAW);
 
 			}// has faces			
 
 			if (newMesh->HasNormals())
 			{
-				mesh->data->normals = new float[mesh->data->nVertex * 3];
-				memcpy(mesh->data->normals, newMesh->mNormals, (sizeof(float) * mesh->data->nVertex * 3));
+				mesh->normals = new float[mesh->nVertex * 3];
+				memcpy(mesh->normals, newMesh->mNormals, (sizeof(float) * mesh->nVertex * 3));
 
-				glGenBuffers(1, (GLuint*)&(mesh->data->idNormals)); // 
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->data->idNormals);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->data->nVertex * 3, mesh->data->normals, GL_STATIC_DRAW);
+				glGenBuffers(1, (GLuint*)&(mesh->idNormals)); // 
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->idNormals);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->normals, GL_STATIC_DRAW);
 
 			}// has normals
-
-
 
 			CTexture* material = (CTexture*)gameObject->CreateComponent(COMP_TEXTURE);
 			material->Enable();
 
 			if (newMesh->HasTextureCoords(0))
 			{
-				material->data->texCoords = new float[mesh->data->nVertex * 3];
-				memcpy(material->data->texCoords, newMesh->mTextureCoords[0], sizeof(float) * mesh->data->nVertex * 3);
+				material->texCoords = new float[mesh->nVertex * 3];
+				memcpy(material->texCoords, newMesh->mTextureCoords[0], sizeof(float) * mesh->nVertex * 3);
 
-				glGenBuffers(1, (GLuint*) &(material->data->idTexCoords));
-				glBindBuffer(GL_ARRAY_BUFFER, material->data->idTexCoords);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->data->nVertex * 3, material->data->texCoords, GL_STATIC_DRAW);
+				glGenBuffers(1, (GLuint*) &(material->idTexCoords));
+				glBindBuffer(GL_ARRAY_BUFFER, material->idTexCoords);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, material->texCoords, GL_STATIC_DRAW);
 			}
 			if (newMesh->HasVertexColors(0))
 			{
-				material->data->colors = new float[mesh->data->nVertex * 3];
-				memcpy(material->data->colors, newMesh->mColors, sizeof(float) * mesh->data->nVertex * 3);
+				material->colors = new float[mesh->nVertex * 3];
+				memcpy(material->colors, newMesh->mColors, sizeof(float) * mesh->nVertex * 3);
 
-				glGenBuffers(1, (GLuint*) &(material->data->idColors));
-				glBindBuffer(GL_ARRAY_BUFFER, material->data->idColors);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->data->nVertex * 3, material->data->colors, GL_STATIC_DRAW);
+				glGenBuffers(1, (GLuint*) &(material->idColors));
+				glBindBuffer(GL_ARRAY_BUFFER, material->idColors);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, material->colors, GL_STATIC_DRAW);
 			}
 
 			//TEXTURE COORDS

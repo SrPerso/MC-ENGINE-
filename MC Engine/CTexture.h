@@ -19,7 +19,7 @@ public:
 	DataTexture::~DataTexture();
 };
 
-class CTexture : public Component
+class CTexture : public Component, public DataTexture
 {
 public:
 	CTexture(GameObject* object);
@@ -27,9 +27,6 @@ public:
 
 	void OnUpdate(float dt);
 
-
-public:
-	DataTexture* data;
 };
 
 
