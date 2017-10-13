@@ -30,8 +30,7 @@ public:
 	virtual void OnUpdate(float dt);
 
 
-	CMesh* componentMesh;
-	CTexture* componentMaterial;
+	
 protected:
 	Component_Type type;
 	GameObject* object = nullptr;
