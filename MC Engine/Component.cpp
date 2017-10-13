@@ -1,7 +1,15 @@
 #include "Component.h"
 
+
 Component::Component(GameObject * object, Component_Type type):object(object),type(type)
 {
+	switch (type) {
+	case COMP_MESH:
+		componentMesh = new CMesh(object);
+
+	case COMP_MATERIAL:
+		componentMaterial = new CTexture(object);
+	}
 }
 
 Component::~Component()

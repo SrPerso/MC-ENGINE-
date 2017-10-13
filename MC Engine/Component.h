@@ -1,6 +1,8 @@
 #ifndef __COMPONENT_H__
 #define __COMPONENT_H__
 #include "Globals.h"
+#include "CMesh.h"
+#include "CTexture.h"
 
 
 enum Component_Type {
@@ -27,10 +29,14 @@ public:
 
 	virtual void OnUpdate(float dt);
 
+
+	CMesh* componentMesh;
+	CTexture* componentMaterial;
 protected:
 	Component_Type type;
 	GameObject* object = nullptr;
 	bool isEnable = true;
+	
 
 };
 

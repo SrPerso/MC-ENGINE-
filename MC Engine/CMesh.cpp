@@ -17,6 +17,15 @@ DataMesh::~DataMesh()
 	//}
 }
 
+CMesh::CMesh(GameObject * object)
+{
+
+}
+
+CMesh::~CMesh()
+{
+}
+
 void CMesh::OnUpdate(float dt)
 {
 
