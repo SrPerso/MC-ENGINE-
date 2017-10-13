@@ -40,6 +40,7 @@ public:
 	void AddBool(JSON_Object*  object, const char* name, bool boolean);
 	void AddString(JSON_Object*  object, const char* name, const char* string);
 
+
 private: 
 
 	std::list<std::string> files;

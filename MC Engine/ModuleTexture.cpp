@@ -130,7 +130,8 @@ uint ModuleTexture::LoadTexture(const char * imagepath)
 	{
 		error = ilGetError();
 		App->ui->AddLogToConsole("Image load failed - IL reports error: ");
-		exit(-1);
+		return 0;
+		//exit(-1);
 	}
 
 	ilDeleteImages(1, &imageID); // Because we have already copied image data into texture data we can release memory used by image.

@@ -245,12 +245,12 @@ bool DataFBX::LoadMesh(const char* path)
 		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
 			//create mesh
-			
+
 			CMesh* mesh = (CMesh*)gameObject->CreateComponent(COMP_MESH);
-			mesh->Enable();			
+			mesh->Enable();
 
 			aiMesh* newMesh = scene->mMeshes[i];
-			
+
 			mesh->nVertex = newMesh->mNumVertices;
 			mesh->Vertex = new float[mesh->nVertex * 3];
 			memcpy(mesh->Vertex, newMesh->mVertices, sizeof(float)* mesh->nVertex * 3);
@@ -263,7 +263,7 @@ bool DataFBX::LoadMesh(const char* path)
 			App->ui->AddLogToConsole("Load Mesh");
 			LOG("loaded mesh %i vertex", mesh->nVertex);
 
-			if (newMesh->HasFaces()) 
+			if (newMesh->HasFaces())
 			{
 				mesh->nFaces = newMesh->mNumFaces;
 
@@ -278,7 +278,7 @@ bool DataFBX::LoadMesh(const char* path)
 					}
 					else
 					{
-						memcpy(&mesh->Index[i * 3], newMesh->mFaces[i].mIndices, sizeof(float)* 3);
+						memcpy(&mesh->Index[i * 3], newMesh->mFaces[i].mIndices, sizeof(float) * 3);
 					}
 				}
 
@@ -302,11 +302,28 @@ bool DataFBX::LoadMesh(const char* path)
 			CTexture* material = (CTexture*)gameObject->CreateComponent(COMP_TEXTURE);
 			material->Enable();
 
+
+			aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
+
+			if (newMaterial != nullptr) {
+
+				uint numTextures = newMaterial->GetTextureCount(aiTextureType_DIFFUSE);
+				aiString path;
+
+				newMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+				std::string fullPath = "Assets/";
+				fullPath.append(path.C_Str());
+				material->image = App->texture->LoadTexture(fullPath.c_str());
+				material->name = path.C_Str();
+
+			}
 			if (newMesh->HasTextureCoords(0))
 			{
+
 				material->texCoords = new float[mesh->nVertex * 3];
 				memcpy(material->texCoords, newMesh->mTextureCoords[0], sizeof(float) * mesh->nVertex * 3);
 
+				glBindTexture(GL_TEXTURE_2D, material->image);
 				glGenBuffers(1, (GLuint*) &(material->idTexCoords));
 				glBindBuffer(GL_ARRAY_BUFFER, material->idTexCoords);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, material->texCoords, GL_STATIC_DRAW);
@@ -322,23 +339,23 @@ bool DataFBX::LoadMesh(const char* path)
 			}
 
 			//TEXTURE COORDS
-			
+
 
 
 			mesh->debugBox.SetNegativeInfinity();//
 			mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
 			/*App->scene_intro->CreateMesh(mesh->componentMesh);//??
-													
+
 			App->scene_intro->sceneDebugInfo.faces += mesh->componentMesh->data->nFaces;
 			App->scene_intro->sceneDebugInfo.tris += mesh->componentMesh->data->nVeRtex/3;
 			App->scene_intro->sceneDebugInfo.vertex += mesh->componentMesh->data->nVertex;*/
 
-		
+
 
 		}//for	
 		//scene.
 
-		aiReleaseImport(scene); 
+		aiReleaseImport(scene);
 		return true;
 		LOG("Mesh %s loaded Ok", path);
 	}//if scene

@@ -19,6 +19,7 @@ public:
 
 	uint LoadTexture(const char* imagepath);
 	bool correct=true;
+
 };
 
 

@@ -2,6 +2,7 @@
 #define __TEXTURE_H__
 
 #include "Component.h"
+#include <string>
 
 class GameObject;
 
@@ -15,6 +16,8 @@ public:
 	uint idTexCoords = 0;
 	float* texCoords = nullptr;
 
+	uint image=0;
+	std::string name;
 public:
 	DataTexture::~DataTexture();
 };

@@ -461,20 +461,20 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 					//--------------------- TEXTURE----------------------------------------------
 					CTexture* componentTexture = (CTexture*)GOToDraw->GetComponent(COMP_MESH);
 
-					if (componentTexture->texCoords != nullptr)
+					if (componentTexture != nullptr)
 					{
-						//	glBindTexture(GL_TEXTURE_2D, image);
+						glBindTexture(GL_TEXTURE_2D, componentTexture->image);
+					}
 						glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 						glBindBuffer(GL_ARRAY_BUFFER, componentTexture->idTexCoords);
 						glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-					}
+					
 
-					if (componentTexture->colors != nullptr)
-					{
+					
 						glEnableClientState(GL_COLOR_ARRAY);
 						glBindBuffer(GL_ARRAY_BUFFER, componentTexture->idColors);
 						glColorPointer(3, GL_FLOAT, 0, NULL);
-					}
+				
 					//--------------------- TEXTURE----------------------------------------------
 
 					// Viewwws
