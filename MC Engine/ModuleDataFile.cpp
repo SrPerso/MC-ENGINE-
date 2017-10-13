@@ -9,8 +9,9 @@
 #include "GameObject.h"
 #include "ModuleGameObjectManager.h"
 #include "Component.h"
-#include "CMesh.h"
 
+#include "CMesh.h"
+#include "CTexture.h"
 
 
 #include "Glew\include\glew.h"

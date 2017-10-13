@@ -3,6 +3,8 @@
 
 #include "Component.h"
 #include "MathGeolib\Geometry\AABB.h"
+class GameObject;
+class Component;
 
 class DataMesh {
 public:

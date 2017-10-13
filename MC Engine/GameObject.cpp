@@ -1,6 +1,9 @@
 #include "GameObject.h"
 #include "Application.h"
 
+#include "CMesh.h"
+#include "CTexture.h"
+
 GameObject::GameObject(GameObject * parent): parent(parent)
 {
 	name = "GameObject";
@@ -9,7 +12,7 @@ GameObject::GameObject(GameObject * parent): parent(parent)
 
 GameObject::~GameObject()
 {
-	while (components.begin != components.end())
+	while (components.size() != 0)
 	{
 
 		delete components.back();
@@ -17,9 +20,8 @@ GameObject::~GameObject()
 	}
 	components.clear();
 
-	while (childs.begin != childs.end()) 
+	while (childs.size()!=0) 
 	{
-
 		delete childs.back();
 		childs.pop_back();
 	}

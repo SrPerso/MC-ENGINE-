@@ -2,8 +2,7 @@
 #define __COMPONENT_H__
 
 #include "Globals.h"
-#include "CMesh.h"
-#include "CTexture.h"
+
 
 
 enum Component_Type {

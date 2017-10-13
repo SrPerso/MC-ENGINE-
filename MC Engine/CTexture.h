@@ -3,6 +3,8 @@
 
 #include "Component.h"
 
+class GameObject;
+
 class DataTexture 
 {
 public:
@@ -16,9 +18,6 @@ public:
 public:
 	DataTexture::~DataTexture();
 };
-
-
-
 
 class CTexture : public Component
 {
