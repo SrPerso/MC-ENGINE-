@@ -247,14 +247,14 @@ bool DataFBX::LoadMesh(const char* path)
 			//create mesh
 			
 			CMesh* mesh = (CMesh*)gameObject->CreateComponent(COMP_MESH);
-			mesh->Enable();
-			
+			mesh->Enable();			
 
 			aiMesh* newMesh = scene->mMeshes[i];
 			
 			mesh->data->nVertex = newMesh->mNumVertices;
 			mesh->data->Vertex = new float[mesh->data->nVertex * 3];
 			memcpy(mesh->data->Vertex, newMesh->mVertices, sizeof(float)* mesh->data->nVertex * 3);
+
 
 			glGenBuffers(1, (GLuint*)&mesh->data->idVertex);
 			glBindBuffer(GL_ARRAY_BUFFER, mesh->data->idVertex);
@@ -299,6 +299,8 @@ bool DataFBX::LoadMesh(const char* path)
 
 			}// has normals
 
+
+
 			CTexture* material = (CTexture*)gameObject->CreateComponent(COMP_TEXTURE);
 			material->Enable();
 
@@ -330,7 +332,7 @@ bool DataFBX::LoadMesh(const char* path)
 			App->scene_intro->CreateMesh(mesh->componentMesh);//??
 
 			App->scene_intro->sceneDebugInfo.faces += mesh->componentMesh->data->nFaces;
-			App->scene_intro->sceneDebugInfo.tris += mesh->componentMesh->data->nVertex/3;
+			App->scene_intro->sceneDebugInfo.tris += mesh->componentMesh->data->nVeRtex/3;
 			App->scene_intro->sceneDebugInfo.vertex += mesh->componentMesh->data->nVertex;*/
 
 		

@@ -3,6 +3,7 @@
 
 Component::Component(GameObject * object, Component_Type type):object(object),type(type)
 {
+
 }
 
 Component::~Component()

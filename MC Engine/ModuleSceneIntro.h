@@ -4,7 +4,7 @@
 #include "Globals.h"
 #include "Primitive.h"
 #include <list>
-#include "MathGeolib\Geometry\AABB.h"
+
 
 struct PhysBody3D;
 struct PhysMotor3D;

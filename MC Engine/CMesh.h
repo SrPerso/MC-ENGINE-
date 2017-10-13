@@ -2,6 +2,7 @@
 #define __MESH_H__
 
 #include "Component.h"
+#include "MathGeolib\Geometry\AABB.h"
 
 class DataMesh {
 public:
@@ -23,8 +24,8 @@ public:
 	
 
 	bool debugMode = true;
-	//AABB debugBox;
-
+	AABB debugBox;
+public:
 	DataMesh::~DataMesh();
 
 };

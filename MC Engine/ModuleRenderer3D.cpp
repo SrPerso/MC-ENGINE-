@@ -462,20 +462,20 @@ void ModuleRenderer3D::Draw(DataMesh* meshToDraw)
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 
-	if (meshToDraw->texCoords != nullptr)
-	{
-		glBindTexture(GL_TEXTURE_2D, image);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw->idTexCoords);
-		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-	}
+	//if (meshToDraw->texCoords != nullptr)
+	//{
+	//	glBindTexture(GL_TEXTURE_2D, image);
+	//	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	//	glBindBuffer(GL_ARRAY_BUFFER, meshToDraw->idTexCoords);
+	//	glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+	//}
 
-	if (meshToDraw->colors != nullptr)
-	{
-		glEnableClientState(GL_COLOR_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw->idColors);
-		glColorPointer(3, GL_FLOAT, 0, NULL);
-	}
+	//if (meshToDraw->colors != nullptr)
+	//{
+	//	glEnableClientState(GL_COLOR_ARRAY);
+	//	glBindBuffer(GL_ARRAY_BUFFER, meshToDraw->idColors);
+	//	glColorPointer(3, GL_FLOAT, 0, NULL);
+	//}
 
 	///
 

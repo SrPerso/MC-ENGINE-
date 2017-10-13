@@ -1,5 +1,6 @@
 #ifndef __COMPONENT_H__
 #define __COMPONENT_H__
+
 #include "Globals.h"
 #include "CMesh.h"
 #include "CTexture.h"
@@ -15,17 +16,17 @@ enum Component_Type {
 
 class GameObject;
 
-class Component {
+class Component{
 public:
 	Component(GameObject* object, Component_Type type = COMP_UNKNOWN);
 	virtual ~Component();
 
 	Component_Type getType();
 
-	bool IsEnable()const;
-	void SetEnable(bool isEnable);
-	void Enable();
-	void Disable();
+	virtual bool IsEnable()const;
+	virtual void SetEnable(bool isEnable);
+	virtual void Enable();
+	virtual void Disable();
 
 	virtual void OnUpdate(float dt);
 
