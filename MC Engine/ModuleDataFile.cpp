@@ -324,11 +324,11 @@ bool DataFBX::LoadMesh(const char* path)
 			//TEXTURE COORDS
 			
 
-/*
-			mesh->debugBox.SetNegativeInfinity();//
-			mesh->debugBox.Enclose((float3*)mesh->componentMesh->data->Vertex, mesh->componentMesh->data->nVertex);
-			App->scene_intro->CreateMesh(mesh->componentMesh);//??
 
+			mesh->debugBox.SetNegativeInfinity();//
+			mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
+			/*App->scene_intro->CreateMesh(mesh->componentMesh);//??
+													
 			App->scene_intro->sceneDebugInfo.faces += mesh->componentMesh->data->nFaces;
 			App->scene_intro->sceneDebugInfo.tris += mesh->componentMesh->data->nVeRtex/3;
 			App->scene_intro->sceneDebugInfo.vertex += mesh->componentMesh->data->nVertex;*/

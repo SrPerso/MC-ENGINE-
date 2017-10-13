@@ -1,17 +1,16 @@
-#include "GameObject.h"
-#include "Application.h"
 
-#include "ModuleUI.h"
+
+#include "GameObject.h"
+
+#include "Application.h"
 #include "ModuleRenderer3D.h"
-#include <vector>
 
 #include "CMesh.h"
 #include "CTexture.h"
 
 GameObject::GameObject(GameObject* parent): parent(parent)
 {
-	name = "GameObject";
-	//App->ui->AddLogToConsole("Constructor Game Object");
+	name = "GameObject";	
 }
 
 GameObject::~GameObject()
@@ -210,8 +209,8 @@ void GameObject::Update(float dt)
 			(*it)->OnUpdate(dt);
 		}
 	}
-
 	App->renderer3D->DrawGO(this);
+
 }
 
 void GameObject::cleanUp()

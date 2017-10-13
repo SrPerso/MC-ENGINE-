@@ -390,7 +390,7 @@ IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 		if (ImGui::Checkbox("WIRE", &sb_Wire_Face)) {
 			App->renderer3D->EDglView();
 		}
-		//	App->renderer3D->WireSet(sb_Wire_Face);
+
 
 		ImGui::End();
 	}	

@@ -43,7 +43,7 @@ public:
 
 public: // View Modes
 	void TextureView();
-	void WireSet(bool wireon=false);
+	
 
 public:
 	Light lights[MAX_LIGHTS];

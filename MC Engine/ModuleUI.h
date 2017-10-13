@@ -106,7 +106,6 @@ public: //
 	
 //debug
 	bool debug_active = true;
-	bool debug_Object_Box = true;
 	bool debug_Tri_Normals = true;
 	bool debug_Vertex_Normals = true;
 	bool debug_Box = true;

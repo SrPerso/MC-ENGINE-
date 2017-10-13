@@ -9,30 +9,22 @@
 #include "SDL\include\SDL_opengl.h"
 #include "parson\parson.h"
 
-
 //
 #include "CMesh.h"
+#include "CTexture.h"
 #include "Component.h"
 #include "GameObject.h"
 //
-
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
 #include "MathGeolib\Geometry\Triangle.h"
 #include "MathGeolib\Math\float4x4.h"
 
-
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
-
-
-
 #pragma comment (lib, "Glew/libx86/glew32.lib") 
-
 #pragma comment (lib, "glu32.lib") 
 #pragma comment (lib, "opengl32.lib") 
-
-
 
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -425,15 +417,89 @@ void ModuleRenderer3D::OnResize(int width, int height)
 }
 
 void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
-{
-	CMesh* component = (CMesh*)GOToDraw->GetComponent(COMP_MESH);
-	
-	if (component->IsEnable() == true)
-	{
-		Draw(component);
+{	
 
-		if (GOToDraw->debugMode == true) {
-			DrawDebug(component);
+	//--------------------- MESH----------------------------------------------
+
+
+	for (std::vector<Component*>::iterator it = GOToDraw->components.begin(); it != GOToDraw->components.end(); it++)
+	{
+		if ((*it)->getType() == COMP_MESH) {
+
+			CMesh* componentMesh = (CMesh*)(*it);
+
+			if (componentMesh != nullptr)
+			{
+				if (componentMesh->IsEnable() == true)
+				{
+					if (componentMesh->wire == true)
+						glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+					else
+						glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+
+					if (componentMesh->nNormals != 0 /*&& App->scene_intro->debugMode*/)
+					{
+						glEnable(GL_LIGHTING);
+						App->ui->sb_Lighting = true;
+
+						glEnableClientState(GL_NORMAL_ARRAY);
+						glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idNormals);
+						glNormalPointer(GL_FLOAT, 0, NULL);
+
+					}
+
+					glEnableClientState(GL_VERTEX_ARRAY);
+					glEnableClientState(GL_ELEMENT_ARRAY_BUFFER);
+					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idVertex);
+					glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, componentMesh->idIndex);
+					glDrawElements(GL_TRIANGLES, componentMesh->nIndex, GL_UNSIGNED_INT, NULL);
+
+					//--------------------- MESH----------------------------------------------
+					//--------------------- TEXTURE----------------------------------------------
+					CTexture* componentTexture = (CTexture*)GOToDraw->GetComponent(COMP_MESH);
+
+					if (componentTexture->texCoords != nullptr)
+					{
+						//	glBindTexture(GL_TEXTURE_2D, image);
+						glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+						glBindBuffer(GL_ARRAY_BUFFER, componentTexture->idTexCoords);
+						glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+					}
+
+					if (componentTexture->colors != nullptr)
+					{
+						glEnableClientState(GL_COLOR_ARRAY);
+						glBindBuffer(GL_ARRAY_BUFFER, componentTexture->idColors);
+						glColorPointer(3, GL_FLOAT, 0, NULL);
+					}
+					//--------------------- TEXTURE----------------------------------------------
+
+					// Viewwws
+
+					EDglView();
+
+					if (GOToDraw->debugMode == true) {
+						DrawDebug(componentMesh);
+					}
+
+
+					glDisableClientState(GL_COLOR_ARRAY);
+					glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+					glDisableClientState(GL_NORMAL_ARRAY);
+					glDisableClientState(GL_VERTEX_ARRAY);
+					glDisableClientState(GL_ELEMENT_ARRAY_BUFFER);
+
+					glPopMatrix();
+					glEnd();
+					glBindTexture(GL_TEXTURE_2D, 0);
+					glUseProgram(0);
+
+
+				}
+			}
 		}
 	}
 
@@ -442,7 +508,7 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 
 void ModuleRenderer3D::Draw(CMesh* meshToDraw)
 {
-	GLuint image = App->texture->LoadTexture("Baker_house.png");
+
 	if (meshToDraw->wire == true)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
@@ -521,6 +587,7 @@ void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 
 					normal.color = Red;
 					normal.Render();
+					glColor3f(White.r, White.g, White.b);
 					}
 					i += 2;
 				}
@@ -546,12 +613,11 @@ void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 					PrimitiveLine normal(vec3{ center.x, center.y, center.z }, vec3{ destX,destY,destZ });
 					normal.color = Blue;
 					normal.Render();
-
+					glColor3f(White.r, White.g, White.b);
 					i += 8;
 				}
 			}//debug_Vertex_Normals		
-
-			if (App->ui->debug_Object_Box == true && App->ui->debug_Box == true)
+			if (App->ui->debug_Box == true)
 			{
 				float3 vertex[8];
 				meshToDraw->debugBox.GetCornerPoints(vertex);
@@ -561,6 +627,7 @@ void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 				glMultMatrixf((float*)float4x4::identity.Transposed().ptr());
 	
 				glColor3f(Green.r, Green.g, Green.b);
+			
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 				glBegin(GL_QUADS);
@@ -596,13 +663,11 @@ void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 				glVertex3fv((float*)&vertex[5]);
 				glVertex3fv((float*)&vertex[1]);
 
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				
 				glEnd();
-
 				glPopMatrix();
-							
-				//glColor4d(Green.r, Green.g, Green.b,100);
-
-
+					
 			}// box
 	
 	}
@@ -610,26 +675,13 @@ void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 
 }
 
+
+
 void ModuleRenderer3D::TextureView()
 {
 	if (App->ui->sb_Texture_2D)
 		glEnable(GL_LINE);
 	else if (!App->ui->sb_Texture_2D)
 		glDisable(GL_LINE);
-
-}
-
-void ModuleRenderer3D::WireSet(bool wireon)
-{
-
-	for (std::list<Primitive*>::iterator it = App->scene_intro->GeometryObjects.begin(); it != App->scene_intro->GeometryObjects.end(); ++it)
-	{
-		(*it)->wire = wireon;
-	}
-	for (std::list<ObjectMesh*>::iterator it = App->scene_intro->MeshObjects.begin(); it != App->scene_intro->MeshObjects.end(); ++it)
-	{
-		(*it)->wire = wireon;
-	}
-
 
 }
