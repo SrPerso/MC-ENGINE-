@@ -17,6 +17,9 @@ public:
 	DataTexture::~DataTexture();
 };
 
+
+
+
 class CTexture : public Component
 {
 public:

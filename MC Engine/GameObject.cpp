@@ -46,6 +46,9 @@ GameObject * GameObject::CreateChild()
 	GameObject* ret = nullptr;
 
 	ret = new GameObject(this);
+	
+	ret->SetEnable(this->IsEnable());		
+	
 	childs.push_back(ret);
 
 	return ret;
@@ -102,29 +105,33 @@ void GameObject::AddChild(GameObject * child)
 }
 
 Component * GameObject::CreateComponent(Component_Type type)
-{
-	Component* ret = nullptr;
+{	
 	/*
-		COMP_UNKNOWN,
-	COMP_MESH,
-	COMP_MATERIAL,
-	COMP_CAMERA,
-	COMP_SOUND
+		COMP_UNKNOWN,COMP_MESH,COMP_TEXTURE,COMP_CAMERA,COMP_SOUND
 	*/
 
-	//TODO COMPONENTS  news 4 all components
+	Component* ret = nullptr;
 
-	/*
 	switch (type)
 	{
 	case COMP_MESH:
-		break;
 
+		ret = new CMesh(this);
+		this->components.push_back(ret);
+
+		break;
+	case COMP_TEXTURE:// future implementation materials
+	
+		ret = new CTexture(this);
+		this->components.push_back(ret);
+		
+		break;
 	default://COMP_UNKNOWN
-		break:
+
+		break;
 	}
 
-	*/
+	
 	return ret;
 }
 

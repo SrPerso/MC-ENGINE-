@@ -17,7 +17,7 @@ DataMesh::~DataMesh()
 	//}
 }
 
-CMesh::CMesh(GameObject * object)
+CMesh::CMesh(GameObject * object) :Component(object, COMP_MESH)
 {
 
 }

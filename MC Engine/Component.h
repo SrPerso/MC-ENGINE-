@@ -8,7 +8,7 @@
 enum Component_Type {
 	COMP_UNKNOWN,
 	COMP_MESH,
-	COMP_MATERIAL,
+	COMP_TEXTURE,
 	COMP_CAMERA,
 	COMP_SOUND
 };
@@ -29,9 +29,6 @@ public:
 
 	virtual void OnUpdate(float dt);
 
-
-	CMesh* componentMesh;
-	CTexture* componentMaterial;
 protected:
 	Component_Type type;
 	GameObject* object = nullptr;
