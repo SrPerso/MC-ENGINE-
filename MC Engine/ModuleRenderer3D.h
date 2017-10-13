@@ -6,6 +6,8 @@
 #include "Glew\include\glew.h"
 #pragma comment (lib, "Glew/libx86/glew32.lib") 
 
+
+
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
@@ -13,6 +15,9 @@
 #define MAX_LIGHTS 8
 #define CHECKERS_HEIGHT 128
 #define CHECKERS_WIDTH 128
+
+class DataMesh;
+
 class ModuleRenderer3D : public Module
 {
 public:
@@ -29,16 +34,18 @@ public:
 	void EDglView();
 
 	void OnResize(int width, int height);
+	
+	void DrawGO(GameObject* GOToDraw);
 
-	void Draw(ObjectMesh meshToDraw);
-	void DrawDebug(ObjectMesh* meshToDraw);
+	
+	void Draw(DataMesh* meshToDraw);
+	void DrawDebug(DataMesh* meshToDraw);
 
 public: // View Modes
 	void TextureView();
 	void WireSet(bool wireon=false);
 
 public:
-
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;

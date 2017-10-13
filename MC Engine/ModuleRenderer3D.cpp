@@ -7,6 +7,11 @@
 #include "parson\parson.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleUI.h"
+//
+#include "CMesh.h"
+#include "Component.h"
+#include "GameObject.h"
+//
 
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -416,53 +421,67 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
-void ModuleRenderer3D::Draw(ObjectMesh meshToDraw)
+void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
+{
+	CMesh* component = (CMesh*)GOToDraw->GetComponent(COMP_MESH);
+	
+	if (component->IsEnable() == true)
+	{
+		Draw(component->data);
+
+		if (GOToDraw->debugMode == true) {
+			DrawDebug(component->data);
+		}
+	}
+
+}
+
+
+void ModuleRenderer3D::Draw(DataMesh* meshToDraw)
 {
 	GLuint image = App->texture->LoadTexture("Baker_house.png");
-	if (meshToDraw.wire == true)
+	if (meshToDraw->wire == true)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	if (meshToDraw.nNormals != 0 /*&& App->scene_intro->debugMode*/)
+	if (meshToDraw->nNormals != 0 /*&& App->scene_intro->debugMode*/)
 	{
 		glEnable(GL_LIGHTING);
 		App->ui->sb_Lighting = true;
 
 		glEnableClientState(GL_NORMAL_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idNormals);
+		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw->idNormals);
 		glNormalPointer(GL_FLOAT, 0, NULL);
 
 	}
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_ELEMENT_ARRAY_BUFFER);
-	glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idVertex);
+	glBindBuffer(GL_ARRAY_BUFFER, meshToDraw->idVertex);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 
-	if (meshToDraw.texCoords != nullptr) 
+	if (meshToDraw->texCoords != nullptr)
 	{
-
-
 		glBindTexture(GL_TEXTURE_2D, image);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idTexCoords);
+		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw->idTexCoords);
 		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-
 	}
-	if (meshToDraw.colors != nullptr) 
+
+	if (meshToDraw->colors != nullptr)
 	{
 		glEnableClientState(GL_COLOR_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idColors);
+		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw->idColors);
 		glColorPointer(3, GL_FLOAT, 0, NULL);
 	}
 
 	///
 
 	
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshToDraw.idIndex);
-		glDrawElements(GL_TRIANGLES, meshToDraw.nIndex, GL_UNSIGNED_INT, NULL);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshToDraw->idIndex);
+		glDrawElements(GL_TRIANGLES, meshToDraw->nIndex, GL_UNSIGNED_INT, NULL);
 
 
 		glDisableClientState(GL_COLOR_ARRAY);
@@ -478,7 +497,7 @@ void ModuleRenderer3D::Draw(ObjectMesh meshToDraw)
 
 }
 
-void ModuleRenderer3D::DrawDebug(ObjectMesh* meshToDraw)
+void ModuleRenderer3D::DrawDebug(DataMesh* meshToDraw)
 {
 	if (meshToDraw->debugMode==true && App->ui->debug_active == true)
 	{

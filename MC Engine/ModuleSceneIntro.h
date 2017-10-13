@@ -34,10 +34,7 @@ public:
 	uint idTexCoords = 0; 
 	float* texCoords = nullptr;
 
-	bool debugMode = true;
-	AABB debugBox;
-
-	ObjectMesh::~ObjectMesh();
+	bool debugMode =true;
 
 };
 struct GlobalDebugInfo

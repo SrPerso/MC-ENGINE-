@@ -144,17 +144,18 @@ void ModuleSceneIntro::CreateMesh(ObjectMesh* Mesh)
 
 void ModuleSceneIntro::Draw()
 {
-	for (std::list<Primitive*>::iterator it = GeometryObjects.begin(); it != GeometryObjects.end(); ++it)
+	/*for (std::list<Primitive*>::iterator it = GeometryObjects.begin(); it != GeometryObjects.end(); ++it)
 	{
 		(*it)->Render();
-	}
-	for (std::list<ObjectMesh*>::iterator it = MeshObjects.begin(); it != MeshObjects.end(); ++it)
-	{
-		App->renderer3D->Draw((**it));
+	}*/
+	//for (std::list<ObjectMesh*>::iterator it = MeshObjects.begin(); it != MeshObjects.end(); ++it)
+	//{
+	//	//App->renderer3D->Draw((**it));
 
-		if ((**it).debugMode == true) 
-			App->renderer3D->DrawDebug((*it));		
-	}
+	//	if ((**it).debugMode == true) 
+	//		App->renderer3D->DrawDebug((*it));		
+	//}
+
 	for (std::list<PrimitiveLine*>::iterator it = NormalsLines.begin(); it != NormalsLines.end(); ++it)
 	{
 		(*it)->Render();
@@ -190,18 +191,3 @@ update_status ModuleSceneIntro::Update(float dt)
 
 }
 
-ObjectMesh::~ObjectMesh()
-{
-	//if (Vertex != nullptr) {
-	//	delete Vertex;
-	//	Vertex = nullptr;
-	//}
-	//if (Index != nullptr) {
-	//	delete Index;
-	//	Index = nullptr;
-	//}
-	//if (normals != nullptr) {
-	//	delete normals;
-	//	normals = nullptr;
-	//}
-}

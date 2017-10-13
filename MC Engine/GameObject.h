@@ -6,6 +6,8 @@
 #include <vector>
 #include "Globals.h"
 
+#include "MathGeolib\Geometry\AABB.h"
+
 class GameObject
 {
 public:
@@ -32,6 +34,8 @@ public:
 
 	GameObject* GetParent()const;
 	
+	void newParent(GameObject*newparent);
+	void AddChild(GameObject* child);
 	//TO ADD 
 	// to move the objects and change the parent is necesary a function newparent(gameobject)
 
@@ -52,12 +56,12 @@ public:
 
 	//ACTIONS BASIC.............................
 
-	/* TODOOOOOOOO
-	void Init();
 	void PreUpdate();
 	void Update(float dt);
 	void cleanUp();
-	*/
+	
+	//
+
 public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> childs;
@@ -66,6 +70,10 @@ private:
 	std::string name;
 	GameObject* parent = nullptr;
 	bool isEnable = true;
-};
 
+public:
+	bool debugMode = true;
+
+
+};
 #endif

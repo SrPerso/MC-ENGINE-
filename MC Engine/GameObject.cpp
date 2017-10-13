@@ -1,11 +1,30 @@
 #include "GameObject.h"
+#include "Application.h"
 
 GameObject::GameObject(GameObject * parent): parent(parent)
 {
+	name = "GameObject";
+	App->ui->AddLogToConsole("Constructor Game Object");
 }
 
 GameObject::~GameObject()
 {
+	while (components.begin != components.end())
+	{
+
+		delete components.back();
+		components.pop_back();
+	}
+	components.clear();
+
+	while (childs.begin != childs.end()) 
+	{
+
+		delete childs.back();
+		childs.pop_back();
+	}
+	childs.clear();
+
 }
 
 const char * GameObject::GetName() const
@@ -54,6 +73,34 @@ GameObject * GameObject::GetParent() const
 	return parent;
 }
 
+void GameObject::newParent(GameObject * newparent)
+{
+	if (newparent != this->parent) {
+		if (newparent) {
+
+			std::vector<GameObject*>::iterator it = std::find(childs.begin(), childs.end(), newparent);
+
+			if (it != this->parent->childs.end())
+			{
+				this->parent->childs.erase(it);
+			}	
+		}
+
+		this->parent = newparent;
+
+		if (newparent) {
+			newparent->childs.push_back(this);
+		}
+	}
+}
+
+void GameObject::AddChild(GameObject * child)
+{
+	childs.push_back(child);
+	child->parent = this;
+	//child->newParent(this);
+}
+
 Component * GameObject::CreateComponent(Component_Type type)
 {
 	Component* ret = nullptr;
@@ -75,9 +122,6 @@ Component * GameObject::CreateComponent(Component_Type type)
 
 	default://COMP_UNKNOWN
 		break:
-
-	
-
 	}
 
 	*/
@@ -90,7 +134,8 @@ Component * GameObject::GetComponent(Component_Type type)
 	
 	for(std::vector<Component*>::iterator it = components.begin(); it!=components.end(); it++)
 	{
-		if((*it)->getType()== type){
+		if((*it)->getType()== type)
+		{
 			ret = (*it);
 		}
 	}
@@ -133,3 +178,36 @@ void GameObject::Disable()
 {
 	isEnable = false;
 }
+
+void GameObject::Update(float dt)
+{
+
+	for (std::vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
+	{
+		if ((*it)->IsEnable() == true)
+		{
+			(*it)->Update(dt);
+		}
+	}
+
+	for (std::vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+	{
+		if((*it)->IsEnable()==true)
+		{
+			(*it)->OnUpdate(dt);
+		}
+	}
+
+	App->renderer3D->DrawGO(this);
+}
+
+void GameObject::cleanUp()
+{
+
+	for (std::vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
+	{
+		(*it)->cleanUp();
+	}
+}
+
+

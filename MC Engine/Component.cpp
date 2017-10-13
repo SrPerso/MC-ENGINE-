@@ -32,3 +32,7 @@ void Component::Disable()
 {
 	isEnable = false;
 }
+
+void Component::OnUpdate(float dt)
+{
+}

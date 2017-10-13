@@ -25,6 +25,8 @@ public:
 	void Enable();
 	void Disable();
 
+	virtual void OnUpdate(float dt);
+
 protected:
 	Component_Type type;
 	GameObject* object = nullptr;

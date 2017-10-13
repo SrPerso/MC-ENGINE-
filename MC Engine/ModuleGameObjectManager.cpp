@@ -15,7 +15,7 @@ GObjectManager::GObjectManager(Application * app, bool start_enabled):Module(app
 GObjectManager::~GObjectManager()
 {
 	if (root != nullptr)
-	delete[] root;
+		root->cleanUp();
 
 }
 
@@ -42,6 +42,12 @@ update_status GObjectManager::PreUpdate(float dt)
 update_status GObjectManager::Update(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
+
+
+	if (root->IsEnable() == true)
+	{
+		root->Update(dt);
+	}
 
 	return update_status(ret);
 }
