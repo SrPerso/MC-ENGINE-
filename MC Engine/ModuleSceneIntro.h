@@ -35,13 +35,13 @@ public:
 	uint idTexCoords = 0; 
 	float* texCoords = nullptr;
 
-	bool debugMode =true;
+	bool debugMode =false;
 
 };
 struct GlobalDebugInfo
 {
 	uint tris = 0;
-	double vertex = 0;
+	uint vertex = 0;
 	uint faces = 0;
 };
 

@@ -22,7 +22,7 @@ ModuleTexture::~ModuleTexture()
 {
 }
 
-bool ModuleTexture::Innit(JSON_Object * data)
+bool ModuleTexture::Init()
 {
 	ilutRenderer(ILUT_OPENGL);
 	ilInit();
@@ -43,7 +43,7 @@ uint ModuleTexture::LoadTexture(const char * imagepath)
 
 	GLuint textureID;			// Create a texture ID as a GLuint
 
-	ILboolean success = false;			// Create a flag to keep track of success/failure
+	ILboolean success;			// Create a flag to keep track of success/failure
 
 	ILenum error;				// Create a flag to keep track of the IL error state
 
@@ -51,34 +51,8 @@ uint ModuleTexture::LoadTexture(const char * imagepath)
 
 	ilBindImage(imageID); 			// Bind the image
 
-	//success = ilLoadImage("Lenna.png"); 	// Load the image file
+	success = ilLoadImage(imagepath); 	// Load the image file
 
-	std::ifstream inputFile(imagepath, std::ifstream::binary);
-
-	inputFile.seekg(0, inputFile.end);
-
-	int length = inputFile.tellg();
-
-	inputFile.seekg(0, inputFile.beg);
-	if (length > 0)
-	{
-		LOG("Loading texture %s", imagepath);
-		char * buffer = new char[length];
-
-		inputFile.read(buffer, length);
-		inputFile.close();
-		success = ilLoadL(IL_TYPE_UNKNOWN, buffer, length); 	// Load the image file
-
-
-		delete[] buffer;
-		//MEMORY LEAKS
-	}
-	else
-	{
-		LOG("Error loading texture %s", imagepath);
-	}
-
-										// If we managed to load the image, then we can start to do things with it...
 	if (success)
 	{
 		// If the image is flipped (i.e. upside-down and mirrored, flip it the right way up!)

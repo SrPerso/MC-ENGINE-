@@ -296,6 +296,8 @@ bool DataFBX::LoadMesh(const char* path)
 				glGenBuffers(1, (GLuint*)&(mesh->idNormals)); // 
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->idNormals);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->normals, GL_STATIC_DRAW);
+				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+				glEnableVertexAttribArray(1);
 
 			}// has normals
 
@@ -310,13 +312,17 @@ bool DataFBX::LoadMesh(const char* path)
 				uint numTextures = newMaterial->GetTextureCount(aiTextureType_DIFFUSE);
 				aiString path;
 
-				newMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-				std::string fullPath = "Assets/";
-				fullPath.append(path.C_Str());
-				material->image = App->texture->LoadTexture(fullPath.c_str());
-				material->name = path.C_Str();
+				aiReturn retu;
+				retu = newMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+			
+				if (retu == aiReturn_FAILURE)
+					App->ui->AddLogToConsole("fail getting texture");
 
+			/*	fullPath.append(path.C_Str());*/
+				material->image = App->texture->LoadTexture(path.C_Str());
+				material->name = path.C_Str();
 			}
+
 			if (newMesh->HasTextureCoords(0))
 			{
 
@@ -344,11 +350,10 @@ bool DataFBX::LoadMesh(const char* path)
 
 			mesh->debugBox.SetNegativeInfinity();//
 			mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
-			/*App->scene_intro->CreateMesh(mesh->componentMesh);//??
 
-			App->scene_intro->sceneDebugInfo.faces += mesh->componentMesh->data->nFaces;
-			App->scene_intro->sceneDebugInfo.tris += mesh->componentMesh->data->nVeRtex/3;
-			App->scene_intro->sceneDebugInfo.vertex += mesh->componentMesh->data->nVertex;*/
+			App->scene_intro->sceneDebugInfo.faces += mesh->nFaces;
+			App->scene_intro->sceneDebugInfo.tris += mesh->nVertex;
+			App->scene_intro->sceneDebugInfo.vertex += mesh->nVertex;
 
 
 
