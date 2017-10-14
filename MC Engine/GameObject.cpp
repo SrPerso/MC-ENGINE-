@@ -79,13 +79,13 @@ void GameObject::DeleteChild(GameObject * objectToDelete)
 	
 		if (it != childs.end()) {
 			childs.erase(it);
-		}
-		
+		}		
 	}
 }
 
 void GameObject::DeleteChilds()
 {
+	this->childs.clear();
 }
 
 GameObject * GameObject::GetParent() const

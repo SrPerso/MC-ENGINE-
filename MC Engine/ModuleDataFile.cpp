@@ -235,6 +235,9 @@ bool DataFBX::LoadMesh(const char* path)
 {
 	bool ret = true;
 
+	
+	App->goManager->GetRoot()->DeleteChilds();
+
 	GameObject* gameObject = App->goManager->GetRoot()->CreateChild();
 
 
