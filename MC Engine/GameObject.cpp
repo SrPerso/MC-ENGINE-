@@ -7,6 +7,7 @@
 
 #include "CMesh.h"
 #include "CTexture.h"
+#include "CTransformation.h"
 
 GameObject::GameObject(GameObject* parent): parent(parent)
 {
@@ -134,6 +135,12 @@ Component * GameObject::CreateComponent(Component_Type type)
 	case COMP_MESH:
 
 		ret = new CMesh(this);
+		this->components.push_back(ret);
+
+		break;
+	case COMP_TRANSFORMATION:
+
+		ret = new CTransformation(this);
 		this->components.push_back(ret);
 
 		break;

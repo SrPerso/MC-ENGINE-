@@ -9,7 +9,7 @@
 #include "GameObject.h"
 #include "ModuleGameObjectManager.h"
 #include "Component.h"
-
+#include "CTransformation.h"
 #include "CMesh.h"
 #include "CTexture.h"
 #include "ModuleUI.h"
@@ -258,6 +258,7 @@ bool DataFBX::LoadMesh(const char* path)
 			mesh->Vertex = new float[mesh->nVertex * 3];
 			memcpy(mesh->Vertex, newMesh->mVertices, sizeof(float)* mesh->nVertex * 3);
 
+	
 
 			glGenBuffers(1, (GLuint*)&mesh->idVertex);
 			glBindBuffer(GL_ARRAY_BUFFER, mesh->idVertex);
@@ -291,6 +292,7 @@ bool DataFBX::LoadMesh(const char* path)
 
 			}// has faces			
 
+
 			if (newMesh->HasNormals())
 			{
 				mesh->normals = new float[mesh->nVertex * 3];
@@ -313,6 +315,7 @@ bool DataFBX::LoadMesh(const char* path)
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->idColors);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->colors, GL_STATIC_DRAW);
 			}
+
 			if (newMesh->HasTextureCoords(0))
 			{
 				CTexture* material = (CTexture*)gameObject->CreateComponent(COMP_TEXTURE);
@@ -350,6 +353,21 @@ bool DataFBX::LoadMesh(const char* path)
 			
 			
 			
+			 //TRANSFORMATION-------------- 
+			aiNode * node = scene->mRootNode;
+			CTransformation* transformation = (CTransformation*)gameObject->CreateComponent(COMP_TRANSFORMATION);
+
+			aiVector3D position;
+			aiVector3D scale;
+			aiQuaternion rotation;
+
+			node->mTransformation.Decompose(scale, rotation, position);
+
+			transformation->position = float3(position.x, position.y, position.z);
+			transformation->scale = float3(scale.x, scale.y, scale.z);
+			transformation->rotation = Quat(rotation.x, rotation.y, rotation.z, rotation.w);
+			//TRANSFORMATION-------------- 
+
 			
 			//TEXTURE COORDS
 
