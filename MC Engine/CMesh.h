@@ -25,7 +25,7 @@ public:
 	uint nNormals = 0;
 	
 
-	bool debugMode = true;
+	bool debugMode = false;
 	AABB debugBox;
 public:
 	DataMesh::~DataMesh();

@@ -46,12 +46,6 @@ bool ModuleSceneIntro::CleanUp()
 		delete GeometryObjects.front();
 		GeometryObjects.pop_front();
 	}
-
-	while (!MeshObjects.empty()) {
-
-		delete MeshObjects.front();
-		MeshObjects.pop_front();
-	}
 	
 	return true;
 }
@@ -135,12 +129,6 @@ void ModuleSceneIntro::CreateLine(vec3 Origin, vec3 destintation,Color color)
 	NormalsLines.push_back(line);
 }
 
-void ModuleSceneIntro::CreateMesh(ObjectMesh* Mesh)
-{
-	MeshObjects.push_back(Mesh);
-
-}
-
 
 void ModuleSceneIntro::Draw()
 {
@@ -148,13 +136,6 @@ void ModuleSceneIntro::Draw()
 	{
 		(*it)->Render();
 	}*/
-	//for (std::list<ObjectMesh*>::iterator it = MeshObjects.begin(); it != MeshObjects.end(); ++it)
-	//{
-	//	//App->renderer3D->Draw((**it));
-
-	//	if ((**it).debugMode == true) 
-	//		App->renderer3D->DrawDebug((*it));		
-	//}
 
 	for (std::list<PrimitiveLine*>::iterator it = NormalsLines.begin(); it != NormalsLines.end(); ++it)
 	{

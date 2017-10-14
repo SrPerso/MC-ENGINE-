@@ -29,6 +29,11 @@ bool ModuleUI::Start()
 	glewInit();
 	ImGui_ImplSdlGL3_Init(App->window->window);
 
+	debug_active = false;
+	debug_Tri_Normals = false;
+	debug_Vertex_Normals = true;
+	debug_Box = false;
+
 	return ret;
 }
 

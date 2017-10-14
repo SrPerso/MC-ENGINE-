@@ -305,16 +305,14 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 
 			if (componentMesh->IsEnable() == true && componentMesh != nullptr)
 			{
-				if (componentMesh->wire == true)
-					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				if (App->ui->sb_Wire_Face == true)
+					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);//WIRE
 				else
-					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);//WIRE
 
 
-				if (componentMesh->nNormals != 0 /*&& App->scene_intro->debugMode*/)
+				if (componentMesh->nNormals != 0)
 				{
-				
-
 					glEnableClientState(GL_NORMAL_ARRAY);
 					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idNormals);
 					glNormalPointer(GL_FLOAT, 0, NULL);
@@ -330,6 +328,12 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 				glDrawElements(GL_TRIANGLES, componentMesh->nIndex, GL_UNSIGNED_INT, NULL);
 
 				//--------------------- MESH----------------------------------------------
+
+				if (!App->ui->sb_Wire_Face == true)
+					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);//WIRE
+				else
+					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);//WIRE
+
 				//--------------------- TEXTURE----------------------------------------------
 				CTexture* componentTexture = (CTexture*)GOToDraw->GetComponent(COMP_MESH);
 			
@@ -356,9 +360,9 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 
 				EDglView();
 
-		/*		if (GOToDraw->debugMode == true) {
+			if (App->ui->debug_active == true) {
 					DrawDebug(componentMesh);
-				}*/
+				}
 
 
 				glDisableClientState(GL_COLOR_ARRAY);
@@ -374,16 +378,14 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 
 
 			}
-
 		}
 	}
-
 }
 
 
 void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 {
-	if (meshToDraw->debugMode == true && App->ui->debug_active == true)
+	if (meshToDraw->debugMode == true)
 	{
 		if (App->ui->debug_Tri_Normals == true && meshToDraw->nVertex > 2)
 		{
@@ -425,7 +427,6 @@ void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 
 			//glEnd();
 		}
-
 
 		if (App->ui->debug_Vertex_Normals == true && meshToDraw->nVertex > 0)
 		{

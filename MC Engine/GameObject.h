@@ -70,9 +70,5 @@ private:
 	GameObject* parent = nullptr;
 	bool isEnable = true;
 
-public:
-	bool debugMode = true;
-
-
 };
 #endif
