@@ -3,6 +3,7 @@
 
 #include "Component.h"
 #include "MathGeolib\Geometry\AABB.h"
+#include <string>
 class GameObject;
 class Component;
 
@@ -46,6 +47,8 @@ public:
 
 	void OnUpdate(float dt);
 	void OnEditor();
+
+	uint mesh_ID;
 };
 
 #endif

@@ -12,7 +12,7 @@ public:
 	//texture	
 
 	uint image=0;
-	std::string name;
+	std::string Textname;	
 public:
 	DataTexture::~DataTexture();
 };
@@ -26,6 +26,7 @@ public:
 
 	void OnUpdate(float dt);
 	void OnEditor();
+	uint Texture_ID; 
 };
 
 

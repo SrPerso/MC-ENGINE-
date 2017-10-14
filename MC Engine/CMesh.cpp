@@ -1,6 +1,6 @@
 #include "CMesh.h"
 
- 
+#include "GameObject.h"
 DataMesh::~DataMesh()
 {
 
@@ -20,7 +20,17 @@ DataMesh::~DataMesh()
 
 CMesh::CMesh(GameObject * object) :Component(object, COMP_MESH)
 {
-
+	if (object != nullptr)
+	{
+		this->mesh_ID = object->NumComponentTypeSize(this->type) + 1;
+	}
+	else
+	{
+		this->mesh_ID = 0;
+	}
+	//const char * preName = "Component Mesh _";
+	name= "Component Mesh_";
+	name.append(std::to_string(mesh_ID));
 }
 
 CMesh::~CMesh()
@@ -38,20 +48,20 @@ void CMesh::OnEditor()
 	/*
 	nVertex, idVertex, nIndex, idIndex, idNormals, nNormals, idColors, idTexCoords, ...
 	*/
-	if (ImGui::TreeNodeEx("Mesh Component"))
+	if (ImGui::TreeNodeEx(name.c_str()))
 	{
-		ImGui::Text("Number of Vertex: %i", nVertex);
-		ImGui::Text("Vertex ID: %i", idVertex);
+		ImGui::Text("\t Number of Vertex: %i", nVertex);
+		ImGui::Text("\t Vertex ID: %i", idVertex);
 
-		ImGui::Text("Number of Index: %i", nIndex);
-		ImGui::Text("Index ID: %i", idIndex);
+		ImGui::Text("\t Number of Index: %i", nIndex);
+		ImGui::Text("\t Index ID: %i", idIndex);
 
-		ImGui::Text("Number of Normals: %i", nNormals);
-		ImGui::Text("Normals ID: %i", idNormals);
+		ImGui::Text("\t Number of Normals: %i", nNormals);
+		ImGui::Text("\t Normals ID: %i", idNormals);
 
-		ImGui::Text("Colors ID: %i", idColors);
+		ImGui::Text("\t Colors ID: %i", idColors);
 
-		ImGui::Text("Texture Coords: %i", idTexCoords);
+	//	ImGui::Text("Texture Coords: %i", idTexCoords);
 
 		ImGui::TreePop();
 	}

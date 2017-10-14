@@ -31,6 +31,7 @@ public:
 private:
 
 	GameObject* root = nullptr;
+
 };
 
 #endif

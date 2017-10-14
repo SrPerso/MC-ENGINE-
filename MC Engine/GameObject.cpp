@@ -10,7 +10,19 @@
 
 GameObject::GameObject(GameObject* parent): parent(parent)
 {
-	name = "GameObject";	
+	name = "GameObject_";	
+
+	if (parent != nullptr)
+	{
+		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
+	}
+	else 
+	{
+		this->GameOIbject_ID = 0;
+	}
+
+	name.append(std::to_string(GameOIbject_ID));
+
 }
 
 GameObject::~GameObject()
@@ -158,6 +170,20 @@ Component * GameObject::GetComponent(Component_Type type)
 uint GameObject::ComponentVectorSize()
 {
 	return uint(components.size());
+}
+
+uint GameObject::NumComponentTypeSize(Component_Type type)
+{
+	uint ret = 0;
+
+	for (std::vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+	{
+		if ((*it)->getType() == type) 
+			ret++;
+		
+	}
+
+	return uint(ret);
 }
 
 void GameObject::DeleteComponent(Component * comp)

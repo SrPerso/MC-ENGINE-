@@ -3,6 +3,7 @@
 
 #include "Globals.h"
 #include "imGUI\imgui.h"
+#include <string>
 class GameObject;
 
 enum Component_Type {
@@ -28,6 +29,7 @@ public:
 	virtual void OnUpdate(float dt);
 
 protected:
+	std::string name;
 	Component_Type type;
 	GameObject* object = nullptr;
 	bool isEnable = true;

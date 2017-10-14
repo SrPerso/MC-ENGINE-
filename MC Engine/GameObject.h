@@ -44,6 +44,7 @@ public:
 	Component* CreateComponent(Component_Type type);
 	Component* GetComponent(Component_Type type);
 	uint ComponentVectorSize();
+	uint NumComponentTypeSize(Component_Type type);
 	void DeleteComponent(Component* comp);
 
 	//ENABLE/DISABLE............................
@@ -72,5 +73,6 @@ private:
 	GameObject* parent = nullptr;
 	bool isEnable = true;
 
+	uint GameOIbject_ID = 0;
 };
 #endif
