@@ -27,10 +27,10 @@ public:
 	void deleteGameObject(GameObject* GObject);
 
 
-
+	GameObject* root = nullptr;
 private:
 
-	GameObject* root = nullptr;
+	
 
 };
 

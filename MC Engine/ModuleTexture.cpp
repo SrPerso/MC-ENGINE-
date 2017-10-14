@@ -1,6 +1,8 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleTexture.h"
+#include "GameObject.h"
+#include "CTexture.h"
 #include "Devil\include\il.h"
 #include "Devil\include\ilu.h"
 #include "Devil\include\ilut.h"
@@ -116,5 +118,15 @@ uint ModuleTexture::LoadTexture(const char * imagepath)
 	correct = false;
 
 	return textureID;
+}
+
+void ModuleTexture::AttatchTexture(uint texture)
+{
+	for (std::vector<GameObject*>::iterator it = App->goManager->root->childs.begin(); it != App->goManager->root->childs.end(); it++)
+	{
+		
+			dynamic_cast<CTexture*>((*it)->GetComponent(COMP_TEXTURE))->image = texture;
+		
+	}
 }
 
