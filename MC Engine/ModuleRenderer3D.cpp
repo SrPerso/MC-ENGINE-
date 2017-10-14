@@ -301,7 +301,7 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 	{
 		if ((*it)->getType() == COMP_MESH) {
 
-			CMesh* componentMesh = (CMesh*)(*it);
+			CMesh* componentMesh = dynamic_cast<CMesh*>(*it);
 
 			if (componentMesh->IsEnable() == true && componentMesh != nullptr)
 			{
@@ -313,6 +313,7 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 
 				if (componentMesh->nNormals != 0)
 				{
+					glEnable(GL_LIGHTING);
 					glEnableClientState(GL_NORMAL_ARRAY);
 					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idNormals);
 					glNormalPointer(GL_FLOAT, 0, NULL);
@@ -335,23 +336,25 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);//WIRE
 
 				//--------------------- TEXTURE----------------------------------------------
-				CTexture* componentTexture = (CTexture*)GOToDraw->GetComponent(COMP_MESH);
+				
 			
-				if (componentTexture->IsEnable() == true)
+				if (componentMesh->idTexCoords>0)
 				{
-
+					CTexture* componentTexture = (CTexture*)GOToDraw->GetComponent(COMP_MESH);
 					if (componentTexture != nullptr)
 					{
 						glBindTexture(GL_TEXTURE_2D, componentTexture->image);
 					}
 					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-					glBindBuffer(GL_ARRAY_BUFFER, componentTexture->idTexCoords);
+					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idTexCoords);
 					glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 
-
+				}
+				if(componentMesh->idColors>0)
+				{
 
 					glEnableClientState(GL_COLOR_ARRAY);
-					glBindBuffer(GL_ARRAY_BUFFER, componentTexture->idColors);
+					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idColors);
 					glColorPointer(3, GL_FLOAT, 0, NULL);
 				}
 				//--------------------- TEXTURE----------------------------------------------

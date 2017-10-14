@@ -300,50 +300,54 @@ bool DataFBX::LoadMesh(const char* path)
 				glEnableVertexAttribArray(1);
 
 			}// has normals
-
-			CTexture* material = (CTexture*)gameObject->CreateComponent(COMP_TEXTURE);
-			material->Enable();
-
-
-			aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
-
-			if (newMaterial != nullptr) {
-
-				uint numTextures = newMaterial->GetTextureCount(aiTextureType_DIFFUSE);
-				aiString path;
-
-				aiReturn retu;
-				retu = newMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 			
-				if (retu == aiReturn_FAILURE)
-					App->ui->AddLogToConsole("fail getting texture");
-
-			/*	fullPath.append(path.C_Str());*/
-				material->image = App->texture->LoadTexture(path.C_Str());
-				material->name = path.C_Str();
-			}
-
-			if (newMesh->HasTextureCoords(0))
-			{
-
-				material->texCoords = new float[mesh->nVertex * 3];
-				memcpy(material->texCoords, newMesh->mTextureCoords[0], sizeof(float) * mesh->nVertex * 3);
-
-				glBindTexture(GL_TEXTURE_2D, material->image);
-				glGenBuffers(1, (GLuint*) &(material->idTexCoords));
-				glBindBuffer(GL_ARRAY_BUFFER, material->idTexCoords);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, material->texCoords, GL_STATIC_DRAW);
-			}
 			if (newMesh->HasVertexColors(0))
 			{
-				material->colors = new float[mesh->nVertex * 3];
-				memcpy(material->colors, newMesh->mColors, sizeof(float) * mesh->nVertex * 3);
+				mesh->colors = new float[mesh->nVertex * 3];
+				memcpy(mesh->colors, newMesh->mColors, sizeof(float) * mesh->nVertex * 3);
 
-				glGenBuffers(1, (GLuint*) &(material->idColors));
-				glBindBuffer(GL_ARRAY_BUFFER, material->idColors);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, material->colors, GL_STATIC_DRAW);
+				glGenBuffers(1, (GLuint*) &(mesh->idColors));
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->idColors);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->colors, GL_STATIC_DRAW);
+			}
+			if (newMesh->HasTextureCoords(0))
+			{
+				CTexture* material = (CTexture*)gameObject->CreateComponent(COMP_TEXTURE);
+				material->Enable();
+
+
+				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
+
+				if (newMaterial != nullptr) {
+
+					uint numTextures = newMaterial->GetTextureCount(aiTextureType_DIFFUSE);
+					aiString path;
+
+					aiReturn retu;
+					retu = newMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+
+					if (retu == aiReturn_FAILURE)
+						App->ui->AddLogToConsole("fail getting texture");
+
+					std::string fullPath = "Assets/";
+					fullPath.append(path.C_Str());
+					material->image = App->texture->LoadTexture(fullPath.c_str());
+					material->name = path.C_Str();
+				}
+
+				mesh->texCoords = new float[mesh->nVertex * 3];
+				memcpy(mesh->texCoords, newMesh->mTextureCoords[0], sizeof(float) * mesh->nVertex * 3);
+
+				glBindTexture(GL_TEXTURE_2D, material->image);
+				glGenBuffers(1, (GLuint*) &(mesh->idTexCoords));
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->idTexCoords);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->texCoords, GL_STATIC_DRAW);
 			}
 
+			
+			
+			
+			
 			//TEXTURE COORDS
 
 

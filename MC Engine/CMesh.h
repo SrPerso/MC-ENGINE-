@@ -23,6 +23,12 @@ public:
 	float* normals = nullptr;
 	uint idNormals = 0;
 	uint nNormals = 0;
+
+	uint idColors = 0;
+	float* colors = nullptr;
+
+	uint idTexCoords = 0;
+	float* texCoords = nullptr;
 	
 
 	bool debugMode = false;

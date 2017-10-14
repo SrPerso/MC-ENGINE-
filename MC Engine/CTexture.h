@@ -10,11 +10,7 @@ class DataTexture
 {
 public:
 	//texture
-	uint idColors = 0;
-	float* colors = nullptr;
-
-	uint idTexCoords = 0;
-	float* texCoords = nullptr;
+	
 
 	uint image=0;
 	std::string name;
