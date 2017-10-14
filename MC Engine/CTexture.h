@@ -9,14 +9,14 @@ class GameObject;
 class DataTexture 
 {
 public:
-	//texture
-	
+	//texture	
 
 	uint image=0;
 	std::string name;
 public:
 	DataTexture::~DataTexture();
 };
+
 
 class CTexture : public Component, public DataTexture
 {
@@ -25,7 +25,7 @@ public:
 	~CTexture();
 
 	void OnUpdate(float dt);
-
+	void OnEditor();
 };
 
 

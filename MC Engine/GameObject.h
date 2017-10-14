@@ -58,7 +58,9 @@ public:
 	//void PreUpdate();
 	void Update(float dt);
 	void cleanUp();
-	
+
+	void OnEditor();
+
 	//
 
 public:

@@ -45,6 +45,7 @@ public:
 	~CMesh();
 
 	void OnUpdate(float dt);
+	void OnEditor();
 };
 
 #endif

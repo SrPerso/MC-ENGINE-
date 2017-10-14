@@ -2,7 +2,7 @@
 #define __COMPONENT_H__
 
 #include "Globals.h"
-
+#include "imGUI\imgui.h"
 class GameObject;
 
 enum Component_Type {
@@ -12,8 +12,6 @@ enum Component_Type {
 	COMP_CAMERA,
 	COMP_SOUND
 };
-
-
 
 class Component{
 public:
@@ -26,7 +24,7 @@ public:
 	virtual void SetEnable(bool isEnable);
 	virtual void Enable();
 	virtual void Disable();
-
+	virtual void OnEditor();
 	virtual void OnUpdate(float dt);
 
 protected:

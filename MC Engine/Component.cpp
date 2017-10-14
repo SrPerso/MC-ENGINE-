@@ -36,6 +36,10 @@ void Component::Disable()
 	isEnable = false;
 }
 
+void Component::OnEditor()
+{
+}
+
 void Component::OnUpdate(float dt)
 {
 }

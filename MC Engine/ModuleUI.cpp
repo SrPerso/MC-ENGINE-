@@ -7,10 +7,14 @@
 #include "Math.h"
 #include "SDL/include/SDL_cpuinfo.h"
 #include "Primitive.h"
+
+#include "ModuleGameObjectManager.h"
+#include "GameObject.h"
+
+
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #pragma comment( lib, "Glew/libx86/glew32.lib" )
-
 
 
 ModuleUI::ModuleUI(Application * app, bool start_enabled) : Module(app, start_enabled)
@@ -102,10 +106,13 @@ update_status ModuleUI::Update(float dt)
 	if (show_Geometry_window)
 		ShowGeometryWindow();
 
+	if (show_Editor_window)
+		ShowEditorWindow();
+	
 	if (show_Debug_window)
 		ShowDebugWindow();
 
-	
+
 	return update_status(ret);
 }
 
@@ -550,6 +557,25 @@ IMGUI_API void ModuleUI::ShowDebugWindow(bool * p_open)
 	return IMGUI_API void();
 }
 
+IMGUI_API void ModuleUI::ShowEditorWindow(bool * p_open)
+{
+	ImGuiWindowFlags window_flags = 0;
+
+	//window_flags |= ImGuiWindowFlags_NoTitleBar;
+	//window_flags |= ImGuiWindowFlags_NoMove;
+//	window_flags |= ImGuiWindowFlags_NoResize;
+
+	if (ImGui::Begin("Editor", p_open, window_flags))
+	{
+		App->goManager->GetRoot()->OnEditor();
+
+
+		ImGui::End();
+	}
+
+	return IMGUI_API void();
+}
+
 
 //show the logs on Console..................................................
 void ModuleUI::AddLogToConsole(std::string toAdd)
@@ -840,19 +866,21 @@ void ModuleUI::HelpMenuBar()
 
 void ModuleUI::WindowMenuBar()
 {
-	ImGui::Checkbox("test window", &show_test_window);
+	//ImGui::Checkbox("test window", &show_test_window);
 
 	ImGui::Checkbox("Image Views", &show_ImageView_window);
 	
-	if (ImGui::MenuItem("Console", "Ctrl + Shift + C"))
-		show_Console_window = !show_Console_window;
+	ImGui::Checkbox("Debug Mode", &show_Debug_window);
 	
 	ImGui::Checkbox("Configuration", &show_Configuration_window);
 	
 	ImGui::Checkbox("Geometry", &show_Geometry_window);
 	//ImGui::Checkbox("MathTest", &show_MathTest_window);
 
-	ImGui::Checkbox("Debug Mode", &show_Debug_window);
+	ImGui::Checkbox("GameObjects Editor", &show_Editor_window);
+
+	if (ImGui::MenuItem("Console", "Ctrl + Shift + C"))
+		show_Console_window = !show_Console_window;
 }
 
 void ModuleUI::GeometryMenuSphere()
