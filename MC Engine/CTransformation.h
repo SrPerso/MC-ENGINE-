@@ -19,7 +19,7 @@ public:
 	void OnEditor();
 
 	void SetPos(float3);
-//	uint Transformation_ID; is not necesary (?)
+	uint Transformation_ID;// is not necesary (?)
 public:
 	float3 position;
 	float3 scale;

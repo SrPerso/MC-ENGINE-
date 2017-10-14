@@ -13,7 +13,7 @@ CTransformation::CTransformation(GameObject * object) :Component(object, COMP_TR
 		this->Transformation_ID = 0;
 	}
 
-	name = "Component Texture_";
+	name = "Component Transformation_";
 	name.append(std::to_string(Transformation_ID));
 }
 
@@ -29,32 +29,32 @@ void CTransformation::OnEditor()
 {
 	if (ImGui::TreeNodeEx(name.c_str()))
 	{
-		ImGui::Text("Position:");
+		ImGui::Text("   Position:");
 
-		ImGui::Text("X = %f",position.x);
+		ImGui::Text("\t X = %f",position.x);
 		ImGui::SameLine();
-		ImGui::Text("Y = %f", position.y);
+		ImGui::Text("\t Y = %f", position.y);
 		ImGui::SameLine(); 
-		ImGui::Text("Z = %f", position.z);
+		ImGui::Text("\t Z = %f", position.z);
 
 
-		ImGui::Text("Scale:");
+		ImGui::Text("   Scale:");
 
-		ImGui::Text("X = %f", scale.x);
+		ImGui::Text("\t X = %f", scale.x);
 		ImGui::SameLine();
-		ImGui::Text("Y = %f", scale.y);
+		ImGui::Text("\t Y = %f", scale.y);
 		ImGui::SameLine();
-		ImGui::Text("Z = %f", scale.z);
+		ImGui::Text("\t Z = %f", scale.z);
 
-		ImGui::Text("Rotation:");
+		ImGui::Text("   Rotation:");
 	
-		ImGui::Text("X = %f", rotation.x);
+		ImGui::Text("\t X = %f", rotation.x);
 		ImGui::SameLine();
-		ImGui::Text("Y = %f", rotation.y);
+		ImGui::Text("\t Y = %f", rotation.y);
 		ImGui::SameLine();
-		ImGui::Text("Z = %f", rotation.z);
+		ImGui::Text("\t Z = %f", rotation.z);
 		ImGui::SameLine();
-		ImGui::Text("W = %f", rotation.w);
+		ImGui::Text("\t W = %f", rotation.w);
 
 		ImGui::TreePop();
 	}
