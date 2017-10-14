@@ -153,7 +153,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glLineWidth(2.0f);
 
 	glEnd();
-	glBindTexture(GL_TEXTURE_2D, 0);
 	glLineWidth(1.0f);
 
 
@@ -296,6 +295,7 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 
 	//--------------------- MESH----------------------------------------------
 
+	glEnable(GL_TEXTURE_2D);
 
 	for (std::vector<Component*>::iterator it = GOToDraw->components.begin(); it != GOToDraw->components.end(); it++)
 	{
@@ -325,22 +325,14 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 				glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idVertex);
 				glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, componentMesh->idIndex);
-				glDrawElements(GL_TRIANGLES, componentMesh->nIndex, GL_UNSIGNED_INT, NULL);
-
 				//--------------------- MESH----------------------------------------------
-
-				if (!App->ui->sb_Wire_Face == true)
-					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);//WIRE
-				else
-					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);//WIRE
 
 				//--------------------- TEXTURE----------------------------------------------
 				
 			
 				if (componentMesh->idTexCoords>0)
 				{
-					CTexture* componentTexture = (CTexture*)GOToDraw->GetComponent(COMP_MESH);
+					CTexture* componentTexture = (CTexture*)GOToDraw->GetComponent(COMP_TEXTURE);
 					if (componentTexture != nullptr)
 					{
 						glBindTexture(GL_TEXTURE_2D, componentTexture->image);
@@ -357,11 +349,15 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idColors);
 					glColorPointer(3, GL_FLOAT, 0, NULL);
 				}
+
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, componentMesh->idIndex);
+				glDrawElements(GL_TRIANGLES, componentMesh->nIndex, GL_UNSIGNED_INT, NULL);
+
 				//--------------------- TEXTURE----------------------------------------------
 
 				// Viewwws
 
-				EDglView();
+				//EDglView();
 
 			if (App->ui->debug_active == true) {
 					DrawDebug(componentMesh);
@@ -376,10 +372,8 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 
 				glPopMatrix();
 				glEnd();
-				glBindTexture(GL_TEXTURE_2D, 0);
 				glUseProgram(0);
-
-
+				glBindTexture(GL_TEXTURE_2D, 0);
 			}
 		}
 	}
