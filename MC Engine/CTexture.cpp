@@ -30,6 +30,7 @@ void CTexture::OnEditor()
 	if (ImGui::TreeNodeEx(name.c_str()))
 	{
 		ImGui::Text("Texture path: %s", Textname);
+		ImGui::TreePop();
 	}
 }
 
