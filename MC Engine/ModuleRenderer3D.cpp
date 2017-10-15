@@ -301,7 +301,14 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 	{
 		if ((*it)->getType() == COMP_MESH) {
 
+
+
 			CMesh* componentMesh = dynamic_cast<CMesh*>(*it);
+
+			if (App->ui->debug_active == true) {
+				DrawDebug(componentMesh);
+			}
+
 
 			if (componentMesh->IsEnable() == true && componentMesh != nullptr)
 			{
@@ -361,10 +368,7 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 
 				//EDglView();
 
-			if (App->ui->debug_active == true) {
-					DrawDebug(componentMesh);
-				}
-
+		
 
 				glDisableClientState(GL_COLOR_ARRAY);
 				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
