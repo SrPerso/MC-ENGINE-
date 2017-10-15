@@ -144,9 +144,9 @@ IMGUI_API void ModuleUI::ShowConsoleWindow(bool * p_open)
 	}
                         
 	
-	const char * test = "aaA";
+	const char * test = "CONSOLE";
 	ImGui::Text("%s", test);
-
+	ImGui::Separator();
 	if (ImGui::Button("Clear"))
 	{
 		consoleTxt.clear();
@@ -229,8 +229,8 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 	if (ImGui::CollapsingHeader("Window"))
 		WindowSetingsC();
 
-	if (ImGui::CollapsingHeader("Hardware")) {}
-		//menu.HardwareConfig();
+	if (ImGui::CollapsingHeader("Hardware"))
+		HardwareSetingsC();
 
 	if (ImGui::CollapsingHeader("Audio"))
 		AudioSetingsC();
@@ -372,12 +372,14 @@ IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 {
 	ImGuiWindowFlags window_flags = 0;
 	
-	//window_flags |= ImGuiWindowFlags_NoTitleBar;
-	window_flags |= ImGuiWindowFlags_NoMove;
+	window_flags |= ImGuiWindowFlags_NoTitleBar;
+	//window_flags |= ImGuiWindowFlags_NoMove;
 	window_flags |= ImGuiWindowFlags_NoResize;
 
 	if (ImGui::Begin("Render Setings", p_open, window_flags))
-	{		
+	{
+		ImGui::Text("RENDER SETINGS:");
+		ImGui::Separator();
 
 		if (ImGui::Checkbox("LIGHTING", &sb_Lighting)) 
 			App->renderer3D->EDglView();		
@@ -414,7 +416,11 @@ IMGUI_API void ModuleUI::ShowGeometryWindow(bool * p_open)
 {
 	ImGuiWindowFlags window_flags = 0;
 
-	if (!ImGui::Begin("Geometry", p_open))
+	window_flags |= ImGuiWindowFlags_NoTitleBar;
+	//window_flags |= ImGuiWindowFlags_NoMove;
+//	window_flags |= ImGuiWindowFlags_NoResize;
+
+	if (!ImGui::Begin("Geometry", p_open, window_flags))
 	{
 		// Early out if the window is collapsed, as an optimization.
 		ImGui::End();
@@ -423,7 +429,8 @@ IMGUI_API void ModuleUI::ShowGeometryWindow(bool * p_open)
 
 	ImGui::PushItemWidth(-100);
 
-	ImGui::Text("Geometry");
+	ImGui::Text("GEOMETRY WINDOW:");
+	ImGui::Separator();
 
 	if (ImGui::CollapsingHeader("Cube"))
 	{	
@@ -527,12 +534,14 @@ IMGUI_API void ModuleUI::ShowDebugWindow(bool * p_open)
 
 	ImGuiWindowFlags window_flags = 0;
 
-	//window_flags |= ImGuiWindowFlags_NoTitleBar;
-	window_flags |= ImGuiWindowFlags_NoMove;
+	window_flags |= ImGuiWindowFlags_NoTitleBar;
+	//window_flags |= ImGuiWindowFlags_NoMove;
 	window_flags |= ImGuiWindowFlags_NoResize;
 
 	if (ImGui::Begin("Debug Window", p_open, window_flags))
 	{
+		ImGui::Text("DEBUG WINDOW:");
+		ImGui::Separator();
 		ImGui::Checkbox("Debug ON", &debug_active);
 		ImGui::SameLine();
 		ImGui::Checkbox("Tri Normals", &debug_Tri_Normals);
@@ -549,6 +558,13 @@ IMGUI_API void ModuleUI::ShowDebugWindow(bool * p_open)
 		ImGui::SameLine();
 		ImGui::Text("Vertex:");		ImGui::SameLine();
 		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(App->scene_intro->sceneDebugInfo.vertex).c_str(), nullptr);
+		ImGui::SameLine();
+		ImGui::Text("FPS:");		ImGui::SameLine();
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string((int)App->GetFPS()).c_str(), nullptr);
+		ImGui::SameLine();
+		ImGui::Text("Ms:");		ImGui::SameLine();
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string((int)App->GetMs()).c_str(), nullptr);
+
 
 		ImGui::End();
 	}
@@ -561,12 +577,14 @@ IMGUI_API void ModuleUI::ShowEditorWindow(bool * p_open)
 {
 	ImGuiWindowFlags window_flags = 0;
 
-	//window_flags |= ImGuiWindowFlags_NoTitleBar;
+	window_flags |= ImGuiWindowFlags_NoTitleBar;
 	//window_flags |= ImGuiWindowFlags_NoMove;
-//	window_flags |= ImGuiWindowFlags_NoResize;
+	//window_flags |= ImGuiWindowFlags_NoResize;
 
 	if (ImGui::Begin("Editor", p_open, window_flags))
 	{
+		ImGui::Text("EDITOR WINDOW:");
+		ImGui::Separator();
 		App->goManager->GetRoot()->OnEditor();
 
 
@@ -597,9 +615,43 @@ void ModuleUI::HardwareSetingsC()
 	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(compiled.minor).c_str(), nullptr);
 	ImGui::SameLine();	ImGui::Text("."); ImGui::SameLine();
 	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(compiled.patch).c_str(), nullptr);
-	ImGui::Text(" ");
-	ImGui::Separator();
 
+	ImGui::Text("imGUI");
+	ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(1).c_str(), nullptr);
+	ImGui::SameLine();	ImGui::Text("."); ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(51).c_str(), nullptr);
+
+	ImGui::Text("MathGeoLib");
+	ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(1).c_str(), nullptr);
+	ImGui::SameLine();	ImGui::Text("."); ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(5).c_str(), nullptr);
+
+	ImGui::Text("Bullet");
+	ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(2).c_str(), nullptr);
+	ImGui::SameLine();	ImGui::Text("."); ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, "X", nullptr);
+
+	ImGui::Text("Glew");
+	ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(2).c_str(), nullptr);
+	ImGui::SameLine();	ImGui::Text("."); ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(1).c_str(), nullptr);
+	ImGui::SameLine();	ImGui::Text("."); ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(0).c_str(), nullptr);
+
+	ImGui::Text("Assimp");
+	ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(4).c_str(), nullptr);
+	ImGui::SameLine();	ImGui::Text("."); ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(0).c_str(), nullptr);
+	ImGui::SameLine();	ImGui::Text("."); ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, std::to_string(1).c_str(), nullptr);
+	ImGui::Text(" ");
+
+	ImGui::Separator();
 
 	ImGui::Text("CPUs:");
 	ImGui::SameLine();
