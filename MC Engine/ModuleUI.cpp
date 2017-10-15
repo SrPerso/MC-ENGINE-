@@ -87,6 +87,8 @@ update_status ModuleUI::Update(float dt)
 
 	/*  *Execute Windows**************************************	*/
 
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT &&App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
+	show_Console_window = !show_Console_window;
 
 	if (show_test_window)
 		ImGui::ShowTestWindow();
@@ -237,8 +239,8 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 
 	if (ImGui::CollapsingHeader("Render"))
 		RenderSetings();
-	//if (ImGui::CollapsingHeader("Devices"))
-	//	DevicesSetingsC();
+	if (ImGui::CollapsingHeader("Input"))
+		DevicesSetingsC();
 
 
 	ImGui::End();
@@ -544,8 +546,8 @@ IMGUI_API void ModuleUI::ShowDebugWindow(bool * p_open)
 		ImGui::Separator();
 		ImGui::Checkbox("Debug ON", &debug_active);
 		ImGui::SameLine();
-		ImGui::Checkbox("Tri Normals", &debug_Tri_Normals);
-		ImGui::SameLine();
+	/*	ImGui::Checkbox("Tri Normals", &debug_Tri_Normals);
+		ImGui::SameLine();*/
 		ImGui::Checkbox("Vertex Normals", &debug_Vertex_Normals);
 		ImGui::SameLine();
 		ImGui::Checkbox("Eclosing Box", &debug_Box);
@@ -1284,6 +1286,48 @@ void ModuleUI::RenderSetings()
 	if (ImGui::Checkbox("WIRE", &sb_Wire_Face)) {
 		App->renderer3D->EDglView();
 	}
+}
+void ModuleUI::DevicesSetingsC()
+{
+	ImGui::Text("Mouse Status:");
+	if (App->input->MouseConected())
+	{
+		ImGui::SameLine();
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, "CONECTED", nullptr);
+	}
+	else {
+		ImGui::SameLine();
+		ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
+	}
+
+	ImGui::Text("Screen Status:");
+	if (App->input->ScreenConected())
+	{
+		ImGui::SameLine();
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, "CONECTED", nullptr);
+	}
+	else{
+		ImGui::SameLine();
+		ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
+	}
+	ImGui::Text("Speakers Status:");
+	if (App->input->SpeakersConected())
+	{
+		ImGui::SameLine();
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, "CONECTED", nullptr);
+	}
+	else {
+		ImGui::SameLine();
+		ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
+	}
+	ImGui::Text("Social life:");
+	ImGui::SameLine();
+	ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
+
+	ImGui::Text("Mouse Position: [%d, %d]", App->input->GetMouseX(), App->input->GetMouseY());
+	ImGui::Text("Mouse Motion: [%d, %d]", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
+
+
 }
 void ModuleUI::Draw()
 {

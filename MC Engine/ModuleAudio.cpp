@@ -25,6 +25,7 @@ bool ModuleAudio::Init( )
 	{
 		LOG("SDL_INIT_AUDIO could not initialize! SDL_Error: %s\n", SDL_GetError());
 		App->ui->AddLogToConsole("SDL_INIT_AUDIO could not initialize!");
+		App->input->SpeakersConectedDisable();
 		ret = false;
 	}
 

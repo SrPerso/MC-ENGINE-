@@ -170,24 +170,36 @@ bool ModuleInput::CleanUp()
 
 bool ModuleInput::KeyBoardConected()
 {
-	bool ret = false;
+	bool ret = true;
 	return ret;
 }
 
 bool ModuleInput::SpeakersConected()
 {
-	bool ret = false;
+	bool ret = true;
+	ret = speakersConected;
+	return ret;
+}
+
+bool ModuleInput::ScreenConected()
+{
+	bool ret = true;
 	return ret;
 }
 
 bool ModuleInput::HeadphonesConected()
 {
-	bool ret = false;
+	bool ret = true;
 	return ret;
 }
 
 bool ModuleInput::MouseConected()
 {
-	bool ret = false;
+	bool ret = true;
 	return ret;
+}
+
+void ModuleInput::SpeakersConectedDisable()
+{
+	speakersConected = false;
 }
