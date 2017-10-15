@@ -1,10 +1,11 @@
 #ifndef __GAMEOBJECT_H__
 #define __GAMEOBJECT_H__
 
+#include "Globals.h"
 #include "Component.h"
+
 #include <string>
 #include <vector>
-#include "Globals.h"
 
 class GameObject
 {
@@ -32,6 +33,8 @@ public:
 
 	GameObject* GetParent()const;
 	
+	void newParent(GameObject*newparent);
+	void AddChild(GameObject* child);
 	//TO ADD 
 	// to move the objects and change the parent is necesary a function newparent(gameobject)
 
@@ -41,6 +44,7 @@ public:
 	Component* CreateComponent(Component_Type type);
 	Component* GetComponent(Component_Type type);
 	uint ComponentVectorSize();
+	uint NumComponentTypeSize(Component_Type type);
 	void DeleteComponent(Component* comp);
 
 	//ENABLE/DISABLE............................
@@ -52,12 +56,14 @@ public:
 
 	//ACTIONS BASIC.............................
 
-	/* TODOOOOOOOO
-	void Init();
-	void PreUpdate();
+	//void PreUpdate();
 	void Update(float dt);
 	void cleanUp();
-	*/
+
+	void OnEditor();
+
+	//
+
 public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> childs;
@@ -66,6 +72,7 @@ private:
 	std::string name;
 	GameObject* parent = nullptr;
 	bool isEnable = true;
-};
 
+	uint GameOIbject_ID = 0;
+};
 #endif

@@ -1,6 +1,7 @@
 #ifndef __Module_GAMEOBJECTMANAGER_H__
 #define __Module_GAMEOBJECTMANAGER_H__
 
+
 #include "Globals.h"
 #include "Module.h"
 
@@ -26,10 +27,11 @@ public:
 	void deleteGameObject(GameObject* GObject);
 
 
-
+	GameObject* root = nullptr;
 private:
 
-	GameObject* root = nullptr;
+	
+
 };
 
 #endif

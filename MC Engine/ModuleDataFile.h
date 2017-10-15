@@ -9,7 +9,6 @@
 
 #include "Glew\include\glew.h"
 
-
 #include "imgui\imgui.h"
 
 class DataJSON {
@@ -40,6 +39,7 @@ public:
 	void AddDouble(JSON_Object*  object, const char* name, double number);
 	void AddBool(JSON_Object*  object, const char* name, bool boolean);
 	void AddString(JSON_Object*  object, const char* name, const char* string);
+
 
 private: 
 

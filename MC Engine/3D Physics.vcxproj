@@ -80,8 +80,11 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Brofiler\Brofiler.h" />
+    <ClInclude Include="CMesh.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="CTexture.h" />
+    <ClInclude Include="CTransformation.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
@@ -170,8 +173,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="CMesh.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="CTexture.cpp" />
+    <ClCompile Include="CTransformation.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="imGUI\imgui.cpp" />

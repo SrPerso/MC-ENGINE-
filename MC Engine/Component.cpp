@@ -1,7 +1,10 @@
 #include "Component.h"
 
+
+#include "Application.h"
 Component::Component(GameObject * object, Component_Type type):object(object),type(type)
 {
+
 }
 
 Component::~Component()
@@ -31,4 +34,12 @@ void Component::Enable()
 void Component::Disable()
 {
 	isEnable = false;
+}
+
+void Component::OnEditor()
+{
+}
+
+void Component::OnUpdate(float dt)
+{
 }

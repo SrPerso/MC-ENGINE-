@@ -309,6 +309,15 @@
     <ClInclude Include="ModuleGameObjectManager.h">
       <Filter>Engine\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="CMesh.h">
+      <Filter>Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CTexture.h">
+      <Filter>Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CTransformation.h">
+      <Filter>Engine\GameObjects\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -484,6 +493,15 @@
     </ClCompile>
     <ClCompile Include="ModuleGameObjectManager.cpp">
       <Filter>Engine\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="CMesh.cpp">
+      <Filter>Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="CTexture.cpp">
+      <Filter>Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="CTransformation.cpp">
+      <Filter>Engine\GameObjects\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

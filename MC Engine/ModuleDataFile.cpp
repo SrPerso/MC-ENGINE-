@@ -1,13 +1,18 @@
 #include "ModuleDataFile.h"
 #include "Application.h"
-#include "ModuleSceneIntro.h"
+#include "Module.h"
 
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
 #include "Assimp\include\postprocess.h"
 #include "Assimp\include\cfileio.h"
-
-
+#include "GameObject.h"
+#include "ModuleGameObjectManager.h"
+#include "Component.h"
+#include "CTransformation.h"
+#include "CMesh.h"
+#include "CTexture.h"
+#include "ModuleUI.h"
 
 #include "Glew\include\glew.h"
 
@@ -229,21 +234,31 @@ bool DataFBX::CleanUp()
 bool DataFBX::LoadMesh(const char* path)
 {
 	bool ret = true;
- 
+
+	
+	App->goManager->GetRoot()->DeleteChilds();
+
+	GameObject* gameObject = App->goManager->GetRoot()->CreateChild();
+
+
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
-
 			//create mesh
+
+			CMesh* mesh = (CMesh*)gameObject->CreateComponent(COMP_MESH);
+			mesh->Enable();
+
 			aiMesh* newMesh = scene->mMeshes[i];
-			ObjectMesh* mesh = new ObjectMesh;
 
 			mesh->nVertex = newMesh->mNumVertices;
 			mesh->Vertex = new float[mesh->nVertex * 3];
 			memcpy(mesh->Vertex, newMesh->mVertices, sizeof(float)* mesh->nVertex * 3);
+
+	
 
 			glGenBuffers(1, (GLuint*)&mesh->idVertex);
 			glBindBuffer(GL_ARRAY_BUFFER, mesh->idVertex);
@@ -252,7 +267,7 @@ bool DataFBX::LoadMesh(const char* path)
 			App->ui->AddLogToConsole("Load Mesh");
 			LOG("loaded mesh %i vertex", mesh->nVertex);
 
-			if (newMesh->HasFaces()) 
+			if (newMesh->HasFaces())
 			{
 				mesh->nFaces = newMesh->mNumFaces;
 
@@ -267,7 +282,7 @@ bool DataFBX::LoadMesh(const char* path)
 					}
 					else
 					{
-						memcpy(&mesh->Index[i * 3], newMesh->mFaces[i].mIndices, sizeof(float)* 3);					
+						memcpy(&mesh->Index[i * 3], newMesh->mFaces[i].mIndices, sizeof(float) * 3);
 					}
 				}
 
@@ -277,6 +292,7 @@ bool DataFBX::LoadMesh(const char* path)
 
 			}// has faces			
 
+
 			if (newMesh->HasNormals())
 			{
 				mesh->normals = new float[mesh->nVertex * 3];
@@ -285,8 +301,11 @@ bool DataFBX::LoadMesh(const char* path)
 				glGenBuffers(1, (GLuint*)&(mesh->idNormals)); // 
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->idNormals);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->normals, GL_STATIC_DRAW);
+				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+				glEnableVertexAttribArray(1);
 
 			}// has normals
+			
 			if (newMesh->HasVertexColors(0))
 			{
 				mesh->colors = new float[mesh->nVertex * 3];
@@ -297,32 +316,79 @@ bool DataFBX::LoadMesh(const char* path)
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->colors, GL_STATIC_DRAW);
 			}
 
-			//TEXTURE COORDS
 			if (newMesh->HasTextureCoords(0))
 			{
+				CTexture* material = (CTexture*)gameObject->CreateComponent(COMP_TEXTURE);
+				material->Enable();
+
+
+				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
+
+				if (newMaterial != nullptr) {
+
+					uint numTextures = newMaterial->GetTextureCount(aiTextureType_DIFFUSE);
+					aiString path;
+
+					aiReturn retu;
+					retu = newMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+
+					if (retu == aiReturn_FAILURE)
+						App->ui->AddLogToConsole("fail getting texture");
+
+					std::string fullPath = "Assets/";
+					fullPath.append(path.C_Str());
+					material->image = App->texture->LoadTexture(fullPath.c_str());
+					material->Textname = path.C_Str();
+				}
+
 				mesh->texCoords = new float[mesh->nVertex * 3];
 				memcpy(mesh->texCoords, newMesh->mTextureCoords[0], sizeof(float) * mesh->nVertex * 3);
 
+				glBindTexture(GL_TEXTURE_2D, material->image);
 				glGenBuffers(1, (GLuint*) &(mesh->idTexCoords));
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->idTexCoords);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->texCoords, GL_STATIC_DRAW);
 			}
 
+			
+			
+			
+			 //TRANSFORMATION-------------- 
+			aiNode * node = scene->mRootNode;
+			CTransformation* transformation = (CTransformation*)gameObject->CreateComponent(COMP_TRANSFORMATION);
+
+			aiVector3D position;
+			aiVector3D scale;
+			aiQuaternion rotation;
+
+			node->mTransformation.Decompose(scale, rotation, position);
+
+			transformation->position = float3(position.x, position.y, position.z);
+			transformation->scale = float3(scale.x, scale.y, scale.z);
+			transformation->rotation = Quat(rotation.x, rotation.y, rotation.z, rotation.w);
+			//TRANSFORMATION-------------- 
+
+			
+			//TEXTURE COORDS
+
+
 
 			mesh->debugBox.SetNegativeInfinity();//
 			mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
-			App->scene_intro->CreateMesh(mesh);
+
+			App->camera->CenterCameraToObject(&mesh->debugBox);
+
 
 			App->scene_intro->sceneDebugInfo.faces += mesh->nFaces;
-			App->scene_intro->sceneDebugInfo.tris += mesh->nVertex/3;
+			App->scene_intro->sceneDebugInfo.tris += mesh->nVertex;
 			App->scene_intro->sceneDebugInfo.vertex += mesh->nVertex;
 
-		
+
 
 		}//for	
 		//scene.
 
-		aiReleaseImport(scene); 
+		aiReleaseImport(scene);
 		return true;
 		LOG("Mesh %s loaded Ok", path);
 	}//if scene

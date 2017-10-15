@@ -42,6 +42,9 @@ public:
 	IMGUI_API void ShowImageViewWindow(bool* p_open = NULL);
 	IMGUI_API void ShowGeometryWindow(bool* p_open = NULL);
 	IMGUI_API void ShowDebugWindow(bool* p_open = NULL);
+
+	IMGUI_API void ShowEditorWindow(bool* p_open = NULL);
+
 	void AddLogToConsole(std::string toAdd);
 
 private:
@@ -72,10 +75,11 @@ private:
 	bool show_Console_window = true;
 	bool show_Configuration_window = false;
 	bool show_Config_window = false;
-	bool show_ImageView_window = false;
+	bool show_ImageView_window = true;
 	bool show_TeamInfo_window = false;
 	bool show_Geometry_window = false;
-	bool show_Debug_window = false;
+	bool show_Debug_window = true;
+	bool show_Editor_window = true;
 
 	//Geometry Test
 	float cubex = 0, cubey = 0, cubez = 0;
@@ -105,11 +109,10 @@ public: //
 	bool sb_Texture_2D = true;
 	
 //debug
-	bool debug_active = true;
-	bool debug_Object_Box = true;
-	bool debug_Tri_Normals = true;
-	bool debug_Vertex_Normals = true;
-	bool debug_Box = true;
+	bool debug_active;
+	bool debug_Tri_Normals;
+	bool debug_Vertex_Normals;
+	bool debug_Box;
 
 };
 

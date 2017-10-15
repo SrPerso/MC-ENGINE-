@@ -3,6 +3,10 @@
 #include "Globals.h"
 #include "glmath.h"
 
+
+
+#define ZOOM_FACTOR 1.6
+
 class ModuleCamera3D : public Module
 {
 public:
@@ -18,6 +22,8 @@ public:
 	void Move(const vec3 &Movement);
 	float* GetViewMatrix();
 
+	void CenterCameraToObject(AABB* box);
+	void CenterCamera();
 private:
 
 	void CalculateViewMatrix();
@@ -25,7 +31,7 @@ private:
 public:
 	
 	vec3 X, Y, Z, Position, Reference;
-
+	AABB* GeometryCentre;
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;

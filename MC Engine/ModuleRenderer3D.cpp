@@ -1,30 +1,30 @@
 #include "Globals.h"
 #include "Application.h"
+
 #include "ModuleRenderer3D.h"
+#include "ModuleSceneIntro.h"
+#include "ModuleUI.h"
 
 #include "Glew\include\glew.h"
 #include "SDL\include\SDL_opengl.h"
 #include "parson\parson.h"
-#include "ModuleSceneIntro.h"
-#include "ModuleUI.h"
 
+//
+#include "CMesh.h"
+#include "CTexture.h"
+#include "Component.h"
+#include "GameObject.h"
+//
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
 #include "MathGeolib\Geometry\Triangle.h"
 #include "MathGeolib\Math\float4x4.h"
 
-
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
-
-
-
 #pragma comment (lib, "Glew/libx86/glew32.lib") 
-
 #pragma comment (lib, "glu32.lib") 
 #pragma comment (lib, "opengl32.lib") 
-
-
 
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -152,128 +152,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	glLineWidth(2.0f);
 
-	/*GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
-	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
-		for (int j = 0; j < CHECKERS_WIDTH; j++) {
-			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-			checkImage[i][j][0] = (GLubyte)c;
-			checkImage[i][j][1] = (GLubyte)c;  checkImage[i][j][2] = (GLubyte)c;
-			checkImage[i][j][3] = (GLubyte)255;
-		}
-	}
-
-	
-	uint ImageName = 0;
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &ImageName);
-	glBindTexture(GL_TEXTURE_2D, ImageName);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);*/
-
-
-	//GLuint image = loadBMP_custom("lena.bmp");
-
-	/*GLuint image = App->texture->LoadTexture("Baker_house.png");
-
-	glBegin(GL_TRIANGLES);
-	glEnable(GL_TEXTURE_2D);
-
-	glBindTexture(GL_TEXTURE_2D, image);
-
-	//Direct Mode
-	//front
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(0, 1, 0);//(1,1)
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(0, 0, 0);//(0,1)
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(1, 0, 0);//(0,0)
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(0, 1, 0);//(1,1)
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(1, 0, 0);//(0,0)
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(1, 1, 0);//(0,1)
-						//right
-
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(1, 1, 0);//(0,0)
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(1, 0, 0);//(0,1)
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(1, 1, 1);//(1,0)
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(1, 1, 1);//(1,0)
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(1, 0, 0);//(0,1)
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(1, 0, 1);//(1,1)
-
-						//left
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(0, 0, 1);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(0, 1, 0);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(0, 1, 1);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(0, 0, 1);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(0, 0, 0);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(0, 1, 0);
-	//up
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(0, 1, 0);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(1, 1, 0);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(1, 1, 1);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(0, 1, 0);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(1, 1, 1);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(0, 1, 1);
-	//down
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(1, 0, 0);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(0, 0, 0);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(0, 0, 1);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(1, 0, 1);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(1, 0, 0);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(0, 0, 1);
-	//back
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(0, 0, 1);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(0, 1, 1);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(1, 1, 1);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(1, 0, 1);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(0, 0, 1);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(1, 1, 1);
-	*/
-
-	//Indices Mode:
-
-
-	
-	
-
 	glEnd();
-	glBindTexture(GL_TEXTURE_2D, 0);
 	glLineWidth(1.0f);
 
 
@@ -284,11 +163,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	App->ui->Draw();
-
-	//if (App->ui->sb_Texture_2D)
-	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//else if (!App->ui->sb_Texture_2D)
-	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	App->scene_intro->Draw();
 
@@ -416,199 +290,222 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
-void ModuleRenderer3D::Draw(ObjectMesh meshToDraw)
-{
-	GLuint image = App->texture->LoadTexture("Baker_house.png");
-	if (meshToDraw.wire == true)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	else
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
+{	
 
-	if (meshToDraw.nNormals != 0 /*&& App->scene_intro->debugMode*/)
+	//--------------------- MESH----------------------------------------------
+
+	glEnable(GL_TEXTURE_2D);
+
+	for (std::vector<Component*>::iterator it = GOToDraw->components.begin(); it != GOToDraw->components.end(); it++)
 	{
-		glEnable(GL_LIGHTING);
-		App->ui->sb_Lighting = true;
+		if ((*it)->getType() == COMP_MESH) {
 
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idNormals);
-		glNormalPointer(GL_FLOAT, 0, NULL);
+			CMesh* componentMesh = dynamic_cast<CMesh*>(*it);
 
-	}
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_ELEMENT_ARRAY_BUFFER);
-	glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idVertex);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
+			if (componentMesh->IsEnable() == true && componentMesh != nullptr)
+			{
+				if (App->ui->sb_Wire_Face == true)
+					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);//WIRE
+				else
+					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);//WIRE
 
 
-	if (meshToDraw.texCoords != nullptr) 
-	{
+				if (componentMesh->nNormals != 0)
+				{
+					glEnable(GL_LIGHTING);
+					glEnableClientState(GL_NORMAL_ARRAY);
+					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idNormals);
+					glNormalPointer(GL_FLOAT, 0, NULL);
 
+				}
 
-		glBindTexture(GL_TEXTURE_2D, image);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idTexCoords);
-		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+				glEnableClientState(GL_VERTEX_ARRAY);
+				glEnableClientState(GL_ELEMENT_ARRAY_BUFFER);
+				glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idVertex);
+				glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	}
-	if (meshToDraw.colors != nullptr) 
-	{
-		glEnableClientState(GL_COLOR_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, meshToDraw.idColors);
-		glColorPointer(3, GL_FLOAT, 0, NULL);
-	}
+				//--------------------- MESH----------------------------------------------
 
-	///
-
-	
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshToDraw.idIndex);
-		glDrawElements(GL_TRIANGLES, meshToDraw.nIndex, GL_UNSIGNED_INT, NULL);
-
-
-		glDisableClientState(GL_COLOR_ARRAY);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_NORMAL_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glDisableClientState(GL_ELEMENT_ARRAY_BUFFER);
+				//--------------------- TEXTURE----------------------------------------------
 		
-		glPopMatrix();
-		glEnd();
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glUseProgram(0);
-
-}
-
-void ModuleRenderer3D::DrawDebug(ObjectMesh* meshToDraw)
-{
-	if (meshToDraw->debugMode==true && App->ui->debug_active == true)
-	{
-			if (App->ui->debug_Tri_Normals == true && meshToDraw->nVertex > 2)
-			{
-				for (int i = 0; i < meshToDraw->nVertex; ++i)
+				if (componentMesh->idColors>0 && App->ui->sb_Color_Material)
 				{
-					if (meshToDraw->normals[i] > -5000) {
-					
-					float originX = meshToDraw->Vertex[i];
-					float originY = meshToDraw->Vertex[i + 1];
-					float originZ = meshToDraw->Vertex[i + 2];
-				
-					float destX = meshToDraw->normals[i] + meshToDraw->Vertex[i];
-					float destY = meshToDraw->normals[i + 1] + meshToDraw->Vertex[i + 1];
-					float destZ = meshToDraw->normals[i + 2] + meshToDraw->Vertex[i + 2];
 
-					PrimitiveLine normal(vec3{ originX ,originY,originZ}, vec3{ destX, destY, destZ });
+					glEnableClientState(GL_COLOR_ARRAY);
+					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idColors);
+					glColorPointer(3, GL_FLOAT, 0, NULL);
+				}
 
-					normal.color = Red;
-					normal.Render();
+				if (componentMesh->idTexCoords>0 && App->ui->sb_Texture_2D)
+				{
+					CTexture* componentTexture = (CTexture*)GOToDraw->GetComponent(COMP_TEXTURE);
+					if (componentTexture != nullptr)
+					{
+						glBindTexture(GL_TEXTURE_2D, componentTexture->image);
 					}
-					i += 2;
+					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idTexCoords);
+					glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+
 				}
-			}//debug_Tri_Normals
-			if (App->ui->debug_Vertex_Normals == true && meshToDraw->nVertex >0)
-			{
-				for (int i = 0; i < meshToDraw->nVertex; ++i)
-				{
-					float3 a = float3(meshToDraw->Vertex[i], meshToDraw->Vertex[i + 1], meshToDraw->Vertex[i + 2]);
-					float3 b = float3(meshToDraw->Vertex[i + 3], meshToDraw->Vertex[i + 4], meshToDraw->Vertex[i + 5]);
-					float3 c = float3(meshToDraw->Vertex[i + 6], meshToDraw->Vertex[i + 7], meshToDraw->Vertex[i + 8]);
-
-					Triangle face(float3(a), float3(b), float3(c));
-
-					float3 center = (a + b + c) / (float)3;
-					float3 normalized = Cross(b - a, c - a);
-					normalized = normalized.Normalized();
-
-					float destX = center.x + normalized.x;
-					float destY = center.y + normalized.y;
-					float destZ = center.z + normalized.z;
-
-					PrimitiveLine normal(vec3{ center.x, center.y, center.z }, vec3{ destX,destY,destZ });
-					normal.color = Blue;
-					normal.Render();
-
-					i += 8;
-				}
-			}//debug_Vertex_Normals		
-
-			if (App->ui->debug_Object_Box == true && App->ui->debug_Box == true)
-			{
-				float3 vertex[8];
-				meshToDraw->debugBox.GetCornerPoints(vertex);
-
-				glPushMatrix();
-
-				glMultMatrixf((float*)float4x4::identity.Transposed().ptr());
+			
 	
-				glColor3f(Green.r, Green.g, Green.b);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-				glBegin(GL_QUADS);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, componentMesh->idIndex);
+				glDrawElements(GL_TRIANGLES, componentMesh->nIndex, GL_UNSIGNED_INT, NULL);
+		
+				//--------------------- TEXTURE----------------------------------------------
 
-				//1
-				glVertex3fv((float*)&vertex[1]);
-				glVertex3fv((float*)&vertex[5]);
-				glVertex3fv((float*)&vertex[7]);
-				glVertex3fv((float*)&vertex[3]);
-				//2
-				glVertex3fv((float*)&vertex[4]);
-				glVertex3fv((float*)&vertex[0]);
-				glVertex3fv((float*)&vertex[2]);
-				glVertex3fv((float*)&vertex[6]);
-				//3
-				glVertex3fv((float*)&vertex[5]);
-				glVertex3fv((float*)&vertex[4]);
-				glVertex3fv((float*)&vertex[6]);
-				glVertex3fv((float*)&vertex[7]);
-				//4
-				glVertex3fv((float*)&vertex[0]);
-				glVertex3fv((float*)&vertex[1]);
-				glVertex3fv((float*)&vertex[3]);
-				glVertex3fv((float*)&vertex[2]);
-				//5
-				glVertex3fv((float*)&vertex[3]);
-				glVertex3fv((float*)&vertex[7]);
-				glVertex3fv((float*)&vertex[6]);
-				glVertex3fv((float*)&vertex[2]);
-				//6
-				glVertex3fv((float*)&vertex[0]);
-				glVertex3fv((float*)&vertex[4]);
-				glVertex3fv((float*)&vertex[5]);
-				glVertex3fv((float*)&vertex[1]);
+				// Viewwws
 
-				glEnd();
+				//EDglView();
+
+			if (App->ui->debug_active == true) {
+					DrawDebug(componentMesh);
+				}
+
+
+				glDisableClientState(GL_COLOR_ARRAY);
+				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+				glDisableClientState(GL_NORMAL_ARRAY);
+				glDisableClientState(GL_VERTEX_ARRAY);
+				glDisableClientState(GL_ELEMENT_ARRAY_BUFFER);
 
 				glPopMatrix();
-							
-				//glColor4d(Green.r, Green.g, Green.b,100);
+				glEnd();
+				glUseProgram(0);
+				glBindTexture(GL_TEXTURE_2D, 0);
+			}
+		}
+	}
+}
 
 
-			}// box
+void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
+{
+
+		if (App->ui->debug_Tri_Normals == true && meshToDraw->nVertex > 2)
+		{
+
+		/*	glLineWidth(2.0f);
+			glBegin(GL_LINES);
+
+			for (int i = 0; i < meshToDraw->nVertex*3; ++i)
+			{*/
+		/*		float3 vertex(&meshToDraw->Vertex[i * 3]);
+				float3 vertex2(&meshToDraw->Vertex[i * 6]);
+				float3 vertex3(&meshToDraw->Vertex[i * 9]);
+
+				Triangle face(float3(a), float3(b), float3(c));
+
+*/
+			//	float3 a = float3(meshToDraw->Vertex[i], meshToDraw->Vertex[i + 1], meshToDraw->Vertex[i + 2]);
+			//	float3 b = float3(meshToDraw->Vertex[i + 3], meshToDraw->Vertex[i + 4], meshToDraw->Vertex[i + 5]);
+			//	float3 c = float3(meshToDraw->Vertex[i + 6], meshToDraw->Vertex[i + 7], meshToDraw->Vertex[i + 8]);
+
+			//	Triangle face(float3(a), float3(b), float3(c));
+
+			//	float3 center = (a + b + c) / (float)3;
+			//	float3 normal = Cross(b - a, c - a);
+			//	normal = normal.Normalized();
+
+			//	float3 pnormal(center + (normal*NORMAL_SIZE));
+
+			//	glColor3f(Red.r, Red.g, Red.b);
+			//	glVertex3f(center.x, center.y, center.z);
+
+			//	glColor3f(White.r, White.g, White.b);
+			//	glVertex3f(pnormal.x, pnormal.y, pnormal.z);
+
+			//	glColor3f(White.r, White.g, White.b);
+			//	i += 8;
+			//}
+
+
+			//glEnd();
+		}
+
+		if (App->ui->debug_Vertex_Normals == true && meshToDraw->nVertex > 0)
+		{
+
+			glLineWidth(2.0f);
+			glBegin(GL_LINES);
+
+			for (uint i = 0; i < meshToDraw->nVertex; ++i)
+			{
+				float3 vertex(&meshToDraw->Vertex[i * 3]);
+				float3 normal(&meshToDraw->normals[i * 3]);
+				float3 pnormal(vertex + (normal*NORMAL_SIZE));
+
+				glColor4f(Blue.r, Blue.g, Blue.b, 255);
+				glVertex3f(vertex.x, vertex.y, vertex.z);
+				//if(sb_Color_Material)
+				glColor3f(White.r, White.g, White.b);
+				glVertex3f(pnormal.x, pnormal.y, pnormal.z);
+
+		
+				glColor4f(White.r, White.g, White.b, 0);
+			}
+			glVertexPointer(3, GL_FLOAT, 0, NULL);
+			glDrawElements(GL_TRIANGLES, meshToDraw->nIndex, GL_UNSIGNED_INT, NULL);
+			glEnd();
+		}
+
+		if (App->ui->debug_Box == true)
+		{
+			float3 vertex[8];
+			meshToDraw->debugBox.GetCornerPoints(vertex);
+
+			glPushMatrix();
+
+			glMultMatrixf((float*)float4x4::identity.Transposed().ptr());
+
+			glColor3f(Green.r, Green.g, Green.b);
+
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+			glBegin(GL_QUADS);
+
+			//1
+			glVertex3fv((float*)&vertex[1]);
+			glVertex3fv((float*)&vertex[5]);
+			glVertex3fv((float*)&vertex[7]);
+			glVertex3fv((float*)&vertex[3]);
+			//2
+			glVertex3fv((float*)&vertex[4]);
+			glVertex3fv((float*)&vertex[0]);
+			glVertex3fv((float*)&vertex[2]);
+			glVertex3fv((float*)&vertex[6]);
+			//3
+			glVertex3fv((float*)&vertex[5]);
+			glVertex3fv((float*)&vertex[4]);
+			glVertex3fv((float*)&vertex[6]);
+			glVertex3fv((float*)&vertex[7]);
+			//4
+			glVertex3fv((float*)&vertex[0]);
+			glVertex3fv((float*)&vertex[1]);
+			glVertex3fv((float*)&vertex[3]);
+			glVertex3fv((float*)&vertex[2]);
+			//5
+			glVertex3fv((float*)&vertex[3]);
+			glVertex3fv((float*)&vertex[7]);
+			glVertex3fv((float*)&vertex[6]);
+			glVertex3fv((float*)&vertex[2]);
+			//6
+			glVertex3fv((float*)&vertex[0]);
+			glVertex3fv((float*)&vertex[4]);
+			glVertex3fv((float*)&vertex[5]);
+			glVertex3fv((float*)&vertex[1]);
+
 	
-	}
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+			glEnd();
+		}// box
 
 
+		glPopMatrix();
+	
 }
 
-void ModuleRenderer3D::TextureView()
-{
-	if (App->ui->sb_Texture_2D)
-		glEnable(GL_LINE);
-	else if (!App->ui->sb_Texture_2D)
-		glDisable(GL_LINE);
-
-}
-
-void ModuleRenderer3D::WireSet(bool wireon)
-{
-
-	for (std::list<Primitive*>::iterator it = App->scene_intro->GeometryObjects.begin(); it != App->scene_intro->GeometryObjects.end(); ++it)
-	{
-		(*it)->wire = wireon;
-	}
-	for (std::list<ObjectMesh*>::iterator it = App->scene_intro->MeshObjects.begin(); it != App->scene_intro->MeshObjects.end(); ++it)
-	{
-		(*it)->wire = wireon;
-	}
-
-
-}

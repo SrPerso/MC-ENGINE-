@@ -14,11 +14,13 @@ class ModuleTexture : public Module {
 public:
 	ModuleTexture(Application* app, bool start_enabled = true);
 	~ModuleTexture();
-	bool Innit(JSON_Object * data);
+	bool Init();
 	bool CleanUp(JSON_Object * data);
 
 	uint LoadTexture(const char* imagepath);
+	void AttatchTexture(uint texture);
 	bool correct=true;
+
 };
 
 

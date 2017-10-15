@@ -7,10 +7,14 @@
 #include "Math.h"
 #include "SDL/include/SDL_cpuinfo.h"
 #include "Primitive.h"
+
+#include "ModuleGameObjectManager.h"
+#include "GameObject.h"
+
+
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #pragma comment( lib, "Glew/libx86/glew32.lib" )
-
 
 
 ModuleUI::ModuleUI(Application * app, bool start_enabled) : Module(app, start_enabled)
@@ -28,6 +32,11 @@ bool ModuleUI::Start()
 	App->ui->AddLogToConsole("Loading UI Engine");
 	glewInit();
 	ImGui_ImplSdlGL3_Init(App->window->window);
+
+	debug_active = false;
+	debug_Tri_Normals = false;
+	debug_Vertex_Normals = true;
+	debug_Box = false;
 
 	return ret;
 }
@@ -97,10 +106,13 @@ update_status ModuleUI::Update(float dt)
 	if (show_Geometry_window)
 		ShowGeometryWindow();
 
+	if (show_Editor_window)
+		ShowEditorWindow();
+	
 	if (show_Debug_window)
 		ShowDebugWindow();
 
-	
+
 	return update_status(ret);
 }
 
@@ -360,11 +372,11 @@ IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 {
 	ImGuiWindowFlags window_flags = 0;
 	
-	window_flags |= ImGuiWindowFlags_NoTitleBar;
+	//window_flags |= ImGuiWindowFlags_NoTitleBar;
 	window_flags |= ImGuiWindowFlags_NoMove;
 	window_flags |= ImGuiWindowFlags_NoResize;
 
-	if (ImGui::Begin("Image View", p_open, window_flags))
+	if (ImGui::Begin("Render Setings", p_open, window_flags))
 	{		
 
 		if (ImGui::Checkbox("LIGHTING", &sb_Lighting)) 
@@ -376,7 +388,7 @@ IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 		
 		ImGui::SameLine();
 		if (ImGui::Checkbox("TEXTURE 2D", &sb_Texture_2D)) 
-			App->renderer3D->TextureView();
+			App->renderer3D->EDglView();
 		
 		ImGui::SameLine();
 		if (ImGui::Checkbox("DEPTH TEST", &sb_Depth_Test)) 
@@ -390,7 +402,7 @@ IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 		if (ImGui::Checkbox("WIRE", &sb_Wire_Face)) {
 			App->renderer3D->EDglView();
 		}
-		//	App->renderer3D->WireSet(sb_Wire_Face);
+
 
 		ImGui::End();
 	}	
@@ -541,6 +553,25 @@ IMGUI_API void ModuleUI::ShowDebugWindow(bool * p_open)
 		ImGui::End();
 	}
 
+
+	return IMGUI_API void();
+}
+
+IMGUI_API void ModuleUI::ShowEditorWindow(bool * p_open)
+{
+	ImGuiWindowFlags window_flags = 0;
+
+	//window_flags |= ImGuiWindowFlags_NoTitleBar;
+	//window_flags |= ImGuiWindowFlags_NoMove;
+//	window_flags |= ImGuiWindowFlags_NoResize;
+
+	if (ImGui::Begin("Editor", p_open, window_flags))
+	{
+		App->goManager->GetRoot()->OnEditor();
+
+
+		ImGui::End();
+	}
 
 	return IMGUI_API void();
 }
@@ -835,19 +866,21 @@ void ModuleUI::HelpMenuBar()
 
 void ModuleUI::WindowMenuBar()
 {
-	ImGui::Checkbox("test window", &show_test_window);
+	//ImGui::Checkbox("test window", &show_test_window);
 
 	ImGui::Checkbox("Image Views", &show_ImageView_window);
 	
-	if (ImGui::MenuItem("Console", "Ctrl + Shift + C"))
-		show_Console_window = !show_Console_window;
+	ImGui::Checkbox("Debug Mode", &show_Debug_window);
 	
 	ImGui::Checkbox("Configuration", &show_Configuration_window);
 	
 	ImGui::Checkbox("Geometry", &show_Geometry_window);
 	//ImGui::Checkbox("MathTest", &show_MathTest_window);
 
-	ImGui::Checkbox("Debug Mode", &show_Debug_window);
+	ImGui::Checkbox("GameObjects Editor", &show_Editor_window);
+
+	if (ImGui::MenuItem("Console", "Ctrl + Shift + C"))
+		show_Console_window = !show_Console_window;
 }
 
 void ModuleUI::GeometryMenuSphere()
@@ -1175,7 +1208,30 @@ void ModuleUI::EditMenuBar()
 
 void ModuleUI::RenderSetings() 
 {
-	
+
+	if (ImGui::Checkbox("LIGHTING", &sb_Lighting))
+		App->renderer3D->EDglView();
+
+	ImGui::SameLine();
+	if (ImGui::Checkbox("COLOR MATERIAL", &sb_Color_Material))
+		App->renderer3D->EDglView();
+
+
+	if (ImGui::Checkbox("TEXTURE 2D", &sb_Texture_2D))
+		App->renderer3D->EDglView();
+
+	ImGui::SameLine();
+	if (ImGui::Checkbox("DEPTH TEST", &sb_Depth_Test))
+		App->renderer3D->EDglView();
+
+
+	if (ImGui::Checkbox("CULL FACE", &sb_Cull_Face))
+		App->renderer3D->EDglView();
+
+	ImGui::SameLine();
+	if (ImGui::Checkbox("WIRE", &sb_Wire_Face)) {
+		App->renderer3D->EDglView();
+	}
 }
 void ModuleUI::Draw()
 {
