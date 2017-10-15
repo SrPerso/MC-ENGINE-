@@ -45,7 +45,7 @@ public:
 
 
 public:
-	SDL_Window* GetWindow() const;
+
 	void ResizeWindow(int width, int height);
 	void SetFullscreen(bool fullscreen);
 	void SetBrightness(float value);
@@ -53,10 +53,7 @@ public:
 	void SetFullDesktop(bool fullDesktop);
 
 public:
-	//The window we'll be rendering to
 	SDL_Window* window;
-
-	//The surface contained by the window
 	SDL_Surface* screen_surface;
 
 private:

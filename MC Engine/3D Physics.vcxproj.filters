@@ -523,5 +523,8 @@
     <None Include="MathGeoLib\Math\Matrix.inl">
       <Filter>Engine\Tools\MathGeoLib</Filter>
     </None>
+    <None Include="Game\config.json">
+      <Filter>Engine</Filter>
+    </None>
   </ItemGroup>
 </Project>

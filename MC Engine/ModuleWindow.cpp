@@ -35,8 +35,10 @@ bool ModuleWindow::Init()
 		ret = false;
 	}
 	
-	else {
-		if (configObject == nullptr) {
+	else 
+	{
+		if (configObject == nullptr) 
+		{
 
 			//Create window
 			width = SCREEN_WIDTH * SCREEN_SIZE;
@@ -71,11 +73,21 @@ bool ModuleWindow::Init()
 
 		}
 
-		else {
+		else 
+		{
 
 			width = json_object_dotget_number(data, "width")*SCREEN_SIZE;
 			height = json_object_dotget_number(data, "height")*SCREEN_SIZE;
-			fullscreen = json_object_dotget_boolean(data, "fullscreen");
+			App->ui->WindowSetingsS.fullscreen = json_object_dotget_boolean(data, "fullscreen");
+			SetFullscreen(json_object_dotget_boolean(data, "fullscreen"));
+			SetBrightness(json_object_dotget_number(data, "brightness"));
+
+			App->ui->WindowSetingsS.fullDesktop = json_object_dotget_boolean(data, "fullDesktop");
+			SetFullDesktop(json_object_dotget_boolean(data, "fullDesktop"));
+
+			App->ui->WindowSetingsS.borderless = json_object_dotget_boolean(data, "borderless");
+			SetBorderless(json_object_dotget_boolean(data, "borderless"));
+
 
 			Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
@@ -110,7 +122,7 @@ bool ModuleWindow::Init()
 		if (window == NULL)
 		{
 			LOG("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-			App->ui->AddLogToConsole("[ERROR]- Window could not be created!");
+			App->ui->AddLogToConsole("[ERROR]-Window could not be created!");
 			ret = false;
 		}
 		else

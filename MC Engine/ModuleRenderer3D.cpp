@@ -8,7 +8,6 @@
 #include "Glew\include\glew.h"
 #include "SDL\include\SDL_opengl.h"
 #include "parson\parson.h"
-
 //
 #include "CMesh.h"
 #include "CTexture.h"
@@ -62,7 +61,8 @@ bool ModuleRenderer3D::Init()
 	if(ret == true)
 	{
 		//Use Vsync
-		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0) {
+		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0)
+		{
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 			App->ui->AddLogToConsole("[ERROR]- Warning: Unable to set VSync!");
 		}
@@ -174,9 +174,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 bool ModuleRenderer3D::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
+
 	App->ui->AddLogToConsole("Destroying 3D Renderer");
-
-
 	SDL_GL_DeleteContext(context);
 
 	return true;
@@ -184,8 +183,8 @@ bool ModuleRenderer3D::CleanUp()
 
 GLuint ModuleRenderer3D::loadBMP_custom(const char * imagepath)
 {
-	unsigned char header[54]; // Each BMP file begins by a 54-bytes header
-	unsigned int dataPos;     // Position in the file where the actual data begins
+	unsigned char header[54]; 
+	unsigned int dataPos;     
 	unsigned int width, height;
 	unsigned int imageSize;
 
@@ -217,7 +216,7 @@ GLuint ModuleRenderer3D::loadBMP_custom(const char * imagepath)
 	height = *(int*)&(header[0x16]);
 
 	if (imageSize == 0)    
-		imageSize = width*height * 3; // 3 : one byte for each Red, Green and Blue component
+		imageSize = width*height * 3; 
 	if (dataPos == 0)      
 		dataPos = 54;
 
@@ -230,10 +229,8 @@ GLuint ModuleRenderer3D::loadBMP_custom(const char * imagepath)
 	GLuint textureID;
 	glGenTextures(1, &textureID);
 
-	// "Bind" the newly created texture : all future texture functions will modify this texture
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
-	// Give the image to OpenGL
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -274,7 +271,6 @@ void ModuleRenderer3D::EDglView()
 	else if (!App->ui->sb_Texture_2D)
 		glDisable(GL_TEXTURE_2D);
 
-
 }
 
 void ModuleRenderer3D::OnResize(int width, int height)
@@ -292,20 +288,21 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 {	
-
 	//--------------------- MESH----------------------------------------------
 
 	glEnable(GL_TEXTURE_2D);
 
 	for (std::vector<Component*>::iterator it = GOToDraw->components.begin(); it != GOToDraw->components.end(); it++)
 	{
-		if ((*it)->getType() == COMP_MESH) {
+		if ((*it)->getType() == COMP_MESH)
+		{
 
 
 
 			CMesh* componentMesh = dynamic_cast<CMesh*>(*it);
 
-			if (App->ui->debug_active == true) {
+			if (App->ui->debug_active == true) 
+			{
 				DrawDebug(componentMesh);
 			}
 
@@ -364,12 +361,6 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 		
 				//--------------------- TEXTURE----------------------------------------------
 
-				// Viewwws
-
-				//EDglView();
-
-		
-
 				glDisableClientState(GL_COLOR_ARRAY);
 				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 				glDisableClientState(GL_NORMAL_ARRAY);
@@ -381,7 +372,8 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 				glUseProgram(0);
 				glBindTexture(GL_TEXTURE_2D, 0);
 			}
-			else {
+			else
+			{
 				App->ui->AddLogToConsole("[ERROR]- Mesh component does not exist");
 			}
 		}
@@ -416,9 +408,11 @@ void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 			glDrawElements(GL_TRIANGLES, meshToDraw->nIndex, GL_UNSIGNED_INT, NULL);
 			glEnd();
 		}
+
 		else if (meshToDraw->nVertex < 0) {
 			App->ui->AddLogToConsole("[ERROR]- The number of verteh is down 0");
 		}
+
 		if (App->ui->debug_Box == true)
 		{
 			float3 vertex[8];
@@ -464,13 +458,11 @@ void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 			glVertex3fv((float*)&vertex[4]);
 			glVertex3fv((float*)&vertex[5]);
 			glVertex3fv((float*)&vertex[1]);
-
-	
+				
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 			glEnd();
 		}// box
-
 
 		glPopMatrix();
 	

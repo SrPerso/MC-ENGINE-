@@ -28,15 +28,46 @@ ModuleUI::~ModuleUI()
 
 bool ModuleUI::Start()
 {
+
 	bool ret = true;
 	App->ui->AddLogToConsole("-START- Loading UI Engine");
 	glewInit();
 	ImGui_ImplSdlGL3_Init(App->window->window);
+	App->window->SetFullscreen(WindowSetingsS.fullscreen);
+	JSON_Value* configValue = json_parse_file("config.json");
+	JSON_Object* configObject = json_value_get_object(configValue);
+	JSON_Object* data = json_object_dotget_object(configObject, this->name.c_str());
 
-	debug_active = false;
-	debug_Tri_Normals = false;
-	debug_Vertex_Normals = true;
-	debug_Box = false;
+	if (data) 
+	{
+
+	show_test_window = json_object_dotget_boolean(data, "show_test_window");
+	show_Console_window = json_object_dotget_boolean(data, "show_Console_window");
+	show_Configuration_window = json_object_dotget_boolean(data, "show_Configuration_window");
+	show_Config_window = json_object_dotget_boolean(data, "show_Config_window");
+	show_ImageView_window = json_object_dotget_boolean(data, "show_ImageView_window");
+	show_TeamInfo_window = json_object_dotget_boolean(data, "show_TeamInfo_window");
+	show_Geometry_window = json_object_dotget_boolean(data, "show_Geometry_window");
+	show_Debug_window = json_object_dotget_boolean(data, "show_Debug_window");
+	show_Editor_window = json_object_dotget_boolean(data, "show_Editor_window");
+	debug_active = json_object_dotget_boolean(data, "debug_active");
+	debug_Vertex_Normals = json_object_dotget_boolean(data, "debug_Vertex_Normals");
+	debug_Box = json_object_dotget_boolean(data, "debug_Box");
+	sb_Depth_Test = json_object_dotget_boolean(data, "sb_Depth_Test");
+	sb_Cull_Face = json_object_dotget_boolean(data, "sb_Cull_Face");
+	sb_Wire_Face = json_object_dotget_boolean(data, "sb_Wire_Face");
+	sb_Lighting = json_object_dotget_boolean(data, "sb_Lighting");
+	sb_Color_Material = json_object_dotget_boolean(data, "sb_Color_Material");
+	sb_Texture_2D = json_object_dotget_boolean(data, "sb_Texture_2D");
+	}
+
+	else 
+	{
+		debug_active = false;
+		debug_Vertex_Normals = true;
+		debug_Box = false;
+	}
+
 
 	return ret;
 }
@@ -89,10 +120,12 @@ update_status ModuleUI::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT &&App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
 	{ 
-		if (show_Console_window) {
+		if (show_Console_window) 
+		{
 			AddLogToConsole("Close Console");
 		}
-		else {
+		else
+		{
 			AddLogToConsole("Open Console");
 		}
 
@@ -142,16 +175,11 @@ IMGUI_API void ModuleUI::ShowConsoleWindow(bool * p_open)
 	ImGuiWindowFlags window_flags = 0;
 
 	window_flags |= ImGuiWindowFlags_NoTitleBar;
-	//window_flags |= ImGuiWindowFlags_NoMove;
-	//window_flags |= ImGuiWindowFlags_NoResize;
-
-
+	
 	if (!ImGui::Begin("Console", p_open, window_flags))
 	{
-		//todo
-		ImGui::End();
-	}
-                        
+			ImGui::End();
+	}                      
 	
 	const char * test = "CONSOLE";
 	ImGui::Text("%s", test);
@@ -203,6 +231,7 @@ IMGUI_API void ModuleUI::ShowTeamInfoWindow(bool * p_open)
 	{
 		ShellExecuteA(NULL, "open", "https://github.com/marcsamper", NULL, NULL, SW_SHOWNORMAL);
 	}
+
 	if (ImGui::MenuItem(" - Carlos Peralta Sorolla"))
 	{
 		ShellExecuteA(NULL, "open", "https://github.com/SrPerso/", NULL, NULL, SW_SHOWNORMAL);
@@ -286,7 +315,8 @@ IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 			App->renderer3D->EDglView();
 
 		ImGui::SameLine();
-		if (ImGui::Checkbox("WIRE", &sb_Wire_Face)) {
+		if (ImGui::Checkbox("WIRE", &sb_Wire_Face)) 
+		{
 			App->renderer3D->EDglView();
 		}
 
@@ -625,6 +655,9 @@ void ModuleUI::WindowSetingsC()
 	}
 	if (ImGui::Checkbox("Fullscreen", &WindowSetingsS.fullscreen))
 	{
+		if(WindowSetingsS.fullscreen)
+		App->window->SetFullscreen(WindowSetingsS.fullscreen);
+		else
 		App->window->SetFullscreen(WindowSetingsS.fullscreen);
 	}
 	ImGui::SameLine();
@@ -652,8 +685,8 @@ void ModuleUI::WindowSetingsC()
 
 void ModuleUI::AplicationSetingsC()
 {
-	static char buf1[64] = ""; ImGui::InputText("App Name", buf1, 64);
-	static char buf2[64] = ""; ImGui::InputText("Organization", buf1, 64);
+	//static char buf1[64] = ""; ImGui::InputText("App Name", buf1, 64);
+	//static char buf2[64] = ""; ImGui::InputText("Organization", buf1, 64);
 
 	if (FPSData.size() >= MAX_FPSMS_COUNT)
 	{
@@ -705,7 +738,8 @@ void ModuleUI::AudioSetingsC()
 	}
 	if (ImGui::TreeNode("Global"))
 	{
-		if (ImGui::Button("Mute", { 50,20 })) {
+		if (ImGui::Button("Mute", { 50,20 }))
+		{
 
 			AudioSetingsS.MasterVolume = 0;
 			Mix_Volume(-1, AudioSetingsS.MasterVolume);
@@ -770,7 +804,8 @@ void ModuleUI::AudioSetingsC()
 
 void ModuleUI::HelpMenuBar()
 {
-	if (ImGui::MenuItem("About..")) {
+	if (ImGui::MenuItem("About.."))
+	{
 		show_TeamInfo_window = !show_TeamInfo_window;
 	}
 
@@ -1130,7 +1165,6 @@ void ModuleUI::EditMenuBar()
 {
 	if (ImGui::MenuItem("Undo", "Ctrl + Z")) {} //conect to IObjects
 	if (ImGui::MenuItem("Redo", "Ctrl + Y")) {}
-
 	ImGui::Separator;
 	if (ImGui::MenuItem("Cut", "Ctrl + X")) {}
 	if (ImGui::MenuItem("Copy", "Ctrl + C")) {}
@@ -1165,13 +1199,14 @@ void ModuleUI::RenderSetings()
 		App->renderer3D->EDglView();
 
 	ImGui::SameLine();
-	if (ImGui::Checkbox("WIRE", &sb_Wire_Face)) {
+	if (ImGui::Checkbox("WIRE", &sb_Wire_Face))
+	{
 		App->renderer3D->EDglView();
 	}
 }
 void ModuleUI::DevicesSetingsC()
 {
-	ImGui::Text("Mouse Status:");
+	/*//ImGui::Text("Mouse Status:");
 	if (App->input->MouseConected())
 	{
 		ImGui::SameLine();
@@ -1182,7 +1217,7 @@ void ModuleUI::DevicesSetingsC()
 		ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
 	}
 
-	/*ImGui::Text("Keyboard Status:"); //Not Workings
+	ImGui::Text("Keyboard Status:"); //Not Workings
 	if (App->input->KeyBoardConected())
 	{
 		ImGui::SameLine();
@@ -1213,6 +1248,7 @@ void ModuleUI::DevicesSetingsC()
 	//	ImGui::SameLine();
 	//	ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
 	//}
+
 	ImGui::Text("Social life:");
 	ImGui::SameLine();
 	ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
