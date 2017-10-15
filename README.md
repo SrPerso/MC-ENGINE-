@@ -58,6 +58,10 @@ Limitations:
 * Warranty
 
 # CHANGELOG
+* V0.6
+Added: 
+- Jason update
+- bug fixes
 
 * V0.5
 Added:
