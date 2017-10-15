@@ -59,6 +59,13 @@ Limitations:
 
 # CHANGELOG
 
+* V0.5
+Added:
+- Drag and drop pngs
+- Added debug mode ( normals and unclosing box)
+- New controls
+- Added debug info
+
 * V0.4
 Added:
 - Drag and drop FBX to the engine
