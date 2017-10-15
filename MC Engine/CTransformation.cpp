@@ -1,4 +1,4 @@
-#include "CTransformation.h"
+﻿#include "CTransformation.h"
 #include "GameObject.h"
 
 
@@ -13,7 +13,7 @@ CTransformation::CTransformation(GameObject * object) :Component(object, COMP_TR
 		this->Transformation_ID = 0;
 	}
 
-	name = "Component Transformation_";
+	name = "- Component Transformation_";
 	name.append(std::to_string(Transformation_ID));
 }
 

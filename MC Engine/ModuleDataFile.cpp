@@ -251,6 +251,7 @@ bool DataFBX::LoadMesh(const char* path)
 		
 			GameObject* gameObjectSon = gameObject->CreateChild();
 
+
 			CMesh* mesh = (CMesh*)gameObjectSon->CreateComponent(COMP_MESH);
 			mesh->Enable();
 
@@ -358,6 +359,9 @@ bool DataFBX::LoadMesh(const char* path)
 			
 			 //TRANSFORMATION-------------- 
 			aiNode * node = scene->mRootNode;
+
+		
+
 			CTransformation* transformation = (CTransformation*)gameObjectSon->CreateComponent(COMP_TRANSFORMATION);
 
 			aiVector3D position;
@@ -369,6 +373,14 @@ bool DataFBX::LoadMesh(const char* path)
 			transformation->position = float3(position.x, position.y, position.z);
 			transformation->scale = float3(scale.x, scale.y, scale.z);
 			transformation->rotation = Quat(rotation.x, rotation.y, rotation.z, rotation.w);
+
+			if (i == 1) {	
+			CTransformation* transformationParent = (CTransformation*)gameObject->CreateComponent(COMP_TRANSFORMATION);
+			
+			transformationParent->position = float3(position.x, position.y, position.z);
+			transformationParent->scale = float3(scale.x, scale.y, scale.z);
+			transformationParent->rotation = Quat(rotation.x, rotation.y, rotation.z, rotation.w);
+			}
 			//TRANSFORMATION-------------- 
 
 			

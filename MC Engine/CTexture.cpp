@@ -1,4 +1,4 @@
-#include "CTexture.h"
+﻿#include "CTexture.h"
 #include "GameObject.h"
 
 CTexture::CTexture(GameObject * object) :Component(object, COMP_TEXTURE)
@@ -12,7 +12,7 @@ CTexture::CTexture(GameObject * object) :Component(object, COMP_TEXTURE)
 		this->Texture_ID = 0;
 	}
 
-	name = "Component Texture_";
+	name = "- Component Texture_";
 	name.append(std::to_string(Texture_ID));
 }
 
