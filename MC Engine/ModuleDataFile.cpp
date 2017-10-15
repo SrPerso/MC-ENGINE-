@@ -376,6 +376,9 @@ bool DataFBX::LoadMesh(const char* path)
 			mesh->debugBox.SetNegativeInfinity();//
 			mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
 
+			App->camera->CenterCameraToObject(&mesh->debugBox);
+
+
 			App->scene_intro->sceneDebugInfo.faces += mesh->nFaces;
 			App->scene_intro->sceneDebugInfo.tris += mesh->nVertex;
 			App->scene_intro->sceneDebugInfo.vertex += mesh->nVertex;

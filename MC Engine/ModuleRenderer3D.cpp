@@ -328,9 +328,16 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 				//--------------------- MESH----------------------------------------------
 
 				//--------------------- TEXTURE----------------------------------------------
-				
-			
-				if (componentMesh->idTexCoords>0)
+		
+				if (componentMesh->idColors>0 && App->ui->sb_Color_Material)
+				{
+
+					glEnableClientState(GL_COLOR_ARRAY);
+					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idColors);
+					glColorPointer(3, GL_FLOAT, 0, NULL);
+				}
+
+				if (componentMesh->idTexCoords>0 && App->ui->sb_Texture_2D)
 				{
 					CTexture* componentTexture = (CTexture*)GOToDraw->GetComponent(COMP_TEXTURE);
 					if (componentTexture != nullptr)
@@ -342,17 +349,12 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 					glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 
 				}
-				if(componentMesh->idColors>0)
-				{
-
-					glEnableClientState(GL_COLOR_ARRAY);
-					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idColors);
-					glColorPointer(3, GL_FLOAT, 0, NULL);
-				}
+			
+	
 
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, componentMesh->idIndex);
 				glDrawElements(GL_TRIANGLES, componentMesh->nIndex, GL_UNSIGNED_INT, NULL);
-
+		
 				//--------------------- TEXTURE----------------------------------------------
 
 				// Viewwws
@@ -382,8 +384,7 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 
 void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 {
-	if (meshToDraw->debugMode == true)
-	{
+
 		if (App->ui->debug_Tri_Normals == true && meshToDraw->nVertex > 2)
 		{
 
@@ -439,7 +440,7 @@ void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 
 				glColor4f(Blue.r, Blue.g, Blue.b, 255);
 				glVertex3f(vertex.x, vertex.y, vertex.z);
-
+				//if(sb_Color_Material)
 				glColor3f(White.r, White.g, White.b);
 				glVertex3f(pnormal.x, pnormal.y, pnormal.z);
 
@@ -505,15 +506,6 @@ void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 
 
 		glPopMatrix();
-	}
+	
 }
 
-
-void ModuleRenderer3D::TextureView()
-{
-	if (App->ui->sb_Texture_2D)
-		glEnable(GL_LINE);
-	else if (!App->ui->sb_Texture_2D)
-		glDisable(GL_LINE);
-
-}

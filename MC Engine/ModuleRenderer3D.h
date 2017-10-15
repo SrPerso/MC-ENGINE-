@@ -41,10 +41,6 @@ public:
 	void Draw(CMesh* meshToDraw);
 	void DrawDebug(CMesh* meshToDraw);
 
-public: // View Modes
-	void TextureView();
-	
-
 public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
