@@ -342,7 +342,7 @@ bool DataFBX::LoadMesh(const char* path)
 					std::string fullPath = "Assets/";
 					fullPath.append(path.C_Str());
 					material->image = App->texture->LoadTexture(fullPath.c_str());
-					material->Textname = path.C_Str();
+					material->Textname = fullPath;
 				}
 
 				mesh->texCoords = new float[mesh->nVertex * 3];

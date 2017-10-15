@@ -1182,6 +1182,17 @@ void ModuleUI::DevicesSetingsC()
 		ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
 	}
 
+	/*ImGui::Text("Keyboard Status:"); //Not Workings
+	if (App->input->KeyBoardConected())
+	{
+		ImGui::SameLine();
+		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, "CONECTED", nullptr);
+	}
+	else {
+		ImGui::SameLine();
+		ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
+	}
+*/
 	ImGui::Text("Screen Status:");
 	if (App->input->ScreenConected())
 	{
@@ -1192,16 +1203,16 @@ void ModuleUI::DevicesSetingsC()
 		ImGui::SameLine();
 		ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
 	}
-	ImGui::Text("Speakers Status:");
-	if (App->input->SpeakersConected())
-	{
-		ImGui::SameLine();
-		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, "CONECTED", nullptr);
-	}
-	else {
-		ImGui::SameLine();
-		ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
-	}
+	//ImGui::Text("Speakers Status:");  //Not Working
+	//if (App->input->SpeakersConected())
+	//{
+	//	ImGui::SameLine();
+	//	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, "CONECTED", nullptr);
+	//}
+	//else {
+	//	ImGui::SameLine();
+	//	ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
+	//}
 	ImGui::Text("Social life:");
 	ImGui::SameLine();
 	ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
