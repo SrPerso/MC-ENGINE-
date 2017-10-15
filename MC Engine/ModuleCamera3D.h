@@ -3,6 +3,10 @@
 #include "Globals.h"
 #include "glmath.h"
 
+
+
+#define ZOOM_FACTOR 1.6
+
 class ModuleCamera3D : public Module
 {
 public:
