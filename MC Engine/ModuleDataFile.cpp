@@ -178,18 +178,7 @@ void DataJSON::AddString(JSON_Object * object, const char * name, const char * s
 	json_object_set_string(object, name, (const char *)string);
 }
 
-//TO DO
-//ImVec2 DataJSON::GetVec2(JSON_Object * object, std::string name)
-//{
-//	ImVec2 ret;
-//
-//
-//	JSON_Value* value = json_object_get_value(object, name.c_str());
-//	if (value && json_value_get_type(value) == JSONNumber)
-//		retX = json_value_get_number(value);
-//
-//	return ImVec2();
-//}
+
 //--------------------------------------------------------------------------------------------------------------------------------
 DataFBX::DataFBX(Application* app, bool start_enabled): Module(app, start_enabled)
 {
@@ -328,7 +317,8 @@ bool DataFBX::LoadMesh(const char* path)
 
 				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
 
-				if (newMaterial != nullptr) {
+				if (newMaterial != nullptr) 
+				{
 
 					uint numTextures = newMaterial->GetTextureCount(aiTextureType_DIFFUSE);
 					aiString path;
@@ -359,9 +349,7 @@ bool DataFBX::LoadMesh(const char* path)
 			
 			 //TRANSFORMATION-------------- 
 			aiNode * node = scene->mRootNode;
-
-		
-
+			
 			CTransformation* transformation = (CTransformation*)gameObjectSon->CreateComponent(COMP_TRANSFORMATION);
 
 			aiVector3D position;
@@ -374,7 +362,8 @@ bool DataFBX::LoadMesh(const char* path)
 			transformation->scale = float3(scale.x, scale.y, scale.z);
 			transformation->rotation = Quat(rotation.x, rotation.y, rotation.z, rotation.w);
 
-			if (i == 1) {	
+			if (i == 1) 
+			{	
 			CTransformation* transformationParent = (CTransformation*)gameObject->CreateComponent(COMP_TRANSFORMATION);
 			
 			transformationParent->position = float3(position.x, position.y, position.z);
@@ -382,12 +371,7 @@ bool DataFBX::LoadMesh(const char* path)
 			transformationParent->rotation = Quat(rotation.x, rotation.y, rotation.z, rotation.w);
 			}
 			//TRANSFORMATION-------------- 
-
 			
-			//TEXTURE COORDS
-
-
-
 			mesh->debugBox.SetNegativeInfinity();//
 			mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
 
@@ -397,9 +381,7 @@ bool DataFBX::LoadMesh(const char* path)
 			App->scene_intro->sceneDebugInfo.faces += mesh->nFaces;
 			App->scene_intro->sceneDebugInfo.tris += mesh->nVertex;
 			App->scene_intro->sceneDebugInfo.vertex += mesh->nVertex;
-
-
-
+			
 		}//for	
 		//scene.
 
@@ -408,7 +390,6 @@ bool DataFBX::LoadMesh(const char* path)
 		App->ui->AddLogToConsole("[OK]- Loaded Mesh");
 		LOG("Mesh %s loaded Ok", path);
 	}//if scene
-
 
 	else 
 	{

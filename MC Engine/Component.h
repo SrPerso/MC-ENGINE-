@@ -6,7 +6,8 @@
 #include <string>
 class GameObject;
 
-enum Component_Type {
+enum Component_Type
+{
 	COMP_UNKNOWN,
 	COMP_MESH,
 	COMP_TEXTURE,
@@ -15,7 +16,8 @@ enum Component_Type {
 	COMP_SOUND
 };
 
-class Component{
+class Component
+{
 public:
 	Component(GameObject* object, Component_Type type = COMP_UNKNOWN);
 	virtual ~Component();
@@ -34,8 +36,6 @@ protected:
 	Component_Type type;
 	GameObject* object = nullptr;
 	bool isEnable = true;
-	
-
 };
 
 #endif

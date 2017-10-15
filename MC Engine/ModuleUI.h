@@ -52,7 +52,7 @@ private:
 	std::vector<float> FPSData;
 	std::vector<float> MsData;
 
-private: //setings structure
+public: //setings structure
 	WindowSetings WindowSetingsS;
 	AudioSetings AudioSetingsS;
 

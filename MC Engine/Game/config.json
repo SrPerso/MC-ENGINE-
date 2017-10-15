@@ -1,8 +1,30 @@
 {
-  "window":
- {
-    "width": 1200,
+  "window": {
+    "width": 1300,
     "height": 720,
-    "fullscreen": false
+    "fullscreen": false,
+    "fullDesktop": false,
+    "brightness": 1,
+    "vsync": true,
+    "borderless": false
+  },
+  "UI": {
+    "show_test_window": false,
+    "show_Console_window": true,
+    "show_Configuration_window": false,
+    "show_Config_window": false,
+    "show_ImageView_window": true,
+    "show_TeamInfo_window": false,
+    "show_Geometry_window": false,
+    "show_Debug_window": true,
+    "show_Editor_window": true,
+    "debug_active": false,
+    "debug_Vertex_Normals": false,
+    "sb_Depth_Test": true,
+    "sb_Cull_Face": true,
+    "sb_Wire_Face": false,
+    "sb_Lighting": true,
+    "sb_Color_Material": true,
+    "sb_Texture_2D": true
   }
 }
