@@ -31,30 +31,23 @@ void CTransformation::OnEditor()
 	{
 		ImGui::Text("   Position:");
 
-		ImGui::Text("\t X = %f",position.x);
-		ImGui::SameLine();
-		ImGui::Text("\t Y = %f", position.y);
-		ImGui::SameLine(); 
-		ImGui::Text("\t Z = %f", position.z);
+		ImGui::Text("\t X = %.2f",position.x);
+		ImGui::Text("\t Y = %.2f", position.y); 
+		ImGui::Text("\t Z = %.2f", position.z);
 
 
 		ImGui::Text("   Scale:");
 
-		ImGui::Text("\t X = %f", scale.x);
-		ImGui::SameLine();
-		ImGui::Text("\t Y = %f", scale.y);
-		ImGui::SameLine();
-		ImGui::Text("\t Z = %f", scale.z);
+		ImGui::Text("\t X = %.2f", scale.x);
+		ImGui::Text("\t Y = %.2f", scale.y);
+		ImGui::Text("\t Z = %.2f", scale.z);
 
 		ImGui::Text("   Rotation:");
 	
-		ImGui::Text("\t X = %f", rotation.x);
-		ImGui::SameLine();
-		ImGui::Text("\t Y = %f", rotation.y);
-		ImGui::SameLine();
-		ImGui::Text("\t Z = %f", rotation.z);
-		ImGui::SameLine();
-		ImGui::Text("\t W = %f", rotation.w);
+		ImGui::Text("\t X = %.2f", rotation.x);
+		ImGui::Text("\t Y = %.2f", rotation.y);
+		ImGui::Text("\t Z = %.2f", rotation.z);
+		ImGui::Text("\t W = %.2f", rotation.w);
 
 		ImGui::TreePop();
 	}

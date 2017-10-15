@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "Application.h"
 #include "Globals.h"
-#include "Brofiler/Brofiler.h"
+//#include "Brofiler/Brofiler.h"
 
 #include "SDL/include/SDL.h"
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
@@ -28,7 +28,7 @@ int main(int argc, char ** argv)
 
 	while (state != MAIN_EXIT)
 	{
-		BROFILER_FRAME("Main Loop");
+		//BROFILER_FRAME("Main Loop");
 
 		switch (state)
 		{			
