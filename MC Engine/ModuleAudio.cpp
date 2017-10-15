@@ -16,15 +16,15 @@ ModuleAudio::~ModuleAudio()
 // Called before render is available
 bool ModuleAudio::Init( )
 {
-	LOG("Loading Audio Mixer");
-	App->ui->AddLogToConsole("Loading Audio Mixer");
+	LOG("-START- Loading Audio Mixer");
+	App->ui->AddLogToConsole("-START- Loading Audio Mixer");
 	bool ret = true;
 	SDL_Init(0);
 
 	if(SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 	{
 		LOG("SDL_INIT_AUDIO could not initialize! SDL_Error: %s\n", SDL_GetError());
-		App->ui->AddLogToConsole("SDL_INIT_AUDIO could not initialize!");
+		App->ui->AddLogToConsole("[ERROR]- SDL_INIT_AUDIO could not initialize! ");
 		App->input->SpeakersConectedDisable();
 		ret = false;
 	}
@@ -36,7 +36,7 @@ bool ModuleAudio::Init( )
 	if((init & flags) != flags)
 	{
 		LOG("Could not initialize Mixer lib. Mix_Init: %s", Mix_GetError());
-		App->ui->AddLogToConsole("Could not initialize Mixer lib. ");
+		App->ui->AddLogToConsole(" [ERROR]- Could not initialize Mixer lib. ");
 		ret = false;
 	}
 
@@ -44,7 +44,7 @@ bool ModuleAudio::Init( )
 	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
 		LOG("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
-		App->ui->AddLogToConsole("SDL_mixer could not initialize!");
+		App->ui->AddLogToConsole(" [ERROR]- SDL_mixer could not initialize! ");
 		ret = true;
 	}
 
@@ -101,7 +101,7 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time)
 	if(music == NULL)
 	{
 		LOG("Cannot load music %s. Mix_GetError(): %s\n", path, Mix_GetError());
-		App->ui->AddLogToConsole("Cannot load music");
+		App->ui->AddLogToConsole("[ERROR]- Cannot load music"  );
 		ret = false;
 	}
 	else
@@ -111,7 +111,7 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time)
 			if(Mix_FadeInMusic(music, -1, (int) (fade_time * 1000.0f)) < 0)
 			{
 				LOG("Cannot fade in music %s. Mix_GetError(): %s", path, Mix_GetError());
-				App->ui->AddLogToConsole("Cannot fade in music ");
+				App->ui->AddLogToConsole(" [ERROR]- Cannot fade in music ");
 				ret = false;
 			}
 		}
@@ -120,7 +120,7 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time)
 			if(Mix_PlayMusic(music, -1) < 0)
 			{
 				LOG("Cannot play in music %s. Mix_GetError(): %s", path, Mix_GetError());
-				App->ui->AddLogToConsole("Cannot play in music");
+				App->ui->AddLogToConsole(" [ERROR]- Cannot play in music ");
 				ret = false;
 			}
 		}
@@ -128,7 +128,7 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time)
 
 	LOG("Successfully playing %s", path);
 
-	App->ui->AddLogToConsole("Successfully playing music");
+	App->ui->AddLogToConsole("[OK]- Successfully playing music");
 	return ret;
 }
 
@@ -149,7 +149,7 @@ unsigned int ModuleAudio::LoadFx(const char* path)
 	{
 		LOG("Cannot load wav %s. Mix_GetError(): %s", path, Mix_GetError());
 
-		App->ui->AddLogToConsole("Cannot load wav ");
+		App->ui->AddLogToConsole(" [ERROR]- Cannot load wav ");
 	}
 	else
 	{

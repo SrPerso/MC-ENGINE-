@@ -20,7 +20,7 @@ ModuleWindow::~ModuleWindow()
 bool ModuleWindow::Init()
 {
 	LOG("Init SDL window & surface");
-	App->ui->AddLogToConsole("Init SDL window & surface");
+	App->ui->AddLogToConsole("-START- Init SDL window & surface");
 	bool ret = true;
 
 	JSON_Value* configValue = json_parse_file("config.json");
@@ -30,7 +30,7 @@ bool ModuleWindow::Init()
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		LOG("SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError());
-		App->ui->AddLogToConsole("SDL_VIDEO could not initialize!");
+		App->ui->AddLogToConsole("[ERROR]- SDL_VIDEO could not initialize!");
 
 		ret = false;
 	}
@@ -110,7 +110,7 @@ bool ModuleWindow::Init()
 		if (window == NULL)
 		{
 			LOG("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-			App->ui->AddLogToConsole("Window could not be created!");
+			App->ui->AddLogToConsole("[ERROR]- Window could not be created!");
 			ret = false;
 		}
 		else

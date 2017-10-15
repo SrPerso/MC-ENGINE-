@@ -29,7 +29,7 @@ ModuleUI::~ModuleUI()
 bool ModuleUI::Start()
 {
 	bool ret = true;
-	App->ui->AddLogToConsole("Loading UI Engine");
+	App->ui->AddLogToConsole("-START- Loading UI Engine");
 	glewInit();
 	ImGui_ImplSdlGL3_Init(App->window->window);
 
@@ -63,11 +63,11 @@ update_status ModuleUI::Update(float dt)
 			ImGui::EndMenu();
 		}
 		
-		if (ImGui::BeginMenu("Edit"))
-		{
-			EditMenuBar();
-			ImGui::EndMenu();
-		}
+		//if (ImGui::BeginMenu("Edit"))
+		//{
+		//	EditMenuBar();
+		//	ImGui::EndMenu();
+		//}
 		
 		if (ImGui::BeginMenu("Help"))
 		{
@@ -88,8 +88,17 @@ update_status ModuleUI::Update(float dt)
 	/*  *Execute Windows**************************************	*/
 
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT &&App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
-	show_Console_window = !show_Console_window;
+	{ 
+		if (show_Console_window) {
+			AddLogToConsole("Close Console");
+		}
+		else {
+			AddLogToConsole("Open Console");
+		}
 
+
+		show_Console_window = !show_Console_window;
+	}
 	if (show_test_window)
 		ImGui::ShowTestWindow();
 	
@@ -141,8 +150,6 @@ IMGUI_API void ModuleUI::ShowConsoleWindow(bool * p_open)
 	{
 		//todo
 		ImGui::End();
-
-		return;
 	}
                         
 	
@@ -170,10 +177,8 @@ IMGUI_API void ModuleUI::ShowTeamInfoWindow(bool * p_open)
 
 	if (!ImGui::Begin("Team", p_open, window_flags))
 	{
-		// Early out if the window is collapsed, as an optimization.
+	
 		ImGui::End();
-
-		return;
 	}
 	
 	ImGui::PushItemWidth(-140);            						
@@ -247,128 +252,6 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 
 	return IMGUI_API void();
 }
-/*
-IMGUI_API void ModuleUI::ShowMathWindow(bool * p_open)
-{
-	// Demonstrate the various window flags. Typically you would just use the default.
-	ImGuiWindowFlags window_flags = 0;
-
-	if (!ImGui::Begin("Math Library Tests", p_open, window_flags))
-	{
-		// Early out if the window is collapsed, as an optimization.
-		ImGui::End();
-		return;
-	}
-
-	static bool intersects= false;
-	static bool intersectsTrue = false;
-	static bool intersectsFalse = false;
-
-	static bool sphere1selected= false;
-	static bool sphere2selected = false;
-	static bool Capsuleselected = false;
-
-	ImGui::Checkbox("Sphere1", &sphere1selected);
-	ImGui::Checkbox("Sphere2", &sphere2selected);
-	ImGui::Checkbox("Capsule1", &Capsuleselected);
-
-	if (sphere1selected){
-		ImGui::Text("Sphere 1:");
-		ImGui::InputInt("Radius", &sphere1.sphereRadius);
-		ImGui::InputInt("X", &sphere1.sphereX);
-		ImGui::InputInt("Y", &sphere1.sphereY);
-		ImGui::InputInt("Z", &sphere1.sphereZ);			
-	}
-
-	if (sphere2selected) {
-		ImGui::Text("Sphere 2:");
-		ImGui::InputInt("Radius 2", &sphere2.sphereRadius);
-		ImGui::InputInt("X 2", &sphere2.sphereX);
-		ImGui::InputInt("Y 2", &sphere2.sphereY);
-		ImGui::InputInt("Z 2", &sphere2.sphereZ);
-	}
-
-	if (Capsuleselected) {
-		ImGui::Text("Capsule 1:");
-		ImGui::InputInt("Capsule 1 Radius", &capsule1.capsuleRadius);
-		ImGui::InputInt("Bottom X", &capsule1.capsuleBotX);
-		ImGui::InputInt("Bottom Y", &capsule1.capsuleBotY);
-		ImGui::InputInt("Bottom Z", &capsule1.capsuleBotZ);
-		ImGui::InputInt("Top X", &capsule1.capsuleTopX);
-		ImGui::InputInt("Top Y", &capsule1.capsuleTopY);
-		ImGui::InputInt("Top Z", &capsule1.capsuleTopZ);
-	}
-	
-	if (ImGui::Button("Run Math Test"))
-	{
-		if (sphere1selected && sphere2selected && Capsuleselected) 
-			ImGui::Text("it can be done.. Too many selections");
-
-		else if (!sphere1selected && !sphere2selected || !sphere2selected && !Capsuleselected)
-			ImGui::Text("it can be done.. is necesary 2 selections");
-
-		else if (sphere1selected && sphere2selected) 
-		{
-			math::Sphere sphere1(float3(sphere1.sphereX, sphere1.sphereY, sphere1.sphereZ), sphere1.sphereRadius);
-			math::Sphere sphere2(float3(sphere2.sphereX, sphere2.sphereY, sphere2.sphereZ), sphere2.sphereRadius);
-
-			intersects = sphere1.Intersects(sphere2);
-		}
-
-		else if (sphere1selected && Capsuleselected) 
-		{
-
-			math::Sphere sphere1(float3(sphere1.sphereX, sphere1.sphereY, sphere1.sphereZ), sphere1.sphereRadius);
-			math::Capsule capsule1(float3(capsule1.capsuleBotX, capsule1.capsuleBotY, capsule1.capsuleBotZ), float3(capsule1.capsuleTopX, capsule1.capsuleTopY, capsule1.capsuleTopZ), capsule1.capsuleRadius);
-
-
-			intersects = sphere1.Intersects(capsule1);
-		}
-
-		else if (sphere1selected && sphere2selected)
-		{
-
-			math::Capsule capsule1(float3(capsule1.capsuleBotX, capsule1.capsuleBotY, capsule1.capsuleBotZ), float3(capsule1.capsuleTopX, capsule1.capsuleTopY, capsule1.capsuleTopZ), capsule1.capsuleRadius);
-			math::Sphere sphere2(float3(sphere2.sphereX, sphere2.sphereY, sphere2.sphereZ), sphere2.sphereRadius);
-
-			intersects = capsule1.Intersects(sphere2);
-		}
-
-		if (intersects)
-		{
-			intersectsTrue = true;
-			intersectsFalse = false;
-		}
-		else
-		{
-			intersectsTrue = false;
-			intersectsFalse = true;
-		}
-	}
-
-	ImGui::Text("Intersection:");
-
-	if (intersectsTrue)
-		ImGui::Text("\t True");
-		
-	if (intersectsFalse)
-		ImGui::Text("\t False");
-		
-	
-	if (ImGui::Button("Reset"))
-	{
-		intersects = false;
-		intersectsTrue = false;
-		intersectsFalse = false;
-		sphere1.~sphereTest();
-		sphere2.~sphereTest();
-		capsule1.~capsuleTest();
-	}
-
-
-		ImGui::End();
-	return IMGUI_API void();
-}*/
 
 IMGUI_API void ModuleUI::ShowImageViewWindow(bool * p_open)
 {
@@ -538,7 +421,7 @@ IMGUI_API void ModuleUI::ShowDebugWindow(bool * p_open)
 
 	window_flags |= ImGuiWindowFlags_NoTitleBar;
 	//window_flags |= ImGuiWindowFlags_NoMove;
-	window_flags |= ImGuiWindowFlags_NoResize;
+	//window_flags |= ImGuiWindowFlags_NoResize;
 
 	if (ImGui::Begin("Debug Window", p_open, window_flags))
 	{
@@ -546,8 +429,6 @@ IMGUI_API void ModuleUI::ShowDebugWindow(bool * p_open)
 		ImGui::Separator();
 		ImGui::Checkbox("Debug ON", &debug_active);
 		ImGui::SameLine();
-	/*	ImGui::Checkbox("Tri Normals", &debug_Tri_Normals);
-		ImGui::SameLine();*/
 		ImGui::Checkbox("Vertex Normals", &debug_Vertex_Normals);
 		ImGui::SameLine();
 		ImGui::Checkbox("Eclosing Box", &debug_Box);
@@ -928,7 +809,8 @@ void ModuleUI::WindowMenuBar()
 	
 	ImGui::Checkbox("Configuration", &show_Configuration_window);
 	
-	ImGui::Checkbox("Geometry", &show_Geometry_window);
+	//ImGui::Checkbox("Geometry", &show_Geometry_window);
+
 	//ImGui::Checkbox("MathTest", &show_MathTest_window);
 
 	ImGui::Checkbox("GameObjects Editor", &show_Editor_window);

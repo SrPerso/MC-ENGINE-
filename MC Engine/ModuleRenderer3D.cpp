@@ -40,7 +40,7 @@ ModuleRenderer3D::~ModuleRenderer3D()
 bool ModuleRenderer3D::Init()
 {
 	LOG("Creating 3D Renderer context");
-	App->ui->AddLogToConsole("Creating 3D Renderer context");
+	App->ui->AddLogToConsole("-START- Creating 3D Renderer context");
 	bool ret = true;
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -55,7 +55,7 @@ bool ModuleRenderer3D::Init()
 	if(context == NULL)
 	{
 		LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
-		App->ui->AddLogToConsole("OpenGL context could not be created! ");
+		App->ui->AddLogToConsole("[ERROR]- OpenGL context could not be created!");
 		ret = false;
 	}
 	
@@ -64,7 +64,7 @@ bool ModuleRenderer3D::Init()
 		//Use Vsync
 		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0) {
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
-			App->ui->AddLogToConsole("Warning: Unable to set VSync!");
+			App->ui->AddLogToConsole("[ERROR]- Warning: Unable to set VSync!");
 		}
 		
 		//Initialize Projection Matrix
@@ -76,7 +76,7 @@ bool ModuleRenderer3D::Init()
 		if(error != GL_NO_ERROR)
 		{
 			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
-			App->ui->AddLogToConsole("Error initializing OpenGL!");
+			App->ui->AddLogToConsole("[ERROR]- Error initializing OpenGL!");
 			ret = false;
 		}
 
@@ -89,7 +89,7 @@ bool ModuleRenderer3D::Init()
 		if(error != GL_NO_ERROR)
 		{
 			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
-			App->ui->AddLogToConsole("Error initializing OpenGL!");
+			App->ui->AddLogToConsole("[ERROR]- Error initializing OpenGL!");
 			ret = false;
 		}
 		
@@ -104,7 +104,7 @@ bool ModuleRenderer3D::Init()
 		if(error != GL_NO_ERROR)
 		{
 			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
-			App->ui->AddLogToConsole("Error initializing OpenGL!");
+			App->ui->AddLogToConsole("[ERROR]- Error initializing OpenGL! ");
 			ret = false;
 		}
 		
@@ -195,19 +195,19 @@ GLuint ModuleRenderer3D::loadBMP_custom(const char * imagepath)
 	FILE * file = fopen(imagepath, "rb");
 	if (!file)
 	{ 
-		printf("Image could not be opened\n");
+		printf("[ERROR]- Image could not be opened\n");
 		return 0;
 	}
 
 	if (fread(header, 1, 54, file) != 54) 
 	{ 
-		printf("Not a correct BMP file\n");
+		printf("[ERROR]- Not a correct BMP file \n");
 		return false;
 	}
 
 	if (header[0] != 'B' || header[1] != 'M') 
 	{
-		printf("Not a correct BMP file\n");
+		printf("[ERROR]- Not a correct BMP file \n");
 		return 0;
 	}
 
@@ -377,6 +377,9 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 				glUseProgram(0);
 				glBindTexture(GL_TEXTURE_2D, 0);
 			}
+			else {
+				App->ui->AddLogToConsole("[ERROR]- Mesh component does not exist");
+			}
 		}
 	}
 }
@@ -384,48 +387,6 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 
 void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 {
-
-		if (App->ui->debug_Tri_Normals == true && meshToDraw->nVertex > 2)
-		{
-
-		/*	glLineWidth(2.0f);
-			glBegin(GL_LINES);
-
-			for (int i = 0; i < meshToDraw->nVertex*3; ++i)
-			{*/
-		/*		float3 vertex(&meshToDraw->Vertex[i * 3]);
-				float3 vertex2(&meshToDraw->Vertex[i * 6]);
-				float3 vertex3(&meshToDraw->Vertex[i * 9]);
-
-				Triangle face(float3(a), float3(b), float3(c));
-
-*/
-			//	float3 a = float3(meshToDraw->Vertex[i], meshToDraw->Vertex[i + 1], meshToDraw->Vertex[i + 2]);
-			//	float3 b = float3(meshToDraw->Vertex[i + 3], meshToDraw->Vertex[i + 4], meshToDraw->Vertex[i + 5]);
-			//	float3 c = float3(meshToDraw->Vertex[i + 6], meshToDraw->Vertex[i + 7], meshToDraw->Vertex[i + 8]);
-
-			//	Triangle face(float3(a), float3(b), float3(c));
-
-			//	float3 center = (a + b + c) / (float)3;
-			//	float3 normal = Cross(b - a, c - a);
-			//	normal = normal.Normalized();
-
-			//	float3 pnormal(center + (normal*NORMAL_SIZE));
-
-			//	glColor3f(Red.r, Red.g, Red.b);
-			//	glVertex3f(center.x, center.y, center.z);
-
-			//	glColor3f(White.r, White.g, White.b);
-			//	glVertex3f(pnormal.x, pnormal.y, pnormal.z);
-
-			//	glColor3f(White.r, White.g, White.b);
-			//	i += 8;
-			//}
-
-
-			//glEnd();
-		}
-
 		if (App->ui->debug_Vertex_Normals == true && meshToDraw->nVertex > 0)
 		{
 
@@ -451,7 +412,9 @@ void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 			glDrawElements(GL_TRIANGLES, meshToDraw->nIndex, GL_UNSIGNED_INT, NULL);
 			glEnd();
 		}
-
+		else if (meshToDraw->nVertex < 0) {
+			App->ui->AddLogToConsole("[ERROR]- The number of verteh is down 0");
+		}
 		if (App->ui->debug_Box == true)
 		{
 			float3 vertex[8];

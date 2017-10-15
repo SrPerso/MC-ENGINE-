@@ -206,9 +206,9 @@ bool DataFBX::Init()
 {
 	bool ret= true;
 
-	LOG("Init FBXLoader");
+	LOG("-START- Init FBXLoader");
 
-	App->ui->AddLogToConsole("Init FBXLoader");
+	App->ui->AddLogToConsole("-START- Init FBXLoader");
 
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
@@ -264,7 +264,7 @@ bool DataFBX::LoadMesh(const char* path)
 			glBindBuffer(GL_ARRAY_BUFFER, mesh->idVertex);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->Vertex, GL_STATIC_DRAW);
 
-			App->ui->AddLogToConsole("Load Mesh");
+			
 			LOG("loaded mesh %i vertex", mesh->nVertex);
 
 			if (newMesh->HasFaces())
@@ -279,6 +279,7 @@ bool DataFBX::LoadMesh(const char* path)
 					if (newMesh->mFaces[i].mNumIndices != 3)
 					{
 						LOG("WARNING, geometry face with != 3 indices!");
+						App->ui->AddLogToConsole("WARNING- geometry face with != 3 indices!");
 					}
 					else
 					{
@@ -333,7 +334,7 @@ bool DataFBX::LoadMesh(const char* path)
 					retu = newMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 
 					if (retu == aiReturn_FAILURE)
-						App->ui->AddLogToConsole("fail getting texture");
+						App->ui->AddLogToConsole("[ERROR]- fail getting texture");
 
 					std::string fullPath = "Assets/";
 					fullPath.append(path.C_Str());
@@ -390,6 +391,7 @@ bool DataFBX::LoadMesh(const char* path)
 
 		aiReleaseImport(scene);
 		return true;
+		App->ui->AddLogToConsole("[OK]- Loaded Mesh");
 		LOG("Mesh %s loaded Ok", path);
 	}//if scene
 
@@ -397,7 +399,7 @@ bool DataFBX::LoadMesh(const char* path)
 	else 
 	{
 		ret = false;
-		LOG("Error loading scene %s", path);
+		LOG("[ERROR]- Error loading scene %s", path);
 	}
 
 	return ret;

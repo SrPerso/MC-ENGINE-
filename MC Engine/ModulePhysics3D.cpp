@@ -41,7 +41,7 @@ ModulePhysics3D::~ModulePhysics3D()
 bool ModulePhysics3D::Init()
 {
 	LOG("Creating 3D Physics simulation");
-	App->ui->AddLogToConsole("Creating 3D Physics simulation");
+	App->ui->AddLogToConsole("-START- Creating 3D Physics simulation");
 	bool ret = true;
 
 	return ret;
@@ -51,7 +51,7 @@ bool ModulePhysics3D::Init()
 bool ModulePhysics3D::Start()
 {
 	LOG("Creating Physics environment");
-	App->ui->AddLogToConsole("Creating Physics environment");
+	App->ui->AddLogToConsole("-START- Creating Physics environment");
 
 	world = new btDiscreteDynamicsWorld(dispatcher, broad_phase, solver, collision_conf);
 	//world->setDebugDrawer(debug_draw);
