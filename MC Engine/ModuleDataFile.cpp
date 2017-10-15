@@ -238,18 +238,21 @@ bool DataFBX::LoadMesh(const char* path)
 	
 	App->goManager->GetRoot()->DeleteChilds();
 
+
 	GameObject* gameObject = App->goManager->GetRoot()->CreateChild();
-
-
-	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	
+	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
+
+
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
-			//create mesh
+		
+			GameObject* gameObjectSon = gameObject->CreateChild();
 
-			CMesh* mesh = (CMesh*)gameObject->CreateComponent(COMP_MESH);
+
+			CMesh* mesh = (CMesh*)gameObjectSon->CreateComponent(COMP_MESH);
 			mesh->Enable();
 
 			aiMesh* newMesh = scene->mMeshes[i];
@@ -319,7 +322,7 @@ bool DataFBX::LoadMesh(const char* path)
 
 			if (newMesh->HasTextureCoords(0))
 			{
-				CTexture* material = (CTexture*)gameObject->CreateComponent(COMP_TEXTURE);
+				CTexture* material = (CTexture*)gameObjectSon->CreateComponent(COMP_TEXTURE);
 				material->Enable();
 
 
@@ -339,7 +342,7 @@ bool DataFBX::LoadMesh(const char* path)
 					std::string fullPath = "Assets/";
 					fullPath.append(path.C_Str());
 					material->image = App->texture->LoadTexture(fullPath.c_str());
-					material->Textname = path.C_Str();
+					material->Textname = fullPath;
 				}
 
 				mesh->texCoords = new float[mesh->nVertex * 3];
@@ -356,7 +359,10 @@ bool DataFBX::LoadMesh(const char* path)
 			
 			 //TRANSFORMATION-------------- 
 			aiNode * node = scene->mRootNode;
-			CTransformation* transformation = (CTransformation*)gameObject->CreateComponent(COMP_TRANSFORMATION);
+
+		
+
+			CTransformation* transformation = (CTransformation*)gameObjectSon->CreateComponent(COMP_TRANSFORMATION);
 
 			aiVector3D position;
 			aiVector3D scale;
@@ -367,6 +373,14 @@ bool DataFBX::LoadMesh(const char* path)
 			transformation->position = float3(position.x, position.y, position.z);
 			transformation->scale = float3(scale.x, scale.y, scale.z);
 			transformation->rotation = Quat(rotation.x, rotation.y, rotation.z, rotation.w);
+
+			if (i == 1) {	
+			CTransformation* transformationParent = (CTransformation*)gameObject->CreateComponent(COMP_TRANSFORMATION);
+			
+			transformationParent->position = float3(position.x, position.y, position.z);
+			transformationParent->scale = float3(scale.x, scale.y, scale.z);
+			transformationParent->rotation = Quat(rotation.x, rotation.y, rotation.z, rotation.w);
+			}
 			//TRANSFORMATION-------------- 
 
 			

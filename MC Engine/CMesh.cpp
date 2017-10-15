@@ -1,4 +1,4 @@
-#include "CMesh.h"
+﻿#include "CMesh.h"
 
 #include "GameObject.h"
 DataMesh::~DataMesh()
@@ -29,7 +29,7 @@ CMesh::CMesh(GameObject * object) :Component(object, COMP_MESH)
 		this->mesh_ID = 0;
 	}
 	//const char * preName = "Component Mesh _";
-	name= "Component Mesh_";
+	name= "- Component Mesh_";
 	name.append(std::to_string(mesh_ID));
 }
 

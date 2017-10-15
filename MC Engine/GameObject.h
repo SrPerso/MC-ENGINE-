@@ -35,6 +35,7 @@ public:
 	
 	void newParent(GameObject*newparent);
 	void AddChild(GameObject* child);
+	GameObject* GetFirstChild();
 	//TO ADD 
 	// to move the objects and change the parent is necesary a function newparent(gameobject)
 

@@ -32,6 +32,8 @@ public:
 	
 	vec3 X, Y, Z, Position, Reference;
 	AABB* GeometryCentre;
+
+	vec3 centreB;
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;

@@ -122,6 +122,11 @@ void GameObject::AddChild(GameObject * child)
 	//child->newParent(this);
 }
 
+GameObject * GameObject::GetFirstChild()
+{
+	return childs[0];
+}
+
 Component * GameObject::CreateComponent(Component_Type type)
 {	
 	/*
