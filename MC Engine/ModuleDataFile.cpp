@@ -238,18 +238,20 @@ bool DataFBX::LoadMesh(const char* path)
 	
 	App->goManager->GetRoot()->DeleteChilds();
 
+
 	GameObject* gameObject = App->goManager->GetRoot()->CreateChild();
-
-
-	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	
+	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
+
+
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
-			//create mesh
+		
+			GameObject* gameObjectSon = gameObject->CreateChild();
 
-			CMesh* mesh = (CMesh*)gameObject->CreateComponent(COMP_MESH);
+			CMesh* mesh = (CMesh*)gameObjectSon->CreateComponent(COMP_MESH);
 			mesh->Enable();
 
 			aiMesh* newMesh = scene->mMeshes[i];
@@ -319,7 +321,7 @@ bool DataFBX::LoadMesh(const char* path)
 
 			if (newMesh->HasTextureCoords(0))
 			{
-				CTexture* material = (CTexture*)gameObject->CreateComponent(COMP_TEXTURE);
+				CTexture* material = (CTexture*)gameObjectSon->CreateComponent(COMP_TEXTURE);
 				material->Enable();
 
 
@@ -356,7 +358,7 @@ bool DataFBX::LoadMesh(const char* path)
 			
 			 //TRANSFORMATION-------------- 
 			aiNode * node = scene->mRootNode;
-			CTransformation* transformation = (CTransformation*)gameObject->CreateComponent(COMP_TRANSFORMATION);
+			CTransformation* transformation = (CTransformation*)gameObjectSon->CreateComponent(COMP_TRANSFORMATION);
 
 			aiVector3D position;
 			aiVector3D scale;
