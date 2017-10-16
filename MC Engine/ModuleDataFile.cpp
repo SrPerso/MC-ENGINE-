@@ -6,6 +6,7 @@
 #include "Assimp\include\scene.h"
 #include "Assimp\include\postprocess.h"
 #include "Assimp\include\cfileio.h"
+
 #include "GameObject.h"
 #include "ModuleGameObjectManager.h"
 #include "Component.h"
@@ -66,7 +67,7 @@ bool DataJSON::Init()
 			{
 				json_object_set_value(object_json, (*item)->name.c_str(), json_value_init_object());
 			}			
-		}
+		} 
 	
 
 	}//for	*/
@@ -78,7 +79,6 @@ void DataJSON::SaveAll() const
 {
 	
 	/*for (std::list<std::string>::const_reverse_iterator file = files.rbegin(); file != files.crend(); ++file) {
-
 
 		JSON_Object* object = nullptr;
 
@@ -238,15 +238,16 @@ bool DataFBX::LoadMesh(const char* path)
 		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
 		
-			GameObject* gameObjectSon = gameObject->CreateChild();
+			GameObject* gameObjectSon = gameObject->CreateChild();// to imp
 
 
-			CMesh* mesh = (CMesh*)gameObjectSon->CreateComponent(COMP_MESH);
-			mesh->Enable();
+			CMesh* mesh = (CMesh*)gameObjectSon->CreateComponent(COMP_MESH);// to imp
+			mesh->Enable();// to imp
 
-			aiMesh* newMesh = scene->mMeshes[i];
+			aiMesh* newMesh = scene->mMeshes[i]; // to imp
 
-			mesh->nVertex = newMesh->mNumVertices;
+
+			mesh->nVertex = newMesh->mNumVertices; 
 			mesh->Vertex = new float[mesh->nVertex * 3];
 			memcpy(mesh->Vertex, newMesh->mVertices, sizeof(float)* mesh->nVertex * 3);
 

@@ -85,12 +85,15 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="CTexture.h" />
     <ClInclude Include="CTransformation.h" />
+    <ClInclude Include="DMesh.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="IMesh.h" />
     <ClInclude Include="imGUI\imgui.h" />
     <ClInclude Include="imGUI\imgui_impl_sdl_gl3.h" />
     <ClInclude Include="imGUI\imgui_internal.h" />
+    <ClInclude Include="Importer.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="MathGeoLib\Algorithm\Random\LCG.h" />
@@ -178,8 +181,10 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="CTexture.cpp" />
     <ClCompile Include="CTransformation.cpp" />
+    <ClCompile Include="DMesh.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glmath.cpp" />
+    <ClCompile Include="IMesh.cpp" />
     <ClCompile Include="imGUI\imgui.cpp" />
     <ClCompile Include="imGUI\imgui_demo.cpp" />
     <ClCompile Include="imGUI\imgui_draw.cpp" />
