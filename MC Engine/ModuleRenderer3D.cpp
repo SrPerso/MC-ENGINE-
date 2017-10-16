@@ -400,12 +400,11 @@ void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 				//if(sb_Color_Material)
 				glColor3f(White.r, White.g, White.b);
 				glVertex3f(pnormal.x, pnormal.y, pnormal.z);
-
-		
+						
 				glColor4f(White.r, White.g, White.b, 0);
 			}
-			glVertexPointer(3, GL_FLOAT, 0, NULL);
-			glDrawElements(GL_TRIANGLES, meshToDraw->nIndex, GL_UNSIGNED_INT, NULL);
+			glVertexPointer(1, GL_FLOAT, 0, NULL);
+			glDrawElements(GL_LINES, meshToDraw->nIndex, GL_UNSIGNED_INT, NULL);
 			glEnd();
 		}
 
@@ -460,7 +459,7 @@ void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 			glVertex3fv((float*)&vertex[1]);
 				
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
+			glColor3f(White.r, White.g, White.b);
 			glEnd();
 		}// box
 
