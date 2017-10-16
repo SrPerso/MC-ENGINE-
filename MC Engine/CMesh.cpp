@@ -3,15 +3,18 @@
 #include "GameObject.h"
 DataMesh::~DataMesh()
 {
-	if (Vertex != nullptr) {
+	if (Vertex != nullptr) 
+	{
 		delete Vertex;
 		Vertex = nullptr;
 	}
-	if (Index != nullptr) {
+	if (Index != nullptr) 
+	{
 		delete Index;
 		Index = nullptr;
 	}
-	if (normals != nullptr) {
+	if (normals != nullptr)
+	{
 		delete normals;
 		normals = nullptr;
 	}

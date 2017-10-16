@@ -7,7 +7,8 @@
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
 
-struct AudioSetings {
+struct AudioSetings
+{
 
 	AudioSetings(){}
 

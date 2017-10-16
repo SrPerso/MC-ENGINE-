@@ -96,8 +96,10 @@ GameObject * GameObject::GetParent() const
 
 void GameObject::newParent(GameObject * newparent)
 {
-	if (newparent != this->parent) {
-		if (newparent) {
+	if (newparent != this->parent) 
+	{
+		if (newparent) 
+		{
 
 			std::vector<GameObject*>::iterator it = std::find(childs.begin(), childs.end(), newparent);
 
@@ -109,7 +111,8 @@ void GameObject::newParent(GameObject * newparent)
 
 		this->parent = newparent;
 
-		if (newparent) {
+		if (newparent)
+		{
 			newparent->childs.push_back(this);
 		}
 	}
@@ -202,7 +205,8 @@ void GameObject::DeleteComponent(Component * comp)
 {
 	for (std::vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
 	{
-		if ((*it) == comp) {
+		if ((*it) == comp)
+		{
 			components.erase(it);
 		}
 	}
@@ -264,14 +268,17 @@ void GameObject::OnEditor()
 {
 	if (ImGui::TreeNodeEx(name.c_str()))
 	{
+
 		for (int i = 0; i < components.size(); i++)
 		{
 			components[i]->OnEditor();
 		}
+
 		for (int i = 0; i < childs.size(); i++)
 		{
 			childs[i]->OnEditor();
 		}
+
 		ImGui::TreePop();
 	}
 }

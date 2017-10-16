@@ -1,13 +1,13 @@
 #ifndef __Module_GAMEOBJECTMANAGER_H__
 #define __Module_GAMEOBJECTMANAGER_H__
 
-
 #include "Globals.h"
 #include "Module.h"
 
 class GameObject;
 
-class GObjectManager : public Module {
+class GObjectManager : public Module
+{
 public:
 
 	GObjectManager(Application* app, bool start_enabled=true);
@@ -22,16 +22,11 @@ public:
 
 	bool CleanUp();
 
-
 	GameObject* GetRoot()const;
 	void deleteGameObject(GameObject* GObject);
 
-
 	GameObject* root = nullptr;
-private:
-
 	
-
 };
 
 #endif

@@ -7,7 +7,8 @@
 class GameObject;
 class Component;
 
-class DataMesh {
+class DataMesh 
+{
 public:
 	uint nVertex = 0;
 	uint idVertex = 0;//id RAM

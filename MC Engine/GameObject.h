@@ -36,10 +36,10 @@ public:
 	void newParent(GameObject*newparent);
 	void AddChild(GameObject* child);
 	GameObject* GetFirstChild();
+
 	//TO ADD 
 	// to move the objects and change the parent is necesary a function newparent(gameobject)
-
-
+	
 	//COMPONENTS.................................
 
 	Component* CreateComponent(Component_Type type);
@@ -62,8 +62,6 @@ public:
 	void cleanUp();
 
 	void OnEditor();
-
-	//
 
 public:
 	std::vector<Component*> components;
