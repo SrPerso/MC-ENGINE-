@@ -10,7 +10,7 @@ class GObjectManager : public Module
 {
 public:
 
-	GObjectManager(Application* app, bool start_enabled=true);
+	GObjectManager(Application* app, bool start_enabled = true);
 	~GObjectManager();
 
 	bool Init();

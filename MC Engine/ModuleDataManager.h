@@ -3,6 +3,8 @@
 
 #include "Globals.h"
 #include "Module.h"
+#include "DContainer.h"
+#include <string>
 
 
 class GameObject;
@@ -20,7 +22,14 @@ public:
 
 	bool CleanUp() { return true; }
 
-	void Import(GameObject*parent,aiScene* scene, aiNode* node);
+	void Import(GameObject*parent,aiScene* scene, aiNode* node); //import all 
+	void ImportBuffers(const void* buffer, DType type);
+
+	void LoadAllData(); //called to load all data
+	void SaveAllData(); //Called to Save all data
+
+// Objects creators?
+
 
 };
 
