@@ -339,6 +339,15 @@
     <ClInclude Include="DMesh.h">
       <Filter>Engine\Engine\DataContainers</Filter>
     </ClInclude>
+    <ClInclude Include="DMaterial.h">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClInclude>
+    <ClInclude Include="IMaterial.h">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="DTransformation.h">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -530,6 +539,13 @@
     <ClCompile Include="DMesh.cpp">
       <Filter>Engine\Engine\DataContainers</Filter>
     </ClCompile>
+    <ClCompile Include="DMaterial.cpp">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClCompile>
+    <ClCompile Include="IMaterial.cpp">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="DTransformation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\Geometry\KDTree.inl">

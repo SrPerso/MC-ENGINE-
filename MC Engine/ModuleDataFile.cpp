@@ -258,7 +258,7 @@ bool DataFBX::LoadMesh(const char* path)
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->Vertex, GL_STATIC_DRAW);
 			//
 		
-			LOG("loaded mesh %i vertex", mesh->nVertex);
+			LOGUI("{Importer}- Mesh Imported %i Vertices", mesh->nVertex);
 
 			if (newMesh->HasFaces())
 			{
@@ -392,7 +392,7 @@ bool DataFBX::LoadMesh(const char* path)
 
 		aiReleaseImport(scene);
 		return true;
-	LOGUI("[OK]- Loaded Mesh");
+		LOGUI("[OK]- Loaded Mesh %s", path);
 		LOG("Mesh %s loaded Ok", path);
 	}//if scene
 

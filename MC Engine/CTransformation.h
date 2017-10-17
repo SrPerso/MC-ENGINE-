@@ -5,11 +5,11 @@
 #include <string>
 #include "MathGeolib\Math\Quat.h"
 #include "MathGeolib\Math\float3.h"
-
+#include "DTransformation.h"
 
 class GameObject;
 
-class CTransformation : public Component
+class CTransformation : public Component, public DTransformation
 {
 public:
 	CTransformation(GameObject* object);
@@ -21,9 +21,7 @@ public:
 	void SetPos(float3);
 	uint Transformation_ID;// is not necesary (?)
 public:
-	float3 position;
-	float3 scale;
-	Quat rotation;
+
 };
 
 #endif //__TRANSFORMATION_H__
