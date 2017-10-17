@@ -64,6 +64,8 @@ public:
 public:
 	float GetFPS();
 	float GetMs();
+
+	std::vector<std::string> consoleTxt;
 private:
 
 	void AddModule(Module* mod);

@@ -247,17 +247,17 @@ bool DataFBX::LoadMesh(const char* path)
 			aiMesh* newMesh = scene->mMeshes[i]; // to imp
 
 
+
+			//passed
 			mesh->nVertex = newMesh->mNumVertices; 
 			mesh->Vertex = new float[mesh->nVertex * 3];
 			memcpy(mesh->Vertex, newMesh->mVertices, sizeof(float)* mesh->nVertex * 3);
-
-	
-
+		
 			glGenBuffers(1, (GLuint*)&mesh->idVertex);
 			glBindBuffer(GL_ARRAY_BUFFER, mesh->idVertex);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->Vertex, GL_STATIC_DRAW);
-
-			
+			//
+		
 			LOG("loaded mesh %i vertex", mesh->nVertex);
 
 			if (newMesh->HasFaces())

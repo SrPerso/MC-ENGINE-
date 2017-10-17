@@ -46,7 +46,8 @@ public:
 	IMGUI_API void ShowEditorWindow(bool* p_open = NULL);
 
 	void AddLogToConsole(std::string toAdd);
-
+	void AddLogToConsole(std::string toAdd,int dataToAdd);
+	void AddLogToConsole(const char file[], int line, const char* format, ...);
 private:
 	std::vector<std::string> consoleTxt;
 	std::vector<float> FPSData;

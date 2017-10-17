@@ -186,12 +186,12 @@ IMGUI_API void ModuleUI::ShowConsoleWindow(bool * p_open)
 	ImGui::Separator();
 	if (ImGui::Button("Clear"))
 	{
-		consoleTxt.clear();
+		App->consoleTxt.clear();
 	}
 
-	for (int i = consoleTxt.size() - 1; i >= 0; i--)
+	for (int i = App->consoleTxt.size() - 1; i >= 0; i--)
 	{
-		ImGui::Text("%s", consoleTxt[i].c_str());
+		ImGui::Text("%s", App->consoleTxt[i].c_str());
 	}
 
 	ImGui::End();
@@ -511,10 +511,32 @@ IMGUI_API void ModuleUI::ShowEditorWindow(bool * p_open)
 //show the logs on Console..................................................
 void ModuleUI::AddLogToConsole(std::string toAdd)
 {
+	LOGUI(toAdd.c_str());
 	consoleTxt.push_back(toAdd);
 
 }
 
+void ModuleUI::AddLogToConsole(std::string toAdd, int dataToAdd)
+{
+
+	toAdd.append(std::to_string(dataToAdd));
+	consoleTxt.push_back(toAdd);
+}
+void ModuleUI::AddLogToConsole(const char file[], int line, const char* format, ...)
+{
+	static char tmp_string[4096];
+	static char tmp_string2[4096];
+	static va_list  ap;
+
+	va_start(ap, format);
+	vsprintf_s(tmp_string, 4096, format, ap);
+	va_end(ap);
+	sprintf_s(tmp_string2, 4096, "\n%s(%d) : %s", file, line, tmp_string);
+
+	consoleTxt.push_back(tmp_string2);
+
+}
+	
 //Config Window.............................................................
 
 void ModuleUI::HardwareSetingsC()
