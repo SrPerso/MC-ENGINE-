@@ -2,21 +2,17 @@
 #ifndef __DATA_MATERIAL_H__
 #define __DATA_MATERIAL_H__
 
+#include "DContainer.h"
 #include "Globals.h"
 #include <string>
 
-class DMaterial
+class DMaterial : public DContainer
 {
 public:
 
-	uint idTexCoords = 0;
-	float* texCoords = nullptr;
-
-	std::string texturePath;
-
 public:
-	DMaterial::~DMaterial();
-
+	DMaterial(DType);
+	~DMaterial();
 };
 
 #endif

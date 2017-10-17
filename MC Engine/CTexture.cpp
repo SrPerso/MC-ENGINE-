@@ -1,11 +1,11 @@
 ﻿#include "CTexture.h"
 #include "GameObject.h"
 
-CTexture::CTexture(GameObject * object) :Component(object, COMP_TEXTURE)
+CTexture::CTexture(GameObject * object, Component_Type type) :Component(object, type)
 {
 	if (object != nullptr)
 	{
-		this->Texture_ID = object->NumComponentTypeSize(this->type) + 1;
+		this->Texture_ID = object->NumComponentTypeSize(this->Ctype) + 1;
 	}
 	else
 	{
@@ -22,11 +22,11 @@ CTexture::~CTexture()
 
 void CTexture::OnUpdate(float dt)
 {
+
 }
 
 void CTexture::OnEditor()
 {
-	//if(name.length>0)
 	if (ImGui::TreeNodeEx(name.c_str()))
 	{
 		ImGui::Text("\t Texture path: %s", Textname.c_str());

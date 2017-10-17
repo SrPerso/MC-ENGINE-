@@ -1,5 +1,10 @@
 #include "DMesh.h"
 
+DMesh::DMesh(DType resType):DContainer(resType)
+{
+
+}
+
 DMesh::~DMesh()
 {
 	if (Vertex != nullptr)
@@ -24,6 +29,12 @@ DMesh::~DMesh()
 	{
 		delete colors;
 		colors = nullptr;
+	}
+
+	if (texCoords != nullptr)
+	{
+		delete texCoords;
+		texCoords = nullptr;
 	}
 }
 

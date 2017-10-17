@@ -15,6 +15,7 @@ Application::Application()
 	camera = new ModuleCamera3D(this);
 	physics = new ModulePhysics3D(this);
 	scene_intro = new ModuleSceneIntro(this);
+	datamanager = new ModuleDataManager(this);
 	goManager = new GObjectManager(this);
 	fbxdata = new DataFBX(this);
 	texture = new ModuleTexture(this);
@@ -33,7 +34,7 @@ Application::Application()
 
 	// Scenes
 	AddModule(goManager);
-
+	AddModule(datamanager);
 	AddModule(fbxdata);
 	AddModule(texture);
 	AddModule(scene_intro);

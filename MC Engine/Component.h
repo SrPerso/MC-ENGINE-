@@ -33,7 +33,7 @@ public:
 
 protected:
 	std::string name;
-	Component_Type type;
+	Component_Type Ctype;
 	GameObject* object = nullptr;
 	bool isEnable = true;
 };

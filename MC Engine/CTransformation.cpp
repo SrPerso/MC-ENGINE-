@@ -2,17 +2,17 @@
 #include "GameObject.h"
 
 
-CTransformation::CTransformation(GameObject * object) :Component(object, COMP_TRANSFORMATION)
+CTransformation::CTransformation(GameObject * object, Component_Type type) :Component(object, type)
 {
 	if (object != nullptr)
 	{
-		this->Transformation_ID = object->NumComponentTypeSize(this->type) + 1;
+		this->Transformation_ID = object->NumComponentTypeSize(this->Ctype) + 1;
 	}
 	else
 	{
 		this->Transformation_ID = 0;
 	}
-
+	
 	name = "- Component Transformation_";
 	name.append(std::to_string(Transformation_ID));
 }

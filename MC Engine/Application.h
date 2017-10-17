@@ -17,6 +17,7 @@
 #include "ModulePhysics3D.h"
 #include "ModuleUI.h"
 
+#include "ModuleDataManager.h"
 #include "ModuleDataFile.h"
 #include "ModuleTexture.h"
 
@@ -29,7 +30,7 @@ public:
 	ModuleWindow* window = nullptr;
 	ModuleInput* input = nullptr;
 	ModuleAudio* audio = nullptr;
-	
+	ModuleDataManager* datamanager = nullptr;
 	ModuleUI* ui = nullptr;
 	ModuleRenderer3D* renderer3D = nullptr;
 	ModuleCamera3D* camera = nullptr;

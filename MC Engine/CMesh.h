@@ -10,11 +10,11 @@
 
 
 class GameObject;
-
+enum Component_Type;
 class CMesh : public Component, public DMesh
 {
 public:
-	CMesh(GameObject* object);
+	CMesh(GameObject* object, Component_Type type = COMP_MESH );
 	~CMesh();
 
 	void OnUpdate(float dt);

@@ -12,7 +12,7 @@ class GameObject;
 class CTransformation : public Component, public DTransformation
 {
 public:
-	CTransformation(GameObject* object);
+	CTransformation(GameObject* object, Component_Type type = COMP_TRANSFORMATION);
 	~CTransformation();
 
 	void OnUpdate(float dt);
@@ -20,7 +20,6 @@ public:
 
 	void SetPos(float3);
 	uint Transformation_ID;// is not necesary (?)
-public:
 
 };
 

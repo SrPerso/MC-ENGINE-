@@ -1,23 +1,23 @@
 ﻿#include "CMesh.h"
 #include "GameObject.h"
 
-CMesh::CMesh(GameObject * object) :Component(object, COMP_MESH)
+CMesh::CMesh(GameObject * object, Component_Type type) : Component(object, COMP_MESH)
 {
-	if (object != nullptr)
-	{
-		this->mesh_ID = object->NumComponentTypeSize(this->type) + 1;
-	}
-	else
-	{
-		this->mesh_ID = 0;
-	}
-	//const char * preName = "Component Mesh _";
-	name= "- Component Mesh_";
-	name.append(std::to_string(mesh_ID));
+		if (object != nullptr)
+		{
+			this->mesh_ID = object->NumComponentTypeSize(this->Ctype) + 1;
+		}
+		else
+		{
+			this->mesh_ID = 0;
+		}
+		name= "- Component Mesh_";
+		name.append(std::to_string(mesh_ID));
 }
 
 CMesh::~CMesh()
 {
+
 }
 
 void CMesh::OnUpdate(float dt)

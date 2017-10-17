@@ -2,7 +2,7 @@
 
 
 #include "Application.h"
-Component::Component(GameObject * object, Component_Type type):object(object),type(type)
+Component::Component(GameObject * object, Component_Type type):object(object), Ctype(type)
 {
 
 }
@@ -13,7 +13,7 @@ Component::~Component()
 
 Component_Type Component::getType()
 {
-	return Component_Type(type);
+	return Component_Type(Ctype);
 }
 
 bool Component::IsEnable() const

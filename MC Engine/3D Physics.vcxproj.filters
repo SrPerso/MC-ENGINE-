@@ -348,6 +348,21 @@
     <ClInclude Include="DTransformation.h">
       <Filter>Engine\Engine\DataContainers</Filter>
     </ClInclude>
+    <ClInclude Include="DContainer.h">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClInclude>
+    <ClInclude Include="ITexture.h">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="DTexture.h">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClInclude>
+    <ClInclude Include="IScene.h">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleDataManager.h">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -545,7 +560,27 @@
     <ClCompile Include="IMaterial.cpp">
       <Filter>Engine\Engine\Importers</Filter>
     </ClCompile>
-    <ClCompile Include="DTransformation.cpp" />
+    <ClCompile Include="ITexture.cpp">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="DTexture.cpp">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClCompile>
+    <ClCompile Include="DTransformation.cpp">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClCompile>
+    <ClCompile Include="DContainer.cpp">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClCompile>
+    <ClCompile Include="Importer.cpp">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="IScenecpp.cpp">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDataManager.cpp">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\Geometry\KDTree.inl">

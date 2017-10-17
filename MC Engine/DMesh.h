@@ -1,12 +1,17 @@
 #ifndef __DATA_MESH_H__
 #define __DATA_MESH_H__
 
+#include "DContainer.h"
 #include "Globals.h"
 #include "MathGeolib\Geometry\AABB.h"
 
 
-class DMesh
+class DMesh : public DContainer
 {
+public:
+
+	DMesh(DType type = D_MESH);
+	~DMesh();
 public:
 
 	uint nVertex = 0;
@@ -37,8 +42,6 @@ public:
 	//
 
 	AABB debugBox;
-public:
-	DMesh::~DMesh();
 
 };
 

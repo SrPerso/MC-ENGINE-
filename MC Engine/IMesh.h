@@ -14,8 +14,11 @@ public:
 	ImporterMesh();
 	virtual ~ImporterMesh();
 
-	DMesh* ImportMesh(const aiMesh* mesh);
+	void ImportMesh(const aiMesh* mesh);
 
+	void SaveMesh(DMesh);
+
+	void LoadMesh(char* buffer, DMesh* data);
 };
 
 #endif
