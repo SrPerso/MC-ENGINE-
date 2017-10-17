@@ -30,7 +30,8 @@ bool ModuleUI::Start()
 {
 
 	bool ret = true;
-	App->ui->AddLogToConsole("-START- Loading UI Engine");
+	LOGUI("-START- Loading UI Engine");
+
 	glewInit();
 	ImGui_ImplSdlGL3_Init(App->window->window);
 	App->window->SetFullscreen(WindowSetingsS.fullscreen);
@@ -59,6 +60,9 @@ bool ModuleUI::Start()
 	sb_Lighting = json_object_dotget_boolean(data, "sb_Lighting");
 	sb_Color_Material = json_object_dotget_boolean(data, "sb_Color_Material");
 	sb_Texture_2D = json_object_dotget_boolean(data, "sb_Texture_2D");
+
+	LOGUI("-START- Loaded config.json");
+
 	}
 
 	else 
@@ -66,6 +70,8 @@ bool ModuleUI::Start()
 		debug_active = false;
 		debug_Vertex_Normals = true;
 		debug_Box = false;
+
+	LOGUI("[ERROR]-START- Cant load config.json");
 	}
 
 
@@ -164,7 +170,7 @@ bool ModuleUI::CleanUp()
 {
 	bool ret = true;
 	ImGui_ImplSdlGL3_Shutdown();
-	App->ui->AddLogToConsole("Unloading UI Engine");
+	LOGUI("-CLEANUP- Unloading UI Engine");
 
 	return ret;
 }

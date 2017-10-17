@@ -25,14 +25,14 @@ ModuleInput::~ModuleInput()
 bool ModuleInput::Init()
 {
 	LOG("-START- Init SDL input event system");
-	App->ui->AddLogToConsole("-START- Init SDL input event system");
+LOGUI("-START- Init SDL input event system");
 	bool ret = true;
 	SDL_Init(0);
 
 	if(SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
 		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
-		App->ui->AddLogToConsole("[ERROR]- SDL_EVENTS could not initialize! ");
+	LOGUI("[ERROR]- SDL_EVENTS could not initialize! ");
 		ret = false;
 	}
 
@@ -127,18 +127,18 @@ update_status ModuleInput::PreUpdate(float dt)
 				if (strcmp(&fileDir[size - 4], ".fbx") == 0 || strcmp(&fileDir[size - 4], ".FBX") == 0)
 				{
 					App->fbxdata->LoadMesh(fileDir);
-					App->ui->AddLogToConsole("(FBX) Droped ");
+				LOGUI("(FBX) Droped ");
 				}
 				else if (strcmp(&fileDir[size - 4], ".png") == 0 || strcmp(&fileDir[size - 4], ".PNG") == 0)
 				{
 					App->texture->AttatchTexture(App->texture->LoadTexture(fileDir));
-					App->ui->AddLogToConsole("(PNG)- Droped ");
+				LOGUI("(PNG)- Droped ");
 				}
 				
 				else 
 				{
 					LOG("File unknown");
-					App->ui->AddLogToConsole("[File unknown] ");
+				LOGUI("[File unknown] ");
 				}
 				SDL_free(fileDir);    // Free dropped_filedir memory
 			break;
@@ -165,7 +165,7 @@ update_status ModuleInput::PreUpdate(float dt)
 bool ModuleInput::CleanUp()
 {
 	LOG("Quitting SDL input event subsystem");
-	App->ui->AddLogToConsole("Quitting SDL input event subsystem");
+LOGUI("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 
 	return true;

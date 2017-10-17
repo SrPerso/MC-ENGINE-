@@ -1,23 +1,4 @@
 #include "DMesh.h"
-#ifndef __DATA_MESH_H__
-#define __DATA_MESH_H__
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#endif
 
 DMesh::~DMesh()
 {
@@ -26,14 +7,23 @@ DMesh::~DMesh()
 		delete Vertex;
 		Vertex = nullptr;
 	}
+
 	if (Index != nullptr)
 	{
 		delete Index;
 		Index = nullptr;
 	}
+
 	if (normals != nullptr)
 	{
 		delete normals;
 		normals = nullptr;
 	}
+
+	if (colors != nullptr)
+	{
+		delete colors;
+		colors = nullptr;
+	}
 }
+
