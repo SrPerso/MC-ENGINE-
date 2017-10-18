@@ -26,7 +26,7 @@ public:
 
 	bool CleanUp() { return true; }
 
-	GameObject* ImportGameObject(std::string Path, GameObject*parent);
+	GameObject* ImportGameObject(std::string Path);
 
 	void LoadAllData(); //called to load all data
 	void SaveAllData(); //Called to Save all data

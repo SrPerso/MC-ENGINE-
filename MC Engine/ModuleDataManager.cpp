@@ -20,9 +20,9 @@ ModuleDataManager::~ModuleDataManager()
 {
 }
 
-GameObject * ModuleDataManager::ImportGameObject(std::string path,GameObject* parent)
+GameObject * ModuleDataManager::ImportGameObject(std::string path)
 {
-	GameObject* newObject = new GameObject(parent);
+	GameObject* newObject = new GameObject();
 
 	int length = strlen(path.c_str());
 	std::string namePath = path;
@@ -54,7 +54,7 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path,GameObject* pa
 		{
 			LOG("Loading meshes");
 
-			for (uint i = 0; i < scene->mNumMeshes; i++)
+			for (int i = 0; i < scene->mNumMeshes; i++)
 			{
 
 				aiMesh* newMesh = scene->mMeshes[i];
