@@ -6,12 +6,16 @@
 #include "DContainer.h"
 #include <string>
 
+#include "IMesh.h"
+#include "ITexture.h"
 
 class GameObject;
 class aiScene;
 class aiNode;
 
-class ModuleDataManager:public Module {
+
+class ModuleDataManager : public Module 
+{
 public:
 	ModuleDataManager(Application * app, bool start_enabled= true);
 	virtual ~ModuleDataManager();
@@ -30,7 +34,9 @@ public:
 
 // Objects creators?
 
-
+public:
+	ImporterMesh * importerMesh = nullptr;
+	ImporterTexture * importerTexture = nullptr;
 };
 
 

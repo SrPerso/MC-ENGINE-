@@ -581,6 +581,7 @@
     <ClCompile Include="ModuleDataManager.cpp">
       <Filter>Engine\Engine\DataContainers</Filter>
     </ClCompile>
+    <ClCompile Include="IScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\Geometry\KDTree.inl">

@@ -7,6 +7,7 @@
 
 class Importer
 {
+
 public:
 	Importer()
 	{}

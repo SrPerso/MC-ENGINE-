@@ -189,6 +189,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="CTexture.cpp" />
     <ClCompile Include="CTransformation.cpp" />
+    <ClCompile Include="IScene.cpp" />
     <ClCompile Include="ModuleDataManager.cpp" />
     <ClCompile Include="DContainer.cpp" />
     <ClCompile Include="DMaterial.cpp" />

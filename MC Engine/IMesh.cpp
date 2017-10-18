@@ -18,8 +18,9 @@ ImporterMesh::~ImporterMesh()
 {
 }
 
-void ImporterMesh::ImportMesh(const aiMesh * newMesh)
+bool ImporterMesh::ImportMesh(aiMesh * newMesh)
 {
+	bool ret = true;
 	
 	if (newMesh != nullptr)
 	{
@@ -129,12 +130,15 @@ void ImporterMesh::ImportMesh(const aiMesh * newMesh)
 		mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
 
 		App->camera->CenterCameraToObject(&mesh->debugBox);
+		ret = true;
 	}
 	else
 	{
+		ret = false;
 		LOGUI("[ERROR]{Importer}- The mesh has not vertices");
 	}
 
+	return ret;
 }
 
 void ImporterMesh::SaveMesh(DMesh mesh)

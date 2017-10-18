@@ -122,7 +122,6 @@ void GameObject::AddChild(GameObject * child)
 {
 	childs.push_back(child);
 	child->parent = this;
-	//child->newParent(this);
 }
 
 GameObject * GameObject::GetFirstChild()

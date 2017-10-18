@@ -7,14 +7,14 @@
 
 class aiMesh;
 
-
 class ImporterMesh : public Importer
 {
+	friend class ModuleDataManager;
 public:
 	ImporterMesh();
 	virtual ~ImporterMesh();
 
-	void ImportMesh(const aiMesh* mesh);
+	bool ImportMesh(aiMesh* mesh);
 
 	void SaveMesh(DMesh);
 
