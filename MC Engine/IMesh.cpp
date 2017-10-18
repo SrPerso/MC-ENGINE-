@@ -19,14 +19,14 @@ ImporterMesh::~ImporterMesh()
 {
 }
 
-DMesh* ImporterMesh::ImportMesh(const void * buffer)
+DMesh* ImporterMesh::ImportMesh(aiMesh * buffer)
 {
 
-	aiMesh* newMesh = (aiMesh*)buffer;
+	aiMesh* newMesh = buffer;
 
 	if (newMesh != nullptr)
 	{
-		DMesh* mesh = nullptr;
+		DMesh* mesh = new DMesh();
 	
 		//VERTEX------------------------------------------------------------------------------
 

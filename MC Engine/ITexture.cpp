@@ -29,7 +29,7 @@ ImporterTexture::~ImporterTexture()
 
 DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  FilePath)
 {
-	DTexture* ret = nullptr;
+	DTexture* ret = new DTexture();
 
 	if (newMaterial != nullptr)
 	{

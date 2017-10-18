@@ -126,8 +126,8 @@ update_status ModuleInput::PreUpdate(float dt)
 
 				if (strcmp(&fileDir[size - 4], ".fbx") == 0 || strcmp(&fileDir[size - 4], ".FBX") == 0)
 				{
-					/*			App->datamanager->ImportGameObject(fileDir);*/
-					App->fbxdata->LoadMesh(fileDir);
+					App->datamanager->ImportGameObject(fileDir);
+					//App->fbxdata->LoadMesh(fileDir);
 				LOGUI("(FBX) Droped ");
 				}
 				else if (strcmp(&fileDir[size - 4], ".png") == 0 || strcmp(&fileDir[size - 4], ".PNG") == 0)

@@ -7,8 +7,9 @@ CTexture::CTexture(GameObject* object, Component_Type type, DTexture * data) :Co
 	if (data)
 	{
 		this->image = data->image;	
-		this->Textname = nullptr;
-		this->Textname.append(data->Textname.c_str());
+		//this->Textname = nullptr;
+		this->Textname.clear();
+		this->Textname=data->Textname.c_str();
 	}
 
 	if (object != nullptr)

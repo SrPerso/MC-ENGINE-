@@ -16,7 +16,7 @@ public:
 	ImporterMesh();
 	virtual ~ImporterMesh();
 
-	DMesh* ImportMesh(const void*buffer);
+	DMesh* ImportMesh(aiMesh*buffer);
 	DTransformation* ImportTrans(aiNode* node);
 
 	void SaveMesh(DMesh);
