@@ -10,8 +10,8 @@
 class GameObject
 {
 public:
-
-	GameObject(GameObject* parent);
+	GameObject();
+	GameObject(GameObject* parent );
 	virtual ~GameObject();
 
 
@@ -42,7 +42,7 @@ public:
 	
 	//COMPONENTS.................................
 
-	Component* CreateComponent(Component_Type type);
+	Component* CreateComponent(Component_Type type, const void*buffet = nullptr);
 	Component* GetComponent(Component_Type type);
 	uint ComponentVectorSize();
 	uint NumComponentTypeSize(Component_Type type);

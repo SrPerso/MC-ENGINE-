@@ -1,8 +1,29 @@
 ﻿#include "CMesh.h"
 #include "GameObject.h"
 
-CMesh::CMesh(GameObject * object, Component_Type type) : Component(object, COMP_MESH)
+CMesh::CMesh(GameObject * object, Component_Type type, DMesh* data) : Component(object, COMP_MESH)
 {
+	if (data)
+	{
+		nVertex = data->nVertex;
+		idVertex = data->idVertex;
+		Vertex = data->Vertex;
+		wire = data->wire;
+		nIndex = data->nIndex;
+		idIndex = data->idIndex;
+		Index = data->Index;
+		nFaces = data->nFaces;
+		normals = data->normals;
+		idNormals = data->idNormals;
+		nNormals = data->nNormals;
+		idColors = data->idColors;
+		colors = data->colors;
+		idTexCoords = data->idTexCoords;
+		texCoords = data->texCoords;
+		debugMode = data->debugMode;
+		debugBox = data->debugBox;
+	}
+
 		if (object != nullptr)
 		{
 			this->mesh_ID = object->NumComponentTypeSize(this->Ctype) + 1;

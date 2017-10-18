@@ -2,8 +2,18 @@
 #include "GameObject.h"
 
 
-CTransformation::CTransformation(GameObject * object, Component_Type type) :Component(object, type)
+CTransformation::CTransformation(GameObject * object, Component_Type type, DTransformation* data) :Component(object, type)
 {
+	if (data)
+	{
+		 position = data->GetPosition();
+		 scale = data->GetScale();
+		 rotation = data->GetRotation();
+
+		 globalPosition = data->GetGlobalPosition();
+		 globalScale = data->GetGlobalScale();
+		 globalRotation = data->GetGlobalRotation();
+	}
 	if (object != nullptr)
 	{
 		this->Transformation_ID = object->NumComponentTypeSize(this->Ctype) + 1;

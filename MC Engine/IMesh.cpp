@@ -7,6 +7,7 @@
 #include "Assimp\include\postprocess.h"
 #include "Assimp\include\cfileio.h"
 
+
 #include "Glew\include\glew.h"
 
 
@@ -18,16 +19,15 @@ ImporterMesh::~ImporterMesh()
 {
 }
 
-bool ImporterMesh::Import(const void * buffer, uint size, std::string & output_file)
+DMesh* ImporterMesh::ImportMesh(const void * buffer)
 {
-	bool ret = true;
 
 	aiMesh* newMesh = (aiMesh*)buffer;
 
 	if (newMesh != nullptr)
 	{
-
 		DMesh* mesh = nullptr;
+	
 		//VERTEX------------------------------------------------------------------------------
 
 		mesh->nVertex = newMesh->mNumVertices;
@@ -128,16 +128,35 @@ bool ImporterMesh::Import(const void * buffer, uint size, std::string & output_f
 		mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
 
 		App->camera->CenterCameraToObject(&mesh->debugBox);
-		ret = true;
+
+		return mesh;
 	}
 	else
 	{
-		ret = false;
+		return nullptr;
 		LOGUI("[ERROR]{Importer}- The mesh has not vertices");
 	}
-
-	return ret;
+	return nullptr;
 }
+
+DTransformation* ImporterMesh::ImportTrans(aiNode* node)
+{
+
+	aiVector3D move;
+	aiVector3D scale;
+	aiQuaternion rotation;
+
+	node->mTransformation.Decompose(scale, rotation, move);
+
+	float3 pos(move.x, move.y, move.z);
+	float3 sca(scale.x, scale.y, scale.z);
+	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
+
+	DTransformation* transl = new DTransformation(pos, sca, rot);
+
+		return transl;
+}
+
 
 void ImporterMesh::SaveMesh(DMesh mesh)
 {

@@ -1,7 +1,40 @@
 #include "DTransformation.h"
 
-DTransformation::DTransformation()
+DTransformation::DTransformation(float3 pos, float3 scale, Quat rot)
 {
+	SetPosition(pos);
+	SetScale(scale);
+	SetRotation(rot);
+}
+
+float3 DTransformation::GetPosition() const
+{
+	return float3(position);
+}
+
+float3 DTransformation::GetScale() const
+{
+	return float3(scale);
+}
+
+Quat DTransformation::GetRotation() const
+{
+	return Quat(rotation);
+}
+
+void DTransformation::SetPosition(float3 position)
+{
+	this->position = position;
+}
+
+void DTransformation::SetScale(float3 scale)
+{
+	this->scale = scale;
+}
+
+void DTransformation::SetRotation(Quat rotation)
+{
+	this->rotation = rotation;
 }
 
 float3 DTransformation::GetGlobalPosition() const

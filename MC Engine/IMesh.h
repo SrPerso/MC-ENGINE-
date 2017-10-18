@@ -4,8 +4,10 @@
 #include "Importer.h"
 #include "Globals.h"
 #include "DMesh.h"
+#include "DTransformation.h"
 
-class aiMesh;
+struct aiMesh;
+struct aiNode;
 
 class ImporterMesh : public Importer
 {
@@ -14,11 +16,16 @@ public:
 	ImporterMesh();
 	virtual ~ImporterMesh();
 
-	virtual bool Import(const void*buffer, uint size, std::string& output_file);
-	
+	DMesh* ImportMesh(const void*buffer);
+	DTransformation* ImportTrans(aiNode* node);
+
 	void SaveMesh(DMesh);
 
 	void LoadMesh(char* buffer, DMesh* data);
 };
+
+
+
+
 
 #endif

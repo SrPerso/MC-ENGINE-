@@ -20,73 +20,69 @@ ModuleDataManager::~ModuleDataManager()
 {
 }
 
-void ModuleDataManager::Import(GameObject * parent, aiScene * scene, aiNode * node)
+GameObject * ModuleDataManager::ImportGameObject(std::string path,GameObject* parent)
 {
-	//idea -> maybe this should go yo IScene
+	GameObject* newObject = new GameObject(parent);
 
-	GameObject* GObject = new GameObject(parent);
-	GObject->Enable();
-	parent->AddChild(GObject);
+	int length = strlen(path.c_str());
+	std::string namePath = path;
 
-	CTransformation* transformation = (CTransformation*)GObject->CreateComponent(COMP_TRANSFORMATION);
-	
-	float3 translation;
-	float3 scale;
-	Quat quaternion;
+	int i = namePath.find_last_of("\\");
 
-	//node->mTransformation.Decompose(scale, quaternion, translation);
-
-	//number of childs of the node	
-	
-		//for(int num = node->mNumMeshes; num!=0; num--)
-		//{
-		//	if (node->mNumMeshes>1)
-		//	{
-
-		//		
-
-		//	}
-		//}
-	
-	
-	//meshes -> for to take every mesh and create a new game object for every mesh
-
-	// calls to import buffers ( one switch with all importers)
-
-	//make a function to asign the buffer to the component
-
-}
-
-void ModuleDataManager::ImportBuffers(const void * buffer, DType type)
-{
-	bool controller = false;
-
-	char* filePath;
-
-	switch (type)
+	if (length > 0 && i > 0)
 	{
-	case D_MESH:
-		importerMesh->Import(buffer);
-		LOGUI("[OK]- ImporterMesh");
-		break;
-	case D_MATERIAL:
-		//import material
-		LOGUI("[OK]- ImporterMaterial");
-		break;
-	case D_TEXTURE:
+		char* testM = new char[length - i];
+		namePath.copy(testM, length - i, i);
+		newObject->SetName(testM);
 
-		importerTexture->ImportTexture((aiMaterial*)buffer,filePath);
-		LOGUI("[OK]- ImporterTexture from %s", filePath);
+		delete[] testM;
+		testM = nullptr;
+	}
+
+	const aiScene* scene = aiImportFile(path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
+
+	if (scene != nullptr && scene->HasMeshes())
+	{
+
+		aiNode* node = scene->mRootNode;
+
+		LOGUI("[OK]- Scene %s loaded succesfully", path);
+
+		newObject->CreateComponent(COMP_TRANSFORMATION, (DTransformation*)importerMesh->ImportTrans(node));
+
+		if (scene != nullptr && scene->HasMeshes())
+		{
+			LOG("Loading meshes");
+
+			for (uint i = 0; i < scene->mNumMeshes; i++)
+			{
+
+				aiMesh* newMesh = scene->mMeshes[i];
+
+				newObject->CreateComponent(COMP_MESH, (DMesh*)importerMesh->ImportMesh(newMesh));
+
+				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
+
+				std::string fullPath = "Assets/";
+				fullPath.append(path);
+
+				newObject->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, fullPath.c_str()));
+
+			}
+
 		
-		break;
-	case D_TRANSFORMATION:
-		LOGUI("[OK]- ImporterTransformation");
-		break;
 
-	default:
-		LOGUI("[ERROR]- Cant import use this kind of importer");
-		break;
-	}	
+			aiReleaseImport(scene);
+
+			return newObject;
+		}
+		else
+		{
+			LOGUI("[Error]- Error importing scene %s", path);
+			return nullptr;
+		}
+
+	}
 }
 
 void ModuleDataManager::LoadAllData()

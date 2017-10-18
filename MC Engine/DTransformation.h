@@ -7,11 +7,20 @@
 class DTransformation
 {
 public:
-	DTransformation();
+	DTransformation(){}
+	DTransformation(float3 pos, float3 scale,Quat rot);
 
 	float3 position;
 	float3 scale;
 	Quat rotation;
+
+	float3 GetPosition()const;
+	float3 GetScale()const;
+	Quat GetRotation()const;
+
+	void SetPosition(float3);
+	void SetScale(float3);
+	void SetRotation(Quat);
 
 	float3 GetGlobalPosition()const;
 	float3 GetGlobalScale()const;
@@ -24,7 +33,7 @@ public:
 public:
 	DTransformation::~DTransformation();
 
-private:
+protected:
 	float3 globalPosition;
 	float3 globalScale;
 	Quat globalRotation;

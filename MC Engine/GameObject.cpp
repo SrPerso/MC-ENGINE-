@@ -9,6 +9,11 @@
 #include "CTexture.h"
 #include "CTransformation.h"
 
+GameObject::GameObject()
+{
+	parent = App->goManager->GetRoot();
+}
+
 GameObject::GameObject(GameObject* parent): parent(parent)
 {
 	name = "GameObject_";	
@@ -129,7 +134,7 @@ GameObject * GameObject::GetFirstChild()
 	return childs[0];
 }
 
-Component * GameObject::CreateComponent(Component_Type type)
+Component * GameObject::CreateComponent(Component_Type type, const void*buffer)
 {	
 	/*
 		COMP_UNKNOWN,COMP_MESH,COMP_TEXTURE,COMP_CAMERA,COMP_SOUND
@@ -141,19 +146,19 @@ Component * GameObject::CreateComponent(Component_Type type)
 	{
 	case COMP_MESH:
 
-		ret = new CMesh(this);
+		ret = new CMesh(this, COMP_MESH,(DMesh*)buffer);
 		this->components.push_back(ret);
 
 		break;
 	case COMP_TRANSFORMATION:
 
-		ret = new CTransformation(this);
+		ret = new CTransformation(this,COMP_TRANSFORMATION, (DTransformation*)buffer);
 		this->components.push_back(ret);
 
 		break;
-	case COMP_TEXTURE:// future implementation materials
+	case COMP_TEXTURE:
 	
-		ret = new CTexture(this);
+		ret = new CTexture(this,COMP_TEXTURE, (DTexture*)buffer);
 		this->components.push_back(ret);
 		
 		break;

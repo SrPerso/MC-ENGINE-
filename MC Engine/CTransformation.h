@@ -12,7 +12,10 @@ class GameObject;
 class CTransformation : public Component, public DTransformation
 {
 public:
-	CTransformation(GameObject* object, Component_Type type = COMP_TRANSFORMATION);
+
+	//CTransformation() :Component(nullptr, COMP_TRANSFORMATION){}
+	CTransformation(GameObject* object, Component_Type type = COMP_TRANSFORMATION) :Component(object, type) {}
+	CTransformation(GameObject* object, Component_Type type = COMP_TRANSFORMATION, DTransformation* data = nullptr);
 	~CTransformation();
 
 	void OnUpdate(float dt);

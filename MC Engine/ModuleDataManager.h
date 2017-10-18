@@ -26,8 +26,7 @@ public:
 
 	bool CleanUp() { return true; }
 
-	void Import(GameObject*parent,aiScene* scene, aiNode* node); //import all 
-	void ImportBuffers(const void* buffer, DType type);
+	GameObject* ImportGameObject(std::string Path, GameObject*parent);
 
 	void LoadAllData(); //called to load all data
 	void SaveAllData(); //Called to Save all data

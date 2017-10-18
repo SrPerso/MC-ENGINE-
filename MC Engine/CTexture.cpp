@@ -1,8 +1,16 @@
 ﻿#include "CTexture.h"
 #include "GameObject.h"
 
-CTexture::CTexture(GameObject * object, Component_Type type) :Component(object, type)
+
+CTexture::CTexture(GameObject* object, Component_Type type, DTexture * data) :Component(object, type)
 {
+	if (data)
+	{
+		this->image = data->image;	
+		this->Textname = nullptr;
+		this->Textname.append(data->Textname.c_str());
+	}
+
 	if (object != nullptr)
 	{
 		this->Texture_ID = object->NumComponentTypeSize(this->Ctype) + 1;
@@ -34,6 +42,3 @@ void CTexture::OnEditor()
 	}
 }
 
-DataTexture::~DataTexture()
-{
-}

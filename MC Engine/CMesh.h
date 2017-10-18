@@ -14,7 +14,7 @@ enum Component_Type;
 class CMesh : public Component, public DMesh
 {
 public:
-	CMesh(GameObject* object, Component_Type type = COMP_MESH );
+	CMesh(GameObject* object, Component_Type type = COMP_MESH , DMesh* data = nullptr);
 	~CMesh();
 
 	void OnUpdate(float dt);
