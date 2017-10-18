@@ -55,6 +55,12 @@ public:
 	void Enable();
 	void Disable();
 
+	//STATIC............................
+
+	bool IsStatic()const;
+	void SetStatic();
+	void SetNoStatic();
+
 	//ACTIONS BASIC.............................
 
 	//void PreUpdate();
@@ -71,6 +77,8 @@ private:
 	std::string name;
 	GameObject* parent = nullptr;
 	bool isEnable = true;
+
+	bool isStatic;
 
 	uint GameOIbject_ID = 0;
 };

@@ -14,8 +14,8 @@ public:
 	ImporterMesh();
 	virtual ~ImporterMesh();
 
-	bool ImportMesh(aiMesh* mesh);
-
+	virtual bool Import(const void*buffer, uint size, std::string& output_file);
+	
 	void SaveMesh(DMesh);
 
 	void LoadMesh(char* buffer, DMesh* data);

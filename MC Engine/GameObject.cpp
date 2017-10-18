@@ -232,6 +232,21 @@ void GameObject::Disable()
 	isEnable = false;
 }
 
+bool GameObject::IsStatic() const
+{
+	return isStatic;
+}
+
+void GameObject::SetStatic()
+{
+	isStatic = true;
+}
+
+void GameObject::SetNoStatic()
+{
+	isStatic = false;
+}
+
 void GameObject::Update(float dt)
 {
 

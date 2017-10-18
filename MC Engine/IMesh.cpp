@@ -18,10 +18,12 @@ ImporterMesh::~ImporterMesh()
 {
 }
 
-bool ImporterMesh::ImportMesh(aiMesh * newMesh)
+bool ImporterMesh::Import(const void * buffer, uint size, std::string & output_file)
 {
 	bool ret = true;
-	
+
+	aiMesh* newMesh = (aiMesh*)buffer;
+
 	if (newMesh != nullptr)
 	{
 
@@ -31,7 +33,7 @@ bool ImporterMesh::ImportMesh(aiMesh * newMesh)
 		mesh->nVertex = newMesh->mNumVertices;
 		mesh->Vertex = new float[mesh->nVertex * 3];
 		memcpy(mesh->Vertex, newMesh->mVertices, sizeof(float)* mesh->nVertex * 3);
-		
+
 		glGenBuffers(1, (GLuint*)&mesh->idVertex);
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->idVertex);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->Vertex, GL_STATIC_DRAW);
@@ -72,12 +74,11 @@ bool ImporterMesh::ImportMesh(aiMesh * newMesh)
 		{
 			LOGUI("[ERROR]- Mesh has not indices!");
 		}
-		
+
 		// NORMALS------------------------------------------------------------------------------
 
 		if (newMesh->HasNormals())
 		{
-
 			mesh->nNormals = mesh->nVertex * 3;
 			mesh->normals = new float[mesh->nVertex * 3];
 			memcpy(mesh->normals, newMesh->mNormals, (sizeof(float) * mesh->nVertex * 3));
@@ -87,7 +88,7 @@ bool ImporterMesh::ImportMesh(aiMesh * newMesh)
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->normals, GL_STATIC_DRAW);
 			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 			glEnableVertexAttribArray(1);
-		
+
 			LOGUI("[OK]- Mesh %i normals Loaded!", mesh->nNormals);
 		}// has normals
 		else
@@ -105,27 +106,24 @@ bool ImporterMesh::ImportMesh(aiMesh * newMesh)
 			glGenBuffers(1, (GLuint*) &(mesh->idColors));
 			glBindBuffer(GL_ARRAY_BUFFER, mesh->idColors);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->colors, GL_STATIC_DRAW);
+
 			LOGUI("[OK]- Mesh vertex Colors Loaded!");
 		}
 		else
 		{
 			LOGUI("[ERROR]- Vertex has not colors!");
 		}
-	
+
 		if (newMesh->HasTextureCoords(0))
 		{
 			mesh->texCoords = new float[mesh->nVertex * 3];
 			memcpy(mesh->texCoords, newMesh->mTextureCoords[0], sizeof(float) * mesh->nVertex * 3);
-
-
+			
 			glGenBuffers(1, (GLuint*) &(mesh->idTexCoords));
 			glBindBuffer(GL_ARRAY_BUFFER, mesh->idTexCoords);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->texCoords, GL_STATIC_DRAW);
-			
 		}
-
-
-
+		
 		mesh->debugBox.SetNegativeInfinity();//
 		mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
 
@@ -166,7 +164,7 @@ void ImporterMesh::SaveMesh(DMesh mesh)
 void ImporterMesh::LoadMesh(char* buffer ,DMesh*data)
 {
 	char* cursor = buffer;
-	// amount of indices / vertices / colors / normals / texture_coords
+
 	uint ranges[5];
 	uint bytes = sizeof(ranges);
 

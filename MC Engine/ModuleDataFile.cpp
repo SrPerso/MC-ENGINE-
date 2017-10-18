@@ -197,7 +197,7 @@ bool DataFBX::Init()
 
 	LOG("-START- Init FBXLoader");
 
-LOGUI("-START- Init FBXLoader");
+	LOGUI("-START- Init FBXLoader");
 
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
@@ -239,7 +239,6 @@ bool DataFBX::LoadMesh(const char* path)
 		{
 		
 			GameObject* gameObjectSon = gameObject->CreateChild();// to imp
-
 
 			CMesh* mesh = (CMesh*)gameObjectSon->CreateComponent(COMP_MESH);// to imp
 			mesh->Enable();// to imp
@@ -347,9 +346,7 @@ bool DataFBX::LoadMesh(const char* path)
 				glGenBuffers(1, (GLuint*) &(mesh->idTexCoords));
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->idTexCoords);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->texCoords, GL_STATIC_DRAW);
-			}
-
-			
+			}	
 			
 			
 			 //TRANSFORMATION-------------- 
@@ -381,8 +378,7 @@ bool DataFBX::LoadMesh(const char* path)
 			mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
 
 			App->camera->CenterCameraToObject(&mesh->debugBox);
-
-
+			
 			App->scene_intro->sceneDebugInfo.faces += mesh->nFaces;
 			App->scene_intro->sceneDebugInfo.tris += mesh->nVertex;
 			App->scene_intro->sceneDebugInfo.vertex += mesh->nVertex;

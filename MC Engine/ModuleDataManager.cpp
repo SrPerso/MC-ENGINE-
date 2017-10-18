@@ -66,7 +66,7 @@ void ModuleDataManager::ImportBuffers(const void * buffer, DType type)
 	switch (type)
 	{
 	case D_MESH:
-		importerMesh->ImportMesh((aiMesh*)buffer);
+		importerMesh->Import(buffer);
 		LOGUI("[OK]- ImporterMesh");
 		break;
 	case D_MATERIAL:
