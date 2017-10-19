@@ -18,8 +18,11 @@ GameObject::GameObject(GameObject* parent): parent(parent)
 {
 	name = "GameObject_";	
 
+
 	if (parent != nullptr)
 	{
+	//	parent->AddChild(this);
+
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
 	}
 	else 

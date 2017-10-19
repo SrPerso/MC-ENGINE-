@@ -245,6 +245,7 @@ bool DataFBX::LoadMesh(const char* path)
 
 			aiMesh* newMesh = scene->mMeshes[i]; // to imp
 
+
 			//passed
 			mesh->nVertex = newMesh->mNumVertices; 
 			mesh->Vertex = new float[mesh->nVertex * 3];

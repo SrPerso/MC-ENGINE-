@@ -20,25 +20,24 @@ ModuleDataManager::~ModuleDataManager()
 {
 }
 
-GameObject * ModuleDataManager::ImportGameObject(std::string path)
+GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*parent)
 {
-
-	GameObject* newObject = App->goManager->GetRoot()->CreateChild();
+	GameObject* newObject = parent->CreateChild();
 	
-	int length = strlen(path.c_str());
-	std::string namePath = path;
+	//int length = strlen(path.c_str());
+	//std::string namePath = path;
 
-	int i = namePath.find_last_of("\\");
+	//int i = namePath.find_last_of("\\");
 
-	if (length > 0 && i > 0)
-	{
-		char* testM = new char[length - i];
-		namePath.copy(testM, length - i, i);
-		newObject->SetName(testM);
+	//if (length > 0 && i > 0)
+	//{
+	//	char* testM = new char[length - i];
+	//	namePath.copy(testM, length - i, i);
+	//	newObject->SetName(testM);
 
-		delete[] testM;
-		testM = nullptr;
-	}
+	//	delete[] testM;
+	//	testM = nullptr;
+	//}
 
 	const aiScene* scene = aiImportFile(path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 
@@ -60,29 +59,28 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path)
 
 				aiMesh* newMesh = scene->mMeshes[i];
 				
-				GameObject * GameObjectSon = nullptr;
+				GameObject * GameObjectSon;
 				
-				if (node->mNumMeshes > 1)
+				if (scene->mNumMeshes > 1)
 				{
-					newObject->AddChild(GameObjectSon);
 
+					GameObjectSon = new GameObject();
+					newObject->AddChild(GameObjectSon);
 				}
 				else
 				{
 					GameObjectSon = newObject;
 				}				
 
-				newObject->CreateComponent(COMP_MESH, (DMesh*)importerMesh->ImportMesh(newMesh));
+				GameObjectSon->CreateComponent(COMP_MESH, (DMesh*)importerMesh->ImportMesh(newMesh));
 			
 				std::string fullPath = "Assets/";
 				fullPath.append(path);
 
 				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
-				newObject->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, fullPath.c_str()));
+				GameObjectSon->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, fullPath.c_str()));
 
-			}
-
-		
+			}	
 
 			aiReleaseImport(scene);
 
@@ -94,8 +92,8 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path)
 			return nullptr;
 		}
 
-		for (int i = 0; i < node->mNumChildren; ++i)
-			ImportGameObject(path);
+		for (int i = 0; i <= node->mNumChildren; ++i)
+			ImportGameObject(path,newObject);
 
 
 	}
