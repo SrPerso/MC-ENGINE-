@@ -22,7 +22,7 @@ bool ImporterScene::ImportScene(GameObject * parent, aiScene * scene, aiNode * n
 
 	}
 
-
+	return true;
 
 
 }

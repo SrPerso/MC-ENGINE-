@@ -43,7 +43,7 @@ DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  F
 		if (retu == aiReturn_FAILURE)
 			LOGUI("[ERROR]- fail getting texture");
 
-		std::string fullPath = FilePath;
+		std::string fullPath = "Assets/";
 		fullPath.append(path.C_Str());
 
 		ret->image = App->texture->LoadTexture(fullPath.c_str());
