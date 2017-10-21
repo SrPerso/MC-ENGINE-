@@ -96,3 +96,5 @@ void CMesh::Move(float3 destiny, float3 start)
 	debugBox.SetNegativeInfinity();
 	debugBox.Enclose((float3*)Vertex, nVertex);
 }
+
+

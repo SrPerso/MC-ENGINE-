@@ -5,11 +5,13 @@
 #include "Component.h"
 #include "GameObject.h"
 #include <string>
+#include <vector>
 #include "MathGeolib\Math\Quat.h"
 #include "MathGeolib\Math\float3.h"
 #include "DTransformation.h"
 
 class GameObject;
+
 
 class CTransformation : public Component, public DTransformation
 {
@@ -22,12 +24,14 @@ public:
 
 	void OnUpdate(float dt);
 	void OnEditor();
+	void Rotate(vec3 rotation);
 
 	void SetPos(float3);
 	uint Transformation_ID;// is not necesary (?)
 
 public:
-	
+	vec3 eulerAngles;
+
 };
 
 #endif //__TRANSFORMATION_H__

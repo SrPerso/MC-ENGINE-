@@ -6,7 +6,7 @@
 #include "Glew\include\glew.h"
 
 #include "MathGeolib\Geometry\AABB.h"
-
+#include <map>
 #include <string>
 
 
@@ -22,6 +22,7 @@ public:
 	void OnEditor();
 
 	void Move(float3 destiny, float3 position);
+	
 	uint mesh_ID;
 };
 

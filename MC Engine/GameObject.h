@@ -48,6 +48,7 @@ public:
 	uint NumComponentTypeSize(Component_Type type);
 	void DeleteComponent(Component* comp);
 	void Move(float3 destiny, float3 position);
+	//void Rotate(vec3 rotation);
 	//ENABLE/DISABLE............................
 
 	bool IsEnable()const;

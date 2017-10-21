@@ -316,3 +316,20 @@ void GameObject::Move(float3 destiny, float3 position)
 	}
 }
 
+/*void GameObject::Rotate(vec3 rotation)
+{
+	/*for (int i = 0; i < childs.size(); i++)
+	{
+		if (childs.size() > 0) {
+			for (int o = 0; o < childs[i]->components.size(); o++) {
+
+				if (childs[i]->components[o]->getType() == COMP_TRANSFORMATION)
+				{
+					dynamic_cast<CTransformation*>(childs[i]->components[o])->Rotate(rotation);
+				}
+			}
+		}
+	}
+	
+}*/
+

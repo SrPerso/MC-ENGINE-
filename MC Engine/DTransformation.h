@@ -14,7 +14,7 @@ public:
 	float3 destiny;
 	float3 scale;
 	Quat rotation;
-
+	float angle;
 	float3 GetPosition()const;
 	float3 GetScale()const;
 	Quat GetRotation()const;
@@ -39,6 +39,7 @@ protected:
 	float3 globalScale;
 	Quat globalRotation;
 	bool moving;
+	bool rotating;
 };
 
 #endif

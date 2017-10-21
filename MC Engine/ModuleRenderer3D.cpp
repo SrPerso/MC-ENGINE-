@@ -296,9 +296,6 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 	{
 		if ((*it)->getType() == COMP_MESH)
 		{
-
-
-
 			CMesh* componentMesh = dynamic_cast<CMesh*>(*it);
 
 			if (App->ui->debug_active == true) 
