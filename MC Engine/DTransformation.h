@@ -1,8 +1,11 @@
 #ifndef __DATA_TRANSFORMATION_H__
 #define __DATA_TRANSFORMATION_H__
 
+#include "Component.h"
 #include "MathGeolib\Math\Quat.h"
 #include "MathGeolib\Math\float3.h"
+#include "MathGeolib\Math\float4x4.h"
+
 
 class DTransformation
 {
@@ -14,6 +17,10 @@ public:
 	float3 destiny;
 	float3 scale;
 	Quat rotation;
+	float3 eulerAngles;
+	float4x4 globalTransformMatrix;
+	float4x4 localTransformMatrix;
+
 	float angle;
 	float3 GetPosition()const;
 	float3 GetScale()const;
@@ -29,7 +36,7 @@ public:
 	
 	void SetGlobalPosition(float3);
 	void SetGlobalScale(float3);
-	void SetGlobalRotation(Quat);
+	
 
 public:
 	DTransformation::~DTransformation();
@@ -40,6 +47,8 @@ protected:
 	Quat globalRotation;
 	bool moving;
 	bool rotating;
+
+	
 };
 
 #endif

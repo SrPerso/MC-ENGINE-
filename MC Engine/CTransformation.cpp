@@ -45,7 +45,8 @@ void CTransformation::OnUpdate(float dt)
 	}
 
 	else if (rotating) {
-		Rotate(eulerAngles);
+		//Rotate(eulerAngles);
+		UpdateTransform();
 		rotating = false;
 	}
 }
@@ -119,10 +120,10 @@ void CTransformation::SetPos(float3 pos)
 	position = pos;
 }
 
-void CTransformation::Rotate(vec3 newRotation)
+void CTransformation::Rotate(float3 newRotation)
 {
-	Quat mod = Quat::FromEulerXYZ(newRotation.x, newRotation.y, newRotation.z);
-	rotation=rotation * mod;
+	/*Quat mod = Quat::FromEulerXYZ(newRotation.x, newRotation.y, newRotation.z);
+	
 	SetRotation(rotation);
 
 	/*if (newRotation.y > 0) {
@@ -134,4 +135,38 @@ void CTransformation::Rotate(vec3 newRotation)
 	else if (newRotation.z > 0) {
 		SetRotation(rotation * Quat::RotateZ(newRotation.z));
 	}*/
+}
+
+void CTransformation::UpdateTransform()
+{
+	rotation = Quat::FromEulerXYZ(eulerAngles.x, eulerAngles.y, eulerAngles.z);
+	globalTransformMatrix = float4x4::FromQuat(rotation);
+	globalTransformMatrix = float4x4::Scale(scale, float3(0, 0, 0)) * globalTransformMatrix;
+	globalTransformMatrix.float4x4::SetTranslatePart(position.x, position.y, position.z);
+}
+
+void CTransformation::SetLocalRotation(Quat newRot)
+{
+	if (object->GetParent() != nullptr)
+	{
+		CTransformation* parentTrans = (CTransformation*)object->GetParent()->GetComponent(COMP_TRANSFORMATION);
+		if (parentTrans != nullptr)
+		{
+			float3 localPos = position - parentTrans->position;
+			Quat localRot = rotation * parentTrans->rotation.Conjugated();
+			float3 localScale = scale.Mul(parentTrans->scale.Recip());
+
+			localTransformMatrix = float4x4::FromQuat(localRot);
+			globalTransformMatrix = float4x4::Scale(localScale, float3(0, 0, 0)) * globalTransformMatrix;
+			globalTransformMatrix.float4x4::SetTranslatePart(localPos.x, localPos.y, localPos.z);
+		}
+		else
+		{
+			localTransformMatrix = globalTransformMatrix;
+		}
+	}
+	else
+	{
+		localTransformMatrix = globalTransformMatrix;
+	}
 }
