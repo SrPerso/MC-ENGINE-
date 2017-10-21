@@ -5,12 +5,6 @@ DTransformation::DTransformation(float3 pos, float3 scale, Quat rot)
 	SetPosition(pos);
 	SetScale(scale);
 	SetRotation(rot);
-
-	globalTransformMatrix = float4x4::FromQuat(rot);
-	globalTransformMatrix = float4x4::Scale(scale, float3(0, 0, 0)) * globalTransformMatrix;
-	globalTransformMatrix.float4x4::SetTranslatePart(pos.x, pos.y, pos.z);
-
-	localTransformMatrix = globalTransformMatrix;
 }
 
 float3 DTransformation::GetPosition() const
@@ -68,9 +62,10 @@ void DTransformation::SetGlobalScale(float3 newScale)
 	globalScale = newScale;
 }
 
-
-
-
+void DTransformation::SetGlobalRotation(Quat newRotation)
+{
+	globalRotation = newRotation;
+}
 
 DTransformation::~DTransformation()
 {
