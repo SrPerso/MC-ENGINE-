@@ -9,7 +9,7 @@ DTransformation::DTransformation(float3 pos, float3 scale, Quat rot)
 
 float3 DTransformation::GetPosition() const
 {
-	return float3(position);
+	return float3(destiny);
 }
 
 float3 DTransformation::GetScale() const
@@ -24,7 +24,7 @@ Quat DTransformation::GetRotation() const
 
 void DTransformation::SetPosition(float3 position)
 {
-	this->position = position;
+	this->destiny = position;
 }
 
 void DTransformation::SetScale(float3 scale)

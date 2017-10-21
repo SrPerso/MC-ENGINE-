@@ -257,23 +257,18 @@ void GameObject::SetNoStatic()
 
 void GameObject::Update(float dt)
 {
-
-	for (std::vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
-	{
-		if ((*it)->IsEnable() == true)
-		{
-			(*it)->Update(dt);
-		}
-	}
-
-	for (std::vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
-	{
-		if((*it)->IsEnable()==true)
-		{
-			(*it)->OnUpdate(dt);
-		}
-	}
 	App->renderer3D->DrawGO(this);
+
+	for (int i = 0; i < components.size(); i++)
+	{
+		components[i]->OnUpdate(dt);
+	}
+
+	for (int i = 0; i < childs.size(); i++)
+	{
+		childs[i]->Update(dt);
+	}
+	
 
 }
 
@@ -305,4 +300,19 @@ void GameObject::OnEditor()
 	}
 }
 
+void GameObject::Move(float3 destiny, float3 position)
+{
+	for (int i = 0; i < childs.size(); i++)
+	{
+		if (childs.size() > 0) {
+			for (int o = 0; o < childs[i]->components.size(); o++) {
+
+				if (childs[i]->components[o]->getType() == COMP_MESH)
+				{
+					dynamic_cast<CMesh*>(childs[i]->components[o])->Move(destiny, position);
+				}
+			}
+		}
+	}
+}
 

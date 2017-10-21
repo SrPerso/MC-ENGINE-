@@ -1,7 +1,9 @@
 #ifndef __TRANSFORMATION_H__
 #define __TRANSFORMATION_H__
 
+#include "Application.h"
 #include "Component.h"
+#include "GameObject.h"
 #include <string>
 #include "MathGeolib\Math\Quat.h"
 #include "MathGeolib\Math\float3.h"
@@ -24,6 +26,8 @@ public:
 	void SetPos(float3);
 	uint Transformation_ID;// is not necesary (?)
 
+public:
+	
 };
 
 #endif //__TRANSFORMATION_H__

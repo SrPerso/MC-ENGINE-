@@ -44,6 +44,7 @@ public:
 	IMGUI_API void ShowDebugWindow(bool* p_open = NULL);
 
 	IMGUI_API void ShowEditorWindow(bool* p_open = NULL);
+	IMGUI_API void ShowInspectorWindow(bool* p_open = NULL);
 
 	void AddLogToConsole(std::string toAdd);
 	void AddLogToConsole(std::string toAdd,int dataToAdd);

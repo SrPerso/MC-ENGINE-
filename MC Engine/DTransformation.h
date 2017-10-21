@@ -11,6 +11,7 @@ public:
 	DTransformation(float3 pos, float3 scale,Quat rot);
 
 	float3 position;
+	float3 destiny;
 	float3 scale;
 	Quat rotation;
 
@@ -37,6 +38,7 @@ protected:
 	float3 globalPosition;
 	float3 globalScale;
 	Quat globalRotation;
+	bool moving;
 };
 
 #endif

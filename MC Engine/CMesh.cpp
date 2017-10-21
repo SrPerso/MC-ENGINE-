@@ -71,3 +71,28 @@ void CMesh::OnEditor()
 
 
 }
+
+void CMesh::Move(float3 destiny, float3 start)
+{
+
+	float3 diff = destiny - start;
+
+	for (int i = 0; i <= nVertex* 3; i += 3)
+	{
+		Vertex[i] += diff.x;
+	}
+	for (int i = 1; i <= nVertex * 3; i += 3)
+	{
+		Vertex[i] += diff.y;
+	}
+	for (int i = 2; i <= nVertex * 3; i += 3)
+	{
+		Vertex[i] += diff.z;
+	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, idVertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * nVertex * 3, Vertex, GL_STATIC_DRAW);
+
+	debugBox.SetNegativeInfinity();
+	debugBox.Enclose((float3*)Vertex, nVertex);
+}

@@ -513,6 +513,22 @@ IMGUI_API void ModuleUI::ShowEditorWindow(bool * p_open)
 	return IMGUI_API void();
 }
 
+IMGUI_API void ModuleUI::ShowInspectorWindow( bool * p_open)
+{
+	ImGuiWindowFlags window_flags = 0;
+
+	window_flags |= ImGuiWindowFlags_NoTitleBar;
+
+	if (ImGui::Begin("Inspector", p_open, window_flags))
+	{
+		ImGui::Text("INSPECTOR WINDOW:");
+		ImGui::Separator();
+		ImGui::End();
+	}
+
+	return IMGUI_API void();
+}
+
 
 //show the logs on Console..................................................
 void ModuleUI::AddLogToConsole(std::string toAdd)

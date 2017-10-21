@@ -3,6 +3,7 @@
 
 #include "DMesh.h"
 #include "Component.h"
+#include "Glew\include\glew.h"
 
 #include "MathGeolib\Geometry\AABB.h"
 
@@ -20,6 +21,7 @@ public:
 	void OnUpdate(float dt);
 	void OnEditor();
 
+	void Move(float3 destiny, float3 position);
 	uint mesh_ID;
 };
 

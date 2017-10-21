@@ -3,7 +3,7 @@
 
 #include "Globals.h"
 #include "Component.h"
-
+#include "MathGeolib\Math\float3.h"
 #include <string>
 #include <vector>
 
@@ -47,7 +47,7 @@ public:
 	uint ComponentVectorSize();
 	uint NumComponentTypeSize(Component_Type type);
 	void DeleteComponent(Component* comp);
-
+	void Move(float3 destiny, float3 position);
 	//ENABLE/DISABLE............................
 
 	bool IsEnable()const;
