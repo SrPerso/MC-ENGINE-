@@ -26,9 +26,11 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	LOGUI("-START- Loading Intro assets");
 	bool ret = true;	
+	GameObject* camera = new GameObject(App->goManager->GetRoot());
 	
-	DCamera* camera = new DCamera();
-	App->goManager->GetRoot()->CreateComponent(COMP_CAMERA,camera);
+
+	App->goManager->GetRoot()->AddChild(camera);
+	camera->CreateComponent(COMP_CAMERA);
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 	

@@ -11,6 +11,7 @@
 #include "DCamera.h"
 
 
+
 class GameObject;
 enum Component_Type;
 class CCamera : public Component, public DCamera
@@ -22,11 +23,11 @@ public:
 	~CCamera();
 
 	void SetPos(float3 newPos);
-	void Update(float dt);
+	void OnUpdate(float dt);
 	void OnEditor();
 	void DrawFrustum();
-
-
+	bool Contains(const AABB & aabb) const;
+	
 };
 
 #endif

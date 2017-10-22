@@ -275,6 +275,17 @@ void GameObject::SetNoStatic()
 
 void GameObject::Update(float dt)
 {
+	/*CCamera* camera = (CCamera*)App->goManager->GetRoot()->GetComponent(COMP_CAMERA);
+	CMesh* debuger = (CMesh*)this->GetComponent(COMP_MESH);
+	if (debuger != nullptr)
+	{
+		AABB recalculatedBox = debuger->debugBox;
+
+		if (camera->Contains(recalculatedBox))
+		{
+			App->renderer3D->DrawGO(this);
+		}
+	}*/
 	App->renderer3D->DrawGO(this);
 
 	for (int i = 0; i < components.size(); i++)

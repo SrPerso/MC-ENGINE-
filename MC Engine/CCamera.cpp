@@ -4,7 +4,8 @@
 
 CCamera::CCamera(GameObject* object, Component_Type type, DCamera * data) :Component(object,COMP_CAMERA)
 {
-	this->aspectRatio = aspectRatio;
+	name = "Camera";
+	/*this->aspectRatio = aspectRatio;
 	this->aspectRatio = (float)16 / 9;
 	frustum.type = data->frustum.type;
 	frustum.pos = data->frustum.pos;
@@ -18,7 +19,7 @@ CCamera::CCamera(GameObject* object, Component_Type type, DCamera * data) :Compo
 
 	frustum.ProjectionMatrix();
 
-	frustumCulling = true;
+	frustumCulling = true;*/
 }
 
 CCamera::~CCamera()
@@ -30,7 +31,7 @@ void CCamera::SetPos(float3 newPos)
 	frustum.pos = newPos;
 }
 
-void CCamera::Update(float dt)
+void CCamera::OnUpdate(float dt)
 {
 	DrawFrustum();
 }
@@ -44,9 +45,6 @@ void CCamera::OnEditor()
 		ImGui::SliderFloat("Y", &frustum.pos.y, -50, 50);
 		ImGui::SliderFloat("Z", &frustum.pos.z, -50, 50);
 		ImGui::TreePop();
-
-		ImGui::Text("FOV:");
-		ImGui::Checkbox("Use Culling", &frustumCulling);
 	}
 }
 
@@ -57,7 +55,7 @@ void CCamera::DrawFrustum()
 	float3 vertices[8];
 	frustum.GetCornerPoints(vertices);
 
-	glColor3f(1.0f, 1.0f, 0.0f);
+	glColor3f(1.0f, 0.0f, 0.0f);
 
 	glBegin(GL_QUADS);
 
@@ -90,7 +88,14 @@ void CCamera::DrawFrustum()
 	glVertex3fv((GLfloat*)&vertices[4]); //glVertex3f( sx, -sy, -sz);
 	glVertex3fv((GLfloat*)&vertices[5]); //glVertex3f( sx, -sy,  sz);
 	glVertex3fv((GLfloat*)&vertices[1]); //glVertex3f(-sx, -sy,  sz);
+	
 
+	glColor3f(1.0f, 1.0f, 1.0f);
 	glEnd();
 
+}
+
+bool CCamera::Contains(const AABB & aabb) const
+{
+	return frustum.Contains(aabb);
 }
