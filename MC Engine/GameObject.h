@@ -51,6 +51,7 @@ public:
 	//void Rotate(vec3 rotation);
 	//ENABLE/DISABLE............................
 
+	void UpdateTranformChilds();
 	bool IsEnable()const;
 	void SetEnable(bool isEnable);
 	void Enable();

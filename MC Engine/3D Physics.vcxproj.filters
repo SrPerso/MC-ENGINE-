@@ -363,6 +363,12 @@
     <ClInclude Include="ModuleDataManager.h">
       <Filter>Engine\Engine\DataContainers</Filter>
     </ClInclude>
+    <ClInclude Include="CCamera.h">
+      <Filter>Engine\Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DCamera.h">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -582,6 +588,12 @@
       <Filter>Engine\Engine\DataContainers</Filter>
     </ClCompile>
     <ClCompile Include="IScene.cpp" />
+    <ClCompile Include="CCamera.cpp">
+      <Filter>Engine\Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="DCamera.cpp">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\Geometry\KDTree.inl">

@@ -3,7 +3,7 @@
 
 #include "MathGeolib\Math\Quat.h"
 #include "MathGeolib\Math\float3.h"
-
+#include "MathGeolib\Math\float4x4.h"
 class DTransformation
 {
 public:
@@ -33,6 +33,10 @@ public:
 
 public:
 	DTransformation::~DTransformation();
+	float3 eulerAngles;
+	float4x4 globalTransformMatrix;
+	float4x4 localTransformMatrix;
+	float3 newPos;
 
 protected:
 	float3 globalPosition;

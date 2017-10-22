@@ -8,6 +8,7 @@
 #include "CMesh.h"
 #include "CTexture.h"
 #include "CTransformation.h"
+#include "CCamera.h"
 
 GameObject::GameObject()
 {
@@ -165,6 +166,11 @@ Component * GameObject::CreateComponent(Component_Type type, const void*buffer)
 		this->components.push_back(ret);
 		
 		break;
+	case COMP_CAMERA:
+		ret = new CCamera(this, COMP_CAMERA, (CCamera*)buffer);
+		this->components.push_back(ret);
+
+		break;
 	default://COMP_UNKNOWN
 
 		break;
@@ -218,6 +224,18 @@ void GameObject::DeleteComponent(Component * comp)
 		}
 	}
 
+}
+
+void GameObject::UpdateTranformChilds()
+{
+	for (int i = 0; i < childs.size(); i++)
+	{
+		CTransformation* tmp = (CTransformation*)childs[i]->GetComponent(COMP_TRANSFORMATION);
+		if (tmp != nullptr)
+		{
+			tmp->UpdateTransFromParent(this);
+		}
+	}
 }
 
 bool GameObject::IsEnable() const

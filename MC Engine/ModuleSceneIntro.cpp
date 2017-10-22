@@ -6,7 +6,8 @@
 #include "Glew\include\glew.h"
 #include "imGUI\imgui.h"
 #include "imGUI\imgui_impl_sdl_gl3.h"
-
+#include "CCamera.h"
+#include "GameObject.h"
 #include "Math.h"
 
 
@@ -25,9 +26,12 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	LOGUI("-START- Loading Intro assets");
 	bool ret = true;	
-
+	
+	DCamera* camera = new DCamera();
+	App->goManager->GetRoot()->CreateComponent(COMP_CAMERA,camera);
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
+	
 
 	return ret;
 }

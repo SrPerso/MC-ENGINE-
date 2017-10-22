@@ -8,6 +8,7 @@
 #include <vector>
 #include "MathGeolib\Math\Quat.h"
 #include "MathGeolib\Math\float3.h"
+#include "MathGeolib\Math\float4x4.h"
 #include "DTransformation.h"
 
 class GameObject;
@@ -24,13 +25,14 @@ public:
 
 	void OnUpdate(float dt);
 	void OnEditor();
-	void Rotate(vec3 rotation);
+	void Rotate();
+
+	void UpdateTransFromParent(GameObject* parent);
+	void SetLocalTrans(GameObject* parent);
 
 	void SetPos(float3);
 	uint Transformation_ID;// is not necesary (?)
 
-public:
-	vec3 eulerAngles;
 
 };
 

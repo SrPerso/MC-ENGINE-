@@ -147,7 +147,7 @@ DTransformation* ImporterMesh::ImportTrans(aiNode* node)
 	aiQuaternion rotation;
 
 	node->mTransformation.Decompose(scale, rotation, move);
-
+	
 	float3 pos(move.x, move.y, move.z);
 	float3 sca(scale.x, scale.y, scale.z);
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);

@@ -80,11 +80,13 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Brofiler\Brofiler.h" />
+    <ClInclude Include="CCamera.h" />
     <ClInclude Include="CMesh.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="CTexture.h" />
     <ClInclude Include="CTransformation.h" />
+    <ClInclude Include="DCamera.h" />
     <ClInclude Include="ModuleDataManager.h" />
     <ClInclude Include="DContainer.h" />
     <ClInclude Include="DMaterial.h" />
@@ -184,11 +186,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="CMesh.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="CTexture.cpp" />
     <ClCompile Include="CTransformation.cpp" />
+    <ClCompile Include="DCamera.cpp" />
     <ClCompile Include="IScene.cpp" />
     <ClCompile Include="ModuleDataManager.cpp" />
     <ClCompile Include="DContainer.cpp" />

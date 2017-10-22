@@ -9,7 +9,8 @@ enum DType
 	D_MESH,
 	D_MATERIAL,
 	D_TEXTURE,
-	D_TRANSFORMATION
+	D_TRANSFORMATION,
+	D_CAMERA
 };
 
 class DContainer
