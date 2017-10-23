@@ -48,7 +48,11 @@ void CCamera::OnEditor()
 		ImGui::SliderFloat("X", &frustum.pos.x, -50, 50);
 		ImGui::SliderFloat("Y", &frustum.pos.y, -50, 50);
 		ImGui::SliderFloat("Z", &frustum.pos.z, -50, 50);
+
+
 		ImGui::TreePop();
+
+		ImGui::Checkbox("CULLING", &needToCull);
 	}
 }
 

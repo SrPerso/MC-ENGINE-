@@ -280,6 +280,7 @@ void GameObject::SetNoStatic()
 
 void GameObject::Update(float dt)
 {
+
 	CCamera* camera = nullptr;
 	for (int i = 0; i < App->goManager->GetRoot()->childs.size(); i++) 
 	{
@@ -295,12 +296,18 @@ void GameObject::Update(float dt)
 		}
 	}
 	
+	
 	CMesh* debuger = (CMesh*)this->GetComponent(COMP_MESH);
 	if (debuger != nullptr && camera!=nullptr)
 	{		
-		recalculatedBox = debuger->debugBox;
-		if (camera->Contains(recalculatedBox))
-		{
+		if (camera->needToCull) {
+			recalculatedBox = debuger->debugBox;
+			if (camera->Contains(recalculatedBox))
+			{
+				App->renderer3D->DrawGO(this);
+			}
+		}
+		else {
 			App->renderer3D->DrawGO(this);
 		}
 	}

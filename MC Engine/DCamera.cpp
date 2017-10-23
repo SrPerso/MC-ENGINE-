@@ -17,7 +17,7 @@ DCamera::DCamera(float3 pos, float3 front, float3 up, float nearPlaneDistance, f
 
 	frustum.ProjectionMatrix();
 
-	frustumCulling = true;
+	needToCull = false;
 }
 
 DCamera::~DCamera()
