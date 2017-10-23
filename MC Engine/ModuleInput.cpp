@@ -135,6 +135,12 @@ update_status ModuleInput::PreUpdate(float dt)
 					App->texture->AttatchTexture(App->texture->LoadTexture(fileDir));
 				LOGUI("(PNG)- Droped ");
 				}
+
+				else if (strcmp(&fileDir[size - 4], ".tga") == 0)
+				{
+					App->texture->AttatchTexture(App->texture->LoadTexture(fileDir));
+					LOGUI("(TGA)- Droped ");
+				}
 				
 				else 
 				{

@@ -22,22 +22,23 @@ ModuleDataManager::~ModuleDataManager()
 
 GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*parent)
 {
-	GameObject* newObject = parent->CreateChild();
-	
-	//int length = strlen(path.c_str());
-	//std::string namePath = path;
+	GameObject* newObject = parent->CreateChild();	
 
-	//int i = namePath.find_last_of("\\");
+	int length = strlen(path.c_str());
+	std::string namePath = path;
 
-	//if (length > 0 && i > 0)
-	//{
-	//	char* testM = new char[length - i];
-	//	namePath.copy(testM, length - i, i);
-	//	newObject->SetName(testM);
+	int i = namePath.find_last_of("\\") + 1;
 
-	//	delete[] testM;
-	//	testM = nullptr;
-	//}
+	if (length > 0 && i > 0)
+	{
+		char* testM = new char[length - i];
+		namePath.copy(testM, length - i, i);
+		newObject->SetName(testM);
+
+		delete[] testM;
+		testM = nullptr;
+	}
+
 
 	const aiScene* scene = aiImportFile(path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 
@@ -64,8 +65,8 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 				if (scene->mNumMeshes > 1)
 				{
 
-					GameObjectSon = new GameObject();
-					newObject->AddChild(GameObjectSon);
+					GameObjectSon = new GameObject(newObject);
+		
 				}
 				else
 				{
@@ -73,13 +74,12 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 				}				
 
 				GameObjectSon->CreateComponent(COMP_MESH, (DMesh*)importerMesh->ImportMesh(newMesh));
-			
-				std::string fullPath = "Assets/";
-				fullPath.append(path);
 
 				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
-				GameObjectSon->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, fullPath.c_str()));
+				GameObjectSon->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));
 
+
+				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, (DTransformation*)importerMesh->ImportTrans(node)); //global objeto total
 			}	
 
 			aiReleaseImport(scene);

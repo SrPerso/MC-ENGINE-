@@ -29,7 +29,7 @@ bool ModuleSceneIntro::Start()
 	GameObject* camera = new GameObject(App->goManager->GetRoot());
 	
 	DCamera* dcamera = new DCamera();
-	App->goManager->GetRoot()->AddChild(camera);
+
 	camera->CreateComponent(COMP_CAMERA, dcamera);
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
@@ -137,15 +137,6 @@ void ModuleSceneIntro::CreateLine(vec3 Origin, vec3 destintation,Color color)
 
 void ModuleSceneIntro::Draw()
 {
-	/*for (std::list<Primitive*>::iterator it = GeometryObjects.begin(); it != GeometryObjects.end(); ++it)
-	{
-		(*it)->Render();
-	}*/
-
-	for (std::list<PrimitiveLine*>::iterator it = NormalsLines.begin(); it != NormalsLines.end(); ++it)
-	{
-		(*it)->Render();
-	}
 }
 
 void ModuleSceneIntro::CreateCylinder(const float x, const float y, const float z, const float radious, const float h)

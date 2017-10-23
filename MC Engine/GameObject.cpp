@@ -14,9 +14,20 @@ GameObject::GameObject()
 {
 	parent = App->goManager->GetRoot();
 
+	name = "GameObject_";
 
 
-	
+	if (parent != nullptr)
+	{
+		parent->AddChild(this);
+		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
+	}
+	else
+	{
+		this->GameOIbject_ID = 0;
+	}
+
+	name.append(std::to_string(GameOIbject_ID));
 }
 
 GameObject::GameObject(GameObject* parent): parent(parent)
@@ -26,7 +37,7 @@ GameObject::GameObject(GameObject* parent): parent(parent)
 
 	if (parent != nullptr)
 	{
-	//	parent->AddChild(this);
+		parent->AddChild(this);
 
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
 	}
@@ -80,7 +91,7 @@ GameObject * GameObject::CreateChild()
 	
 	ret->SetEnable(this->IsEnable());		
 	
-	childs.push_back(ret);
+	//childs.push_back(ret);
 
 	return ret;
 }
@@ -314,14 +325,21 @@ void GameObject::Update(float dt)
 
 	//App->renderer3D->DrawGO(this);
 
-	for (int i = 0; i < components.size(); i++)
+
+	for (std::vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
 	{
-		components[i]->OnUpdate(dt);
+		if ((*it)->IsEnable() == true)
+		{
+			(*it)->Update(dt);
+		}
 	}
 
-	for (int i = 0; i < childs.size(); i++)
+	for (std::vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
 	{
-		childs[i]->Update(dt);
+		if ((*it)->IsEnable() == true)
+		{
+			(*it)->OnUpdate(dt);
+		}
 	}
 	
 

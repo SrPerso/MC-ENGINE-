@@ -43,11 +43,40 @@ DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  F
 		if (retu == aiReturn_FAILURE)
 			LOGUI("[ERROR]- fail getting texture");
 
-		std::string fullPath = "Assets/";
-		fullPath.append(path.C_Str());
+		std::string fullPath = path.C_Str();
 
-		ret->image = App->texture->LoadTexture(fullPath.c_str());
-		ret->Textname = fullPath;
+		int i = fullPath.find_last_of("\\");
+
+		if (i == -1)
+		{
+			std::string newpath = "Assets/";
+			newpath.append(path.C_Str());
+
+			ret->image = App->texture->LoadTexture(newpath.c_str());
+			ret->Textname = newpath;
+
+		}
+		else {
+
+			int length = strlen(path.C_Str());
+			std::string namePath = path.C_Str();
+
+			int i = namePath.find_last_of("\\") + 1;
+
+			if (length > 0 && i > 0)
+			{
+				char* testM = new char[length - i];
+				namePath.copy(testM, length - i, i);
+
+				delete[] testM;
+				testM = nullptr;
+			}
+
+
+			ret->image = App->texture->LoadTexture(fullPath.c_str());
+			ret->Textname = fullPath;
+
+		}
 
 		LOGUI("[OK]- Imported Texture");
 	}
