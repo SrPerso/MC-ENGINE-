@@ -11,6 +11,10 @@
 #include "Glew\include\glew.h"
 
 
+//filesystem
+
+#include <fstream>
+
 ImporterMesh::ImporterMesh()
 {
 }
@@ -157,35 +161,85 @@ DTransformation* ImporterMesh::ImportTrans(aiNode* node)
 		return transl;
 }
 
-
-void ImporterMesh::SaveMesh(DMesh mesh)
+bool ImporterMesh::Save(const void * buffer, const char * saverFile, uint id)
 {
+	bool ret = true;
 	// amount of indices / vertices / colors / normals / texture_coords / AABB
 	
-	uint ranges[2] = { mesh.nIndex, mesh.nVertex };
+	DMesh* mesh = (DMesh*)buffer;
 
-	uint size = sizeof(ranges) + sizeof(uint) * mesh.nIndex + sizeof(float) * mesh.nVertex * 3;
+	uint ranges[2] = { mesh->nIndex, mesh->nVertex };
+	uint size = sizeof(ranges) + sizeof(uint) * mesh->nIndex + sizeof(float) * mesh->nVertex * 3 + sizeof(float) * mesh->nNormals * 3;
 	
-	char* data = new char[size]; // Allocate
+	char* data = new char[size]; 
 	char* cursor = data;
 	
-	uint bytes = sizeof(ranges); // First store ranges
+	uint bytes = sizeof(ranges);
 	
 	memcpy(cursor, ranges, bytes);
-	cursor += bytes; // Store indices
+	cursor += bytes;
 
-	bytes = sizeof(uint) * mesh.nIndex;
+	bytes = sizeof(uint) * mesh->nIndex;	
+	memcpy(cursor, mesh->Index, bytes);
+
+	bytes = sizeof(float) *mesh->nVertex * 3;
+	memcpy(cursor,  mesh->Vertex, bytes);
+
+	bytes = sizeof(float) *mesh->nNormals * 3;
+	memcpy(cursor, mesh->normals, bytes);
+
+	std::string path;
+
+		path = "Library/Mesh";
+		path.append("/");
+		path.append("Mesh");
+		path.append(std::to_string(id));
+		path.append(".test");
 	
-	memcpy(cursor, mesh.Index, bytes);
+	std::ofstream file(path.c_str(), std::ofstream::out | std::ofstream::binary);
+	file.write(data, size);
+	file.close();
 
+	return ret;
 }
 
-void ImporterMesh::LoadMesh(char* buffer ,DMesh*data)
+bool ImporterMesh::Load(const void * buffer, const char * loadFile, uint id)
 {
-	char* cursor = buffer;
+
+	bool ret = true;
+
+
+	DMesh* data = (DMesh*)buffer;
+
+	std::string path;
+
+	path = "Library/Mesh";
+	path.append("/");
+	path.append("Mesh");
+	path.append(std::to_string(id));
+	path.append(".test");
+
+	std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
+
+	int size;
+	size = file.gcount();
+
+	char* cursor = path.c_str;
+
+	if (file.read(cursor, size))
+	{
+		LOGUI("[ERROR]- Cant read %s.", path.c_str);
+		return  false;
+	}
+	else
+	{
+		LOGUI("[ERROR]- Cant read %s.", path.c_str);
+		ret =  true;
+	}
 
 	uint ranges[5];
 	uint bytes = sizeof(ranges);
+
 
 	memcpy(ranges, cursor, bytes);
 	data->nIndex = ranges[0];
@@ -197,6 +251,26 @@ void ImporterMesh::LoadMesh(char* buffer ,DMesh*data)
 	bytes = sizeof(float) * data->nIndex;
 	data->Index = new float[data->nIndex];
 
+	glGenBuffers(1, (GLuint*)&data->idIndex);
+	glBindBuffer(GL_ARRAY_BUFFER, data->idIndex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nIndex * 3, data->Index, GL_STATIC_DRAW);
+
+	bytes = sizeof(float) *data->nVertex * 3;
+	data->Vertex = new float[data->nVertex];
+
+	glGenBuffers(1, (GLuint*)&data->idVertex);
+	glBindBuffer(GL_ARRAY_BUFFER, data->idVertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nVertex * 3, data->Vertex, GL_STATIC_DRAW);
+
+	bytes = sizeof(uint) *data->nNormals * 3;
+	data->normals = new float[data->nNormals];
+
+	glGenBuffers(1, (GLuint*)&data->idNormals);
+	glBindBuffer(GL_ARRAY_BUFFER, data->idNormals);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nNormals * 3, data->normals, GL_STATIC_DRAW);
+
 	memcpy(data->Index, cursor, bytes);
-	
+
+
+	return ret;
 }

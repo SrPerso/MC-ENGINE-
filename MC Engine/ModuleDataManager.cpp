@@ -13,8 +13,9 @@
 
 ModuleDataManager::ModuleDataManager(Application* app, bool start_enabled) :Module(app, start_enabled)
 {
-	name = "Moudle Data Manager"; //this module is going to import all Data of the components. and future scene loader
-}
+	name = "Module Data Manager"; //this module is going to import all Data of the components. and future scene loader
+
+	}
 
 ModuleDataManager::~ModuleDataManager()
 {
@@ -102,6 +103,8 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 
 void ModuleDataManager::LoadAllData()
 {
+
+
 	//calling all load importers functions
 }
 
