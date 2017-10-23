@@ -28,9 +28,9 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;	
 	GameObject* camera = new GameObject(App->goManager->GetRoot());
 	
-
+	DCamera* dcamera = new DCamera();
 	App->goManager->GetRoot()->AddChild(camera);
-	camera->CreateComponent(COMP_CAMERA);
+	camera->CreateComponent(COMP_CAMERA, dcamera);
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 	

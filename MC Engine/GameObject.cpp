@@ -13,6 +13,10 @@
 GameObject::GameObject()
 {
 	parent = App->goManager->GetRoot();
+
+
+
+	
 }
 
 GameObject::GameObject(GameObject* parent): parent(parent)
@@ -167,7 +171,8 @@ Component * GameObject::CreateComponent(Component_Type type, const void*buffer)
 		
 		break;
 	case COMP_CAMERA:
-		ret = new CCamera(this, COMP_CAMERA, (CCamera*)buffer);
+		//DCamera* camera = new DCamera();
+		ret = new CCamera(this, COMP_CAMERA, (DCamera*)buffer);
 		this->components.push_back(ret);
 
 		break;
@@ -275,18 +280,32 @@ void GameObject::SetNoStatic()
 
 void GameObject::Update(float dt)
 {
-	/*CCamera* camera = (CCamera*)App->goManager->GetRoot()->GetComponent(COMP_CAMERA);
-	CMesh* debuger = (CMesh*)this->GetComponent(COMP_MESH);
-	if (debuger != nullptr)
+	CCamera* camera = nullptr;
+	for (int i = 0; i < App->goManager->GetRoot()->childs.size(); i++) 
 	{
-		AABB recalculatedBox = debuger->debugBox;
-
+		for (int p = 0; p < App->goManager->GetRoot()->childs[i]->components.size(); p++) 
+		{
+			if(App->goManager->GetRoot()->childs[i]->components[p]->getType()==COMP_CAMERA)
+			{
+				if (App->goManager->GetRoot()->childs[i]->components[p] != nullptr) 
+				{
+					camera = (CCamera*)App->goManager->GetRoot()->childs[i]->components[p];
+				}
+			}
+		}
+	}
+	
+	CMesh* debuger = (CMesh*)this->GetComponent(COMP_MESH);
+	if (debuger != nullptr && camera!=nullptr)
+	{		
+		recalculatedBox = debuger->debugBox;
 		if (camera->Contains(recalculatedBox))
 		{
 			App->renderer3D->DrawGO(this);
 		}
-	}*/
-	App->renderer3D->DrawGO(this);
+	}
+
+	//App->renderer3D->DrawGO(this);
 
 	for (int i = 0; i < components.size(); i++)
 	{

@@ -581,18 +581,17 @@
     <ClCompile Include="Importer.cpp">
       <Filter>Engine\Engine\Importers</Filter>
     </ClCompile>
-    <ClCompile Include="IScenecpp.cpp">
-      <Filter>Engine\Engine\Importers</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleDataManager.cpp">
       <Filter>Engine\Engine\DataContainers</Filter>
     </ClCompile>
-    <ClCompile Include="IScene.cpp" />
     <ClCompile Include="CCamera.cpp">
       <Filter>Engine\Engine\GameObjects\Components</Filter>
     </ClCompile>
     <ClCompile Include="DCamera.cpp">
       <Filter>Engine\Engine\DataContainers</Filter>
+    </ClCompile>
+    <ClCompile Include="IScene.cpp">
+      <Filter>Engine\Engine\Importers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

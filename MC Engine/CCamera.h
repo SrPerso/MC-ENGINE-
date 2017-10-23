@@ -19,6 +19,7 @@ class CCamera : public Component, public DCamera
 public:
 	
 	CCamera(GameObject* object, Component_Type type = COMP_UNKNOWN);
+	
 	CCamera(GameObject* object, Component_Type type = COMP_TRANSFORMATION, DCamera* data = nullptr);
 	~CCamera();
 

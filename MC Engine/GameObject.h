@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "Component.h"
 #include "MathGeolib\Math\float3.h"
+#include "MathGeolib\Geometry\AABB.h"
 #include <string>
 #include <vector>
 
@@ -74,6 +75,7 @@ public:
 public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> childs;
+	AABB recalculatedBox;
 
 private:
 	std::string name;
