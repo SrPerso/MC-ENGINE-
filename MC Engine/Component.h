@@ -29,6 +29,7 @@ public:
 	virtual void Enable();
 	virtual void Disable();
 	virtual void OnEditor();
+	virtual void OnInspector();
 	virtual void OnUpdate(float dt);
 
 protected:

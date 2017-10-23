@@ -15,6 +15,7 @@ public:
 
 	void OnUpdate(float dt);
 	void OnEditor();
+	void OnInspector();
 	uint Texture_ID; 
 };
 #endif //_TEXTURE_H

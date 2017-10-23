@@ -71,6 +71,7 @@ public:
 	void cleanUp();
 
 	void OnEditor();
+	void OnInspector();
 
 public:
 	std::vector<Component*> components;

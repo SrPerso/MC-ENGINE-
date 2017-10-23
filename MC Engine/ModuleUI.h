@@ -6,6 +6,7 @@
 #include "imGUI\imgui.h"
 #include <string>
 #include <vector>
+#include "Component.h"
 //#include "ModuleAudio.h"
 #define MAX_FPSMS_COUNT 80
 
@@ -44,11 +45,13 @@ public:
 	IMGUI_API void ShowDebugWindow(bool* p_open = NULL);
 
 	IMGUI_API void ShowEditorWindow(bool* p_open = NULL);
-	IMGUI_API void ShowInspectorWindow(bool* p_open = NULL);
+	IMGUI_API void ShowInspectorWindow(Component* component= NULL,bool* p_open = NULL);
 
 	void AddLogToConsole(std::string toAdd);
 	void AddLogToConsole(std::string toAdd,int dataToAdd);
 	void AddLogToConsole(const char file[], int line, const char* format, ...);
+
+	bool show_Inspector_window = false;
 private:
 	std::vector<std::string> consoleTxt;
 	std::vector<float> FPSData;
@@ -82,6 +85,7 @@ private:
 	bool show_Geometry_window = false;
 	bool show_Debug_window = true;
 	bool show_Editor_window = true;
+	
 
 	//Geometry Test
 	float cubex = 0, cubey = 0, cubez = 0;

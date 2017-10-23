@@ -20,6 +20,7 @@ public:
 
 	void OnUpdate(float dt);
 	void OnEditor();
+	void OnInspector();
 
 	void Move(float3 destiny, float3 position);
 	

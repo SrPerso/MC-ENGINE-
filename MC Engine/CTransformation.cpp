@@ -56,6 +56,16 @@ void CTransformation::OnEditor()
 	if (ImGui::TreeNodeEx(name.c_str()))
 	{
 		
+		ImGui::TreePop();
+	}
+	
+	
+
+}
+
+void CTransformation::OnInspector() {
+
+	
 		ImGui::Text("   Position:");
 
 		ImGui::Text("\t X = %.2f", destiny.x);
@@ -102,19 +112,8 @@ void CTransformation::OnEditor()
 		ImGui::Text("\t X = %.2f", scale.x);
 		ImGui::Text("\t Y = %.2f", scale.y);
 		ImGui::Text("\t Z = %.2f", scale.z);
-
-		
-
-
-		
-
-		ImGui::TreePop();
-	}
 	
-	
-
 }
-
 void CTransformation::UpdateTransFromParent(GameObject * parent)
 {
 	CTransformation* parentTrans = (CTransformation*)parent->GetComponent(COMP_TRANSFORMATION);

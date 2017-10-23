@@ -26,6 +26,7 @@ public:
 	void SetPos(float3 newPos);
 	void OnUpdate(float dt);
 	void OnEditor();
+	void OnInspector();
 	void DrawFrustum();
 	bool Contains(const AABB & aabb) const;
 	

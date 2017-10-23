@@ -7,7 +7,10 @@
 #include "Math.h"
 #include "SDL/include/SDL_cpuinfo.h"
 #include "Primitive.h"
-
+#include "CTexture.h"
+#include "CTransformation.h"
+#include "CMesh.h"
+#include "CCamera.h"
 #include "ModuleGameObjectManager.h"
 #include "GameObject.h"
 
@@ -51,6 +54,7 @@ bool ModuleUI::Start()
 	show_Geometry_window = json_object_dotget_boolean(data, "show_Geometry_window");
 	show_Debug_window = json_object_dotget_boolean(data, "show_Debug_window");
 	show_Editor_window = json_object_dotget_boolean(data, "show_Editor_window");
+	show_Inspector_window = json_object_dotget_boolean(data, "show_Inspector_window");
 	debug_active = json_object_dotget_boolean(data, "debug_active");
 	debug_Vertex_Normals = json_object_dotget_boolean(data, "debug_Vertex_Normals");
 	debug_Box = json_object_dotget_boolean(data, "debug_Box");
@@ -161,6 +165,9 @@ update_status ModuleUI::Update(float dt)
 	
 	if (show_Debug_window)
 		ShowDebugWindow();
+
+	if (show_Inspector_window)
+		ShowInspectorWindow();
 
 
 	return update_status(ret);
@@ -505,24 +512,53 @@ IMGUI_API void ModuleUI::ShowEditorWindow(bool * p_open)
 		ImGui::Text("EDITOR WINDOW:");
 		ImGui::Separator();
 		App->goManager->GetRoot()->OnEditor();
-
-
 		ImGui::End();
 	}
 
 	return IMGUI_API void();
 }
 
-IMGUI_API void ModuleUI::ShowInspectorWindow( bool * p_open)
+IMGUI_API void ModuleUI::ShowInspectorWindow(Component* component, bool * p_open)
 {
 	ImGuiWindowFlags window_flags = 0;
-
+	
 	window_flags |= ImGuiWindowFlags_NoTitleBar;
 
 	if (ImGui::Begin("Inspector", p_open, window_flags))
 	{
-		ImGui::Text("INSPECTOR WINDOW:");
+		ImGui::Text("INSPECTOR");
 		ImGui::Separator();
+
+		
+		if (component != nullptr) {
+			Component_Type type = component->getType();
+		
+			switch (type)
+			{
+			case COMP_TRANSFORMATION:
+				component = (CTransformation*)component;
+				component->OnInspector();
+				break;
+
+			case COMP_TEXTURE:
+				component = (CTexture*)component;
+				component->OnInspector();
+				break;
+
+			case COMP_MESH:
+				component = (CMesh*)component;
+				component->OnInspector();
+				break;
+
+			case COMP_CAMERA:
+				component = (CCamera*)component;
+				component->OnInspector();
+				break;
+
+
+			}
+		}		//App->goManager->GetRoot()->OnInspector();
+
 		ImGui::End();
 	}
 
@@ -894,6 +930,7 @@ void ModuleUI::WindowMenuBar()
 
 	ImGui::Checkbox("GameObjects Editor", &show_Editor_window);
 
+	ImGui::Checkbox("GameObjects Inspector", &show_Inspector_window);
 	if (ImGui::MenuItem("Console", "Ctrl + Shift + C"))
 		show_Console_window = !show_Console_window;
 }

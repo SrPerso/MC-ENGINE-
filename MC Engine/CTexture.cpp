@@ -38,8 +38,17 @@ void CTexture::OnEditor()
 {
 	if (ImGui::TreeNodeEx(name.c_str()))
 	{
-		ImGui::Text("\t Texture path: %s", Textname.c_str());
+		
 		ImGui::TreePop();
 	}
 }
+
+void CTexture::OnInspector()
+{
+	
+		ImGui::Text("\t Texture path: %s", Textname.c_str());
+		
+		
+}
+
 

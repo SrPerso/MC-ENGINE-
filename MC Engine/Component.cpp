@@ -40,6 +40,10 @@ void Component::OnEditor()
 {
 }
 
+void Component::OnInspector()
+{
+}
+
 void Component::OnUpdate(float dt)
 {
 }

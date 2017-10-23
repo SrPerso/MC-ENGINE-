@@ -362,6 +362,11 @@ void GameObject::OnEditor()
 		for (int i = 0; i < components.size(); i++)
 		{
 			components[i]->OnEditor();
+			if (App->ui->show_Inspector_window = true) {
+				App->ui->show_Inspector_window = false;
+			}
+			
+			App->ui->ShowInspectorWindow(components[i]);
 		}
 
 		for (int i = 0; i < childs.size(); i++)
@@ -371,6 +376,22 @@ void GameObject::OnEditor()
 
 		ImGui::TreePop();
 	}
+}
+
+void GameObject::OnInspector()
+{
+	
+	/*
+		for (int i = 0; i < components.size(); i++)
+		{
+			components[i]->OnInspector();
+		}
+
+		/*for (int i = 0; i < childs.size(); i++)
+		{
+			childs[i]->OnInspector();
+		}*/
+	
 }
 
 void GameObject::Move(float3 destiny, float3 position)

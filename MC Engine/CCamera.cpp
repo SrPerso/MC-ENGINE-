@@ -44,16 +44,24 @@ void CCamera::OnEditor()
 {
 	if (ImGui::TreeNodeEx(name.c_str()))
 	{
+	
+		ImGui::TreePop();
+
+	}
+}
+
+void CCamera::OnInspector()
+{
+	
 		ImGui::Text("Position:");
 		ImGui::SliderFloat("X", &frustum.pos.x, -50, 50);
 		ImGui::SliderFloat("Y", &frustum.pos.y, -50, 50);
 		ImGui::SliderFloat("Z", &frustum.pos.z, -50, 50);
 
 
-		ImGui::TreePop();
 
 		ImGui::Checkbox("CULLING", &needToCull);
-	}
+	
 }
 
 void CCamera::DrawFrustum()

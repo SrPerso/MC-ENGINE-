@@ -51,7 +51,17 @@ void CMesh::OnEditor()
 	nVertex, idVertex, nIndex, idIndex, idNormals, nNormals, idColors, idTexCoords, ...
 	*/
 	if (ImGui::TreeNodeEx(name.c_str()))
-	{
+	{	//	ImGui::Text("Texture Coords: %i", idTexCoords);
+		
+		ImGui::TreePop();
+	}
+
+
+
+}
+
+void CMesh::OnInspector()
+{
 		ImGui::Text("\t Number of Vertex: %i", nVertex);
 		ImGui::Text("\t Vertex ID: %i", idVertex);
 
@@ -63,13 +73,8 @@ void CMesh::OnEditor()
 
 		ImGui::Text("\t Colors ID: %i", idColors);
 
-	//	ImGui::Text("Texture Coords: %i", idTexCoords);
-
-		ImGui::TreePop();
-	}
-
-
-
+		//	ImGui::Text("Texture Coords: %i", idTexCoords);
+	
 }
 
 void CMesh::Move(float3 destiny, float3 start)

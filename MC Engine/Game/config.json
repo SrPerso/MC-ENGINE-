@@ -18,6 +18,7 @@
     "show_Geometry_window": false,
     "show_Debug_window": true,
     "show_Editor_window": true,
+    "show_Inspector_window": false,
     "debug_active": false,
     "debug_Vertex_Normals": false,
     "sb_Depth_Test": true,
