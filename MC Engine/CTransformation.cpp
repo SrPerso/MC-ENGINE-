@@ -114,6 +114,17 @@ void CTransformation::OnInspector() {
 		ImGui::Text("\t Z = %.2f", scale.z);
 	
 }
+const void* CTransformation::GetData()
+{
+	DTransformation* data;
+
+	data->SetGlobalPosition(position);
+	data->SetGlobalScale(scale);
+	data->SetGlobalRotation(rotation);
+
+	return (DTransformation*)data;
+}
+
 void CTransformation::UpdateTransFromParent(GameObject * parent)
 {
 	CTransformation* parentTrans = (CTransformation*)parent->GetComponent(COMP_TRANSFORMATION);

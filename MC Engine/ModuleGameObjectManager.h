@@ -25,8 +25,8 @@ public:
 	GameObject* GetRoot()const;
 	void deleteGameObject(GameObject* GObject);
 
-	void Load();
-	void DSave(GameObject*GObject);
+	void LoadData();
+	void SaveData();
 
 	GameObject* root = nullptr;
 	

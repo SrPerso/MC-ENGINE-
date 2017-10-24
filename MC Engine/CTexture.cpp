@@ -51,4 +51,15 @@ void CTexture::OnInspector()
 		
 }
 
+const void * CTexture::GetData()
+{
+	DTexture* data;
+
+	data->image = this->image;
+	data->Textname = nullptr;
+	data->Textname.append(this->Textname);
+
+	return (DTexture*) data;
+}
+
 

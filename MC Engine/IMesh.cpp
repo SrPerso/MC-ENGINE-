@@ -207,70 +207,70 @@ bool ImporterMesh::Load(const void * buffer, const char * loadFile, uint id)
 {
 
 	bool ret = true;
-
-
-	DMesh* data = (DMesh*)buffer;
-
-	std::string path;
-
-	path = "Library/Mesh";
-	path.append("/");
-	path.append("Mesh");
-	path.append(std::to_string(id));
-	path.append(".test");
-
-	std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
-
-	int size;
-	size = file.gcount();
-
-	char* cursor = path.c_str;
-
-	if (file.read(cursor, size))
-	{
-		LOGUI("[ERROR]- Cant read %s.", path.c_str);
-		return  false;
-	}
-	else
-	{
-		LOGUI("[ERROR]- Cant read %s.", path.c_str);
-		ret =  true;
-	}
-
-	uint ranges[5];
-	uint bytes = sizeof(ranges);
-
-
-	memcpy(ranges, cursor, bytes);
-	data->nIndex = ranges[0];
-	data->nVertex = ranges[1];
-
-	// Load indices
-	cursor += bytes;
-
-	bytes = sizeof(float) * data->nIndex;
-	data->Index = new float[data->nIndex];
-
-	glGenBuffers(1, (GLuint*)&data->idIndex);
-	glBindBuffer(GL_ARRAY_BUFFER, data->idIndex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nIndex * 3, data->Index, GL_STATIC_DRAW);
-
-	bytes = sizeof(float) *data->nVertex * 3;
-	data->Vertex = new float[data->nVertex];
-
-	glGenBuffers(1, (GLuint*)&data->idVertex);
-	glBindBuffer(GL_ARRAY_BUFFER, data->idVertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nVertex * 3, data->Vertex, GL_STATIC_DRAW);
-
-	bytes = sizeof(uint) *data->nNormals * 3;
-	data->normals = new float[data->nNormals];
-
-	glGenBuffers(1, (GLuint*)&data->idNormals);
-	glBindBuffer(GL_ARRAY_BUFFER, data->idNormals);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nNormals * 3, data->normals, GL_STATIC_DRAW);
-
-	memcpy(data->Index, cursor, bytes);
-
-
+//
+//
+//	DMesh* data = (DMesh*)buffer;
+//
+//	std::string path;
+//
+//	path = "Library/Mesh";
+//	path.append("/");
+//	path.append("Mesh");
+//	path.append(std::to_string(id));
+//	path.append(".test");
+//
+//	std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
+//
+//	int size;
+//	size = file.gcount();
+//
+//	char* cursor = path.c_str;
+//
+//	if (file.read(cursor, size))
+//	{
+//		LOGUI("[ERROR]- Cant read %s.", path.c_str);
+//		return  false;
+//	}
+//	else
+//	{
+//		LOGUI("[ERROR]- Cant read %s.", path.c_str);
+//		ret =  true;
+//	}
+//
+//	uint ranges[5];
+//	uint bytes = sizeof(ranges);
+//
+//
+//	memcpy(ranges, cursor, bytes);
+//	data->nIndex = ranges[0];
+//	data->nVertex = ranges[1];
+//
+//	// Load indices
+//	cursor += bytes;
+//
+//	bytes = sizeof(float) * data->nIndex;
+//	data->Index = new float[data->nIndex];
+//
+//	glGenBuffers(1, (GLuint*)&data->idIndex);
+//	glBindBuffer(GL_ARRAY_BUFFER, data->idIndex);
+//	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nIndex * 3, data->Index, GL_STATIC_DRAW);
+//
+//	bytes = sizeof(float) *data->nVertex * 3;
+//	data->Vertex = new float[data->nVertex];
+//
+//	glGenBuffers(1, (GLuint*)&data->idVertex);
+//	glBindBuffer(GL_ARRAY_BUFFER, data->idVertex);
+//	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nVertex * 3, data->Vertex, GL_STATIC_DRAW);
+//
+//	bytes = sizeof(uint) *data->nNormals * 3;
+//	data->normals = new float[data->nNormals];
+//
+//	glGenBuffers(1, (GLuint*)&data->idNormals);
+//	glBindBuffer(GL_ARRAY_BUFFER, data->idNormals);
+//	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nNormals * 3, data->normals, GL_STATIC_DRAW);
+//
+//	memcpy(data->Index, cursor, bytes);
+//
+//
 	return ret;
 }

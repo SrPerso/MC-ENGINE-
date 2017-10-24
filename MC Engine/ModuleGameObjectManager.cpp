@@ -80,8 +80,11 @@ void GObjectManager::deleteGameObject(GameObject * GObject)
 	}
 }
 
-void GObjectManager::Load()
+void GObjectManager::LoadData()
 {
-	//	root->DLoad();
-	
+}
+
+void GObjectManager::SaveData()
+{
+		root->SaveData();
 }

@@ -394,6 +394,29 @@ void GameObject::OnInspector()
 	
 }
 
+std::vector<const void*>* GameObject::SaveData() //make  (?)
+{
+		
+	std::vector<const void*>* dataToSave;
+
+	for (int i = 0; i < childs.size(); i++)
+	{
+		dataToSave->push_back(childs[i]->SaveData());
+	}
+	if(components.size()>0)
+	{
+
+		for (int i = 0; i < components.size(); i++)
+		{
+		
+			dataToSave->push_back(components[i]->GetData());		
+		}
+		return dataToSave;	
+	}	
+	
+	return nullptr;	
+}
+
 void GameObject::Move(float3 destiny, float3 position)
 {
 	for (int i = 0; i < childs.size(); i++)

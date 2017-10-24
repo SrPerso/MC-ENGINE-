@@ -73,7 +73,13 @@ public:
 	void OnEditor();
 	void OnInspector();
 
+	//DATA ------------------------------------
+
+	std::vector<const void*>* SaveData();
+	void LoadData();
+
 public:
+
 	std::vector<Component*> components;
 	std::vector<GameObject*> childs;
 	AABB recalculatedBox;
