@@ -254,6 +254,15 @@ void GameObject::UpdateTranformChilds()
 	}
 }
 
+void GameObject::SetLocalTransform()
+{
+	CTransformation* myTrans = (CTransformation*)GetComponent(COMP_TRANSFORMATION);
+	if (myTrans != nullptr)
+	{
+		myTrans->SetLocalTrans(GetParent());
+	}
+}
+
 bool GameObject::IsEnable() const
 {
 	return isEnable;
@@ -308,22 +317,26 @@ void GameObject::Update(float dt)
 	}
 	
 	
-	CMesh* debuger = (CMesh*)this->GetComponent(COMP_MESH);
-	if (debuger != nullptr && camera!=nullptr)
+	//CMesh* debuger = (CMesh*)this->GetComponent(COMP_MESH);
+	if (camera!=nullptr)
 	{		
 		if (camera->needToCull) {
-			recalculatedBox = debuger->debugBox;
+			
 			if (camera->Contains(recalculatedBox))
 			{
 				App->renderer3D->DrawGO(this);
 			}
 		}
+
 		else {
 			App->renderer3D->DrawGO(this);
 		}
 	}
+	else {
+		App->renderer3D->DrawGO(this);
+	}
 
-	//App->renderer3D->DrawGO(this);
+	
 
 
 	for (std::vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
@@ -394,32 +407,9 @@ void GameObject::OnInspector()
 	
 }
 
-std::vector<const void*>* GameObject::SaveData() //make  (?)
-{
-		
-	std::vector<const void*>* dataToSave;
-
-	for (int i = 0; i < childs.size(); i++)
-	{
-		dataToSave->push_back(childs[i]->SaveData());
-	}
-	if(components.size()>0)
-	{
-
-		for (int i = 0; i < components.size(); i++)
-		{
-		
-			dataToSave->push_back(components[i]->GetData());		
-		}
-		return dataToSave;	
-	}	
-	
-	return nullptr;	
-}
-
 void GameObject::Move(float3 destiny, float3 position)
 {
-	for (int i = 0; i < childs.size(); i++)
+	/*for (int i = 0; i < childs.size(); i++)
 	{
 		if (childs.size() > 0) {
 			for (int o = 0; o < childs[i]->components.size(); o++) {
@@ -431,7 +421,7 @@ void GameObject::Move(float3 destiny, float3 position)
 			}
 		}
 	}
-}
+}*/
 
 /*void GameObject::Rotate(vec3 rotation)
 {
@@ -447,6 +437,6 @@ void GameObject::Move(float3 destiny, float3 position)
 			}
 		}
 	}
-	
-}*/
+	*/
+}
 

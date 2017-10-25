@@ -79,12 +79,3 @@ void GObjectManager::deleteGameObject(GameObject * GObject)
 		GObject->DeleteChilds();
 	}
 }
-
-void GObjectManager::LoadData()
-{
-}
-
-void GObjectManager::SaveData()
-{
-		root->SaveData();
-}

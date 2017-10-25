@@ -19,9 +19,9 @@ public:
 	DMesh* ImportMesh(aiMesh*buffer);
 	DTransformation* ImportTrans(aiNode* node);
 
-	bool Save(const void* buffer, const char* saverFile, uint id);
+	void SaveMesh(DMesh);
 
-	bool Load(const void* buffer, const char* loadFile, uint id);
+	void LoadMesh(char* buffer, DMesh* data);
 };
 
 

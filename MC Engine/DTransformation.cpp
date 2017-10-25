@@ -1,10 +1,11 @@
 #include "DTransformation.h"
 
-DTransformation::DTransformation(float3 pos, float3 scale, Quat rot)
+DTransformation::DTransformation(float3 pos, float3 scales, Quat rot)
 {
-	SetPosition(pos);
-	SetScale(scale);
-	SetRotation(rot);
+	
+	position = pos;
+	destiny = pos;
+	scale = scales;
 	eulerAngles = rot.ToEulerXYZ();
 	angle =rot.Angle();
 	rotation = rot;

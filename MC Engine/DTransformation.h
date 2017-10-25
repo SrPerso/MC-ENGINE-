@@ -42,8 +42,7 @@ protected:
 	float3 globalPosition;
 	float3 globalScale;
 	Quat globalRotation;
-	bool moving;
-	bool rotating;
+	bool UpdateTrans;
 };
 
 #endif

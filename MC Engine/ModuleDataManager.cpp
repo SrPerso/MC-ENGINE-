@@ -13,9 +13,8 @@
 
 ModuleDataManager::ModuleDataManager(Application* app, bool start_enabled) :Module(app, start_enabled)
 {
-	name = "Module Data Manager"; //this module is going to import all Data of the components. and future scene loader
-
-	}
+	name = "Moudle Data Manager"; //this module is going to import all Data of the components. and future scene loader
+}
 
 ModuleDataManager::~ModuleDataManager()
 {
@@ -50,7 +49,7 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 
 		LOGUI("[OK]- Scene %s loaded succesfully", path);
 
-		newObject->CreateComponent(COMP_TRANSFORMATION, (DTransformation*)importerMesh->ImportTrans(node)); //global objeto total
+		//newObject->CreateComponent(COMP_TRANSFORMATION, (DTransformation*)importerMesh->ImportTrans(node));//global objeto total
 
 		if (scene != nullptr && scene->HasMeshes())
 		{
@@ -74,15 +73,18 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 					GameObjectSon = newObject;
 				}				
 
+				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, (DTransformation*)importerMesh->ImportTrans(node));
+
 				GameObjectSon->CreateComponent(COMP_MESH, (DMesh*)importerMesh->ImportMesh(newMesh));
 
 				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
 				GameObjectSon->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));
 
 
-				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, (DTransformation*)importerMesh->ImportTrans(node)); //global objeto total
+				//global objeto total
 			}	
 
+			newObject->SetLocalTransform();
 			aiReleaseImport(scene);
 
 			return newObject;
@@ -103,8 +105,6 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 
 void ModuleDataManager::LoadAllData()
 {
-
-
 	//calling all load importers functions
 }
 

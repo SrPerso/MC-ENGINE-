@@ -56,6 +56,8 @@ void CMesh::OnEditor()
 		ImGui::TreePop();
 	}
 
+
+
 }
 
 void CMesh::OnInspector()
@@ -98,31 +100,6 @@ void CMesh::Move(float3 destiny, float3 start)
 
 	debugBox.SetNegativeInfinity();
 	debugBox.Enclose((float3*)Vertex, nVertex);
-}
-
-const void * CMesh::GetData()
-{
-	DMesh* data;
-
-	data->nVertex = nVertex;
-	data->idVertex = idVertex;
-	data->Vertex = Vertex;
-	data->wire = wire;
-	data->nIndex = nIndex;
-	data->idIndex = idIndex;
-	data->Index = Index;
-	data->nFaces = nFaces;
-	data->normals = normals;
-	data->idNormals = idNormals;
-	data->nNormals = nNormals;
-	data->idColors = idColors;
-	data->colors = colors;
-	data->idTexCoords = idTexCoords;
-	data->texCoords = texCoords;
-	data->debugMode = debugMode;
-	data->debugBox = debugBox;
-
-	return (DMesh*)data;
 }
 
 

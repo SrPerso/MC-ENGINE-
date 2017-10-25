@@ -11,10 +11,6 @@
 #include "Glew\include\glew.h"
 
 
-//filesystem
-
-#include <fstream>
-
 ImporterMesh::ImporterMesh()
 {
 }
@@ -31,7 +27,7 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer)
 	if (newMesh != nullptr)
 	{
 		DMesh* mesh = new DMesh();
-	
+		
 		//VERTEX------------------------------------------------------------------------------
 
 		mesh->nVertex = newMesh->mNumVertices;
@@ -130,7 +126,7 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer)
 		
 		mesh->debugBox.SetNegativeInfinity();//
 		mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
-
+		
 		App->camera->CenterCameraToObject(&mesh->debugBox);
 
 		return mesh;
@@ -157,120 +153,50 @@ DTransformation* ImporterMesh::ImportTrans(aiNode* node)
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
 	DTransformation* transl = new DTransformation(pos, sca, rot);
-
-		return transl;
+	
+	return transl;
 }
 
-bool ImporterMesh::Save(const void * buffer, const char * saverFile, uint id)
+
+void ImporterMesh::SaveMesh(DMesh mesh)
 {
-	bool ret = true;
 	// amount of indices / vertices / colors / normals / texture_coords / AABB
 	
-	DMesh* mesh = (DMesh*)buffer;
+	uint ranges[2] = { mesh.nIndex, mesh.nVertex };
 
-	uint ranges[2] = { mesh->nIndex, mesh->nVertex };
-	uint size = sizeof(ranges) + sizeof(uint) * mesh->nIndex + sizeof(float) * mesh->nVertex * 3 + sizeof(float) * mesh->nNormals * 3;
+	uint size = sizeof(ranges) + sizeof(uint) * mesh.nIndex + sizeof(float) * mesh.nVertex * 3;
 	
-	char* data = new char[size]; 
+	char* data = new char[size]; // Allocate
 	char* cursor = data;
 	
-	uint bytes = sizeof(ranges);
+	uint bytes = sizeof(ranges); // First store ranges
 	
 	memcpy(cursor, ranges, bytes);
-	cursor += bytes;
+	cursor += bytes; // Store indices
 
-	bytes = sizeof(uint) * mesh->nIndex;	
-	memcpy(cursor, mesh->Index, bytes);
-
-	bytes = sizeof(float) *mesh->nVertex * 3;
-	memcpy(cursor,  mesh->Vertex, bytes);
-
-	bytes = sizeof(float) *mesh->nNormals * 3;
-	memcpy(cursor, mesh->normals, bytes);
-
-	std::string path;
-
-		path = "Library/Mesh";
-		path.append("/");
-		path.append("Mesh");
-		path.append(std::to_string(id));
-		path.append(".test");
+	bytes = sizeof(uint) * mesh.nIndex;
 	
-	std::ofstream file(path.c_str(), std::ofstream::out | std::ofstream::binary);
-	file.write(data, size);
-	file.close();
+	memcpy(cursor, mesh.Index, bytes);
 
-	return ret;
 }
 
-bool ImporterMesh::Load(const void * buffer, const char * loadFile, uint id)
+void ImporterMesh::LoadMesh(char* buffer ,DMesh*data)
 {
+	char* cursor = buffer;
 
-	bool ret = true;
-//
-//
-//	DMesh* data = (DMesh*)buffer;
-//
-//	std::string path;
-//
-//	path = "Library/Mesh";
-//	path.append("/");
-//	path.append("Mesh");
-//	path.append(std::to_string(id));
-//	path.append(".test");
-//
-//	std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
-//
-//	int size;
-//	size = file.gcount();
-//
-//	char* cursor = path.c_str;
-//
-//	if (file.read(cursor, size))
-//	{
-//		LOGUI("[ERROR]- Cant read %s.", path.c_str);
-//		return  false;
-//	}
-//	else
-//	{
-//		LOGUI("[ERROR]- Cant read %s.", path.c_str);
-//		ret =  true;
-//	}
-//
-//	uint ranges[5];
-//	uint bytes = sizeof(ranges);
-//
-//
-//	memcpy(ranges, cursor, bytes);
-//	data->nIndex = ranges[0];
-//	data->nVertex = ranges[1];
-//
-//	// Load indices
-//	cursor += bytes;
-//
-//	bytes = sizeof(float) * data->nIndex;
-//	data->Index = new float[data->nIndex];
-//
-//	glGenBuffers(1, (GLuint*)&data->idIndex);
-//	glBindBuffer(GL_ARRAY_BUFFER, data->idIndex);
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nIndex * 3, data->Index, GL_STATIC_DRAW);
-//
-//	bytes = sizeof(float) *data->nVertex * 3;
-//	data->Vertex = new float[data->nVertex];
-//
-//	glGenBuffers(1, (GLuint*)&data->idVertex);
-//	glBindBuffer(GL_ARRAY_BUFFER, data->idVertex);
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nVertex * 3, data->Vertex, GL_STATIC_DRAW);
-//
-//	bytes = sizeof(uint) *data->nNormals * 3;
-//	data->normals = new float[data->nNormals];
-//
-//	glGenBuffers(1, (GLuint*)&data->idNormals);
-//	glBindBuffer(GL_ARRAY_BUFFER, data->idNormals);
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nNormals * 3, data->normals, GL_STATIC_DRAW);
-//
-//	memcpy(data->Index, cursor, bytes);
-//
-//
-	return ret;
+	uint ranges[5];
+	uint bytes = sizeof(ranges);
+
+	memcpy(ranges, cursor, bytes);
+	data->nIndex = ranges[0];
+	data->nVertex = ranges[1];
+
+	// Load indices
+	cursor += bytes;
+
+	bytes = sizeof(float) * data->nIndex;
+	data->Index = new float[data->nIndex];
+
+	memcpy(data->Index, cursor, bytes);
+	
 }

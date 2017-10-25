@@ -24,11 +24,9 @@ public:
 	~CCamera();
 
 	void SetPos(float3 newPos);
-
-	void OnUpdate(float dt)override;
-	void OnEditor()override;
-	void OnInspector()override;
-
+	void OnUpdate(float dt);
+	void OnEditor();
+	void OnInspector();
 	void DrawFrustum();
 	bool Contains(const AABB & aabb) const;
 	
