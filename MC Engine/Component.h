@@ -4,6 +4,8 @@
 #include "Globals.h"
 #include "imGUI\imgui.h"
 #include <string>
+#include "DContainer.h"
+
 class GameObject;
 
 enum Component_Type
@@ -22,7 +24,8 @@ public:
 	Component(GameObject* object, Component_Type type = COMP_UNKNOWN);
 	virtual ~Component();
 
-	Component_Type getType();
+	Component_Type getType()const;
+	DType GetDataType()const;
 
 	virtual bool IsEnable()const;
 	virtual void SetEnable(bool isEnable);
@@ -37,6 +40,7 @@ public:
 protected:
 	std::string name;
 	Component_Type Ctype;
+	DType dType;
 	GameObject* object = nullptr;
 	bool isEnable = true;
 };

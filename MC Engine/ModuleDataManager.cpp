@@ -95,20 +95,51 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 
 		for (int i = 0; i <= node->mNumChildren; ++i)
 			ImportGameObject(path,newObject);
-
-
 	}
-
-}
-
-void ModuleDataManager::LoadAllData()
-{
-
-
-	//calling all load importers functions
 }
 
 void ModuleDataManager::SaveAllData()
 {
-	//calling all save importers functions
+	std::vector<const void*>* returned = nullptr;
+
+	App->goManager->GetRoot()->SaveData();
+
+	
+}
+
+void ModuleDataManager::SaveData(const void * buff,DType type, uint id)
+{
+	switch (type)
+	{
+	case D_UNKNOWN:
+		LOGUI("[ERROR]-trying to save a unknown data");
+		break;
+
+	case D_MESH:
+		importerMesh->Save(buff,nullptr,id); //(const void * buffer, const char * saverFile, uint id
+		LOGUI("[OK]-MeshData %i saved", id);
+		break;
+
+	case D_MATERIAL:
+	
+		//LOGUI("[OK]-MaterialData %i saved", id);
+		LOGUI("[ON CONSTRUCTION]-MaterialData %i saved", id);
+		break;
+
+	case D_TEXTURE:
+		importerTexture->Save(buff, nullptr, id);  //(const void * buffer, const char * saverFile, uint id
+		LOGUI("[OK]-TextureData %i saved", id);
+		break;
+
+	case D_TRANSFORMATION:
+	//	LOGUI("[OK]-Transformation Data %i saved", id);
+		LOGUI("[ON CONSTRUCTION]-Transformation Data %i saved", id);
+		break;
+
+	case D_CAMERA:
+		break;
+
+	default:
+		break;
+	}
 }

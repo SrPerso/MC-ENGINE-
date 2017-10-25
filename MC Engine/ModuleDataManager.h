@@ -28,8 +28,8 @@ public:
 
 	GameObject* ImportGameObject(std::string Path, GameObject*parent);
 
-	void LoadAllData(); //called to load all data
-	void SaveAllData(); //Called to Save all data
+	void SaveAllData(); 
+	void SaveData(const void * buff, DType type, uint id);
 
 // Objects creators?
 

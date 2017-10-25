@@ -38,6 +38,10 @@ public:
 	void AddChild(GameObject* child);
 	GameObject* GetFirstChild();
 
+
+	void SetParentID(uint parentID);
+	uint GetParentId();
+
 	//TO ADD 
 	// to move the objects and change the parent is necesary a function newparent(gameobject)
 	
@@ -75,7 +79,8 @@ public:
 
 	//DATA ------------------------------------
 
-	std::vector<const void*>* SaveData();
+	void SaveData();
+	//std::vector<const void*>* SaveData();
 	void LoadData();
 
 public:
@@ -91,6 +96,11 @@ private:
 
 	bool isStatic;
 
+
+private: 
+
+	uint Parent_ID = 0;
 	uint GameOIbject_ID = 0;
+
 };
 #endif

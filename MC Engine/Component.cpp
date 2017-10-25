@@ -11,9 +11,14 @@ Component::~Component()
 {
 }
 
-Component_Type Component::getType()
+Component_Type Component::getType()const
 {
 	return Component_Type(Ctype);
+}
+
+DType Component::GetDataType()const
+{
+	return DType(dType);
 }
 
 bool Component::IsEnable() const
