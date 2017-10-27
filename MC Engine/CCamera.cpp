@@ -21,7 +21,7 @@ CCamera::CCamera(GameObject* object, Component_Type type, DCamera * data) :Compo
 		frustum.horizontalFov = 2.f * atanf((tanf(frustum.verticalFov * 0.5f)) * (aspectRatio));
 
 		frustum.ProjectionMatrix();
-
+		dType = D_CAMERA;
 		//frustumCulling = true;
 
 }

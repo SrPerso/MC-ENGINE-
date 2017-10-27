@@ -202,11 +202,13 @@ bool ImporterMesh::Save(const void * buffer, const char * saverFile, uint id)
 		path.append("/");
 		path.append("Mesh");
 		path.append(std::to_string(id));
-		path.append(".test");
+		path.append(".McMesh");
 	
 	std::ofstream file(path.c_str(), std::ofstream::out | std::ofstream::binary);
 	file.write(data, size);
 	file.close();
+
+	delete data;
 
 	return ret;
 }
@@ -224,7 +226,7 @@ bool ImporterMesh::Load(const void * buffer, const char * loadFile, uint id)
 	//path.append("/");
 	//path.append("Mesh");
 	//path.append(std::to_string(id));
-	//path.append(".test");
+	//path.append(".McMesh");
 
 	//std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
 

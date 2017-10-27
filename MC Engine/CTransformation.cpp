@@ -29,6 +29,7 @@ CTransformation::CTransformation(GameObject * object, Component_Type type, DTran
 	
 	name = "- Component Transformation_";
 	name.append(std::to_string(Transformation_ID));
+	dType = D_TRANSFORMATION;
 }
 
 CTransformation::~CTransformation()

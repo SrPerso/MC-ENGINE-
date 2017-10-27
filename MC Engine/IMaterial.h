@@ -13,6 +13,9 @@ public:
 	~ImporterMaterial();
 
 	DMaterial* ImportMaterial(DMaterial* mesh);
+
+	//bool Save(const void* buffer, const char* saverFile, uint id) override;
+	//bool Load(const void* buffer, const char* loadFile, uint id)override;
 };
 
 

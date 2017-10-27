@@ -19,8 +19,8 @@ GameObject::GameObject()
 
 	if (parent != nullptr)
 	{
-		parent->AddChild(this);
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
+		parent->AddChild(this);
 	}
 	else
 	{
@@ -37,9 +37,8 @@ GameObject::GameObject(GameObject* parent): parent(parent)
 
 	if (parent != nullptr)
 	{
-		parent->AddChild(this);
-
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
+		parent->AddChild(this);
 	}
 	else 
 	{
@@ -170,9 +169,9 @@ void GameObject::SetGOID(uint newID)
 	GameOIbject_ID = newID;
 }
 
-uint GameObject::GetGOId()
+int GameObject::GetGOId()
 {
-	return uint(GameOIbject_ID);
+	return int(GameOIbject_ID);
 }
 
 Component * GameObject::CreateComponent(Component_Type type, const void*buffer)
@@ -419,11 +418,11 @@ void GameObject::SaveData()
 	{
 		for (int i = 0; i < components.size(); i++)
 		{
-			if(components[i]->GetDataType()==D_MESH)
-				App->datamanager->SaveData(components[i]->GetData(),components[i]->GetDataType(),this->GameOIbject_ID);
+			if (components[i]->GetDataType() == D_MESH) {
+				App->datamanager->SaveData(components[i]->GetData(), components[i]->GetDataType(), this->GameOIbject_ID);
+			}			
 		}
 	}
-
 }
 
 
