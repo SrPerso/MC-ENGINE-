@@ -7,7 +7,6 @@
 
 class Importer
 {
-
 public:
 	Importer()
 	{}
@@ -16,7 +15,7 @@ public:
 	{}
 public:
 
-	virtual bool LoadResource(DContainer* resource) = 0;
+	//virtual bool LoadResource(DContainer* resource) = 0;
 
 	virtual bool Import(const char* file, const char*path, std::string& output_file);
 	virtual bool Import(const void*buffer, uint size, std::string& output_file);

@@ -9,11 +9,16 @@
 #include "GameObject.h"
 #include "DContainer.h"
 
+#include "IMesh.h"
+
 #include "CTransformation.h"
 
 ModuleDataManager::ModuleDataManager(Application* app, bool start_enabled) :Module(app, start_enabled)
 {
 	name = "Module Data Manager"; //this module is going to import all Data of the components. and future scene loader
+
+	importerMesh = new ImporterMesh();
+
 
 	}
 
@@ -74,7 +79,10 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 					GameObjectSon = newObject;
 				}				
 
-				GameObjectSon->CreateComponent(COMP_MESH, (DMesh*)importerMesh->ImportMesh(newMesh));
+				DMesh* MeshtoCreate = (DMesh*)importerMesh->ImportMesh(newMesh);
+				GameObjectSon->CreateComponent(COMP_MESH, MeshtoCreate);
+				ImporterMesh* imesh = nullptr;
+				imesh->Save(MeshtoCreate, nullptr, GameObjectSon->GetGOId());
 
 				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
 				GameObjectSon->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));

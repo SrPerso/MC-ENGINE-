@@ -41,7 +41,8 @@ public:
 
 	void SetParentID(uint parentID);
 	uint GetParentId();
-
+	void SetGOID(uint parentID);
+	uint GetGOId();
 	//TO ADD 
 	// to move the objects and change the parent is necesary a function newparent(gameobject)
 	

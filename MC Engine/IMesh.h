@@ -14,7 +14,7 @@ class ImporterMesh : public Importer
 	friend class ModuleDataManager;
 public:
 	ImporterMesh();
-	virtual ~ImporterMesh();
+	~ImporterMesh();
 
 	DMesh* ImportMesh(aiMesh*buffer);
 	DTransformation* ImportTrans(aiNode* node);
