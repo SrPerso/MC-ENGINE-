@@ -140,7 +140,8 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer)
 		//delete mesh;
 
 		//Load(&mesh, nullptr, 20);
-		Save(&mesh, nullptr, 20);
+		Save(mesh, nullptr, 20);
+
 		return mesh;
 	}
 	else
@@ -178,7 +179,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 
 	std::string path;
 	
-	//path to save----------
+	//path to save ----------
 
 	path = "Library/Mesh";
 	path.append("/");
@@ -211,8 +212,8 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 		textureCoodsSize = mesh->nVertex;
 	
 	uint ranges[5] = {
-		mesh->nIndex,
-		mesh->nVertex,
+		mesh->nIndex,/* indices */
+		mesh->nVertex,/* vertices */
 		colorSize/* colors */,
 		mesh->nNormals  /* normals*/,
 		textureCoodsSize  /* text coods*/
@@ -241,6 +242,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 
 	char* data = new char[size];
 	char* cursor = data;	
+	
 	uint allocsize = 0;
 
 	allocsize = sizeof(ranges);
@@ -248,7 +250,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 	
 	cursor += allocsize;
 	allocsize = sizeof(float) * mesh->nVertex * 3;			//Vertices
-	memcpy(cursor, (DMesh*)mesh->nVertex, allocsize);
+	memcpy(cursor, mesh->Vertex, allocsize);
 		
 	cursor += allocsize;
 	allocsize = sizeof(uint) *mesh->nIndex;					//Index
@@ -275,7 +277,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 		memcpy(cursor, mesh->colors, allocsize);
 	}
 
-	std::ofstream file_end(path.c_str(), std::ofstream::binary);
+	std::ofstream file_end(path.c_str(), std::ifstream::out | std::ofstream::binary);
 
 	if (file_end.good()) //write file
 		file_end.write(data, size);
@@ -293,7 +295,6 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 
 bool ImporterMesh::Load(const void * buffer, const char * loadFile, uint id)
 {
-
 	bool ret = true;
 
 	//DMesh* data = (DMesh*)buffer;
@@ -304,7 +305,7 @@ bool ImporterMesh::Load(const void * buffer, const char * loadFile, uint id)
 	//path.append("/");
 	//path.append("Mesh");
 	//path.append(std::to_string(id));
-	//path.append(".McMesh");
+	//path.append(".mcm");
 
 	//std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
 
