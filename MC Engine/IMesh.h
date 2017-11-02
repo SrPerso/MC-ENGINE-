@@ -3,11 +3,12 @@
 
 #include "Importer.h"
 #include "Globals.h"
-#include "DMesh.h"
-#include "DTransformation.h"
 
 struct aiMesh;
 struct aiNode;
+
+class DMesh;
+class DTransformation;
 
 class ImporterMesh : public Importer
 {
@@ -21,7 +22,7 @@ public:
 
 	bool Save(const void* buffer, const char* saverFile, uint id);
 
-	bool Load(const void* buffer, const char* loadFile, uint id);
+	DMesh* Load(const void* buffer, const char* loadFile, uint id);
 };
 
 

@@ -1,6 +1,8 @@
 #include "IMesh.h"
 #include "Application.h"
 #include "Globals.h"
+#include "DMesh.h"
+#include "DTransformation.h"
 
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
@@ -292,10 +294,8 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 	return ret;
 }
 
-bool ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
+DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 {
-	bool ret = true;
-
 	DMesh* data = (DMesh*)buffer;
 
 	std::string path; //path to load
@@ -318,12 +318,11 @@ bool ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 	if (file.read(cursor, size))
 	{
 		LOGUI("[OK]- Reading %s.", path.c_str());
-		return  false;
 	}
 	else
 	{
 		LOGUI("[ERROR]- Cant read %s.", path.c_str());
-		ret = true;
+		return nullptr;
 	}	
 
 	// load numbers --------
@@ -422,5 +421,5 @@ bool ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 		}
 	}
 	
-	return ret;
+	return data;
 }
