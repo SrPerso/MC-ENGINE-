@@ -286,79 +286,141 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 
 	file_end.close();
 
-	RELEASE_DELET(data);
-		
-	LOGUI("[OK]- Saving %s ", );
+	RELEASE_DELET(data);		
+	LOGUI("[OK]- Saving %s ", path.c_str());
 
 	return ret;
 }
 
-bool ImporterMesh::Load(const void * buffer, const char * loadFile, uint id)
+bool ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 {
 	bool ret = true;
 
-	//DMesh* data = (DMesh*)buffer;
+	DMesh* data = (DMesh*)buffer;
 
-	//std::string path;
+	std::string path; //path to load
 
-	//path = "Library/Mesh";
-	//path.append("/");
-	//path.append("Mesh");
-	//path.append(std::to_string(id));
-	//path.append(".mcm");
+	path = "Library/Mesh";
+	path.append("/");
+	path.append("Mesh");
+	path.append(std::to_string(id));
+	path.append(".mcm");
 
-	//std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
+	std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
 
-	//int size;
-	//size = file.gcount();
+	// look if is possible to read -- 
 
-	//char* cursor = path.c_str;
+	uint size = 0;
+	size = file.gcount();
 
-	//if (file.read(cursor, size))
-	//{
-	//	LOGUI("[ERROR]- Cant read %s.", path.c_str);
-	//	return  false;
-	//}
-	//else
-	//{
-	//	LOGUI("[ERROR]- Cant read %s.", path.c_str);
-	//	ret =  true;
-	//}
+	char* cursor = new char[size];
 
-	//uint ranges[5];
-	//uint bytes = sizeof(ranges);
+	if (file.read(cursor, size))
+	{
+		LOGUI("[OK]- Reading %s.", path.c_str());
+		return  false;
+	}
+	else
+	{
+		LOGUI("[ERROR]- Cant read %s.", path.c_str());
+		ret = true;
+	}	
 
+	// load numbers --------
 
-	//memcpy(ranges, cursor, bytes);
-	//data->nIndex = ranges[0];
-	//data->nVertex = ranges[1];
-
-	//// Load indices
-	//cursor += bytes;
-
-	//bytes = sizeof(float) * data->nIndex;
-	//data->Index = new float[data->nIndex];
-
-	//glGenBuffers(1, (GLuint*)&data->idIndex);
-	//glBindBuffer(GL_ARRAY_BUFFER, data->idIndex);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nIndex * 3, data->Index, GL_STATIC_DRAW);
-
-	//bytes = sizeof(float) *data->nVertex * 3;
-	//data->Vertex = new float[data->nVertex];
-
-	//glGenBuffers(1, (GLuint*)&data->idVertex);
-	//glBindBuffer(GL_ARRAY_BUFFER, data->idVertex);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nVertex * 3, data->Vertex, GL_STATIC_DRAW);
-
-	//bytes = sizeof(uint) *data->nNormals * 3;
-	//data->normals = new float[data->nNormals];
-
-	//glGenBuffers(1, (GLuint*)&data->idNormals);
-	//glBindBuffer(GL_ARRAY_BUFFER, data->idNormals);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nNormals * 3, data->normals, GL_STATIC_DRAW);
-
-	//memcpy(data->Index, cursor, bytes);
+	//uint ranges[5] = {/* indices *//* vertices *//* colors *//* normals*//* text coods*/ //};
 
 
+	uint ranges[5];
+	uint bytes = sizeof(ranges);
+
+	memcpy(ranges, cursor, bytes);
+
+	data->nIndex = ranges[0];
+	data->nVertex = ranges[1];
+	uint nColors = ranges[2];
+	data->nNormals = ranges[3];
+	uint textureCoods = ranges[4];
+	
+	// Load indices
+
+	//---
+	cursor += bytes;
+	bytes = sizeof(float) * data->nIndex;
+	data->Index = new float[data->nIndex];
+
+	memcpy(data->Index, cursor, bytes);
+
+	glGenBuffers(1, (uint*)&(data->idIndex));
+	glBindBuffer(GL_ARRAY_BUFFER, data->idIndex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nIndex * 3, data->Index, GL_STATIC_DRAW);			// Index
+
+
+	//---
+	//---
+	cursor += bytes;
+	bytes = sizeof(float) *data->nVertex * 3;
+	data->Vertex = new float[data->nVertex];
+
+	memcpy(data->Vertex, cursor, bytes);
+
+
+	glGenBuffers(1, (uint*)&(data->idVertex));
+	glBindBuffer(GL_ARRAY_BUFFER, data->idVertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nVertex * 3, data->Vertex, GL_STATIC_DRAW);			// vertex
+
+	//---
+	//---
+
+	if (data->nNormals >0)
+	{
+		cursor += bytes;
+		bytes = sizeof(uint) *data->nNormals * 3;
+		data->normals = new float[data->nNormals];
+
+		memcpy(data->normals, cursor, bytes);
+
+		
+
+		if (data->normals != nullptr)
+		{
+			glGenBuffers(1, (uint*)&(data->idNormals));
+			glBindBuffer(GL_ARRAY_BUFFER, data->idNormals);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nNormals * 3, data->normals, GL_STATIC_DRAW);		// normals
+		}
+
+	}
+
+	if (nColors>0)
+	{
+		cursor += bytes;
+		bytes = sizeof(float) *data->nNormals * 3;
+		memcpy(data->texCoords, cursor, bytes);
+
+		memcpy(data->colors, cursor, bytes);
+
+		if (data->colors != nullptr)
+		{
+			glGenBuffers(1, (uint*)&(data->idColors));
+			glBindBuffer(GL_ARRAY_BUFFER, data->idColors);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nVertex * 3, data->colors, GL_STATIC_DRAW);			// Colors
+		}
+	}
+
+	if (textureCoods > 0)
+	{
+		cursor += bytes;
+		bytes = sizeof(float) *data->nNormals * 3;
+		memcpy(data->texCoords, cursor, bytes);
+
+		memcpy(data->texCoords, cursor, bytes);
+		if (data->texCoords != nullptr)
+		{
+			glGenBuffers(1, (uint*)&(data->idTexCoords));
+			glBindBuffer(GL_ARRAY_BUFFER, data->idTexCoords);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nVertex * 3, data->texCoords, GL_STATIC_DRAW);		// Texture coords
+		}
+	}
+	
 	return ret;
 }
