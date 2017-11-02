@@ -36,13 +36,13 @@ public:
 	
 	void newParent(GameObject*newparent);
 	void AddChild(GameObject* child);
-	GameObject* GetFirstChild();
+	GameObject* GetFirstChild() const;
 
 
 	void SetParentID(uint parentID);
-	uint GetParentId();
+	uint GetParentId()const;
 	void SetGOID(uint parentID);
-	int GetGOId();
+	int GetGOId()const;
 	//TO ADD 
 	// to move the objects and change the parent is necesary a function newparent(gameobject)
 	
@@ -50,7 +50,7 @@ public:
 
 	Component* CreateComponent(Component_Type type, const void*buffet = nullptr);
 	Component* GetComponent(Component_Type type);
-	uint ComponentVectorSize();
+	uint ComponentVectorSize()const;
 	uint NumComponentTypeSize(Component_Type type);
 	void DeleteComponent(Component* comp);
 	void Move(float3 destiny, float3 position);

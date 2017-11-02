@@ -35,7 +35,7 @@ public:
 	virtual void OnInspector();
 	virtual void OnUpdate(float dt) = 0;
 
-	virtual const void*GetData();
+	virtual const void*GetData() ;
 
 protected:
 	std::string name;

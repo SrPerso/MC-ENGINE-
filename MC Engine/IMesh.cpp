@@ -14,6 +14,8 @@
 //filesystem
 
 #include <fstream>
+#include <iostream>
+#include <new>
 
 ImporterMesh::ImporterMesh()
 {
@@ -133,14 +135,12 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer)
 
 		App->camera->CenterCameraToObject(&mesh->debugBox);
 
-
-	
-
+		
 
 		//delete mesh;
 
 		//Load(&mesh, nullptr, 20);
-
+		Save(&mesh, nullptr, 20);
 		return mesh;
 	}
 	else
@@ -169,46 +169,124 @@ DTransformation* ImporterMesh::ImportTrans(aiNode* node)
 		return transl;
 }
 
-bool ImporterMesh::Save(const void * buffer, const char * saverFile, uint id)
+bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 {
 	bool ret = true;
 	// amount of indices / vertices / colors / normals / texture_coords / AABB
 	
 	DMesh* mesh = (DMesh*)buffer;
 
-	uint ranges[2] = { mesh->nIndex, mesh->nVertex };
-	uint size = sizeof(ranges) + sizeof(uint) * mesh->nIndex + sizeof(float) * mesh->nVertex * 3 + sizeof(float) * mesh->nNormals * 3;
-	
-	char* data = new char[size]; 
-	char* cursor = data;
-	
-	uint bytes = sizeof(ranges);
-	
-	memcpy(cursor, ranges, bytes);
-	cursor += bytes;
-
-	bytes = sizeof(uint) * mesh->nIndex;	
-	memcpy(cursor, mesh->Index, bytes);
-
-	bytes = sizeof(float) *mesh->nVertex * 3;
-	memcpy(cursor,  mesh->Vertex, bytes);
-
-	bytes = sizeof(float) *mesh->nNormals * 3;
-	memcpy(cursor, mesh->normals, bytes);
-
 	std::string path;
+	
+	//path to save----------
 
 	path = "Library/Mesh";
-		path.append("/");
-		path.append("Mesh");
-		path.append(std::to_string(id));
-		path.append(".McMesh");
-	
-	std::ofstream file(path.c_str(), std::ofstream::out | std::ofstream::binary);
-	file.write(data, size);
-	file.close();
+	path.append("/");
+	path.append("Mesh");
+	path.append(std::to_string(id));
+	path.append(".mcm");
 
-	delete data;
+	LOGUI("[SAVING]- %s", path.c_str());
+
+	// Opening ----------
+
+	FILE* file = fopen(path.c_str(), "r");
+
+	if (file != nullptr)
+	{
+		fclose(file);
+		LOGUI("[ERROR]- %s  is already created", path.c_str());
+
+		return false;
+	}
+
+	// contains the number of every thing ----------
+
+	uint colorSize = 0;
+	if (mesh->colors != nullptr)  // number of colors ( vertex)
+		colorSize = mesh->nVertex;
+
+	uint textureCoodsSize = 0;
+	if (mesh->texCoords != nullptr)// number of text coods
+		textureCoodsSize = mesh->nVertex;
+	
+	uint ranges[5] = {
+		mesh->nIndex,
+		mesh->nVertex,
+		colorSize/* colors */,
+		mesh->nNormals  /* normals*/,
+		textureCoodsSize  /* text coods*/
+	};
+
+	//size of all ----------
+
+	uint size = 0;
+	size += sizeof(ranges);
+
+	size += mesh->nVertex * sizeof(float) * 3;	 // number of vertex
+
+	size += mesh->nIndex * sizeof(uint);		// number of index  
+
+	if (mesh->colors != nullptr)				// number of colors ( vertex)
+		size += mesh->nVertex * sizeof(float) * 3;
+	
+	if (mesh->normals != nullptr)				// number of normals
+		size += mesh->nNormals * sizeof(float) * 3;
+
+	if (mesh->texCoords != nullptr)				// number of text coods
+		size += mesh->nVertex * sizeof(float) * 3;
+
+	
+	//Now is going to copy all to the array ----------
+
+	char* data = new char[size];
+	char* cursor = data;	
+	uint allocsize = 0;
+
+	allocsize = sizeof(ranges);
+	memcpy(cursor, ranges, allocsize);						//contains the number of every thing 
+	
+	cursor += allocsize;
+	allocsize = sizeof(float) * mesh->nVertex * 3;			//Vertices
+	memcpy(cursor, (DMesh*)mesh->nVertex, allocsize);
+		
+	cursor += allocsize;
+	allocsize = sizeof(uint) *mesh->nIndex;					//Index
+	memcpy(cursor, mesh->Index, allocsize);
+
+	if (mesh->normals != nullptr)				
+	{
+		cursor += allocsize;
+		allocsize = sizeof(float) * mesh->nNormals * 3;		//Nortmals
+		memcpy(cursor, mesh->normals, allocsize);
+	}
+
+	if (mesh->texCoords != nullptr)
+	{
+		cursor += allocsize;
+		allocsize = sizeof(float) *mesh->nVertex * 3;		//Texture coods
+		memcpy(cursor, mesh->texCoords, allocsize);
+	}
+
+	if (mesh->colors != nullptr)
+	{
+		cursor += allocsize;
+		allocsize = sizeof(float) * mesh->nVertex * 3;		//colors
+		memcpy(cursor, mesh->colors, allocsize);
+	}
+
+	std::ofstream file_end(path.c_str(), std::ofstream::binary);
+
+	if (file_end.good()) //write file
+		file_end.write(data, size);
+	else
+		LOGUI("[ERROR]- writting error ", path.c_str() );
+
+	file_end.close();
+
+	RELEASE_DELET(data);
+		
+	LOGUI("[OK]- Saving %s ", );
 
 	return ret;
 }

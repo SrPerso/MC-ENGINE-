@@ -72,10 +72,8 @@ DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  F
 				testM = nullptr;
 			}
 
-
 			ret->image = App->texture->LoadTexture(fullPath.c_str());
 			ret->Textname = fullPath;
-
 		}
 
 		LOGUI("[OK]- Imported Texture");
@@ -83,14 +81,4 @@ DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  F
 	glBindTexture(GL_TEXTURE_2D, ret->image);
 
 	return ret;
-}
-
-bool ImporterTexture::Save(const void * buffer, const char * saverFile, uint id)
-{
-	return true;
-}
-
-bool ImporterTexture::Load(const void * buffer, const char * loadFile, uint id)
-{
-	return true;
 }

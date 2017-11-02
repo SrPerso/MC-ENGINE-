@@ -149,7 +149,7 @@ void GameObject::AddChild(GameObject * child)
 	
 }
 
-GameObject * GameObject::GetFirstChild()
+GameObject * GameObject::GetFirstChild()const
 {
 	return childs[0];
 }
@@ -159,7 +159,7 @@ void GameObject::SetParentID(uint parentID)
 	Parent_ID = parentID;
 }
 
-uint GameObject::GetParentId()
+uint GameObject::GetParentId()const
 {
 	return uint(Parent_ID);
 }
@@ -169,7 +169,7 @@ void GameObject::SetGOID(uint newID)
 	GameOIbject_ID = newID;
 }
 
-int GameObject::GetGOId()
+int GameObject::GetGOId()const
 {
 	return int(GameOIbject_ID);
 }
@@ -232,7 +232,7 @@ Component * GameObject::GetComponent(Component_Type type)
 	return ret;
 }
 
-uint GameObject::ComponentVectorSize()
+uint GameObject::ComponentVectorSize()const
 {
 	return uint(components.size());
 }
