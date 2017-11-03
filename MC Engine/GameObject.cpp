@@ -425,33 +425,24 @@ void GameObject::SaveData()
 	}
 }
 
-
-/*
-std::vector<const void*>* GameObject::SaveData() //make  (?)
+void GameObject::LoadData()
 {
+	//for (int i = 0; i < childs.size(); i++)
+	//{
+	//	childs[i]->LoadData();
+	//}
 
-	std::vector<const void*>* dataToSave = nullptr;
+	//if (components.size()>0)
+	//{
+	//	for (int i = 0; i < components.size(); i++)
+	//	{
+	//		if()
+	//			App->datamanager->LoadData(components[i]->GetData(), components[i]->GetDataType(), this->GameOIbject_ID);
+	//	}
+	//}
 
-	dataToSave->push_back(this->GetName());
 
-	for (int i = 0; i < childs.size(); i++)
-	{
-		dataToSave->push_back(childs[i]->SaveData());
-	}
-
-	if(components.size()>0)
-	{
-		for (int i = 0; i < components.size(); i++)
-		{	
-			dataToSave->push_back(components[i]->GetData());		
-		}
-		return dataToSave;	
-	}	
-	
-	return dataToSave;
 }
-*/
-
 
 void GameObject::Move(float3 destiny, float3 position)
 {

@@ -1,6 +1,6 @@
 #include "DMesh.h"
 
-DMesh::DMesh(DType resType):DContainer(resType)
+DMesh::DMesh(DType resType):DContainer(D_MESH)
 {
 
 }
