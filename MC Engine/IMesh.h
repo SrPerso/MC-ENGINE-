@@ -3,6 +3,7 @@
 
 #include "Importer.h"
 #include "Globals.h"
+#include "GameObject.h"
 
 struct aiMesh;
 struct aiNode;
@@ -22,6 +23,7 @@ public:
 
 	void SaveMesh(DMesh);
 	DMesh* Load(const void* buffer, const char* loadFile, uint id);
+	bool Save(const void* buffer, const char * saverFile, uint id);
 
 };
 

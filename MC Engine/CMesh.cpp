@@ -106,7 +106,7 @@ void CMesh::Move(float3 destiny, float3 start)
 	debugBox.Enclose((float3*)Vertex, nVertex);
 }
 
-const void * CMesh::GetData()
+const void * CMesh::GetData() 
 {
 	DMesh* data = new DMesh;
 

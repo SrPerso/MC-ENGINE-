@@ -94,11 +94,14 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 					GameObjectSon = newObject;
 				}				
 
-				DMesh* MeshtoCreate = (DMesh*)importerMesh->ImportMesh(newMesh);
-				GameObjectSon->CreateComponent(COMP_MESH, MeshtoCreate);
 
 				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, importerMesh->ImportTrans(node));
-				GameObjectSon->CreateComponent(COMP_MESH, (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon));
+
+				DMesh* MeshtoCreate = (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon);
+				GameObjectSon->CreateComponent(COMP_MESH, MeshtoCreate);
+
+				
+				//GameObjectSon->CreateComponent(COMP_MESH, (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon));
 				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
 				GameObjectSon->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));
         

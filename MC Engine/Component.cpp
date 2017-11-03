@@ -52,3 +52,8 @@ void Component::OnInspector()
 void Component::OnUpdate(float dt)
 {
 }
+
+const void * Component::GetData()
+{
+	return nullptr;
+}

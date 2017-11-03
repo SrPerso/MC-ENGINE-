@@ -17,10 +17,7 @@ CTransformation::CTransformation(GameObject * object, Component_Type type, DTran
 
 
 			localTransformMatrix = data->localTransformMatrix;
-
-		 //globalPosition = data->GetGlobalPosition();
-		 //globalScale = data->GetGlobalScale();
-		 //globalRotation = data->GetGlobalRotation();
+		
 
 	}
 	if (object != nullptr)

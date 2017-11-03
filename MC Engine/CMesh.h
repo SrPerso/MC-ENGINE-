@@ -23,6 +23,7 @@ public:
 	void OnInspector();
 
 	void Move(float3 destiny, float3 position);
+	const void* GetData();
 	
 	uint mesh_ID;
 };
