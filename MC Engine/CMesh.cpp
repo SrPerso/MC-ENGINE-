@@ -1,48 +1,49 @@
 ﻿#include "CMesh.h"
-
 #include "GameObject.h"
-DataMesh::~DataMesh()
-{
-	if (Vertex != nullptr) 
-	{
-		delete Vertex;
-		Vertex = nullptr;
-	}
-	if (Index != nullptr) 
-	{
-		delete Index;
-		Index = nullptr;
-	}
-	if (normals != nullptr)
-	{
-		delete normals;
-		normals = nullptr;
-	}
-}
 
-CMesh::CMesh(GameObject * object) :Component(object, COMP_MESH)
+CMesh::CMesh(GameObject * object, Component_Type type, DMesh* data) : Component(object, COMP_MESH)
 {
-	if (object != nullptr)
+	if (data)
 	{
-		this->mesh_ID = object->NumComponentTypeSize(this->type) + 1;
+		nVertex = data->nVertex;
+		idVertex = data->idVertex;
+		Vertex = data->Vertex;
+		wire = data->wire;
+		nIndex = data->nIndex;
+		idIndex = data->idIndex;
+		Index = data->Index;
+		nFaces = data->nFaces;
+		normals = data->normals;
+		idNormals = data->idNormals;
+		nNormals = data->nNormals;
+		idColors = data->idColors;
+		colors = data->colors;
+		idTexCoords = data->idTexCoords;
+		texCoords = data->texCoords;
+		debugMode = data->debugMode;
+		debugBox = data->debugBox;
 	}
-	else
-	{
-		this->mesh_ID = 0;
-	}
-	//const char * preName = "Component Mesh _";
-	name= "- Component Mesh_";
-	name.append(std::to_string(mesh_ID));
+
+		if (object != nullptr)
+		{
+			this->mesh_ID = object->NumComponentTypeSize(this->Ctype) + 1;
+		}
+		else
+		{
+			this->mesh_ID = 0;
+		}
+		name= "- Component Mesh_";
+		name.append(std::to_string(mesh_ID));
+		dType = D_MESH;
 }
 
 CMesh::~CMesh()
 {
+
 }
 
 void CMesh::OnUpdate(float dt)
 {
-
-
 }
 
 void CMesh::OnEditor()
@@ -51,7 +52,17 @@ void CMesh::OnEditor()
 	nVertex, idVertex, nIndex, idIndex, idNormals, nNormals, idColors, idTexCoords, ...
 	*/
 	if (ImGui::TreeNodeEx(name.c_str()))
-	{
+	{	//	ImGui::Text("Texture Coords: %i", idTexCoords);
+		
+		ImGui::TreePop();
+	}
+
+
+
+}
+
+void CMesh::OnInspector()
+{
 		ImGui::Text("\t Number of Vertex: %i", nVertex);
 		ImGui::Text("\t Vertex ID: %i", idVertex);
 
@@ -62,12 +73,65 @@ void CMesh::OnEditor()
 		ImGui::Text("\t Normals ID: %i", idNormals);
 
 		ImGui::Text("\t Colors ID: %i", idColors);
+		
 
-	//	ImGui::Text("Texture Coords: %i", idTexCoords);
+		ImGui::Text("\t ID: %i", this->object->GetGOId());
 
-		ImGui::TreePop();
+		//	ImGui::Text("Texture Coords: %i", idTexCoords);
+	
+}
+
+void CMesh::Move(float3 destiny, float3 start)
+{
+
+	float3 diff = destiny - start;
+
+	for (int i = 0; i <= nVertex* 3; i += 3)
+	{
+		Vertex[i] += diff.x;
+	}
+	for (int i = 1; i <= nVertex * 3; i += 3)
+	{
+		Vertex[i] += diff.y;
+	}
+	for (int i = 2; i <= nVertex * 3; i += 3)
+	{
+		Vertex[i] += diff.z;
 	}
 
+	glBindBuffer(GL_ARRAY_BUFFER, idVertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * nVertex * 3, Vertex, GL_STATIC_DRAW);
 
-
+	debugBox.SetNegativeInfinity();
+	debugBox.Enclose((float3*)Vertex, nVertex);
 }
+
+const void * CMesh::GetData()
+{
+	DMesh* data = new DMesh;
+
+	data->nVertex = nVertex;
+	data->idVertex = idVertex;
+	data->Vertex = Vertex;
+	data->wire = wire;
+	data->nIndex = nIndex;
+	data->idIndex = idIndex;
+	data->Index = Index;
+	data->nFaces = nFaces;
+	data->normals = normals;
+	data->idNormals = idNormals;
+	data->nNormals = nNormals;
+	data->idColors = idColors;
+	data->colors = colors;
+	data->idTexCoords = idTexCoords;
+	data->texCoords = texCoords;
+	data->debugMode = debugMode;
+	data->debugBox = debugBox;
+
+	DMesh* ret= data;
+
+	delete data;
+
+	return (DMesh*)ret;
+}
+

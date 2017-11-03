@@ -20,6 +20,8 @@
 #include "MathGeolib\Geometry\Triangle.h"
 #include "MathGeolib\Math\float4x4.h"
 
+#include "CTransformation.h"
+
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "Glew/libx86/glew32.lib") 
 #pragma comment (lib, "glu32.lib") 
@@ -39,7 +41,7 @@ ModuleRenderer3D::~ModuleRenderer3D()
 bool ModuleRenderer3D::Init()
 {
 	LOG("Creating 3D Renderer context");
-	App->ui->AddLogToConsole("-START- Creating 3D Renderer context");
+	LOGUI("-START- Creating 3D Renderer context");
 	bool ret = true;
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -54,7 +56,7 @@ bool ModuleRenderer3D::Init()
 	if(context == NULL)
 	{
 		LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
-		App->ui->AddLogToConsole("[ERROR]- OpenGL context could not be created!");
+		LOGUI("[ERROR]- OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 	
@@ -64,7 +66,7 @@ bool ModuleRenderer3D::Init()
 		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0)
 		{
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
-			App->ui->AddLogToConsole("[ERROR]- Warning: Unable to set VSync!");
+			LOGUI("[ERROR]- Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 		}
 		
 		//Initialize Projection Matrix
@@ -76,7 +78,7 @@ bool ModuleRenderer3D::Init()
 		if(error != GL_NO_ERROR)
 		{
 			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
-			App->ui->AddLogToConsole("[ERROR]- Error initializing OpenGL!");
+			LOGUI("[ERROR]- Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 
@@ -89,7 +91,7 @@ bool ModuleRenderer3D::Init()
 		if(error != GL_NO_ERROR)
 		{
 			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
-			App->ui->AddLogToConsole("[ERROR]- Error initializing OpenGL!");
+			LOGUI("[ERROR]- Error initializing OpenGL!  %s\n", gluErrorString(error)); 
 			ret = false;
 		}
 		
@@ -104,7 +106,7 @@ bool ModuleRenderer3D::Init()
 		if(error != GL_NO_ERROR)
 		{
 			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
-			App->ui->AddLogToConsole("[ERROR]- Error initializing OpenGL! ");
+			LOGUI("[ERROR]- Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 		
@@ -174,8 +176,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 bool ModuleRenderer3D::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
+	LOGUI("-CLEANUP- Destroying 3D Renderer");
 
-	App->ui->AddLogToConsole("Destroying 3D Renderer");
 	SDL_GL_DeleteContext(context);
 
 	return true;
@@ -291,18 +293,23 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 	//--------------------- MESH----------------------------------------------
 
 	glEnable(GL_TEXTURE_2D);
+	
+	CTransformation* transform = (CTransformation*)GOToDraw->GetComponent(COMP_TRANSFORMATION);
 
+	glPushMatrix();
+	if (transform != nullptr)
+	{
+		glMultMatrixf(transform->GetTransMatrix().Transposed().ptr());
+	}
 	for (std::vector<Component*>::iterator it = GOToDraw->components.begin(); it != GOToDraw->components.end(); it++)
 	{
+		
 		if ((*it)->getType() == COMP_MESH)
 		{
-
-
-
 			CMesh* componentMesh = dynamic_cast<CMesh*>(*it);
 
-			if (App->ui->debug_active == true) 
-			{
+			if (App->ui->debug_active == true) 			{		
+				
 				DrawDebug(componentMesh);
 			}
 
@@ -352,9 +359,7 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idTexCoords);
 					glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 
-				}
-			
-	
+				}		
 
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, componentMesh->idIndex);
 				glDrawElements(GL_TRIANGLES, componentMesh->nIndex, GL_UNSIGNED_INT, NULL);
@@ -367,17 +372,19 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 				glDisableClientState(GL_VERTEX_ARRAY);
 				glDisableClientState(GL_ELEMENT_ARRAY_BUFFER);
 
-				glPopMatrix();
+				
 				glEnd();
 				glUseProgram(0);
 				glBindTexture(GL_TEXTURE_2D, 0);
 			}
 			else
 			{
-				App->ui->AddLogToConsole("[ERROR]- Mesh component does not exist");
+			LOGUI("[ERROR]- Mesh component does not exist");
 			}
+
 		}
 	}
+	glPopMatrix();
 }
 
 
@@ -409,7 +416,7 @@ void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 		}
 
 		else if (meshToDraw->nVertex < 0) {
-			App->ui->AddLogToConsole("[ERROR]- The number of verteh is down 0");
+		LOGUI("[ERROR]- The number of verteh is down 0");
 		}
 
 		if (App->ui->debug_Box == true)

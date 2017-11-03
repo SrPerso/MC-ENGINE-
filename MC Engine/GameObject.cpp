@@ -8,14 +8,37 @@
 #include "CMesh.h"
 #include "CTexture.h"
 #include "CTransformation.h"
+#include "CCamera.h"
+
+GameObject::GameObject()
+{
+	parent = App->goManager->GetRoot();
+
+	name = "GameObject_";
+
+
+	if (parent != nullptr)
+	{
+		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
+		parent->AddChild(this);
+	}
+	else
+	{
+		this->GameOIbject_ID = 0;
+	}
+
+	name.append(std::to_string(GameOIbject_ID));
+}
 
 GameObject::GameObject(GameObject* parent): parent(parent)
 {
 	name = "GameObject_";	
 
+
 	if (parent != nullptr)
 	{
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
+		parent->AddChild(this);
 	}
 	else 
 	{
@@ -63,11 +86,11 @@ GameObject * GameObject::CreateChild()
 {
 	GameObject* ret = nullptr;
 
-	ret = new GameObject(this);
+	ret = new GameObject(this);	
 	
 	ret->SetEnable(this->IsEnable());		
 	
-	childs.push_back(ret);
+	//childs.push_back(ret);
 
 	return ret;
 }
@@ -121,16 +144,37 @@ void GameObject::newParent(GameObject * newparent)
 void GameObject::AddChild(GameObject * child)
 {
 	childs.push_back(child);
+	child->SetParentID(this->GameOIbject_ID);
 	child->parent = this;
-	//child->newParent(this);
+	
 }
 
-GameObject * GameObject::GetFirstChild()
+GameObject * GameObject::GetFirstChild()const
 {
 	return childs[0];
 }
 
-Component * GameObject::CreateComponent(Component_Type type)
+void GameObject::SetParentID(uint parentID)
+{
+	Parent_ID = parentID;
+}
+
+uint GameObject::GetParentId()const
+{
+	return uint(Parent_ID);
+}
+
+void GameObject::SetGOID(uint newID)
+{
+	GameOIbject_ID = newID;
+}
+
+int GameObject::GetGOId()const
+{
+	return int(GameOIbject_ID);
+}
+
+Component * GameObject::CreateComponent(Component_Type type, const void*buffer)
 {	
 	/*
 		COMP_UNKNOWN,COMP_MESH,COMP_TEXTURE,COMP_CAMERA,COMP_SOUND
@@ -142,21 +186,27 @@ Component * GameObject::CreateComponent(Component_Type type)
 	{
 	case COMP_MESH:
 
-		ret = new CMesh(this);
+		ret = new CMesh(this, COMP_MESH,(DMesh*)buffer);
 		this->components.push_back(ret);
 
 		break;
 	case COMP_TRANSFORMATION:
 
-		ret = new CTransformation(this);
+		ret = new CTransformation(this,COMP_TRANSFORMATION, (DTransformation*)buffer);
 		this->components.push_back(ret);
 
 		break;
-	case COMP_TEXTURE:// future implementation materials
+	case COMP_TEXTURE:
 	
-		ret = new CTexture(this);
+		ret = new CTexture(this,COMP_TEXTURE, (DTexture*)buffer);
 		this->components.push_back(ret);
 		
+		break;
+	case COMP_CAMERA:
+		//DCamera* camera = new DCamera();
+		ret = new CCamera(this, COMP_CAMERA, (DCamera*)buffer);
+		this->components.push_back(ret);
+
 		break;
 	default://COMP_UNKNOWN
 
@@ -182,7 +232,7 @@ Component * GameObject::GetComponent(Component_Type type)
 	return ret;
 }
 
-uint GameObject::ComponentVectorSize()
+uint GameObject::ComponentVectorSize()const
 {
 	return uint(components.size());
 }
@@ -213,6 +263,27 @@ void GameObject::DeleteComponent(Component * comp)
 
 }
 
+void GameObject::UpdateTranformChilds()
+{
+	for (int i = 0; i < childs.size(); i++)
+	{
+		CTransformation* tmp = (CTransformation*)childs[i]->GetComponent(COMP_TRANSFORMATION);
+		if (tmp != nullptr)
+		{
+			tmp->UpdateTransFromParent(this);
+		}
+	}
+}
+
+void GameObject::SetLocalTransform()
+{
+	CTransformation* myTrans = (CTransformation*)GetComponent(COMP_TRANSFORMATION);
+	if (myTrans != nullptr)
+	{
+		myTrans->SetLocalTrans(GetParent());
+	}
+}
+
 bool GameObject::IsEnable() const
 {
 	return isEnable;
@@ -233,8 +304,57 @@ void GameObject::Disable()
 	isEnable = false;
 }
 
+bool GameObject::IsStatic() const
+{
+	return isStatic;
+}
+
+void GameObject::SetStatic()
+{
+	isStatic = true;
+}
+
+void GameObject::SetNoStatic()
+{
+	isStatic = false;
+}
+
 void GameObject::Update(float dt)
 {
+
+	CCamera* camera = nullptr;
+	for (int i = 0; i < App->goManager->GetRoot()->childs.size(); i++) 
+	{
+		for (int p = 0; p < App->goManager->GetRoot()->childs[i]->components.size(); p++) 
+		{
+			if(App->goManager->GetRoot()->childs[i]->components[p]->getType()==COMP_CAMERA)
+			{
+				if (App->goManager->GetRoot()->childs[i]->components[p] != nullptr) 
+				{
+					camera = (CCamera*)App->goManager->GetRoot()->childs[i]->components[p];
+				}
+			}
+		}
+	}	
+	
+	//CMesh* debuger = (CMesh*)this->GetComponent(COMP_MESH);
+	if (camera!=nullptr)
+	{		
+		if (camera->needToCull) {
+			
+			if (camera->Contains(recalculatedBox))
+			{
+				App->renderer3D->DrawGO(this);
+			}
+		}
+
+		else {
+			App->renderer3D->DrawGO(this);
+		}
+	}
+	else {
+		App->renderer3D->DrawGO(this);
+	}
 
 	for (std::vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
 	{
@@ -246,13 +366,11 @@ void GameObject::Update(float dt)
 
 	for (std::vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
 	{
-		if((*it)->IsEnable()==true)
+		if ((*it)->IsEnable() == true)
 		{
 			(*it)->OnUpdate(dt);
 		}
 	}
-	App->renderer3D->DrawGO(this);
-
 }
 
 void GameObject::cleanUp()
@@ -272,6 +390,11 @@ void GameObject::OnEditor()
 		for (int i = 0; i < components.size(); i++)
 		{
 			components[i]->OnEditor();
+			if (App->ui->show_Inspector_window = true) {
+				App->ui->show_Inspector_window = false;
+			}
+			
+			App->ui->ShowInspectorWindow(components[i]);
 		}
 
 		for (int i = 0; i < childs.size(); i++)
@@ -282,5 +405,55 @@ void GameObject::OnEditor()
 		ImGui::TreePop();
 	}
 }
+
+void GameObject::OnInspector()
+{	
+	/*
+		for (int i = 0; i < components.size(); i++)
+		{
+			components[i]->OnInspector();
+		}
+
+		/*for (int i = 0; i < childs.size(); i++)
+		{
+			childs[i]->OnInspector();
+		}*/	
+}
+
+void GameObject::SaveData()
+{
+	for (int i = 0; i < childs.size(); i++)
+	{
+		childs[i]->SaveData();
+	}
+
+	if (components.size()>0)
+	{
+		for (int i = 0; i < components.size(); i++)
+		{
+			if (components[i]->GetDataType() == D_MESH) {
+				App->datamanager->SaveData(components[i]->GetData(), components[i]->GetDataType(), this->GameOIbject_ID);
+			}			
+		}
+	}
+}
+
+void GameObject::LoadData()
+{
+	//for (int i = 0; i < childs.size(); i++)
+	//{
+	//	childs[i]->LoadData();
+	//}
+
+	//if (components.size()>0)
+	//{
+	//	for (int i = 0; i < components.size(); i++)
+	//	{
+	//		if()
+	//			App->datamanager->LoadData(components[i]->GetData(), components[i]->GetDataType(), this->GameOIbject_ID);
+	//	}
+	//}
+}
+
 
 

@@ -73,7 +73,7 @@ uint ModuleTexture::LoadTexture(const char * imagepath)
 		if (!success)
 		{
 			error = ilGetError();
-			App->ui->AddLogToConsole("[ERROR]- Image conversion failed  ");
+		LOGUI("[ERROR]- Image conversion failed  ");
 			exit(-1);
 		}
 
@@ -105,15 +105,18 @@ uint ModuleTexture::LoadTexture(const char * imagepath)
 	else // If we failed to open the image file in the first place...
 	{
 		error = ilGetError();
-		App->ui->AddLogToConsole("[ERROR]- Image load failed  ");
+	LOGUI("[ERROR]- Image load failed  ");
 		return 0;
 		//exit(-1);
 	}
 
 	ilDeleteImages(1, &imageID); // Because we have already copied image data into texture data we can release memory used by image.
 	
-	if(correct)
-	App->ui->AddLogToConsole("[OK]- Texture creation successful.");
+	if (correct)
+	{
+		LOGUI("[OK]- Texture creation successful.");
+	}
+		
 
 	correct = false;
 

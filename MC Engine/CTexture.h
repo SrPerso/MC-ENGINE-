@@ -3,31 +3,19 @@
 
 #include "Component.h"
 #include <string>
+#include "DTexture.h"
 
 class GameObject;
 
-class DataTexture 
+class CTexture : public Component, public DTexture
 {
 public:
-	//texture	
-
-	uint image=0;
-	std::string Textname;	
-public:
-	DataTexture::~DataTexture();
-};
-
-
-class CTexture : public Component, public DataTexture
-{
-public:
-	CTexture(GameObject* object);
+	CTexture(GameObject* object, Component_Type type , DTexture* data);
 	~CTexture();
 
 	void OnUpdate(float dt);
 	void OnEditor();
+	void OnInspector();
 	uint Texture_ID; 
 };
-
-
 #endif //_TEXTURE_H

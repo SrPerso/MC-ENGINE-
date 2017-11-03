@@ -6,7 +6,8 @@
 #include "Glew\include\glew.h"
 #include "imGUI\imgui.h"
 #include "imGUI\imgui_impl_sdl_gl3.h"
-
+#include "CCamera.h"
+#include "GameObject.h"
 #include "Math.h"
 
 
@@ -23,11 +24,16 @@ ModuleSceneIntro::~ModuleSceneIntro()
 bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
-
+	LOGUI("-START- Loading Intro assets");
 	bool ret = true;	
+	GameObject* camera = new GameObject(App->goManager->GetRoot());
+	
+	DCamera* dcamera = new DCamera();
 
+	camera->CreateComponent(COMP_CAMERA, dcamera);
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
+	
 
 	return ret;
 }
@@ -37,8 +43,7 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
-	LOG("Cleaning scene Objects");
-	App->ui->AddLogToConsole("Cleaning scene Objects");
+	LOGUI("-CLEANUP- Cleaning scene Objects");
 
 
 	while (!GeometryObjects.empty()) {
@@ -132,15 +137,6 @@ void ModuleSceneIntro::CreateLine(vec3 Origin, vec3 destintation,Color color)
 
 void ModuleSceneIntro::Draw()
 {
-	/*for (std::list<Primitive*>::iterator it = GeometryObjects.begin(); it != GeometryObjects.end(); ++it)
-	{
-		(*it)->Render();
-	}*/
-
-	for (std::list<PrimitiveLine*>::iterator it = NormalsLines.begin(); it != NormalsLines.end(); ++it)
-	{
-		(*it)->Render();
-	}
 }
 
 void ModuleSceneIntro::CreateCylinder(const float x, const float y, const float z, const float radious, const float h)

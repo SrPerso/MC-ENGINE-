@@ -309,10 +309,17 @@ bool Frustum::Contains(const Polygon &polygon) const
 
 bool Frustum::Contains(const AABB &aabb) const
 {
-	for(int i = 0; i < 8; ++i)
+	float3 vCorner[8];
+	int totalIn = 0;
+	for (int i = 0; i < 8; ++i)
+	{		
 		if (!Contains(aabb.CornerPoint(i)))
-			return false;
-
+			totalIn++;
+	}
+	if (totalIn == 8)
+	{
+		return false;
+	}
 	return true;
 }
 

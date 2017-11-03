@@ -6,6 +6,7 @@
 #include "Assimp\include\scene.h"
 #include "Assimp\include\postprocess.h"
 #include "Assimp\include\cfileio.h"
+
 #include "GameObject.h"
 #include "ModuleGameObjectManager.h"
 #include "Component.h"
@@ -66,7 +67,7 @@ bool DataJSON::Init()
 			{
 				json_object_set_value(object_json, (*item)->name.c_str(), json_value_init_object());
 			}			
-		}
+		} 
 	
 
 	}//for	*/
@@ -78,7 +79,6 @@ void DataJSON::SaveAll() const
 {
 	
 	/*for (std::list<std::string>::const_reverse_iterator file = files.rbegin(); file != files.crend(); ++file) {
-
 
 		JSON_Object* object = nullptr;
 
@@ -197,7 +197,7 @@ bool DataFBX::Init()
 
 	LOG("-START- Init FBXLoader");
 
-	App->ui->AddLogToConsole("-START- Init FBXLoader");
+	LOGUI("-START- Init FBXLoader");
 
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
@@ -238,26 +238,25 @@ bool DataFBX::LoadMesh(const char* path)
 		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
 		
-			GameObject* gameObjectSon = gameObject->CreateChild();
+			GameObject* gameObjectSon = gameObject->CreateChild();// to imp
+
+			CMesh* mesh = (CMesh*)gameObjectSon->CreateComponent(COMP_MESH);// to imp
+			mesh->Enable();// to imp
+
+			aiMesh* newMesh = scene->mMeshes[i]; // to imp
 
 
-			CMesh* mesh = (CMesh*)gameObjectSon->CreateComponent(COMP_MESH);
-			mesh->Enable();
-
-			aiMesh* newMesh = scene->mMeshes[i];
-
-			mesh->nVertex = newMesh->mNumVertices;
+			//passed
+			mesh->nVertex = newMesh->mNumVertices; 
 			mesh->Vertex = new float[mesh->nVertex * 3];
 			memcpy(mesh->Vertex, newMesh->mVertices, sizeof(float)* mesh->nVertex * 3);
-
-	
-
+		
 			glGenBuffers(1, (GLuint*)&mesh->idVertex);
 			glBindBuffer(GL_ARRAY_BUFFER, mesh->idVertex);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->Vertex, GL_STATIC_DRAW);
-
-			
-			LOG("loaded mesh %i vertex", mesh->nVertex);
+			//
+		
+			LOGUI("{Importer}- Mesh Imported %i Vertices", mesh->nVertex);
 
 			if (newMesh->HasFaces())
 			{
@@ -271,7 +270,7 @@ bool DataFBX::LoadMesh(const char* path)
 					if (newMesh->mFaces[i].mNumIndices != 3)
 					{
 						LOG("WARNING, geometry face with != 3 indices!");
-						App->ui->AddLogToConsole("WARNING- geometry face with != 3 indices!");
+						LOGUI("WARNING- geometry face with != 3 indices!");
 					}
 					else
 					{
@@ -296,8 +295,12 @@ bool DataFBX::LoadMesh(const char* path)
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->normals, GL_STATIC_DRAW);
 				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 				glEnableVertexAttribArray(1);
-
+				LOGUI("[OK]- Mesh normals Loaded!");
 			}// has normals
+
+			else {
+				LOGUI("[ERROR]- geometry has not normals!");
+			}
 			
 			if (newMesh->HasVertexColors(0))
 			{
@@ -327,7 +330,7 @@ bool DataFBX::LoadMesh(const char* path)
 					retu = newMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 
 					if (retu == aiReturn_FAILURE)
-						App->ui->AddLogToConsole("[ERROR]- fail getting texture");
+					LOGUI("[ERROR]- fail getting texture");
 
 					std::string fullPath = "Assets/";
 					fullPath.append(path.C_Str());
@@ -342,9 +345,7 @@ bool DataFBX::LoadMesh(const char* path)
 				glGenBuffers(1, (GLuint*) &(mesh->idTexCoords));
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->idTexCoords);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->texCoords, GL_STATIC_DRAW);
-			}
-
-			
+			}	
 			
 			
 			 //TRANSFORMATION-------------- 
@@ -376,8 +377,7 @@ bool DataFBX::LoadMesh(const char* path)
 			mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
 
 			App->camera->CenterCameraToObject(&mesh->debugBox);
-
-
+			
 			App->scene_intro->sceneDebugInfo.faces += mesh->nFaces;
 			App->scene_intro->sceneDebugInfo.tris += mesh->nVertex;
 			App->scene_intro->sceneDebugInfo.vertex += mesh->nVertex;
@@ -387,7 +387,7 @@ bool DataFBX::LoadMesh(const char* path)
 
 		aiReleaseImport(scene);
 		return true;
-		App->ui->AddLogToConsole("[OK]- Loaded Mesh");
+		LOGUI("[OK]- Loaded Mesh %s", path);
 		LOG("Mesh %s loaded Ok", path);
 	}//if scene
 

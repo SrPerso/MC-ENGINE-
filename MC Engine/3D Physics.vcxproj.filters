@@ -4,18 +4,6 @@
     <Filter Include="Engine">
       <UniqueIdentifier>{8b7ed093-66ce-4096-96d2-fbb9faa4bf52}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Modules">
-      <UniqueIdentifier>{7b418be2-1631-4a31-9ef2-8a8b234a7339}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Modules\Game">
-      <UniqueIdentifier>{83f46af7-e02f-40c0-9e56-41d76082527b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Modules\UI">
-      <UniqueIdentifier>{f1f9c236-4fd8-4a71-a59d-2ac9a17214a6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Containers">
-      <UniqueIdentifier>{afc36133-f401-499a-aa33-0da1e500fb52}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Tools">
       <UniqueIdentifier>{7e4dfaf7-022c-4f7d-92aa-f3b3fa9d6248}</UniqueIdentifier>
     </Filter>
@@ -34,67 +22,85 @@
     <Filter Include="Engine\Helpers">
       <UniqueIdentifier>{121f8e6b-df36-4ab0-be0d-601ddfc9e503}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\GameObjects">
+    <Filter Include="Engine\Helpers\Containers">
+      <UniqueIdentifier>{afc36133-f401-499a-aa33-0da1e500fb52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Engine">
+      <UniqueIdentifier>{1c4a49a7-e035-40c0-bb52-0df161052a93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Engine\Principal">
+      <UniqueIdentifier>{17670a1c-7013-4834-a7b9-cdcaa8eabd67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Engine\Modules">
+      <UniqueIdentifier>{7b418be2-1631-4a31-9ef2-8a8b234a7339}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Engine\Modules\Game">
+      <UniqueIdentifier>{83f46af7-e02f-40c0-9e56-41d76082527b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Engine\Modules\UI">
+      <UniqueIdentifier>{f1f9c236-4fd8-4a71-a59d-2ac9a17214a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Engine\Importers">
+      <UniqueIdentifier>{2a2ee03d-2190-49d1-abdb-c78bdaa91a00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Engine\GameObjects">
       <UniqueIdentifier>{afd7c2f5-9c23-4523-8b2f-0f1917e54dbf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\GameObjects\Components">
+    <Filter Include="Engine\Engine\GameObjects\Components">
       <UniqueIdentifier>{b7a96174-b79b-4e51-8079-abec0f0d410e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Engine\DataContainers">
+      <UniqueIdentifier>{ef91e114-2eaf-4b50-847f-3bd75d9f9442}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClInclude>
     <ClInclude Include="ModuleAudio.h">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClInclude>
     <ClInclude Include="ModuleCamera3D.h">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClInclude>
     <ClInclude Include="ModuleInput.h">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClInclude>
     <ClInclude Include="ModuleRenderer3D.h">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClInclude>
     <ClInclude Include="ModuleWindow.h">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClInclude>
     <ClInclude Include="p2DynArray.h">
-      <Filter>Engine\Containers</Filter>
+      <Filter>Engine\Helpers\Containers</Filter>
     </ClInclude>
     <ClInclude Include="p2List.h">
-      <Filter>Engine\Containers</Filter>
+      <Filter>Engine\Helpers\Containers</Filter>
     </ClInclude>
     <ClInclude Include="p2Point.h">
-      <Filter>Engine\Containers</Filter>
+      <Filter>Engine\Helpers\Containers</Filter>
     </ClInclude>
     <ClInclude Include="glmath.h">
-      <Filter>Engine\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Application.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Globals.h">
-      <Filter>Engine</Filter>
+      <Filter>Engine\Helpers\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Primitive.h">
       <Filter>Engine\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="Color.h">
-      <Filter>Engine\Containers</Filter>
+      <Filter>Engine\Helpers\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Engine\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="ModuleSceneIntro.h">
-      <Filter>Engine\Modules\Game</Filter>
+      <Filter>Engine\Engine\Modules\Game</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Engine\Tools</Filter>
     </ClInclude>
     <ClInclude Include="ModulePhysics3D.h">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClInclude>
     <ClInclude Include="PhysBody3D.h">
       <Filter>Engine\Helpers</Filter>
@@ -110,9 +116,6 @@
     </ClInclude>
     <ClInclude Include="imGUI\imgui_impl_sdl_gl3.h">
       <Filter>Engine\Tools\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="Math.h">
-      <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="MathGeoLib\MathBuildConfig.h">
       <Filter>Engine\Tools\MathGeoLib</Filter>
@@ -292,48 +295,99 @@
       <Filter>Engine\Tools\parson</Filter>
     </ClInclude>
     <ClInclude Include="ModuleUI.h">
-      <Filter>Engine\Modules\UI</Filter>
+      <Filter>Engine\Engine\Modules\UI</Filter>
     </ClInclude>
     <ClInclude Include="ModuleDataFile.h">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClInclude>
     <ClInclude Include="ModuleTexture.h">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Engine\GameObjects</Filter>
+      <Filter>Engine\Engine\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Component.h">
-      <Filter>Engine\GameObjects</Filter>
+      <Filter>Engine\Engine\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="ModuleGameObjectManager.h">
-      <Filter>Engine\GameObjects</Filter>
+      <Filter>Engine\Engine\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="CMesh.h">
-      <Filter>Engine\GameObjects\Components</Filter>
+      <Filter>Engine\Engine\GameObjects\Components</Filter>
     </ClInclude>
     <ClInclude Include="CTexture.h">
-      <Filter>Engine\GameObjects\Components</Filter>
+      <Filter>Engine\Engine\GameObjects\Components</Filter>
     </ClInclude>
     <ClInclude Include="CTransformation.h">
-      <Filter>Engine\GameObjects\Components</Filter>
+      <Filter>Engine\Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Importer.h">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="IMesh.h">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Engine\Engine\Principal</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Engine\Engine\Principal</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Engine\Engine\Principal</Filter>
+    </ClInclude>
+    <ClInclude Include="DMesh.h">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClInclude>
+    <ClInclude Include="DMaterial.h">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClInclude>
+    <ClInclude Include="IMaterial.h">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="DTransformation.h">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClInclude>
+    <ClInclude Include="DContainer.h">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClInclude>
+    <ClInclude Include="ITexture.h">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="DTexture.h">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClInclude>
+    <ClInclude Include="IScene.h">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleDataManager.h">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClInclude>
+    <ClInclude Include="CCamera.h">
+      <Filter>Engine\Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DCamera.h">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleTimeManager.h">
+      <Filter>Engine\Engine\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClCompile>
     <ClCompile Include="ModuleCamera3D.cpp">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClCompile>
     <ClCompile Include="ModuleInput.cpp">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClCompile>
     <ClCompile Include="ModuleRenderer3D.cpp">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClCompile>
     <ClCompile Include="ModuleWindow.cpp">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClCompile>
     <ClCompile Include="log.cpp">
       <Filter>Engine\Tools</Filter>
@@ -341,29 +395,23 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Engine\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="Application.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="glmath.cpp">
-      <Filter>Engine\Containers</Filter>
+      <Filter>Engine\Helpers\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Primitive.cpp">
       <Filter>Engine\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
-      <Filter>Engine\Containers</Filter>
+      <Filter>Engine\Helpers\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Engine\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="ModuleSceneIntro.cpp">
-      <Filter>Engine\Modules\Game</Filter>
+      <Filter>Engine\Engine\Modules\Game</Filter>
     </ClCompile>
     <ClCompile Include="ModulePhysics3D.cpp">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClCompile>
     <ClCompile Include="PhysBody3D.cpp">
       <Filter>Engine\Helpers</Filter>
@@ -477,31 +525,79 @@
       <Filter>Engine\Tools\parson</Filter>
     </ClCompile>
     <ClCompile Include="ModuleUI.cpp">
-      <Filter>Engine\Modules\UI</Filter>
+      <Filter>Engine\Engine\Modules\UI</Filter>
     </ClCompile>
     <ClCompile Include="ModuleDataFile.cpp">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClCompile>
     <ClCompile Include="ModuleTexture.cpp">
-      <Filter>Engine\Modules</Filter>
+      <Filter>Engine\Engine\Modules</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Engine\GameObjects</Filter>
+      <Filter>Engine\Engine\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Component.cpp">
-      <Filter>Engine\GameObjects</Filter>
+      <Filter>Engine\Engine\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="ModuleGameObjectManager.cpp">
-      <Filter>Engine\GameObjects</Filter>
+      <Filter>Engine\Engine\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="CMesh.cpp">
-      <Filter>Engine\GameObjects\Components</Filter>
+      <Filter>Engine\Engine\GameObjects\Components</Filter>
     </ClCompile>
     <ClCompile Include="CTexture.cpp">
-      <Filter>Engine\GameObjects\Components</Filter>
+      <Filter>Engine\Engine\GameObjects\Components</Filter>
     </ClCompile>
     <ClCompile Include="CTransformation.cpp">
-      <Filter>Engine\GameObjects\Components</Filter>
+      <Filter>Engine\Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="IMesh.cpp">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Engine\Engine\Principal</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Engine\Engine\Principal</Filter>
+    </ClCompile>
+    <ClCompile Include="DMesh.cpp">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClCompile>
+    <ClCompile Include="DMaterial.cpp">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClCompile>
+    <ClCompile Include="IMaterial.cpp">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="ITexture.cpp">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="DTexture.cpp">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClCompile>
+    <ClCompile Include="DTransformation.cpp">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClCompile>
+    <ClCompile Include="DContainer.cpp">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClCompile>
+    <ClCompile Include="Importer.cpp">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDataManager.cpp">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClCompile>
+    <ClCompile Include="CCamera.cpp">
+      <Filter>Engine\Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="DCamera.cpp">
+      <Filter>Engine\Engine\DataContainers</Filter>
+    </ClCompile>
+    <ClCompile Include="IScene.cpp">
+      <Filter>Engine\Engine\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleTimeManager.cpp">
+      <Filter>Engine\Engine\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -524,7 +620,7 @@
       <Filter>Engine\Tools\MathGeoLib</Filter>
     </None>
     <None Include="Game\config.json">
-      <Filter>Engine</Filter>
+      <Filter>Engine\Engine\Principal</Filter>
     </None>
   </ItemGroup>
 </Project>

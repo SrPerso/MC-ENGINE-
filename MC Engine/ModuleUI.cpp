@@ -7,9 +7,13 @@
 #include "Math.h"
 #include "SDL/include/SDL_cpuinfo.h"
 #include "Primitive.h"
-
+#include "CTexture.h"
+#include "CTransformation.h"
+#include "CMesh.h"
+#include "CCamera.h"
 #include "ModuleGameObjectManager.h"
 #include "GameObject.h"
+
 
 
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
@@ -30,7 +34,8 @@ bool ModuleUI::Start()
 {
 
 	bool ret = true;
-	App->ui->AddLogToConsole("-START- Loading UI Engine");
+	LOGUI("-START- Loading UI Engine");
+
 	glewInit();
 	ImGui_ImplSdlGL3_Init(App->window->window);
 	App->window->SetFullscreen(WindowSetingsS.fullscreen);
@@ -50,6 +55,7 @@ bool ModuleUI::Start()
 	show_Geometry_window = json_object_dotget_boolean(data, "show_Geometry_window");
 	show_Debug_window = json_object_dotget_boolean(data, "show_Debug_window");
 	show_Editor_window = json_object_dotget_boolean(data, "show_Editor_window");
+	show_Inspector_window = json_object_dotget_boolean(data, "show_Inspector_window");
 	debug_active = json_object_dotget_boolean(data, "debug_active");
 	debug_Vertex_Normals = json_object_dotget_boolean(data, "debug_Vertex_Normals");
 	debug_Box = json_object_dotget_boolean(data, "debug_Box");
@@ -59,6 +65,9 @@ bool ModuleUI::Start()
 	sb_Lighting = json_object_dotget_boolean(data, "sb_Lighting");
 	sb_Color_Material = json_object_dotget_boolean(data, "sb_Color_Material");
 	sb_Texture_2D = json_object_dotget_boolean(data, "sb_Texture_2D");
+
+	LOGUI("-START- Loaded config.json");
+
 	}
 
 	else 
@@ -66,6 +75,8 @@ bool ModuleUI::Start()
 		debug_active = false;
 		debug_Vertex_Normals = true;
 		debug_Box = false;
+
+	LOGUI("[ERROR]-START- Cant load config.json");
 	}
 
 
@@ -156,6 +167,9 @@ update_status ModuleUI::Update(float dt)
 	if (show_Debug_window)
 		ShowDebugWindow();
 
+	if (show_Inspector_window)
+		ShowInspectorWindow();
+
 
 	return update_status(ret);
 }
@@ -164,7 +178,7 @@ bool ModuleUI::CleanUp()
 {
 	bool ret = true;
 	ImGui_ImplSdlGL3_Shutdown();
-	App->ui->AddLogToConsole("Unloading UI Engine");
+	LOGUI("-CLEANUP- Unloading UI Engine");
 
 	return ret;
 }
@@ -186,12 +200,12 @@ IMGUI_API void ModuleUI::ShowConsoleWindow(bool * p_open)
 	ImGui::Separator();
 	if (ImGui::Button("Clear"))
 	{
-		consoleTxt.clear();
+		App->consoleTxt.clear();
 	}
 
-	for (int i = consoleTxt.size() - 1; i >= 0; i--)
+	for (int i = App->consoleTxt.size() - 1; i >= 0; i--)
 	{
-		ImGui::Text("%s", consoleTxt[i].c_str());
+		ImGui::Text("%s", App->consoleTxt[i].c_str());
 	}
 
 	ImGui::End();
@@ -275,7 +289,8 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 		RenderSetings();
 	if (ImGui::CollapsingHeader("Input"))
 		DevicesSetingsC();
-
+	if (ImGui::CollapsingHeader("Time Configuration"))
+		App->timeManager->OnConfiguration();
 
 	ImGui::End();
 
@@ -499,7 +514,52 @@ IMGUI_API void ModuleUI::ShowEditorWindow(bool * p_open)
 		ImGui::Text("EDITOR WINDOW:");
 		ImGui::Separator();
 		App->goManager->GetRoot()->OnEditor();
+		ImGui::End();
+	}
 
+	return IMGUI_API void();
+}
+
+IMGUI_API void ModuleUI::ShowInspectorWindow(Component* component, bool * p_open)
+{
+	ImGuiWindowFlags window_flags = 0;
+	
+	window_flags |= ImGuiWindowFlags_NoTitleBar;
+
+	if (ImGui::Begin("Inspector", p_open, window_flags))
+	{
+		ImGui::Text("INSPECTOR");
+		ImGui::Separator();
+
+		
+		if (component != nullptr) {
+			Component_Type type = component->getType();
+		
+			switch (type)
+			{
+			case COMP_TRANSFORMATION:
+				component = (CTransformation*)component;
+				component->OnInspector();
+				break;
+
+			case COMP_TEXTURE:
+				component = (CTexture*)component;
+				component->OnInspector();
+				break;
+
+			case COMP_MESH:
+				component = (CMesh*)component;
+				component->OnInspector();
+				break;
+
+			case COMP_CAMERA:
+				component = (CCamera*)component;
+				component->OnInspector();
+				break;
+
+
+			}
+		}		//App->goManager->GetRoot()->OnInspector();
 
 		ImGui::End();
 	}
@@ -511,10 +571,32 @@ IMGUI_API void ModuleUI::ShowEditorWindow(bool * p_open)
 //show the logs on Console..................................................
 void ModuleUI::AddLogToConsole(std::string toAdd)
 {
+	LOGUI(toAdd.c_str());
 	consoleTxt.push_back(toAdd);
 
 }
 
+void ModuleUI::AddLogToConsole(std::string toAdd, int dataToAdd)
+{
+
+	toAdd.append(std::to_string(dataToAdd));
+	consoleTxt.push_back(toAdd);
+}
+void ModuleUI::AddLogToConsole(const char file[], int line, const char* format, ...)
+{
+	static char tmp_string[4096];
+	static char tmp_string2[4096];
+	static va_list  ap;
+
+	va_start(ap, format);
+	vsprintf_s(tmp_string, 4096, format, ap);
+	va_end(ap);
+	sprintf_s(tmp_string2, 4096, "\n%s(%d) : %s", file, line, tmp_string);
+
+	consoleTxt.push_back(tmp_string2);
+
+}
+	
 //Config Window.............................................................
 
 void ModuleUI::HardwareSetingsC()
@@ -850,6 +932,7 @@ void ModuleUI::WindowMenuBar()
 
 	ImGui::Checkbox("GameObjects Editor", &show_Editor_window);
 
+	ImGui::Checkbox("GameObjects Inspector", &show_Inspector_window);
 	if (ImGui::MenuItem("Console", "Ctrl + Shift + C"))
 		show_Console_window = !show_Console_window;
 }
@@ -1154,8 +1237,17 @@ update_status ModuleUI::FileMenuBar()
 {
 	update_status ret = UPDATE_CONTINUE;
 
+	if (ImGui::MenuItem("Save Scene", "Ctrl + S"))
+		App->datamanager->SaveAllData();
+
+	if (ImGui::MenuItem("Clean Scene", "Ctrl + Supr")) //TO FIX
+		App->goManager->root->DeleteChilds();
+
+
 	if (ImGui::MenuItem("Quit", "ESC"))
 		return UPDATE_STOP;
+
+
 
 
 	return update_status(ret);
