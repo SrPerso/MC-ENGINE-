@@ -23,6 +23,7 @@ CTexture::CTexture(GameObject* object, Component_Type type, DTexture * data) :Co
 
 	name = "- Component Texture_";
 	name.append(std::to_string(Texture_ID));
+	dType = D_TEXTURE;
 }
 
 CTexture::~CTexture()

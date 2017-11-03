@@ -36,8 +36,13 @@ public:
 	
 	void newParent(GameObject*newparent);
 	void AddChild(GameObject* child);
-	GameObject* GetFirstChild();
+	GameObject* GetFirstChild() const;
 
+
+	void SetParentID(uint parentID);
+	uint GetParentId()const;
+	void SetGOID(uint parentID);
+	int GetGOId()const;
 	//TO ADD 
 	// to move the objects and change the parent is necesary a function newparent(gameobject)
 	
@@ -45,7 +50,7 @@ public:
 
 	Component* CreateComponent(Component_Type type, const void*buffet = nullptr);
 	Component* GetComponent(Component_Type type);
-	uint ComponentVectorSize();
+	uint ComponentVectorSize()const;
 	uint NumComponentTypeSize(Component_Type type);
 	void DeleteComponent(Component* comp);
 	void Move(float3 destiny, float3 position);
@@ -74,6 +79,12 @@ public:
 	void OnEditor();
 	void OnInspector();
 
+	//DATA ------------------------------------
+
+	void SaveData();
+	//std::vector<const void*>* SaveData();
+	void LoadData();
+
 public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> childs;
@@ -83,9 +94,13 @@ private:
 	std::string name;
 	GameObject* parent = nullptr;
 	bool isEnable = true;
-
 	bool isStatic;
 
+
+private: 
+
+	uint Parent_ID = 0;
 	uint GameOIbject_ID = 0;
+
 };
 #endif

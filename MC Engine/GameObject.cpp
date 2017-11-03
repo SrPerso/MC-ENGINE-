@@ -19,8 +19,8 @@ GameObject::GameObject()
 
 	if (parent != nullptr)
 	{
-		parent->AddChild(this);
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
+		parent->AddChild(this);
 	}
 	else
 	{
@@ -37,9 +37,8 @@ GameObject::GameObject(GameObject* parent): parent(parent)
 
 	if (parent != nullptr)
 	{
-		parent->AddChild(this);
-
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
+		parent->AddChild(this);
 	}
 	else 
 	{
@@ -87,7 +86,7 @@ GameObject * GameObject::CreateChild()
 {
 	GameObject* ret = nullptr;
 
-	ret = new GameObject(this);
+	ret = new GameObject(this);	
 	
 	ret->SetEnable(this->IsEnable());		
 	
@@ -145,12 +144,34 @@ void GameObject::newParent(GameObject * newparent)
 void GameObject::AddChild(GameObject * child)
 {
 	childs.push_back(child);
+	child->SetParentID(this->GameOIbject_ID);
 	child->parent = this;
+	
 }
 
-GameObject * GameObject::GetFirstChild()
+GameObject * GameObject::GetFirstChild()const
 {
 	return childs[0];
+}
+
+void GameObject::SetParentID(uint parentID)
+{
+	Parent_ID = parentID;
+}
+
+uint GameObject::GetParentId()const
+{
+	return uint(Parent_ID);
+}
+
+void GameObject::SetGOID(uint newID)
+{
+	GameOIbject_ID = newID;
+}
+
+int GameObject::GetGOId()const
+{
+	return int(GameOIbject_ID);
 }
 
 Component * GameObject::CreateComponent(Component_Type type, const void*buffer)
@@ -211,7 +232,7 @@ Component * GameObject::GetComponent(Component_Type type)
 	return ret;
 }
 
-uint GameObject::ComponentVectorSize()
+uint GameObject::ComponentVectorSize()const
 {
 	return uint(components.size());
 }
@@ -314,8 +335,7 @@ void GameObject::Update(float dt)
 				}
 			}
 		}
-	}
-	
+	}	
 	
 	//CMesh* debuger = (CMesh*)this->GetComponent(COMP_MESH);
 	if (camera!=nullptr)
@@ -336,9 +356,6 @@ void GameObject::Update(float dt)
 		App->renderer3D->DrawGO(this);
 	}
 
-	
-
-
 	for (std::vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
 	{
 		if ((*it)->IsEnable() == true)
@@ -354,8 +371,6 @@ void GameObject::Update(float dt)
 			(*it)->OnUpdate(dt);
 		}
 	}
-	
-
 }
 
 void GameObject::cleanUp()
@@ -392,8 +407,7 @@ void GameObject::OnEditor()
 }
 
 void GameObject::OnInspector()
-{
-	
+{	
 	/*
 		for (int i = 0; i < components.size(); i++)
 		{
@@ -403,40 +417,43 @@ void GameObject::OnInspector()
 		/*for (int i = 0; i < childs.size(); i++)
 		{
 			childs[i]->OnInspector();
-		}*/
-	
+		}*/	
 }
 
-void GameObject::Move(float3 destiny, float3 position)
+void GameObject::SaveData()
 {
-	/*for (int i = 0; i < childs.size(); i++)
+	for (int i = 0; i < childs.size(); i++)
 	{
-		if (childs.size() > 0) {
-			for (int o = 0; o < childs[i]->components.size(); o++) {
+		childs[i]->SaveData();
+	}
 
-				if (childs[i]->components[o]->getType() == COMP_MESH)
-				{
-					dynamic_cast<CMesh*>(childs[i]->components[o])->Move(destiny, position);
-				}
-			}
+	if (components.size()>0)
+	{
+		for (int i = 0; i < components.size(); i++)
+		{
+			if (components[i]->GetDataType() == D_MESH) {
+				App->datamanager->SaveData(components[i]->GetData(), components[i]->GetDataType(), this->GameOIbject_ID);
+			}			
 		}
 	}
-}*/
-
-/*void GameObject::Rotate(vec3 rotation)
-{
-	/*for (int i = 0; i < childs.size(); i++)
-	{
-		if (childs.size() > 0) {
-			for (int o = 0; o < childs[i]->components.size(); o++) {
-
-				if (childs[i]->components[o]->getType() == COMP_TRANSFORMATION)
-				{
-					dynamic_cast<CTransformation*>(childs[i]->components[o])->Rotate(rotation);
-				}
-			}
-		}
-	}
-	*/
 }
+
+void GameObject::LoadData()
+{
+	//for (int i = 0; i < childs.size(); i++)
+	//{
+	//	childs[i]->LoadData();
+	//}
+
+	//if (components.size()>0)
+	//{
+	//	for (int i = 0; i < components.size(); i++)
+	//	{
+	//		if()
+	//			App->datamanager->LoadData(components[i]->GetData(), components[i]->GetDataType(), this->GameOIbject_ID);
+	//	}
+	//}
+}
+
+
 

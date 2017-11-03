@@ -15,3 +15,16 @@ bool Importer::Import(const void * buffer, uint size, std::string & output_file)
 
 	return ret;
 }
+
+bool Importer::Save(const void * buffer, const char * saveFile, uint id)
+{
+
+	LOGUI("[ERROR]- saving importes -> default saver");
+	return true;
+}
+
+//bool Importer::Load(const void * buffer, const char * saveFile, uint id)
+//{
+//	LOGUI("[ERROR]- saving importes -> default Loader");
+//	return true;
+//}

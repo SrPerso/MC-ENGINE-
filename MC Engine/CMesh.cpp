@@ -34,6 +34,7 @@ CMesh::CMesh(GameObject * object, Component_Type type, DMesh* data) : Component(
 		}
 		name= "- Component Mesh_";
 		name.append(std::to_string(mesh_ID));
+		dType = D_MESH;
 }
 
 CMesh::~CMesh()
@@ -72,6 +73,9 @@ void CMesh::OnInspector()
 		ImGui::Text("\t Normals ID: %i", idNormals);
 
 		ImGui::Text("\t Colors ID: %i", idColors);
+		
+
+		ImGui::Text("\t ID: %i", this->object->GetGOId());
 
 		//	ImGui::Text("Texture Coords: %i", idTexCoords);
 	
@@ -102,4 +106,32 @@ void CMesh::Move(float3 destiny, float3 start)
 	debugBox.Enclose((float3*)Vertex, nVertex);
 }
 
+const void * CMesh::GetData()
+{
+	DMesh* data = new DMesh;
+
+	data->nVertex = nVertex;
+	data->idVertex = idVertex;
+	data->Vertex = Vertex;
+	data->wire = wire;
+	data->nIndex = nIndex;
+	data->idIndex = idIndex;
+	data->Index = Index;
+	data->nFaces = nFaces;
+	data->normals = normals;
+	data->idNormals = idNormals;
+	data->nNormals = nNormals;
+	data->idColors = idColors;
+	data->colors = colors;
+	data->idTexCoords = idTexCoords;
+	data->texCoords = texCoords;
+	data->debugMode = debugMode;
+	data->debugBox = debugBox;
+
+	DMesh* ret= data;
+
+	delete data;
+
+	return (DMesh*)ret;
+}
 

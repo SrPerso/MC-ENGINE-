@@ -19,6 +19,16 @@ void logUI(const char file[], int line, const char* format, ...);
 #define RADTODEG 57.295779513082320876f 
 #define HAVE_M_PI
 
+
+#define RELEASE_DELET( x )	\
+{                           \
+	if( x != NULL )         \
+	{                       \
+		delete[] x;         \
+	    x = NULL;           \
+	}                       \
+}
+
 typedef unsigned int uint;
 
 enum update_status

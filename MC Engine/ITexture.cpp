@@ -72,10 +72,8 @@ DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  F
 				testM = nullptr;
 			}
 
-
 			ret->image = App->texture->LoadTexture(fullPath.c_str());
 			ret->Textname = fullPath;
-
 		}
 
 		LOGUI("[OK]- Imported Texture");

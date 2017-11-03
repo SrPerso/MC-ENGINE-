@@ -1237,8 +1237,17 @@ update_status ModuleUI::FileMenuBar()
 {
 	update_status ret = UPDATE_CONTINUE;
 
+	if (ImGui::MenuItem("Save Scene", "Ctrl + S"))
+		App->datamanager->SaveAllData();
+
+	if (ImGui::MenuItem("Clean Scene", "Ctrl + Supr")) //TO FIX
+		App->goManager->root->DeleteChilds();
+
+
 	if (ImGui::MenuItem("Quit", "ESC"))
 		return UPDATE_STOP;
+
+
 
 
 	return update_status(ret);

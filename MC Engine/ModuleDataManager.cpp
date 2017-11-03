@@ -9,20 +9,26 @@
 #include "GameObject.h"
 #include "DContainer.h"
 
+#include "IMesh.h"
+
 #include "CTransformation.h"
 
 ModuleDataManager::ModuleDataManager(Application* app, bool start_enabled) :Module(app, start_enabled)
 {
-	name = "Moudle Data Manager"; //this module is going to import all Data of the components. and future scene loader
+	name = "Module Data Manager"; //this module is going to import all Data of the components. and future scene loader
+
+	importerMesh = new ImporterMesh();
 }
+
 
 ModuleDataManager::~ModuleDataManager()
 {
 }
 
-GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*parent)
+GameObject* ModuleDataManager::ImportGameObject(std::string path, GameObject * parent)
 {
-	GameObject* newObject = new GameObject(parent);	
+
+	GameObject* newObject = parent->CreateChild();
 
 	int length = strlen(path.c_str());
 	std::string namePath = path;
@@ -39,16 +45,15 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 		testM = nullptr;
 	}
 
-
 	const aiScene* scene = aiImportFile(path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
 
-		aiNode* node = scene->mRootNode;
-		
-
 		LOGUI("[OK]- Scene %s loaded succesfully", path);
+
+		aiNode* node = scene->mRootNode;
+		newObject->SetName(node->mName.C_Str());
 
 		//newObject->CreateComponent(COMP_TRANSFORMATION, importerMesh->ImportTrans(node));//global objeto total
 
@@ -56,61 +61,102 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 		{
 			LOG("Loading meshes");
 
-			for (int i = 0; i < scene->mNumMeshes; i++)
-			{
+			newObject = ImportGameObject(path, newObject, scene, node);
 
-				aiMesh* newMesh = scene->mMeshes[i];
-				
-				GameObject * GameObjectSon;
-				
-				if (scene->mNumMeshes > 1)
-				{
-
-					GameObjectSon = new GameObject(newObject);
-		
-				}
-				else
-				{
-					GameObjectSon = newObject;
-				}				
-
-				
-
-				
-				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, importerMesh->ImportTrans(node));
-				GameObjectSon->CreateComponent(COMP_MESH, (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon));
-				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
-				GameObjectSon->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));
-
-
-				//global objeto total
-			}	
-
-			
 			aiReleaseImport(scene);
-
-			return newObject;
 		}
 		else
 		{
 			LOGUI("[Error]- Error importing scene %s", path);
 			return nullptr;
 		}
-
-		for (int i = 0; i <= node->mNumChildren; ++i)
-			ImportGameObject(path,newObject);
-
-
 	}
+	return nullptr;
+}
 
+GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*parent,const aiScene* scene,aiNode* node )
+{	
+	GameObject* newObject = parent->CreateChild();
+
+			for (int i = 0; i < node->mNumMeshes; i++)
+			{
+
+				aiMesh* newMesh = scene->mMeshes[node->mMeshes[i]];
+				
+				GameObject * GameObjectSon;
+				
+				if (node->mNumMeshes > 1)
+				{
+					GameObjectSon = new GameObject(newObject);		
+				}
+				else
+				{
+					GameObjectSon = newObject;
+				}				
+
+				DMesh* MeshtoCreate = (DMesh*)importerMesh->ImportMesh(newMesh);
+				GameObjectSon->CreateComponent(COMP_MESH, MeshtoCreate);
+
+				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, importerMesh->ImportTrans(node));
+				GameObjectSon->CreateComponent(COMP_MESH, (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon));
+				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
+				GameObjectSon->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));
+        
+			}		
+
+			for (int i = 0; i < node->mNumChildren; ++i)
+				newObject = ImportGameObject(path, newObject, scene ,node->mChildren[i]);
+
+			return newObject;
+}
+
+
+void ModuleDataManager::SaveAllData()const
+{
+	//std::vector<const void*>* returned = nullptr;
+
+	App->goManager->GetRoot()->SaveData();	
+}
+
+void ModuleDataManager::SaveData(const void * buff,DType type, uint id)const
+{
+	switch (type)
+	{
+	case D_UNKNOWN:
+		LOGUI("[ERROR]-trying to save a unknown data");
+		break;
+
+	case D_MESH:
+		importerMesh->Save(buff,nullptr,id); //(const void * buffer, const char * saverFile, uint id
+		LOGUI("[OK]-MeshData %i saved", id);
+		break;
+
+	case D_MATERIAL:
+	
+		//LOGUI("[OK]-MaterialData %i saved", id);
+		LOGUI("[ON CONSTRUCTION]-MaterialData %i saved", id);
+		break;
+
+	case D_TEXTURE:
+		importerTexture->Save(buff, nullptr, id);  //(const void * buffer, const char * saverFile, uint id
+		LOGUI("[OK]-TextureData %i saved", id);
+		break;
+
+	case D_TRANSFORMATION:
+	//	LOGUI("[OK]-Transformation Data %i saved", id);
+		LOGUI("[ON CONSTRUCTION]-Transformation Data %i saved", id);
+		break;
+
+	case D_CAMERA:
+		break;
+
+	default:
+		break;
+	}
 }
 
 void ModuleDataManager::LoadAllData()
 {
-	//calling all load importers functions
-}
+	App->goManager->GetRoot()->LoadData();
 
-void ModuleDataManager::SaveAllData()
-{
-	//calling all save importers functions
 }

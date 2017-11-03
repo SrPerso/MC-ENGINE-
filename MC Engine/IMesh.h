@@ -3,26 +3,26 @@
 
 #include "Importer.h"
 #include "Globals.h"
-#include "DMesh.h"
-#include "DTransformation.h"
-#include "GameObject.h"
 
 struct aiMesh;
 struct aiNode;
+
+class DMesh;
+class DTransformation;
 
 class ImporterMesh : public Importer
 {
 	friend class ModuleDataManager;
 public:
 	ImporterMesh();
-	virtual ~ImporterMesh();
+	~ImporterMesh();
 
 	DMesh* ImportMesh(aiMesh*buffer, GameObject* object);
 	DTransformation* ImportTrans(aiNode* node);
 
 	void SaveMesh(DMesh);
+	DMesh* Load(const void* buffer, const char* loadFile, uint id);
 
-	void LoadMesh(char* buffer, DMesh* data);
 };
 
 
