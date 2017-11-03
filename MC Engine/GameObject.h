@@ -58,6 +58,7 @@ public:
 	//ENABLE/DISABLE............................
 
 	void UpdateTranformChilds();
+	void SetLocalTransform();
 	bool IsEnable()const;
 	void SetEnable(bool isEnable);
 	void Enable();
@@ -85,7 +86,6 @@ public:
 	void LoadData();
 
 public:
-
 	std::vector<Component*> components;
 	std::vector<GameObject*> childs;
 	AABB recalculatedBox;

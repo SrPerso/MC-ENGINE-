@@ -9,15 +9,9 @@
 #include "Assimp\include\postprocess.h"
 #include "Assimp\include\cfileio.h"
 
-
 #include "Glew\include\glew.h"
-
-
 //filesystem
-
 #include <fstream>
-#include <iostream>
-#include <new>
 
 ImporterMesh::ImporterMesh()
 {
@@ -27,7 +21,7 @@ ImporterMesh::~ImporterMesh()
 {
 }
 
-DMesh* ImporterMesh::ImportMesh(aiMesh * buffer)
+DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object)
 {
 
 	aiMesh* newMesh = buffer;
@@ -35,7 +29,7 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer)
 	if (newMesh != nullptr)
 	{
 		DMesh* mesh = new DMesh();
-	
+		
 		//VERTEX------------------------------------------------------------------------------
 
 		mesh->nVertex = newMesh->mNumVertices;
@@ -134,7 +128,8 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer)
 		
 		mesh->debugBox.SetNegativeInfinity();//
 		mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
-
+		
+		object->SetLocalTransform();
 		App->camera->CenterCameraToObject(&mesh->debugBox);
 			
 
@@ -299,7 +294,6 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 
 	return ret;
 }
-
 DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 {
 	//DMesh* data = new DMesh();

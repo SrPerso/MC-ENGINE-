@@ -18,9 +18,8 @@ ModuleDataManager::ModuleDataManager(Application* app, bool start_enabled) :Modu
 	name = "Module Data Manager"; //this module is going to import all Data of the components. and future scene loader
 
 	importerMesh = new ImporterMesh();
+}
 
-
-	}
 
 ModuleDataManager::~ModuleDataManager()
 {
@@ -28,13 +27,13 @@ ModuleDataManager::~ModuleDataManager()
 
 GameObject* ModuleDataManager::ImportGameObject(std::string path, GameObject * parent)
 {
-	GameObject* newObject = parent->CreateChild();
 
+	GameObject* newObject = parent->CreateChild();
 
 	int length = strlen(path.c_str());
 	std::string namePath = path;
 
-	int i = namePath.find_last_of("\\") + 1;
+	int i = namePath.find_last_of("\\");
 
 	if (length > 0 && i > 0)
 	{
@@ -50,10 +49,13 @@ GameObject* ModuleDataManager::ImportGameObject(std::string path, GameObject * p
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
+
 		LOGUI("[OK]- Scene %s loaded succesfully", path);
 
 		aiNode* node = scene->mRootNode;
 		newObject->SetName(node->mName.C_Str());
+
+		//newObject->CreateComponent(COMP_TRANSFORMATION, importerMesh->ImportTrans(node));//global objeto total
 
 		if (scene != nullptr && scene->HasMeshes())
 		{
@@ -95,19 +97,18 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 				DMesh* MeshtoCreate = (DMesh*)importerMesh->ImportMesh(newMesh);
 				GameObjectSon->CreateComponent(COMP_MESH, MeshtoCreate);
 
+				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, importerMesh->ImportTrans(node));
+				GameObjectSon->CreateComponent(COMP_MESH, (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon));
 				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
 				GameObjectSon->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));
-
-				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, (DTransformation*)importerMesh->ImportTrans(node)); //global objeto total
+        
 			}		
 
 			for (int i = 0; i < node->mNumChildren; ++i)
 				newObject = ImportGameObject(path, newObject, scene ,node->mChildren[i]);
 
 			return newObject;
-
 }
-
 
 
 void ModuleDataManager::SaveAllData()const

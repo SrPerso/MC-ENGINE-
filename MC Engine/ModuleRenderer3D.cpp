@@ -20,6 +20,8 @@
 #include "MathGeolib\Geometry\Triangle.h"
 #include "MathGeolib\Math\float4x4.h"
 
+#include "CTransformation.h"
+
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "Glew/libx86/glew32.lib") 
 #pragma comment (lib, "glu32.lib") 
@@ -291,15 +293,23 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 	//--------------------- MESH----------------------------------------------
 
 	glEnable(GL_TEXTURE_2D);
+	
+	CTransformation* transform = (CTransformation*)GOToDraw->GetComponent(COMP_TRANSFORMATION);
 
+	glPushMatrix();
+	if (transform != nullptr)
+	{
+		glMultMatrixf(transform->GetTransMatrix().Transposed().ptr());
+	}
 	for (std::vector<Component*>::iterator it = GOToDraw->components.begin(); it != GOToDraw->components.end(); it++)
 	{
+		
 		if ((*it)->getType() == COMP_MESH)
 		{
 			CMesh* componentMesh = dynamic_cast<CMesh*>(*it);
 
-			if (App->ui->debug_active == true) 
-			{
+			if (App->ui->debug_active == true) 			{		
+				
 				DrawDebug(componentMesh);
 			}
 
@@ -362,7 +372,7 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 				glDisableClientState(GL_VERTEX_ARRAY);
 				glDisableClientState(GL_ELEMENT_ARRAY_BUFFER);
 
-				glPopMatrix();
+				
 				glEnd();
 				glUseProgram(0);
 				glBindTexture(GL_TEXTURE_2D, 0);
@@ -371,8 +381,10 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 			{
 			LOGUI("[ERROR]- Mesh component does not exist");
 			}
+
 		}
 	}
+	glPopMatrix();
 }
 
 

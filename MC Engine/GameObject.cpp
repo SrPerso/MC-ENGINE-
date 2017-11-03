@@ -275,6 +275,15 @@ void GameObject::UpdateTranformChilds()
 	}
 }
 
+void GameObject::SetLocalTransform()
+{
+	CTransformation* myTrans = (CTransformation*)GetComponent(COMP_TRANSFORMATION);
+	if (myTrans != nullptr)
+	{
+		myTrans->SetLocalTrans(GetParent());
+	}
+}
+
 bool GameObject::IsEnable() const
 {
 	return isEnable;
@@ -328,19 +337,23 @@ void GameObject::Update(float dt)
 		}
 	}	
 	
-	CMesh* debuger = (CMesh*)this->GetComponent(COMP_MESH);
-	if (debuger != nullptr && camera!=nullptr)
+	//CMesh* debuger = (CMesh*)this->GetComponent(COMP_MESH);
+	if (camera!=nullptr)
 	{		
 		if (camera->needToCull) {
-			recalculatedBox = debuger->debugBox;
+			
 			if (camera->Contains(recalculatedBox))
 			{
 				App->renderer3D->DrawGO(this);
 			}
 		}
+
 		else {
 			App->renderer3D->DrawGO(this);
 		}
+	}
+	else {
+		App->renderer3D->DrawGO(this);
 	}
 
 	for (std::vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
@@ -440,43 +453,7 @@ void GameObject::LoadData()
 	//			App->datamanager->LoadData(components[i]->GetData(), components[i]->GetDataType(), this->GameOIbject_ID);
 	//	}
 	//}
-
-
 }
 
-void GameObject::Move(float3 destiny, float3 position)
-{
-	for (int i = 0; i < childs.size(); i++)
-	{
-		if (childs.size() <= 0)
-			continue;
 
-		for (int o = 0; o < childs[i]->components.size(); o++)
-		{
-
-			if (childs[i]->components[o]->getType() == COMP_MESH)
-			{
-				dynamic_cast<CMesh*>(childs[i]->components[o])->Move(destiny, position);
-			}
-		}
-
-	}
-}
-
-/*void GameObject::Rotate(vec3 rotation)
-{
-	/*for (int i = 0; i < childs.size(); i++)
-	{
-		if (childs.size() > 0) {
-			for (int o = 0; o < childs[i]->components.size(); o++) {
-
-				if (childs[i]->components[o]->getType() == COMP_TRANSFORMATION)
-				{
-					dynamic_cast<CTransformation*>(childs[i]->components[o])->Rotate(rotation);
-				}
-			}
-		}
-	}
-	
-}*/
 

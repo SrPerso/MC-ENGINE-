@@ -18,14 +18,12 @@ public:
 	CMesh(GameObject* object, Component_Type type = COMP_MESH , DMesh* data = nullptr);
 	~CMesh();
 
-	void OnUpdate(float dt)override;
-	void OnEditor()override;
-	void OnInspector()override;
+	void OnUpdate(float dt);
+	void OnEditor();
+	void OnInspector();
 
 	void Move(float3 destiny, float3 position);
 	
-	const void* GetData()override;
-
 	uint mesh_ID;
 };
 

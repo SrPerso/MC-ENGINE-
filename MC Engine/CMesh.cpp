@@ -57,6 +57,8 @@ void CMesh::OnEditor()
 		ImGui::TreePop();
 	}
 
+
+
 }
 
 void CMesh::OnInspector()
@@ -132,5 +134,4 @@ const void * CMesh::GetData()
 
 	return (DMesh*)ret;
 }
-
 

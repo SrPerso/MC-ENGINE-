@@ -33,9 +33,10 @@ public:
 	virtual void Disable();
 	virtual void OnEditor();
 	virtual void OnInspector();
-	virtual void OnUpdate(float dt) = 0;
 
+	virtual void OnUpdate(float dt) = 0;
 	virtual const void*GetData() ;
+
 
 protected:
 	std::string name;

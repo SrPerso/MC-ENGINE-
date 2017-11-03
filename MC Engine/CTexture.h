@@ -13,13 +13,9 @@ public:
 	CTexture(GameObject* object, Component_Type type , DTexture* data);
 	~CTexture();
 
-	void OnUpdate(float dt)override;
-	void OnEditor()override;
-	void OnInspector()override;
-
-	const void* GetData()override;
-
-
+	void OnUpdate(float dt);
+	void OnEditor();
+	void OnInspector();
 	uint Texture_ID; 
 };
 #endif //_TEXTURE_H

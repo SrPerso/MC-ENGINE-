@@ -4,14 +4,19 @@
 
 CTransformation::CTransformation(GameObject * object, Component_Type type, DTransformation* data) :Component(object, type)
 {
-	moving = false;
-	rotating = false;
+	
 	if (data)
 	{
-		 position = data->GetPosition();
-		 scale = data->GetScale();
-		 rotation = data->GetRotation();
-		 destiny = data->GetPosition();
+			position = data->position;
+			scale = data->scale;
+			destiny = data->destiny;
+			eulerAngles = data->eulerAngles;
+			angle = data->angle;
+			rotation = data->rotation;
+			globalTransformMatrix = data->globalTransformMatrix;
+
+
+			localTransformMatrix = data->localTransformMatrix;
 
 		 //globalPosition = data->GetGlobalPosition();
 		 //globalScale = data->GetGlobalScale();
@@ -38,18 +43,15 @@ CTransformation::~CTransformation()
 
 void CTransformation::OnUpdate(float dt)
 {
-	if (moving && object != nullptr)
+	if (UpdateTrans && object != nullptr)
 	{
-		object->Move(destiny, position);
-		moving = false;
 		position = destiny;
+		TransUpdate();
+		//UpdateTrans = false;
+		
 	}
 
-	else if (rotating) {
-		position = newPos;
-		Rotate();
-		rotating = false;
-	}
+	
 }
 
 void CTransformation::OnEditor()
@@ -61,7 +63,6 @@ void CTransformation::OnEditor()
 	}
 	
 	
-
 }
 
 void CTransformation::OnInspector() {
@@ -76,15 +77,15 @@ void CTransformation::OnInspector() {
 		ImGui::Text("Position:");
 		if (ImGui::SliderFloat("X", &destiny.x, -50, 50))
 		{
-			moving = true;
+			UpdateTrans = true;
 		}
 		if (ImGui::SliderFloat("Y", &destiny.y, -50, 50))
 		{
-			moving = true;
+			UpdateTrans = true;
 		}
 		if (ImGui::SliderFloat("Z", &destiny.z, -50, 50))
 		{
-			moving = true;
+			UpdateTrans = true;
 		}
 
 		ImGui::Text("   Rotation:");
@@ -97,15 +98,15 @@ void CTransformation::OnInspector() {
 		ImGui::Text("Rotation:");
 		if (ImGui::SliderFloat("RX", &eulerAngles.x, 0, 360))
 		{
-			rotating = true;
+			UpdateTrans = true;
 		}
 		if (ImGui::SliderFloat("RY", &eulerAngles.y, 0, 360))
 		{
-			rotating = true;
+			UpdateTrans = true;
 		}
 		if (ImGui::SliderFloat("RZ", &eulerAngles.z, 0, 360))
 		{
-			rotating = true;
+			UpdateTrans = true;
 		}
 
 		ImGui::Text("   Scale:");
@@ -115,15 +116,23 @@ void CTransformation::OnInspector() {
 		ImGui::Text("\t Z = %.2f", scale.z);
 	
 }
-const void* CTransformation::GetData()
+void CTransformation::TransUpdate()
 {
-	DTransformation* data;
+	//eulerAngles.x *= DEGTORAD;
+	//eulerAngles.y *= DEGTORAD;
+	//eulerAngles.z *= DEGTORAD;
+	rotation = Quat::FromEulerXYZ(eulerAngles.x, eulerAngles.y, eulerAngles.z);
+	//eulerAngles.x *= RADTODEG;
+	//eulerAngles.y *= RADTODEG;
+	//eulerAngles.z *= RADTODEG;
+	globalTransformMatrix = float4x4::FromQuat(rotation);
+	globalTransformMatrix = float4x4::Scale(scale, float3(0, 0, 0)) * globalTransformMatrix;
+	globalTransformMatrix.float4x4::SetTranslatePart(position.x, position.y, position.z);
 
-	data->SetGlobalPosition(position);
-	data->SetGlobalScale(scale);
-	data->SetGlobalRotation(rotation);
+	SetLocalTrans(object->GetParent());
+	object->UpdateTranformChilds();
 
-	return (DTransformation*)data;
+	UpdateTrans = false;
 }
 
 void CTransformation::UpdateTransFromParent(GameObject * parent)
@@ -133,9 +142,9 @@ void CTransformation::UpdateTransFromParent(GameObject * parent)
 	{
 		globalTransformMatrix = parentTrans->localTransformMatrix * globalTransformMatrix;
 		float4x4 temp;
-		globalTransformMatrix.Decompose(newPos, temp, scale);
+		globalTransformMatrix.Decompose(destiny, temp, scale);
 		eulerAngles = temp.ToEulerXYZ();
-		Rotate();
+		TransUpdate();
 	}
 }
 
@@ -170,6 +179,11 @@ void CTransformation::SetPos(float3 pos)
 	position = pos;
 }
 
+float4x4 CTransformation::GetTransMatrix()
+{
+	return globalTransformMatrix;
+}
+
 void CTransformation::Rotate()
 {	
 	rotation = Quat::FromEulerXYZ(eulerAngles.x, eulerAngles.y, eulerAngles.z);
@@ -180,7 +194,7 @@ void CTransformation::Rotate()
 	SetLocalTrans(object->GetParent());
 	object->UpdateTranformChilds();
 
-	rotating = true;
+	//rotating = true;
 	/*if (newRotation.y > 0) {
 		SetRotation( rotation * Quat::RotateY(newRotation.y));
 	}

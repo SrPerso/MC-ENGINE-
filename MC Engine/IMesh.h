@@ -17,12 +17,12 @@ public:
 	ImporterMesh();
 	~ImporterMesh();
 
-	DMesh* ImportMesh(aiMesh*buffer);
+	DMesh* ImportMesh(aiMesh*buffer, GameObject* object);
 	DTransformation* ImportTrans(aiNode* node);
 
-	bool Save(const void* buffer, const char* saverFile, uint id);
-
+	void SaveMesh(DMesh);
 	DMesh* Load(const void* buffer, const char* loadFile, uint id);
+
 };
 
 

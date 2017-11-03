@@ -23,20 +23,18 @@ public:
 	CTransformation(GameObject* object, Component_Type type = COMP_TRANSFORMATION, DTransformation* data = nullptr);
 	~CTransformation();
 
-	void OnUpdate(float dt)override;
-	void OnEditor()override;
-	void OnInspector()override;
-	const void* GetData()override;
-
-
+	void OnUpdate(float dt);
+	void OnEditor();
+	void OnInspector();
 	void Rotate();
 
+	void TransUpdate();
 	void UpdateTransFromParent(GameObject* parent);
 	void SetLocalTrans(GameObject* parent);
 
 	void SetPos(float3);
 	uint Transformation_ID;// is not necesary (?)
-
+	float4x4 GetTransMatrix();
 
 };
 

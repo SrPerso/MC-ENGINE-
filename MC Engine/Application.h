@@ -14,12 +14,18 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 
+
 #include "ModulePhysics3D.h"
+#include "ModuleDataManager.h"
 #include "ModuleUI.h"
 
-#include "ModuleDataManager.h"
+
+
 #include "ModuleDataFile.h"
 #include "ModuleTexture.h"
+#include "ModuleTimeManager.h"
+
+
 
 #include <list>
 
@@ -40,6 +46,8 @@ public:
 	DataJSON* jtsonData = nullptr;
 	DataFBX* fbxdata = nullptr;
 	ModuleTexture* texture = nullptr;
+	ModuleTimeManager* timeManager = nullptr;
+	
 
 
 
