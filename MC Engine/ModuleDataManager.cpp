@@ -108,7 +108,7 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 			}		
 
 			for (int i = 0; i < node->mNumChildren; ++i)
-				newObject = ImportGameObject(path, newObject, scene ,node->mChildren[i]);
+				newObject = ImportGameObject(path, parent, scene ,node->mChildren[i]);
 
 			return newObject;
 }
