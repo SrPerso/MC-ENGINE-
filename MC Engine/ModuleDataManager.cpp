@@ -22,12 +22,12 @@ ModuleDataManager::~ModuleDataManager()
 
 GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*parent)
 {
-	GameObject* newObject = parent->CreateChild();	
+	GameObject* newObject = new GameObject(parent);	
 
 	int length = strlen(path.c_str());
 	std::string namePath = path;
 
-	int i = namePath.find_last_of("\\") + 1;
+	int i = namePath.find_last_of("\\");
 
 	if (length > 0 && i > 0)
 	{
@@ -46,10 +46,11 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 	{
 
 		aiNode* node = scene->mRootNode;
+		
 
 		LOGUI("[OK]- Scene %s loaded succesfully", path);
 
-		//newObject->CreateComponent(COMP_TRANSFORMATION, (DTransformation*)importerMesh->ImportTrans(node));//global objeto total
+		//newObject->CreateComponent(COMP_TRANSFORMATION, importerMesh->ImportTrans(node));//global objeto total
 
 		if (scene != nullptr && scene->HasMeshes())
 		{
@@ -73,10 +74,11 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 					GameObjectSon = newObject;
 				}				
 
-				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, (DTransformation*)importerMesh->ImportTrans(node));
+				
 
-				GameObjectSon->CreateComponent(COMP_MESH, (DMesh*)importerMesh->ImportMesh(newMesh));
-
+				
+				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, importerMesh->ImportTrans(node));
+				GameObjectSon->CreateComponent(COMP_MESH, (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon));
 				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
 				GameObjectSon->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));
 
@@ -84,7 +86,7 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 				//global objeto total
 			}	
 
-			newObject->SetLocalTransform();
+			
 			aiReleaseImport(scene);
 
 			return newObject;

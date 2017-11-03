@@ -19,7 +19,7 @@ ImporterMesh::~ImporterMesh()
 {
 }
 
-DMesh* ImporterMesh::ImportMesh(aiMesh * buffer)
+DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object)
 {
 
 	aiMesh* newMesh = buffer;
@@ -127,6 +127,7 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer)
 		mesh->debugBox.SetNegativeInfinity();//
 		mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
 		
+		object->SetLocalTransform();
 		App->camera->CenterCameraToObject(&mesh->debugBox);
 
 		return mesh;

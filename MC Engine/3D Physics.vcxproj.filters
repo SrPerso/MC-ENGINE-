@@ -369,6 +369,9 @@
     <ClInclude Include="DCamera.h">
       <Filter>Engine\Engine\DataContainers</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleTimeManager.h">
+      <Filter>Engine\Engine\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -593,6 +596,10 @@
     <ClCompile Include="IScene.cpp">
       <Filter>Engine\Engine\Importers</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleTimeManaher.cpp">
+      <Filter>Engine\Engine\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleTimeManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\Geometry\KDTree.inl">

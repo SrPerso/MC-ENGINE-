@@ -5,6 +5,7 @@
 #include "Globals.h"
 #include "DMesh.h"
 #include "DTransformation.h"
+#include "GameObject.h"
 
 struct aiMesh;
 struct aiNode;
@@ -16,7 +17,7 @@ public:
 	ImporterMesh();
 	virtual ~ImporterMesh();
 
-	DMesh* ImportMesh(aiMesh*buffer);
+	DMesh* ImportMesh(aiMesh*buffer, GameObject* object);
 	DTransformation* ImportTrans(aiNode* node);
 
 	void SaveMesh(DMesh);

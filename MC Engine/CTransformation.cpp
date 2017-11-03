@@ -117,13 +117,13 @@ void CTransformation::OnInspector() {
 }
 void CTransformation::TransUpdate()
 {
-	eulerAngles.x *= DEGTORAD;
-	eulerAngles.y *= DEGTORAD;
-	eulerAngles.z *= DEGTORAD;
+	//eulerAngles.x *= DEGTORAD;
+	//eulerAngles.y *= DEGTORAD;
+	//eulerAngles.z *= DEGTORAD;
 	rotation = Quat::FromEulerXYZ(eulerAngles.x, eulerAngles.y, eulerAngles.z);
-	eulerAngles.x *= RADTODEG;
-	eulerAngles.y *= RADTODEG;
-	eulerAngles.z *= RADTODEG;
+	//eulerAngles.x *= RADTODEG;
+	//eulerAngles.y *= RADTODEG;
+	//eulerAngles.z *= RADTODEG;
 	globalTransformMatrix = float4x4::FromQuat(rotation);
 	globalTransformMatrix = float4x4::Scale(scale, float3(0, 0, 0)) * globalTransformMatrix;
 	globalTransformMatrix.float4x4::SetTranslatePart(position.x, position.y, position.z);

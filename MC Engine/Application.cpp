@@ -6,6 +6,7 @@
 
 Application::Application()
 {
+	timeManager = new ModuleTimeManager(this);
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	audio = new ModuleAudio(this, true);
@@ -19,18 +20,21 @@ Application::Application()
 	goManager = new GObjectManager(this);
 	fbxdata = new DataFBX(this);
 	texture = new ModuleTexture(this);
+	
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
 
 	// Main Modules
+	AddModule(timeManager);
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
 	AddModule(audio);
 
 	AddModule(physics);
+
 
 	// Scenes
 	AddModule(goManager);
@@ -81,6 +85,8 @@ bool Application::Init()
 	}
 	
 	ms_timer.Start();
+	timeManager->StartGameTime();
+	timeManager->StartRealTime();
 	return ret;
 }
 
@@ -97,6 +103,8 @@ void Application::FinishUpdate()
 	dt = (float)ms_timer.Read() / 1000.0f;
 	lastFPS = 1.0f / dt;
 	lastMs = (float)ms_timer.Read();
+
+	timeManager->SetFrame(1);
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
