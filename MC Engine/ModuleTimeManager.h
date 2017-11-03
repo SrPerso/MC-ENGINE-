@@ -1,12 +1,9 @@
 #ifndef __ModuleTimeManager_H__
 #define __ModuleTimeManager_H__
 
-#include "Application.h"
-#include "Module.h"
-#include "SDL_mixer\include\SDL_mixer.h"
 #include "Timer.h"
+#include "Module.h"
 
-#define DEFAULT_MUSIC_FADE_TIME 2.0f
 
 
 class ModuleTimeManager : public Module
@@ -24,6 +21,8 @@ public:
 	void SetFrame(int numFrame);
 	void StartGameTime();
 	void StartRealTime();
+	float ShowGameTime();
+	float ShowRealTimeSinceStartup();
 
 private:
 

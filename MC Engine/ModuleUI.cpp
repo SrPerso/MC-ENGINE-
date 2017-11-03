@@ -15,6 +15,7 @@
 #include "GameObject.h"
 
 
+
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #pragma comment( lib, "Glew/libx86/glew32.lib" )
@@ -288,7 +289,8 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 		RenderSetings();
 	if (ImGui::CollapsingHeader("Input"))
 		DevicesSetingsC();
-
+	if (ImGui::CollapsingHeader("Time Configuration"))
+		App->timeManager->OnConfiguration();
 
 	ImGui::End();
 

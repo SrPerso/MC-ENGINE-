@@ -65,6 +65,7 @@ bool Application::Init()
 {
 	bool ret = true;
 
+
 	// Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
 
@@ -84,9 +85,10 @@ bool Application::Init()
 		item++;
 	}
 	
-	ms_timer.Start();
 	timeManager->StartGameTime();
 	timeManager->StartRealTime();
+	ms_timer.Start();
+	
 	return ret;
 }
 

@@ -1,4 +1,5 @@
 #include "ModuleTimeManager.h"
+#include "imGUI\imgui.h"
 
 ModuleTimeManager::ModuleTimeManager(Application * app, bool start_enabled): Module(app, start_enabled)
 {
@@ -45,8 +46,8 @@ void ModuleTimeManager::OnConfiguration()
 			//PlayOneFrame();
 		}
 
-		ImGui::Text("Real Time Since Startup: %.2f", Real_Time_Since_Startup);
-		ImGui::Text("Game Time: %.2f", Time);
+		ImGui::Text("Real Time Since Startup: %.2f", ShowRealTimeSinceStartup());
+		ImGui::Text("Game Time: %.2f", ShowGameTime());
 		ImGui::Text("Frame Count %i", Frame_Count);
 	}
 }
@@ -79,4 +80,16 @@ void ModuleTimeManager::StartRealTime()
 {
 	Real_Time_Since_Startup.Start();
 
+}
+
+float ModuleTimeManager::ShowGameTime()
+{
+	float dt= (float)Time.Read() / 1000.0f;
+	return dt;
+}
+
+float ModuleTimeManager::ShowRealTimeSinceStartup()
+{
+	float dt = (float)Real_Time_Since_Startup.Read() / 1000.0f;
+	return dt;
 }
