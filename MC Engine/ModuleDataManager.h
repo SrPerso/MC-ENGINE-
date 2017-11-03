@@ -27,11 +27,15 @@ public:
 	bool CleanUp() { return true; }
 
 	GameObject* ImportGameObject(std::string Path, GameObject*parent);
+	GameObject* ImportGameObject(std::string Path, GameObject*parent,const aiScene* scene, aiNode* node = nullptr);
 
-	void SaveAllData(); 
-	void SaveData(const void * buff, DType type, uint id);
 
-// Objects creators?
+	void SaveAllData()const; 
+	void SaveData(const void * buff, DType type, uint id)const;
+
+	void LoadAllData();
+	
+	// Objects creators?
 
 public:
 	ImporterMesh * importerMesh = nullptr;
