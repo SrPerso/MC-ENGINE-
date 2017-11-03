@@ -20,7 +20,7 @@ void logUI(const char file[], int line, const char* format, ...);
 #define HAVE_M_PI
 
 
-#define RELEASE_DELET( x )	\
+#define RELEASE_ARRAY( x )	\
 {                           \
 	if( x != NULL )         \
 	{                       \

@@ -142,6 +142,12 @@ update_status ModuleInput::PreUpdate(float dt)
 					LOGUI("(TGA)- Droped ");
 				}
 				
+				else if (strcmp(&fileDir[size - 4], ".json") == 0)
+				{
+				//	App->jtsonData;
+					LOGUI("(JTSON)- Droped ");
+				}
+
 				else 
 				{
 					LOG("File unknown");

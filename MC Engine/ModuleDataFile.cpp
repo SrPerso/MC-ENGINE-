@@ -47,7 +47,7 @@ bool DataJSON::Init()
 	bool ret = true;
 	
 
-	/*for (std::list<std::string>::const_reverse_iterator  file = files.rbegin(); file != files.crend(); ++file)
+	for (std::list<std::string>::const_reverse_iterator  file = files.rbegin(); file != files.crend(); ++file)
 	{
 		value_json = json_parse_file(file->c_str());
 
@@ -70,7 +70,7 @@ bool DataJSON::Init()
 		} 
 	
 
-	}//for	*/
+	}//for	
 
 	return ret;
 }
@@ -78,7 +78,7 @@ bool DataJSON::Init()
 void DataJSON::SaveAll() const
 {
 	
-	/*for (std::list<std::string>::const_reverse_iterator file = files.rbegin(); file != files.crend(); ++file) {
+	for (std::list<std::string>::const_reverse_iterator file = files.rbegin(); file != files.crend(); ++file) {
 
 		JSON_Object* object = nullptr;
 
@@ -90,7 +90,7 @@ void DataJSON::SaveAll() const
 
 		json_serialize_to_string_pretty(value_json);		
 		json_serialize_to_file(value_json, file->c_str());
-	}*/
+	}
 }
 
 int DataJSON::GetInt(JSON_Object * object, const char * name) const

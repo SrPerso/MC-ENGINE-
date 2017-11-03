@@ -55,8 +55,6 @@ GameObject* ModuleDataManager::ImportGameObject(std::string path, GameObject * p
 		aiNode* node = scene->mRootNode;
 		newObject->SetName(node->mName.C_Str());
 
-		//newObject->CreateComponent(COMP_TRANSFORMATION, importerMesh->ImportTrans(node));//global objeto total
-
 		if (scene != nullptr && scene->HasMeshes())
 		{
 			LOG("Loading meshes");
@@ -103,8 +101,6 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 				DMesh* MeshtoCreate = (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon, GameObjectSon->GetGOId());
 				GameObjectSon->CreateComponent(COMP_MESH, MeshtoCreate);
 
-				
-				//GameObjectSon->CreateComponent(COMP_MESH, (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon));
 				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
 				GameObjectSon->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));        
 			}		

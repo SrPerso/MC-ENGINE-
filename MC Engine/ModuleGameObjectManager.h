@@ -5,7 +5,7 @@
 #include "Module.h"
 
 class GameObject;
-
+class DataJSON;
 class GObjectManager : public Module
 {
 public:
@@ -26,7 +26,9 @@ public:
 	void deleteGameObject(GameObject* GObject);
 
 	GameObject* root = nullptr;
-	
+
+
+	DataJSON* DJsonSaver;
 };
 
 #endif
