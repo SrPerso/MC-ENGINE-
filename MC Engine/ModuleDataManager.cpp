@@ -78,6 +78,8 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 {	
 	GameObject* newObject = parent->CreateChild();
 
+	newObject->SetGOID(App->randGen->Int());
+
 			for (int i = 0; i < node->mNumMeshes; i++)
 			{
 
@@ -88,6 +90,7 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 				if (node->mNumMeshes > 1)
 				{
 					GameObjectSon = new GameObject(newObject);		
+					GameObjectSon->SetGOID(App->randGen->Int());
 				}
 				else
 				{
@@ -97,14 +100,13 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 
 				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, importerMesh->ImportTrans(node));
 
-				DMesh* MeshtoCreate = (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon);
+				DMesh* MeshtoCreate = (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon, GameObjectSon->GetGOId());
 				GameObjectSon->CreateComponent(COMP_MESH, MeshtoCreate);
 
 				
 				//GameObjectSon->CreateComponent(COMP_MESH, (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon));
 				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
-				GameObjectSon->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));
-        
+				GameObjectSon->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));        
 			}		
 
 			for (int i = 0; i < node->mNumChildren; ++i)

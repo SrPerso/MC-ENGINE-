@@ -18,7 +18,7 @@ public:
 	ImporterMesh();
 	~ImporterMesh();
 
-	DMesh* ImportMesh(aiMesh*buffer, GameObject* object);
+	DMesh* ImportMesh(aiMesh*buffer, GameObject* object, uint id);
 	DTransformation* ImportTrans(aiNode* node);
 
 	void SaveMesh(DMesh);

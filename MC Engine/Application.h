@@ -25,7 +25,7 @@
 #include "ModuleTexture.h"
 #include "ModuleTimeManager.h"
 
-
+#include "MathGeoLib\Algorithm\Random\LCG.h"
 
 #include <list>
 
@@ -49,7 +49,7 @@ public:
 	ModuleTimeManager* timeManager = nullptr;
 	
 
-
+	math::LCG* randGen = nullptr;
 
 private:
 

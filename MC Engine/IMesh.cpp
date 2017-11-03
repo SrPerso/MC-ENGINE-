@@ -21,7 +21,7 @@ ImporterMesh::~ImporterMesh()
 {
 }
 
-DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object)
+DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, uint id)
 {
 
 	aiMesh* newMesh = buffer;
@@ -136,7 +136,7 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object)
 		//delete mesh;
 
 	
-		Save(mesh, nullptr, 20);
+		Save(mesh, nullptr, id);
 
 
 		//Load(&mesh, nullptr, 20);

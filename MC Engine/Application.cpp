@@ -4,6 +4,8 @@
 #include "Globals.h"
 #include "parson\parson.h"
 
+
+
 Application::Application()
 {
 	timeManager = new ModuleTimeManager(this);
@@ -21,7 +23,7 @@ Application::Application()
 	fbxdata = new DataFBX(this);
 	texture = new ModuleTexture(this);
 	
-
+	randGen = new math::LCG();
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
