@@ -43,10 +43,11 @@ public:
 	void CreateCube2(vec3 size, vec3 pos);
 	void CreateLine(vec3 Origin, vec3 destintation, Color color = Red);
 
-	void SelectObject(LineSegment &picking);
+	GameObject* SelectObject(LineSegment &picking);
 
 	GameObject* IntersectAABB(LineSegment &picking);
-	void IntersectTriangle(LineSegment &picking, GameObject* closest);
+	void IntersectTriangle(LineSegment &picking, GameObject* &closest);
+	void ObjectSelected(GameObject* selected);
 
 public:
 	std::list<Primitive*> GeometryObjects;

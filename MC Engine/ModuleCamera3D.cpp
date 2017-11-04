@@ -190,8 +190,9 @@ update_status ModuleCamera3D::Update(float dt)
 		if(App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 		{
 			camera->SetPos(float3(Position.x, Position.y, Position.z), -float3(Z.x, Z.y, Z.z), float3(Y.x, Y.y, Y.z));
-			LineSegment picking = camera->GetFrustum().UnProjectLineSegment(App->input->GetNormalized_x(),App->input->GetNormalized_y);
-			App->scene_intro->SelectObject(picking);
+			LineSegment picking = camera->GetFrustum().UnProjectLineSegment(App->input->GetNormalized_x(),App->input->GetNormalized_y());
+			GameObject* selected= App->scene_intro->SelectObject(picking);
+			App->scene_intro->ObjectSelected(selected);
 		}
 
 	}

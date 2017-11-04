@@ -138,17 +138,20 @@ void ModuleSceneIntro::CreateLine(vec3 Origin, vec3 destintation,Color color)
 	NormalsLines.push_back(line);
 }
 
-void ModuleSceneIntro::SelectObject(LineSegment & picking)
+GameObject* ModuleSceneIntro::SelectObject(LineSegment & picking)
 {
+	
 	GameObject* closest = nullptr;
 	
 	closest=IntersectAABB(picking);
 
+	
 	if (closest != nullptr) 
 	{
 		IntersectTriangle(picking, closest);
 	}
 
+	return closest;
 	
 }
 
@@ -157,7 +160,6 @@ GameObject*  ModuleSceneIntro::IntersectAABB(LineSegment & picking)
 	GameObject* Closest = nullptr;
 	CMesh* IntersectMesh = nullptr;
 	CTransformation* transform= nullptr;
-	int count = 0;
 	for (uint i = 0; i < App->goManager->GetRoot()->childs.size(); i++)
 	{		
 		IntersectMesh = (CMesh*)App->goManager->GetRoot()->childs[i]->GetComponent(COMP_MESH);
@@ -166,13 +168,13 @@ GameObject*  ModuleSceneIntro::IntersectAABB(LineSegment & picking)
 			if (picking.Intersects(IntersectMesh->debugBox) == true)
 			{
 				DistanceList.push_back(App->goManager->GetRoot()->childs[i]);
-				count++;
+				LOG("Hit");
 			}
 		}
 	}
 
 	
-	if (DistanceList.size > 0)
+	if (DistanceList.size() > 0)
 	{
 		for (std::list<GameObject*>::iterator it = DistanceList.begin(); it != DistanceList.end(); ++it) 
 		{			
@@ -190,10 +192,11 @@ GameObject*  ModuleSceneIntro::IntersectAABB(LineSegment & picking)
 
 }
 
-void ModuleSceneIntro::IntersectTriangle(LineSegment & picking, GameObject * closest)
+void ModuleSceneIntro::IntersectTriangle(LineSegment & picking, GameObject * &closest)
 {
 	CMesh* thisMesh = nullptr;
 	CTransformation* thisTransformation = nullptr;
+	float distance = 0;
 
 	thisMesh = (CMesh*)closest->GetComponent(COMP_MESH);
 	thisTransformation = (CTransformation*)closest ->GetComponent(COMP_TRANSFORMATION);
@@ -210,10 +213,21 @@ void ModuleSceneIntro::IntersectTriangle(LineSegment & picking, GameObject * clo
 		tri.b.Set(thisMesh->nVertex[&thisMesh->Index[i++]], thisMesh->nVertex[&thisMesh->Index[i]], thisMesh->nVertex[&thisMesh->Index[i]]);
 		tri.c.Set(thisMesh->nVertex[&thisMesh->Index[i++]], thisMesh->nVertex[&thisMesh->Index[i]], thisMesh->nVertex[&thisMesh->Index[i]]);
 
+		float* LocalDistance = 0;
+		float3 LocalHitPoint;
+		LocalHitPoint.x = 0; LocalHitPoint.y = 0; LocalHitPoint.z = 0;
+		if (newSegment.Intersects(tri, LocalDistance, &LocalHitPoint)) 
+		{
+			closest = closest;
 
+		}
 	}
 
 
+}
+
+void ModuleSceneIntro::ObjectSelected(GameObject * selected)
+{
 }
 
 
