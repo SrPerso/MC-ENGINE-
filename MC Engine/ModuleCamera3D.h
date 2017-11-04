@@ -2,7 +2,8 @@
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
-
+#include "DCamera.h"
+#include "CCamera.h"
 
 
 #define ZOOM_FACTOR 1.6
@@ -36,9 +37,10 @@ public:
 	AABB* GeometryCentre;
 
 	vec3 centreB;
+	DCamera* dcamera = nullptr;
+	CCamera* camera = nullptr;
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;
-
 	
 };

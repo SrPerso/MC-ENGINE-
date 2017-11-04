@@ -17,6 +17,9 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	GeometryCentre = nullptr;
 	name = "module camera 3d";
 
+	dcamera = new DCamera();
+	camera = new CCamera(nullptr, COMP_CAMERA, dcamera);
+
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -186,7 +189,9 @@ update_status ModuleCamera3D::Update(float dt)
 
 		if(App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 		{
-			CreateRay();
+			camera->SetPos(float3(Position.x, Position.y, Position.z), -float3(Z.x, Z.y, Z.z), float3(Y.x, Y.y, Y.z));
+			LineSegment picking = camera->GetFrustum().UnProjectLineSegment(App->input->GetNormalized_x(),App->input->GetNormalized_y);
+			App->scene_intro->SelectObject(picking);
 		}
 
 	}

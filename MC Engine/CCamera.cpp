@@ -30,9 +30,12 @@ CCamera::~CCamera()
 {
 }
 
-void CCamera::SetPos(float3 newPos)
+
+void CCamera::SetPos(float3 newpos, float3 front, float3 up)
 {
-	frustum.pos = newPos;
+	frustum.pos = newpos;
+	frustum.front = front;
+	frustum.up = up;
 }
 
 void CCamera::OnUpdate(float dt)
@@ -114,4 +117,9 @@ void CCamera::DrawFrustum()
 bool CCamera::Contains(const AABB & aabb) const
 {
 	return frustum.Contains(aabb);
+}
+
+Frustum CCamera::GetFrustum() const
+{
+	return frustum;
 }

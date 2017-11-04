@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include "Module.h"
 #include "p2DynArray.h"
 #include "Globals.h"
@@ -42,14 +43,21 @@ public:
 	void CreateCube2(vec3 size, vec3 pos);
 	void CreateLine(vec3 Origin, vec3 destintation, Color color = Red);
 
+	void SelectObject(LineSegment &picking);
+
+	GameObject* IntersectAABB(LineSegment &picking);
+	void IntersectTriangle(LineSegment &picking, GameObject* closest);
 
 public:
 	std::list<Primitive*> GeometryObjects;
 
 	std::list<PrimitiveLine*> NormalsLines;
+
+	std::list<GameObject*> DistanceList;
 	
 	GlobalDebugInfo sceneDebugInfo;
 
+	float MinDistance;
 public:
 	void CreateCylinder(const float x, const float y, const float z, const float radious, const float h);
 };

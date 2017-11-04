@@ -9,9 +9,13 @@
 #include "CCamera.h"
 #include "GameObject.h"
 #include "Math.h"
+#include "CMesh.h"
+#include "CTransformation.h"
 
 
 #pragma comment( lib, "Glew/libx86/glew32.lib" )
+
+#define MINDISTANCE 1000;
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -33,7 +37,7 @@ bool ModuleSceneIntro::Start()
 	camera->CreateComponent(COMP_CAMERA, dcamera);
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
-	
+	MinDistance = MINDISTANCE;
 
 	return ret;
 }
@@ -132,6 +136,84 @@ void ModuleSceneIntro::CreateLine(vec3 Origin, vec3 destintation,Color color)
 	PrimitiveLine* line = new PrimitiveLine(Origin, destintation);
 	line->color = color;
 	NormalsLines.push_back(line);
+}
+
+void ModuleSceneIntro::SelectObject(LineSegment & picking)
+{
+	GameObject* closest = nullptr;
+	
+	closest=IntersectAABB(picking);
+
+	if (closest != nullptr) 
+	{
+		IntersectTriangle(picking, closest);
+	}
+
+	
+}
+
+GameObject*  ModuleSceneIntro::IntersectAABB(LineSegment & picking)
+{
+	GameObject* Closest = nullptr;
+	CMesh* IntersectMesh = nullptr;
+	CTransformation* transform= nullptr;
+	int count = 0;
+	for (uint i = 0; i < App->goManager->GetRoot()->childs.size(); i++)
+	{		
+		IntersectMesh = (CMesh*)App->goManager->GetRoot()->childs[i]->GetComponent(COMP_MESH);
+		if (IntersectMesh != nullptr) 
+		{
+			if (picking.Intersects(IntersectMesh->debugBox) == true)
+			{
+				DistanceList.push_back(App->goManager->GetRoot()->childs[i]);
+				count++;
+			}
+		}
+	}
+
+	
+	if (DistanceList.size > 0)
+	{
+		for (std::list<GameObject*>::iterator it = DistanceList.begin(); it != DistanceList.end(); ++it) 
+		{			
+			transform = ((CTransformation*)(*it)->GetComponent(COMP_TRANSFORMATION));
+			float thisDist = (transform->position - App->camera->camera->frustum.pos).Length();
+			if (thisDist < MinDistance) 
+			{
+				Closest = (*it);
+			}
+		}
+	}
+	
+
+	return Closest;
+
+}
+
+void ModuleSceneIntro::IntersectTriangle(LineSegment & picking, GameObject * closest)
+{
+	CMesh* thisMesh = nullptr;
+	CTransformation* thisTransformation = nullptr;
+
+	thisMesh = (CMesh*)closest->GetComponent(COMP_MESH);
+	thisTransformation = (CTransformation*)closest ->GetComponent(COMP_TRANSFORMATION);
+
+	LineSegment newSegment = picking;
+	newSegment.Transform(thisTransformation->GetTransMatrix().Inverted());
+
+	Triangle tri;
+
+	for (uint i = 0; i < thisMesh->nVertex;)
+	{
+
+		tri.a.Set(thisMesh->nVertex[&thisMesh->Index[i++]], thisMesh->nVertex[&thisMesh->Index[i]], thisMesh->nVertex[&thisMesh->Index[i]]);
+		tri.b.Set(thisMesh->nVertex[&thisMesh->Index[i++]], thisMesh->nVertex[&thisMesh->Index[i]], thisMesh->nVertex[&thisMesh->Index[i]]);
+		tri.c.Set(thisMesh->nVertex[&thisMesh->Index[i++]], thisMesh->nVertex[&thisMesh->Index[i]], thisMesh->nVertex[&thisMesh->Index[i]]);
+
+
+	}
+
+
 }
 
 
