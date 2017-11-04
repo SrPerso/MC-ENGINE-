@@ -72,25 +72,24 @@ void CTransformation::OnInspector() {
 		ImGui::Text("\t Z = %.2f", destiny.z);
 
 		ImGui::Text("Position:");
-		if (ImGui::SliderFloat("X", &destiny.x, -50, 50))
+		if (ImGui::SliderFloat("X", &destiny.x, -100, 100))
 		{
 			UpdateTrans = true;
 		}
-		if (ImGui::SliderFloat("Y", &destiny.y, -50, 50))
+		if (ImGui::SliderFloat("Y", &destiny.y, -100, 100))
 		{
 			UpdateTrans = true;
 		}
-		if (ImGui::SliderFloat("Z", &destiny.z, -50, 50))
+		if (ImGui::SliderFloat("Z", &destiny.z, -100, 100))
 		{
 			UpdateTrans = true;
 		}
 
 		ImGui::Text("   Rotation:");
 
-		ImGui::Text("\t X = %.2f", rotation.x);
-		ImGui::Text("\t Y = %.2f", rotation.y);
-		ImGui::Text("\t Z = %.2f", rotation.z);
-		ImGui::Text("\t W = %.2f", rotation.w);
+		ImGui::Text("\t X = %.2f", eulerAngles.x);
+		ImGui::Text("\t Y = %.2f", eulerAngles.y);
+		ImGui::Text("\t Z = %.2f", eulerAngles.z);	
 
 		ImGui::Text("Rotation:");
 		if (ImGui::SliderFloat("RX", &eulerAngles.x, 0, 360))
@@ -106,22 +105,35 @@ void CTransformation::OnInspector() {
 			UpdateTrans = true;
 		}
 
-		ImGui::Text("   Scale:");
+		ImGui::Text("Scale:");
 
 		ImGui::Text("\t X = %.2f", scale.x);
 		ImGui::Text("\t Y = %.2f", scale.y);
 		ImGui::Text("\t Z = %.2f", scale.z);
+
+		if (ImGui::SliderFloat("SX", &scale.x, 1, 100))
+		{
+			UpdateTrans = true;
+		}
+		if (ImGui::SliderFloat("SY", &scale.y, 1, 100))
+		{
+			UpdateTrans = true;
+		}
+		if (ImGui::SliderFloat("SZ", &scale.z, 1, 100))
+		{
+			UpdateTrans = true;
+		}
 	
 }
 void CTransformation::TransUpdate()
 {
-	//eulerAngles.x *= DEGTORAD;
-	//eulerAngles.y *= DEGTORAD;
-	//eulerAngles.z *= DEGTORAD;
+	eulerAngles.x *= DEGTORAD;
+	eulerAngles.y *= DEGTORAD;
+	eulerAngles.z *= DEGTORAD;
 	rotation = Quat::FromEulerXYZ(eulerAngles.x, eulerAngles.y, eulerAngles.z);
-	//eulerAngles.x *= RADTODEG;
-	//eulerAngles.y *= RADTODEG;
-	//eulerAngles.z *= RADTODEG;
+	eulerAngles.x *= RADTODEG;
+	eulerAngles.y *= RADTODEG;
+	eulerAngles.z *= RADTODEG;
 	globalTransformMatrix = float4x4::FromQuat(rotation);
 	globalTransformMatrix = float4x4::Scale(scale, float3(0, 0, 0)) * globalTransformMatrix;
 	globalTransformMatrix.float4x4::SetTranslatePart(position.x, position.y, position.z);
