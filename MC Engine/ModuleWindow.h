@@ -51,6 +51,9 @@ public:
 	void SetBrightness(float value);
 	void SetBorderless(bool borderless);
 	void SetFullDesktop(bool fullDesktop);
+	int GetWidth() const ;
+	int GetHeight() const;
+	
 
 public:
 	SDL_Window* window;
@@ -60,6 +63,7 @@ private:
 	int width;
 	int height;
 	bool fullscreen;
+	
 };
 
 #endif // __ModuleWindow_H__

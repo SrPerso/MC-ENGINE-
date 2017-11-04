@@ -22,6 +22,8 @@ public:
 	void Move(const vec3 &Movement);
 	float* GetViewMatrix();
 
+	
+
 	void CenterCameraToObject(AABB* box);
 	void CenterCamera();
 private:
@@ -37,4 +39,6 @@ public:
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;
+
+	
 };

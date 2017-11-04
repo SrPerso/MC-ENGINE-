@@ -3,6 +3,7 @@
 #include "PhysBody3D.h"
 #include "ModuleCamera3D.h"
 #include "parson\parson.h"
+#include "MathGeoLib\Geometry\LineSegment.h"
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	CalculateViewMatrix();
@@ -129,7 +130,7 @@ update_status ModuleCamera3D::Update(float dt)
 			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
 			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
 
-	
+
 
 			Position += newPos;
 			Reference += newPos;
@@ -146,7 +147,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 			if (dx != 0)
 			{
-				if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) 
+				if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 				{
 					float DeltaX = (float)dx * Sensitivity;
 					X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
@@ -181,6 +182,11 @@ update_status ModuleCamera3D::Update(float dt)
 			}
 
 			Position = Reference + Z * length(Position);
+		}
+
+		if(App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+		{
+			CreateRay();
 		}
 
 	}
@@ -235,7 +241,8 @@ void ModuleCamera3D::Move(const vec3 &Movement)
 float* ModuleCamera3D::GetViewMatrix()
 {
 	return &ViewMatrix;
-}
+}	
+
 
 void ModuleCamera3D::CenterCameraToObject(AABB * box)
 {

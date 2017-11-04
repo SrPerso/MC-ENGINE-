@@ -219,3 +219,24 @@ void ModuleInput::SpeakersConectedDisable()
 {
 	speakersConected = false;
 }
+
+float ModuleInput::GetNormalized_x() const
+{
+	return normalized_x;
+}
+
+float ModuleInput::GetNormalized_y() const
+{
+	return normalized_y;
+}
+
+void ModuleInput::NormalizeMouse()
+{
+	int w, h;
+	w = App->window->GetWidth();
+	h = App->window->GetHeight();
+
+	normalized_x = (float)w / mouse_x;
+	normalized_y = (float)h / mouse_y;
+
+}

@@ -66,6 +66,11 @@ public: //devices
 	void SpeakersConectedDisable();
 
 	bool speakersConected = true;
+
+	float GetNormalized_x() const;
+	float GetNormalized_y() const;
+
+	void NormalizeMouse();
 private:
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
@@ -74,6 +79,11 @@ private:
 	int mouse_z;
 	int mouse_x_motion;
 	int mouse_y_motion;
+
+
+	//ray
+	float normalized_x;
+	float normalized_y;
 	
 	//int mouse_z_motion;
 };

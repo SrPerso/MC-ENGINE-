@@ -54,9 +54,9 @@ void CCamera::OnInspector()
 {
 	
 		ImGui::Text("Position:");
-		ImGui::SliderFloat("X", &frustum.pos.x, -50, 50);
-		ImGui::SliderFloat("Y", &frustum.pos.y, -50, 50);
-		ImGui::SliderFloat("Z", &frustum.pos.z, -50, 50);
+		ImGui::SliderFloat("X", &frustum.pos.x, -100, 100);
+		ImGui::SliderFloat("Y", &frustum.pos.y, -100, 100);
+		ImGui::SliderFloat("Z", &frustum.pos.z, -100, 100);
 
 
 
