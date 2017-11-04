@@ -320,41 +320,7 @@ void GameObject::SetNoStatic()
 }
 
 void GameObject::Update(float dt)
-{
-
-	CCamera* camera = nullptr;
-	for (int i = 0; i < App->goManager->GetRoot()->childs.size(); i++) 
-	{
-		for (int p = 0; p < App->goManager->GetRoot()->childs[i]->components.size(); p++) 
-		{
-			if(App->goManager->GetRoot()->childs[i]->components[p]->getType()==COMP_CAMERA)
-			{
-				if (App->goManager->GetRoot()->childs[i]->components[p] != nullptr) 
-				{
-					camera = (CCamera*)App->goManager->GetRoot()->childs[i]->components[p];
-				}
-			}
-		}
-	}	
-	
-	//CMesh* debuger = (CMesh*)this->GetComponent(COMP_MESH);
-	if (camera!=nullptr)
-	{		
-		if (camera->needToCull) {
-			
-			if (camera->Contains(recalculatedBox))
-			{
-				App->renderer3D->DrawGO(this);
-			}
-		}
-
-		else {
-			App->renderer3D->DrawGO(this);
-		}
-	}
-	else {
-		App->renderer3D->DrawGO(this);
-	}
+{	
 
 	for (std::vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
 	{
@@ -369,6 +335,43 @@ void GameObject::Update(float dt)
 		if ((*it)->IsEnable() == true)
 		{
 			(*it)->OnUpdate(dt);
+		}
+	}
+
+	CCamera* camera = nullptr;
+	for (int i = 0; i < App->goManager->GetRoot()->childs.size(); i++)
+	{
+		for (int p = 0; p < App->goManager->GetRoot()->childs[i]->components.size(); p++)
+		{
+			if (App->goManager->GetRoot()->childs[i]->components[p]->getType() == COMP_CAMERA)
+			{
+				if (App->goManager->GetRoot()->childs[i]->components[p] != nullptr)
+				{
+					camera = (CCamera*)App->goManager->GetRoot()->childs[i]->components[p];
+				}
+			}
+		}
+	}
+
+	CMesh* debuger = (CMesh*)this->GetComponent(COMP_MESH);
+	if (debuger != nullptr) {
+		recalculatedBox = debuger->debugBox;
+		if (camera != nullptr)
+		{
+			if (camera->needToCull) {
+
+				if (camera->Contains(recalculatedBox))
+				{
+					App->renderer3D->DrawGO(this);
+				}
+			}
+
+			else {
+				App->renderer3D->DrawGO(this);
+			}
+		}
+		else {
+			App->renderer3D->DrawGO(this);
 		}
 	}
 }

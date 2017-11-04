@@ -193,24 +193,3 @@ float4x4 CTransformation::GetTransMatrix()
 	return globalTransformMatrix;
 }
 
-void CTransformation::Rotate()
-{	
-	rotation = Quat::FromEulerXYZ(eulerAngles.x, eulerAngles.y, eulerAngles.z);
-	globalTransformMatrix = float4x4::FromQuat(rotation);
-	globalTransformMatrix = float4x4::Scale(scale, float3(0, 0, 0)) * globalTransformMatrix;
-	globalTransformMatrix.float4x4::SetTranslatePart(position.x, position.y, position.z);
-
-	SetLocalTrans(object->GetParent());
-	object->UpdateTranformChilds();
-
-	//rotating = true;
-	/*if (newRotation.y > 0) {
-		SetRotation( rotation * Quat::RotateY(newRotation.y));
-	}
-	else if (newRotation.x > 0) {
-		SetRotation( rotation * Quat::RotateX(newRotation.x));
-	}
-	else if (newRotation.z > 0) {
-		SetRotation(rotation * Quat::RotateZ(newRotation.z));
-	}*/
-}

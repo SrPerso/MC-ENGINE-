@@ -26,7 +26,7 @@ public:
 	void OnUpdate(float dt);
 	void OnEditor();
 	void OnInspector();
-	void Rotate();
+	
 
 	void TransUpdate();
 	void UpdateTransFromParent(GameObject* parent);
