@@ -43,10 +43,10 @@ public:
 	void CreateCube2(vec3 size, vec3 pos);
 	void CreateLine(vec3 Origin, vec3 destintation, Color color = Red);
 
-	GameObject* SelectObject(LineSegment &picking);
+	GameObject* SelectObject(LineSegment picking);
 
-	GameObject* IntersectAABB(LineSegment &picking);
-	void IntersectTriangle(LineSegment &picking, GameObject* &closest);
+	GameObject* IntersectAABB(LineSegment picking);
+	GameObject* IntersectTriangle(LineSegment picking, GameObject* closest);
 	void ObjectSelected(GameObject* selected);
 
 public:

@@ -138,7 +138,7 @@ void ModuleSceneIntro::CreateLine(vec3 Origin, vec3 destintation,Color color)
 	NormalsLines.push_back(line);
 }
 
-GameObject* ModuleSceneIntro::SelectObject(LineSegment & picking)
+GameObject* ModuleSceneIntro::SelectObject(LineSegment  picking)
 {
 	
 	GameObject* closest = nullptr;
@@ -148,14 +148,24 @@ GameObject* ModuleSceneIntro::SelectObject(LineSegment & picking)
 	
 	if (closest != nullptr) 
 	{
-		IntersectTriangle(picking, closest);
+		closest=IntersectTriangle(picking, closest);
+		
+	
+	}
+	else 
+	{
+		
+		for (std::list<GameObject*>::iterator it = DistanceList.begin(); it != DistanceList.end(); ++it)
+		{
+
+		}
 	}
 
 	return closest;
 	
 }
 
-GameObject*  ModuleSceneIntro::IntersectAABB(LineSegment & picking)
+GameObject*  ModuleSceneIntro::IntersectAABB(LineSegment picking)
 {
 	GameObject* Closest = nullptr;
 	CMesh* IntersectMesh = nullptr;
@@ -168,7 +178,7 @@ GameObject*  ModuleSceneIntro::IntersectAABB(LineSegment & picking)
 			if (picking.Intersects(IntersectMesh->debugBox) == true)
 			{
 				DistanceList.push_back(App->goManager->GetRoot()->childs[i]);
-				LOG("Hit");
+				
 			}
 		}
 	}
@@ -181,8 +191,9 @@ GameObject*  ModuleSceneIntro::IntersectAABB(LineSegment & picking)
 			transform = ((CTransformation*)(*it)->GetComponent(COMP_TRANSFORMATION));
 			float thisDist = (transform->position - App->camera->camera->frustum.pos).Length();
 			if (thisDist < MinDistance) 
-			{
+			{			
 				Closest = (*it);
+				MinDistance = thisDist;
 			}
 		}
 	}
@@ -192,8 +203,9 @@ GameObject*  ModuleSceneIntro::IntersectAABB(LineSegment & picking)
 
 }
 
-void ModuleSceneIntro::IntersectTriangle(LineSegment & picking, GameObject * &closest)
+GameObject* ModuleSceneIntro::IntersectTriangle(LineSegment picking, GameObject * closest)
 {
+	GameObject* newObj=nullptr;
 	CMesh* thisMesh = nullptr;
 	CTransformation* thisTransformation = nullptr;
 	float distance = 0;
@@ -218,11 +230,12 @@ void ModuleSceneIntro::IntersectTriangle(LineSegment & picking, GameObject * &cl
 		LocalHitPoint.x = 0; LocalHitPoint.y = 0; LocalHitPoint.z = 0;
 		if (newSegment.Intersects(tri, LocalDistance, &LocalHitPoint)) 
 		{
-			closest = closest;
-
+			newObj = closest;
+			return newObj;
 		}
 	}
 
+	return newObj;
 
 }
 
