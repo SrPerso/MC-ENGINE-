@@ -135,9 +135,9 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, uint id)
 
 		//delete mesh;	
 		Save(mesh, nullptr, id);
-		mesh = nullptr;
-		mesh = Load(mesh, nullptr, id);
-		
+		//mesh = nullptr;
+		//mesh = Load(mesh, nullptr, id);
+		//
 		return mesh;
 	}
 

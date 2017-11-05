@@ -96,7 +96,7 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 				}				
 
 
-			//	GameObjectSon->CreateComponent(COMP_TRANSFORMATION, (DMesh*)importerMesh->ImportTrans(node));
+				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, (DMesh*)importerMesh->ImportTrans(node));
 
 				DMesh* MeshtoCreate = (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon, GameObjectSon->GetGOId());
 				GameObjectSon->CreateComponent(COMP_MESH, MeshtoCreate);
