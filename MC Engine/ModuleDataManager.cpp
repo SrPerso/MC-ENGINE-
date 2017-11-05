@@ -58,18 +58,18 @@ GameObject* ModuleDataManager::ImportGameObject(std::string path, GameObject * p
 		if (scene != nullptr && scene->HasMeshes())
 		{
 			LOG("Loading meshes");
-
 			newObject = ImportGameObject(path, newObject, scene, node);
-
 			aiReleaseImport(scene);
 		}
+
 		else
 		{
 			LOGUI("[Error]- Error importing scene %s", path);
 			return nullptr;
 		}
 	}
-	return nullptr;
+
+	return newObject;
 }
 
 GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*parent,const aiScene* scene,aiNode* node )
@@ -80,7 +80,7 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 
 			for (int i = 0; i < node->mNumMeshes; i++)
 			{
-
+				 
 				aiMesh* newMesh = scene->mMeshes[node->mMeshes[i]];
 				
 				GameObject * GameObjectSon;
@@ -96,7 +96,7 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 				}				
 
 
-				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, importerMesh->ImportTrans(node));
+			//	GameObjectSon->CreateComponent(COMP_TRANSFORMATION, (DMesh*)importerMesh->ImportTrans(node));
 
 				DMesh* MeshtoCreate = (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon, GameObjectSon->GetGOId());
 				GameObjectSon->CreateComponent(COMP_MESH, MeshtoCreate);

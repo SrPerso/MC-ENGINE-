@@ -133,13 +133,11 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, uint id)
 		App->camera->CenterCameraToObject(&mesh->debugBox);
 			
 
-		//delete mesh;
-
-	
-		//Save(mesh, nullptr, id);
-
-
-		//Load(&mesh, nullptr, 20);
+		//delete mesh;	
+		Save(mesh, nullptr, id);
+		mesh = nullptr;
+		mesh = Load(mesh, nullptr, id);
+		
 		return mesh;
 	}
 
@@ -186,7 +184,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 
 	path = "Library/Mesh";
 	path.append("/");
-	path.append("Mesh");
+	path.append("m");
 	path.append(std::to_string(id));
 	path.append(".mcm");
 
@@ -297,40 +295,70 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 {
 	DMesh* data = new DMesh();
-	data = (DMesh*)buffer;
-
+	//data = (DMesh*)buffer;
 	std::string path; //path to load
 
+	if (loadFile == nullptr)
+	{
 	path = "Library/Mesh";
 	path.append("/");
-	path.append("Mesh");
+	path.append("m");
 	path.append(std::to_string(id));
 	path.append(".mcm");
+	}
+	else
+	{
+		path = loadFile;
+	}
+
 
 	std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
 
-	// look if is possible to read -- 
+	char* datafile;
+
+	if (file) 
+	{
+
+		file.seekg(0, file.end);
+
+		int size = file.tellg(); //size of the file
+
+		file.seekg(0, file.beg);
+
+		datafile = new char[size];
+		
+
+		if (file.read(datafile, size))
+		{
+			LOGUI("[READING]- %s", path.c_str());
+		}			
+		else
+		{
+			LOGUI("{Load}[ERROR]- only %ll can be read on: %s", file.gcount(), path.c_str());
+
+			RELEASE_ARRAY(datafile);
+			return nullptr;
+		}
+
+		file.close();
+	}
+	else
+		LOGUI("[ERROR]- loading %s", path);
+
+	if (datafile == nullptr)
+	{
+		return nullptr;
+	}	
 
 	uint size = 0;
 	size = file.gcount();
 
-	char* cursor = new char[size];
-
-	if (file.read(cursor, size))
-	{
-		LOGUI("[OK]- Reading %s.", path.c_str());
-	}
-	else
-	{
-		LOGUI("[ERROR]- Cant read %s.", path.c_str());
-		return nullptr;
-	}	
+	char* cursor = datafile;
 
 	// load numbers --------
 
 	//uint ranges[5] = {/* indices *//* vertices *//* colors *//* normals*//* text coods*/ //};
-
-
+	
 	uint ranges[5];
 	uint bytes = sizeof(ranges);
 
@@ -342,12 +370,11 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 	data->nNormals = ranges[3];
 	uint textureCoods = ranges[4];
 	
-	// Load indices
 
-	//---
+	//--- 
 	cursor += bytes;
-	bytes = sizeof(float) * data->nIndex;
-	data->Index = new float[bytes*3];
+	bytes = sizeof(float) *data->nIndex;
+	data->Index = new float[data->nIndex*3];
 
 	memcpy(data->Index, cursor, bytes);
 
@@ -360,7 +387,7 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 	//---
 	cursor += bytes;
 	bytes = sizeof(float) *data->nVertex * 3;
-	data->Vertex = new float[data->nVertex];
+	data->Vertex = new float[bytes];
 
 	memcpy(data->Vertex, cursor, bytes);
 
@@ -376,7 +403,7 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 	{
 		cursor += bytes;
 		bytes = sizeof(uint) *data->nNormals * 3;
-		data->normals = new float[data->nNormals];
+		data->normals = new float[bytes];
 
 		memcpy(data->normals, cursor, bytes);
 
@@ -395,7 +422,7 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 	{
 		cursor += bytes;
 		bytes = sizeof(float) *data->nNormals * 3;
-		memcpy(data->texCoords, cursor, bytes);
+		data->colors = new float[bytes];
 
 		memcpy(data->colors, cursor, bytes);
 
@@ -411,9 +438,10 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 	{
 		cursor += bytes;
 		bytes = sizeof(float) *data->nNormals * 3;
-		memcpy(data->texCoords, cursor, bytes);
+		data->texCoords = new float[bytes];
 
 		memcpy(data->texCoords, cursor, bytes);
+
 		if (data->texCoords != nullptr)
 		{
 			glGenBuffers(1, (uint*)&(data->idTexCoords));
@@ -422,6 +450,7 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 		}
 	}
 	
-	return (DMesh *)data; 
-return nullptr;
+	LOGUI("[LOADED]- %s", path.c_str());
+
+	return data; 
 }
