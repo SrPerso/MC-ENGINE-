@@ -236,7 +236,7 @@ void ModuleInput::NormalizeMouse()
 	w = App->window->GetWidth();
 	h = App->window->GetHeight();
 
-	normalized_x = (float)w / mouse_x;
-	normalized_y = (float)h / mouse_y;
+	normalized_x = (float)(w / mouse_x);
+	normalized_y = (float)(h / mouse_y);
 
 }

@@ -203,12 +203,12 @@ void ModuleWindow::SetFullDesktop(bool fullDesktop)
 
 int ModuleWindow::GetWidth() const
 {
-	return width;
+	return this->width;
 }
 
 int ModuleWindow::GetHeight() const
 {
-	return height;
+	return this->height;
 }
 
 

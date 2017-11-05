@@ -4,7 +4,7 @@
 
 
 
-CCamera::CCamera(GameObject* object, Component_Type type, DCamera * data) :Component(object,COMP_CAMERA)
+CCamera::CCamera(Component_Type type, DCamera * data) :Component(COMP_CAMERA)
 {
 	
 		name = "Camera";
@@ -24,6 +24,27 @@ CCamera::CCamera(GameObject* object, Component_Type type, DCamera * data) :Compo
 		dType = D_CAMERA;
 		//frustumCulling = true;
 
+}
+
+CCamera::CCamera(GameObject * object, Component_Type type, DCamera * data) :Component(object,COMP_CAMERA)
+{
+
+	name = "Camera";
+	this->aspectRatio = aspectRatio;
+	this->aspectRatio = (float)16 / 9;
+	frustum.type = data->frustum.type;
+	frustum.pos = data->frustum.pos;
+	frustum.front = data->frustum.front;
+	frustum.up = data->frustum.up;
+	frustum.nearPlaneDistance = data->frustum.nearPlaneDistance;
+	frustum.farPlaneDistance = data->frustum.farPlaneDistance;
+	FOV = 15;
+	frustum.verticalFov = DEGTORAD * FOV;
+	frustum.horizontalFov = 2.f * atanf((tanf(frustum.verticalFov * 0.5f)) * (aspectRatio));
+
+	frustum.ProjectionMatrix();
+	dType = D_CAMERA;
+	//frustumCulling = true;
 }
 
 CCamera::~CCamera()
@@ -122,4 +143,9 @@ bool CCamera::Contains(const AABB & aabb) const
 Frustum CCamera::GetFrustum() const
 {
 	return frustum;
+}
+
+const float * CCamera::GetViewMatrix() const
+{
+	return frustum.ViewProjMatrix().Transposed().ptr();
 }

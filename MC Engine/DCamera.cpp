@@ -3,6 +3,7 @@
 DCamera::DCamera(float3 pos, float3 front, float3 up, float nearPlaneDistance, float farPlaneDistance, float verticalFov, float aspectRatio, FrustumType type) 
 {
 	//name = "Camera";
+	Active = false;
 	this->aspectRatio = aspectRatio;
 	this->aspectRatio = (float)16 / 9;
 	frustum.type = type;

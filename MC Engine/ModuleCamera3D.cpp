@@ -3,7 +3,9 @@
 #include "PhysBody3D.h"
 #include "ModuleCamera3D.h"
 #include "parson\parson.h"
-#include "MathGeoLib\Geometry\LineSegment.h"
+
+#include "Primitive.h"
+
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	CalculateViewMatrix();
@@ -18,7 +20,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	name = "module camera 3d";
 
 	dcamera = new DCamera();
-	camera = new CCamera(nullptr, COMP_CAMERA, dcamera);
+	editorCam = new CCamera(COMP_CAMERA, dcamera);
 
 }
 
@@ -188,17 +190,22 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		if(App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
-		{
-			
-			camera->SetPos(float3(Position.x, Position.y, Position.z), -float3(Z.x, Z.y, Z.z), float3(Y.x, Y.y, Y.z));
-			LineSegment picking = camera->GetFrustum().UnProjectLineSegment(App->input->GetNormalized_x(),App->input->GetNormalized_y());
+		{	
+			App->input->NormalizeMouse();
+			LineSegment picking= editorCam->GetFrustum().UnProjectLineSegment(App->input->GetNormalized_x(),App->input->GetNormalized_y());
+			thispick = picking;
 			GameObject* selected= App->scene_intro->SelectObject(picking);
 			App->scene_intro->ObjectSelected(selected);
 		}
-
+		editorCam->SetPos(float3(Position.x, Position.y, Position.z), -float3(Z.x, Z.y, Z.z), float3(Y.x, Y.y, Y.z));
+		CalculateViewMatrix();
 	}
 	// Recalculate matrix -------------
-	CalculateViewMatrix();
+
+
+	PrimitiveLine_Ray a(thispick.a.x, thispick.a.y, thispick.a.z, thispick.b.x, thispick.b.y, thispick.b.z);
+	a.color = Yellow;
+	a.Render();
 
 	return UPDATE_CONTINUE;
 }
@@ -245,9 +252,17 @@ void ModuleCamera3D::Move(const vec3 &Movement)
 }
 
 // -----------------------------------------------------------------
-float* ModuleCamera3D::GetViewMatrix()
+const float* ModuleCamera3D::GetViewMatrix()
 {
-	return &ViewMatrix;
+	if (mainCam != nullptr && mainCam->Active==true) 
+	{
+		return mainCam->GetViewMatrix();
+	}
+	else
+	{
+		return editorCam->GetViewMatrix();
+	}
+	
 }	
 
 

@@ -458,3 +458,33 @@ void Cube2::InnerRender()const
 	glDisableClientState(GL_ELEMENT_ARRAY_BUFFER);
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
+
+PrimitiveLine_Ray::PrimitiveLine_Ray():Primitive(), origin(0, 0, 0), destination(1, 1, 1)
+{
+	type = PrimitiveTypes::Primitive_Line;
+}
+
+PrimitiveLine_Ray::PrimitiveLine_Ray(float x, float y, float z) : Primitive(), origin(0, 0, 0), destination(x, y, z)
+{
+
+	type = PrimitiveTypes::Primitive_Line;
+}
+
+PrimitiveLine_Ray::PrimitiveLine_Ray(float oX, float oY, float oZ, float dX, float dY, float dZ): Primitive(), origin(oX, oY, oZ), destination(dX, dY, dZ)
+{
+	type = PrimitiveTypes::Primitive_Line;
+}
+
+void PrimitiveLine_Ray::InnerRender() const
+{
+	glLineWidth(2.0f);
+
+	glBegin(GL_LINES);
+
+	glVertex3f(origin.x, origin.y, origin.z);
+	glVertex3f(destination.x, destination.y, destination.z);
+
+	glEnd();
+
+	glLineWidth(1.0f);
+}

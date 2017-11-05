@@ -82,6 +82,18 @@ public:
 };
 
 
+class PrimitiveLine_Ray : public Primitive
+{
+public:
+	PrimitiveLine_Ray();
+	PrimitiveLine_Ray(float x, float y, float z);
+	PrimitiveLine_Ray(float oX, float oY, float oZ, float dX, float dY, float dZ);
+	void InnerRender() const;
+public:
+	vec3 origin;
+	vec3 destination;
+};
+
 // ============================================
 class PrimitiveSphere : public Primitive
 {

@@ -35,6 +35,7 @@ bool ModuleSceneIntro::Start()
 	DCamera* dcamera = new DCamera();
 
 	camera->CreateComponent(COMP_CAMERA, dcamera);
+	App->camera->mainCam = (CCamera*)camera->GetComponent(COMP_CAMERA);
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 	MinDistance = MINDISTANCE;
@@ -168,17 +169,36 @@ GameObject* ModuleSceneIntro::SelectObject(LineSegment  picking)
 GameObject*  ModuleSceneIntro::IntersectAABB(LineSegment picking)
 {
 	GameObject* Closest = nullptr;
-	CMesh* IntersectMesh = nullptr;
+	
 	CTransformation* transform= nullptr;
 	for (uint i = 0; i < App->goManager->GetRoot()->childs.size(); i++)
-	{		
-		IntersectMesh = (CMesh*)App->goManager->GetRoot()->childs[i]->GetComponent(COMP_MESH);
-		if (IntersectMesh != nullptr) 
+	{
+		if (App->goManager->GetRoot()->childs[i]->childs.size() > 0) 
 		{
-			if (picking.Intersects(IntersectMesh->debugBox) == true)
+			for (uint p = 0; p < App->goManager->GetRoot()->childs[i]->childs.size(); p++)
 			{
-				DistanceList.push_back(App->goManager->GetRoot()->childs[i]);
-				
+				CMesh* IntersectMesh =(CMesh*)App->goManager->GetRoot()->childs[i]->childs[p]->GetComponent(COMP_MESH);
+				if (IntersectMesh != nullptr)
+				{
+					if (picking.Intersects(IntersectMesh->debugBox) == true)
+					{
+						DistanceList.push_back(App->goManager->GetRoot()->childs[i]->childs[p]);
+						LOGUI("hit");
+
+					}
+				}
+			}
+		}
+		else {
+			CMesh* IntersectMesh = (CMesh*)App->goManager->GetRoot()->childs[i]->GetComponent(COMP_MESH);
+			if (IntersectMesh != nullptr)
+			{
+				if (picking.Intersects(IntersectMesh->debugBox) == true)
+				{
+					DistanceList.push_back(App->goManager->GetRoot()->childs[i]);
+					LOGUI("hit");
+
+				}
 			}
 		}
 	}
@@ -189,7 +209,7 @@ GameObject*  ModuleSceneIntro::IntersectAABB(LineSegment picking)
 		for (std::list<GameObject*>::iterator it = DistanceList.begin(); it != DistanceList.end(); ++it) 
 		{			
 			transform = ((CTransformation*)(*it)->GetComponent(COMP_TRANSFORMATION));
-			float thisDist = (transform->position - App->camera->camera->frustum.pos).Length();
+			float thisDist = (transform->position - App->camera->editorCam->frustum.pos).Length();
 			if (thisDist < MinDistance) 
 			{			
 				Closest = (*it);

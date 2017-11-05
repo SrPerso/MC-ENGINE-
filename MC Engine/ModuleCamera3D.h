@@ -4,6 +4,7 @@
 #include "glmath.h"
 #include "DCamera.h"
 #include "CCamera.h"
+#include "MathGeoLib\Geometry\LineSegment.h"
 
 
 #define ZOOM_FACTOR 1.6
@@ -21,7 +22,7 @@ public:
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
 	void LookAt(const vec3 &Spot);
 	void Move(const vec3 &Movement);
-	float* GetViewMatrix();
+	const float* GetViewMatrix();
 
 	
 
@@ -38,7 +39,10 @@ public:
 
 	vec3 centreB;
 	DCamera* dcamera = nullptr;
-	CCamera* camera = nullptr;
+	CCamera* mainCam = nullptr;
+	CCamera* editorCam= nullptr;
+
+	LineSegment thispick;
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;

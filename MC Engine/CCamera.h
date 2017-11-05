@@ -18,7 +18,7 @@ class CCamera : public Component, public DCamera
 {
 public:
 	
-	CCamera(GameObject* object, Component_Type type = COMP_UNKNOWN);
+	CCamera(Component_Type type = COMP_UNKNOWN, DCamera* data = nullptr);
 	
 	CCamera(GameObject* object, Component_Type type = COMP_TRANSFORMATION, DCamera* data = nullptr);
 	~CCamera();
@@ -30,6 +30,8 @@ public:
 	void DrawFrustum();
 	bool Contains(const AABB & aabb) const;
 	Frustum GetFrustum()const;
+
+	const float* GetViewMatrix() const;
 	
 };
 

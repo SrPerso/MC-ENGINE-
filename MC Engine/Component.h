@@ -22,6 +22,7 @@ class Component
 {
 public:
 	Component(GameObject* object, Component_Type type = COMP_UNKNOWN);
+	Component(Component_Type type = COMP_UNKNOWN);
 	virtual ~Component();
 
 	Component_Type getType()const;

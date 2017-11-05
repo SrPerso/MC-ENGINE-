@@ -341,7 +341,7 @@ void GameObject::Update(float dt)
 	CCamera* camera = nullptr;
 	for (int i = 0; i < App->goManager->GetRoot()->childs.size(); i++)
 	{
-		for (int p = 0; p < App->goManager->GetRoot()->childs[i]->components.size(); p++)
+		for (int p = 0; p < App->goManager->GetRoot()->childs[i]->components.size(); p++)	
 		{
 			if (App->goManager->GetRoot()->childs[i]->components[p]->getType() == COMP_CAMERA)
 			{

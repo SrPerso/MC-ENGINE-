@@ -7,6 +7,10 @@ Component::Component(GameObject * object, Component_Type type):object(object), C
 
 }
 
+Component::Component(Component_Type type): Ctype(type)
+{
+}
+
 Component::~Component()
 {
 }
