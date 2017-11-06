@@ -51,8 +51,8 @@ public:
 	void SetBrightness(float value);
 	void SetBorderless(bool borderless);
 	void SetFullDesktop(bool fullDesktop);
-	int GetWidth() const ;
-	int GetHeight() const;
+	void GetWidth(int& width) ;
+	void GetHeight(int& height) ;
 	
 
 public:

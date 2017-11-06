@@ -6,7 +6,7 @@
 #include "Globals.h"
 #include "Primitive.h"
 #include <list>
-
+#include <vector>
 
 struct PhysBody3D;
 struct PhysMotor3D;
@@ -43,10 +43,12 @@ public:
 	void CreateCube2(vec3 size, vec3 pos);
 	void CreateLine(vec3 Origin, vec3 destintation, Color color = Red);
 
+	
+	void IntersectAABB(LineSegment &picking, std::vector<GameObject*>& DistanceList);
 	GameObject* SelectObject(LineSegment picking);
 
-	GameObject* IntersectAABB(LineSegment picking);
-	GameObject* IntersectTriangle(LineSegment picking, GameObject* closest);
+	
+	
 	void ObjectSelected(GameObject* selected);
 
 public:
@@ -54,7 +56,7 @@ public:
 
 	std::list<PrimitiveLine*> NormalsLines;
 
-	std::list<GameObject*> DistanceList;
+	
 	
 	GlobalDebugInfo sceneDebugInfo;
 

@@ -71,7 +71,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT &&  App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 	{
-		//	CenterCamera();
+		//CenterCamera();
 		//LookAt(centreB);
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
@@ -191,9 +191,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 		if(App->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
 		{						
-			LineSegment picking = editorCam->GetFrustum().UnProjectLineSegment( -(1 - App->input->GetNormalized_x() * 2),  1 - App->input->GetNormalized_y() * 2);
-			float testA = -(1 - App->input->GetNormalized_x() * 2);
-			float testB = (1 - App->input->GetNormalized_y() * 2);
+			LineSegment picking = editorCam->GetFrustum().UnProjectLineSegment( -(1 - App->input->GetNormalized_x() * 2),  1 - App->input->GetNormalized_y() * 2);			
 			thispick = picking;
 			selected= App->scene_intro->SelectObject(picking);
 			App->ui->show_Inspector_window = false;
@@ -278,7 +276,7 @@ void ModuleCamera3D::CenterCameraToObject(AABB * box)
 
 		float3 centre = box->CenterPoint();
 		float3 difference = box->maxPoint - box->minPoint;
-		float wide = difference.Length();
+		float wide = difference.Length()+10;
 		float FOVdistance = (wide*0.5f) / (tan(60.0f * 0.5f * DEGTORAD));
 		
 		Reference = vec3(centre.x, centre.y, centre.z);	

@@ -469,5 +469,13 @@ void GameObject::LoadData()
 	//}
 }
 
+void GameObject::TriIntersection(LineSegment & line, float & distance, float3 & hitPoint)
+{
+	CMesh* Mesh = (CMesh*)GetComponent(COMP_MESH);
 
+	if (Mesh != nullptr)
+	{
+		Mesh->IntersectTriangle(line, distance, hitPoint);
+	}
+}
 

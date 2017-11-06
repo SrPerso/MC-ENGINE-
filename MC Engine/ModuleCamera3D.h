@@ -28,7 +28,6 @@ public:
 
 	void CenterCameraToObject(AABB* box);
 	void CenterCamera();
-private:
 
 	void CalculateViewMatrix();
 

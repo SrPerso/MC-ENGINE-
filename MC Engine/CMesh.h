@@ -21,6 +21,7 @@ public:
 	void OnUpdate(float dt);
 	void OnEditor();
 	void OnInspector();
+	bool IntersectTriangle(LineSegment & picking, float& distance, float3 &hitPoint);
 
 	void Move(float3 destiny, float3 position);
 	const void* GetData();

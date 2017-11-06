@@ -223,7 +223,7 @@ void ModuleInput::SpeakersConectedDisable()
 float ModuleInput::GetNormalized_x() 
 {
 	int w;
-	w = App->window->GetWidth();
+	App->window->GetWidth(w);
 
 
 	normalized_x = (float)(mouse_x / (float)w);
@@ -234,7 +234,7 @@ float ModuleInput::GetNormalized_y()
 {
 	int h;
 
-	h = App->window->GetHeight();
+	App->window->GetHeight(h);
 
 
 	normalized_y = (float)(mouse_y / (float)h);

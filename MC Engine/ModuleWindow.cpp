@@ -99,6 +99,7 @@ LOGUI("-START- Init SDL window & surface");
 			if (WIN_FULLSCREEN == true)
 			{
 				flags |= SDL_WINDOW_FULLSCREEN;
+				
 			}
 
 			if (WIN_RESIZABLE == true)
@@ -155,11 +156,14 @@ bool ModuleWindow::CleanUp()
 
 void ModuleWindow::SetTitle(const char* title)
 {
+	
 	SDL_SetWindowTitle(window, title);
+
 }
 
 void ModuleWindow::ResizeWindow(int width, int height)
 {
+
 	SDL_SetWindowSize(window, width, height);
 }
 
@@ -202,14 +206,14 @@ void ModuleWindow::SetFullDesktop(bool fullDesktop)
 	SDL_SetWindowFullscreen(window, flags);
 }
 
-int ModuleWindow::GetWidth() const
+void ModuleWindow::GetWidth(int& width) 
 {
-	return this->width;
+	width= this->width;
 }
 
-int ModuleWindow::GetHeight() const
+void ModuleWindow::GetHeight(int& height)
 {
-	return this->height;
+	height= this->height;
 }
 
 
