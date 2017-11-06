@@ -39,6 +39,7 @@ public:
 
 public:
 	ImporterMesh * importerMesh = nullptr;
+	ImporterTrans * importerTransformations = nullptr;
 	ImporterTexture * importerTexture = nullptr;
 };
 

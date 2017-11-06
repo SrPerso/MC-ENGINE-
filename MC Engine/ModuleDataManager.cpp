@@ -61,7 +61,6 @@ GameObject* ModuleDataManager::ImportGameObject(std::string path, GameObject * p
 			newObject = ImportGameObject(path, newObject, scene, node);
 			aiReleaseImport(scene);
 		}
-
 		else
 		{
 			LOGUI("[Error]- Error importing scene %s", path);
@@ -85,7 +84,7 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 				
 				GameObject * GameObjectSon;
 				
-				if (node->mNumMeshes > 1)
+				if (node->mNumMeshes > 1 && i == 1 )
 				{
 					GameObjectSon = new GameObject(newObject);		
 					GameObjectSon->SetGOID(App->randGen->Int());
@@ -94,9 +93,8 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 				{
 					GameObjectSon = newObject;
 				}				
-
-
-				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, (DMesh*)importerMesh->ImportTrans(node));
+				
+				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, (DTransformation*)importerTransformations->ImportTrans(node, GameObjectSon, GameObjectSon->GetGOId()));
 
 				DMesh* MeshtoCreate = (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon, GameObjectSon->GetGOId());
 				GameObjectSon->CreateComponent(COMP_MESH, MeshtoCreate);

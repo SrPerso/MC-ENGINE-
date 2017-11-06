@@ -129,15 +129,17 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, uint id)
 		mesh->debugBox.SetNegativeInfinity();//
 		mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
 		
-		object->SetLocalTransform();
+		
 		App->camera->CenterCameraToObject(&mesh->debugBox);
-			
+		object->SetLocalTransform();
 
 		//delete mesh;	
 		Save(mesh, nullptr, id);
-		//mesh = nullptr;
-		//mesh = Load(mesh, nullptr, id);
-		//
+		
+	/*	mesh = nullptr;
+
+		mesh = Load(mesh, nullptr, id);*/
+		
 		return mesh;
 	}
 
@@ -149,7 +151,15 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, uint id)
 	return nullptr;
 }
 
-DTransformation* ImporterMesh::ImportTrans(aiNode* node)
+ImporterTrans::ImporterTrans()
+{
+}
+
+ImporterTrans::~ImporterTrans()
+{
+}
+
+DTransformation* ImporterTrans::ImportTrans(aiNode* node, GameObject* object, uint id)
 {
 	if (node != nullptr)
 	{
@@ -164,11 +174,92 @@ DTransformation* ImporterMesh::ImportTrans(aiNode* node)
 		Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
 		DTransformation* transl = new DTransformation(pos, sca, rot);
+		
+		Save(transl, nullptr, id);
 
 		return transl;
 	}
 	return nullptr;
 
+}
+
+DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile, uint id)
+{
+	return nullptr;
+}
+
+bool ImporterTrans::Save(const void * buffer, const char * saverFile, uint id)
+{
+	bool ret = true;
+
+	ImporterTrans* trans = (ImporterTrans*)buffer;
+
+
+	//path to save ----------
+
+	std::string path;
+
+	path = "Library/Mesh";
+	path.append("/");
+	path.append("m");
+	path.append(std::to_string(id));
+	path.append(".mct");
+
+	LOGUI("[SAVING]{Transformation}- %s", path.c_str());
+
+	// Opening ----------
+
+	FILE* file = fopen(path.c_str(), "r");
+
+	if (file != nullptr)
+	{
+		fclose(file);
+		LOGUI("[ERROR]- %s  is already created", path.c_str());
+
+		return false;
+	}
+	//size of all ----------
+
+	uint position = 3;// coordenates x,y,z
+	uint scale = 3;// coordenates x,y,z
+	uint rotation = 4;// angle + vector x,y,z
+
+	uint ranges[3] = {
+		position, /* position */
+		scale, /* scale */
+		rotation /* rotation */
+	};	
+	
+	uint size = 0;
+	
+	size += sizeof(ranges);
+
+	size += position;
+	size += scale;
+	size += rotation;
+
+
+	//Now is going to copy all to the array ----------
+	char* data = new char[size];
+	char* cursor = data;
+
+	uint allocsize = 0;
+
+	//write 
+
+	std::ofstream file_end(path.c_str(), std::ifstream::out | std::ofstream::binary);
+
+	if (file_end.good()) //write file
+		file_end.write(data, size);
+	else
+		LOGUI("[ERROR]- writting error ", path.c_str());
+
+	file_end.close();
+
+	RELEASE_ARRAY(data);
+	LOGUI("[SAVED]{Transformation}- %s ", path.c_str());
+
+	return ret;
 }
 
 bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
@@ -188,7 +279,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 	path.append(std::to_string(id));
 	path.append(".mcm");
 
-	LOGUI("[SAVING]- %s", path.c_str());
+	LOGUI("[SAVING]{Mesh}- %s", path.c_str());
 
 	// Opening ----------
 
@@ -217,7 +308,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 		mesh->nVertex,/* vertices */
 		colorSize/* colors */,
 		mesh->nNormals  /* normals*/,
-		textureCoodsSize  /* text coods*/
+		textureCoodsSize  /* text coods*/,
 	};
 
 	//size of all ----------
@@ -288,7 +379,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 	file_end.close();
 
 	RELEASE_ARRAY(data);
-	LOGUI("[OK]- Saved %s ", path.c_str());
+	LOGUI("[SAVED]{Mesh}- %s ", path.c_str());
 
 	return ret;
 }
@@ -369,7 +460,7 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 	uint nColors = ranges[2];
 	data->nNormals = ranges[3];
 	uint textureCoods = ranges[4];
-	
+
 
 	//--- 
 	cursor += bytes;
@@ -415,8 +506,10 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 			glBindBuffer(GL_ARRAY_BUFFER, data->idNormals);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nNormals * 3, data->normals, GL_STATIC_DRAW);		// normals
 		}
-
 	}
+	
+	//---
+	//---
 
 	if (nColors>0)
 	{
@@ -434,6 +527,9 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 		}
 	}
 
+	//---
+	//---
+
 	if (textureCoods > 0)
 	{
 		cursor += bytes;
@@ -449,7 +545,10 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nVertex * 3, data->texCoords, GL_STATIC_DRAW);		// Texture coords
 		}
 	}
-	
+
+	//---
+	//---
+
 	LOGUI("[LOADED]- %s", path.c_str());
 
 	return data; 

@@ -349,7 +349,7 @@ IMGUI_API void ModuleUI::ShowGeometryWindow(bool * p_open)
 
 	window_flags |= ImGuiWindowFlags_NoTitleBar;
 	//window_flags |= ImGuiWindowFlags_NoMove;
-//	window_flags |= ImGuiWindowFlags_NoResize;
+	//window_flags |= ImGuiWindowFlags_NoResize;
 
 	if (!ImGui::Begin("Geometry", p_open, window_flags))
 	{
@@ -507,7 +507,6 @@ IMGUI_API void ModuleUI::ShowEditorWindow(bool * p_open)
 	ImGuiWindowFlags window_flags = 0;
 
 	window_flags |= ImGuiWindowFlags_NoTitleBar;
-	window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	//window_flags |= ImGuiWindowFlags_NoMove;
 	//window_flags |= ImGuiWindowFlags_NoResize;
 
@@ -1407,28 +1406,6 @@ void ModuleUI::RenderSetings()
 }
 void ModuleUI::DevicesSetingsC()
 {
-	/*//ImGui::Text("Mouse Status:");
-	if (App->input->MouseConected())
-	{
-		ImGui::SameLine();
-		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, "CONECTED", nullptr);
-	}
-	else {
-		ImGui::SameLine();
-		ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
-	}
-
-	ImGui::Text("Keyboard Status:"); //Not Workings
-	if (App->input->KeyBoardConected())
-	{
-		ImGui::SameLine();
-		ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, "CONECTED", nullptr);
-	}
-	else {
-		ImGui::SameLine();
-		ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
-	}
-*/
 	ImGui::Text("Screen Status:");
 	if (App->input->ScreenConected())
 	{
@@ -1439,16 +1416,6 @@ void ModuleUI::DevicesSetingsC()
 		ImGui::SameLine();
 		ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
 	}
-	//ImGui::Text("Speakers Status:");  //Not Working
-	//if (App->input->SpeakersConected())
-	//{
-	//	ImGui::SameLine();
-	//	ImGui::TextColoredV(ImVec4{ 0,100,0,255 }, "CONECTED", nullptr);
-	//}
-	//else {
-	//	ImGui::SameLine();
-	//	ImGui::TextColoredV(ImVec4{ 100,0,0,255 }, "DISCONECTED", nullptr);
-	//}
 
 	ImGui::Text("Social life:");
 	ImGui::SameLine();
@@ -1456,8 +1423,7 @@ void ModuleUI::DevicesSetingsC()
 
 	ImGui::Text("Mouse Position: [%d, %d]", App->input->GetMouseX(), App->input->GetMouseY());
 	ImGui::Text("Mouse Motion: [%d, %d]", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
-
-
+	
 }
 void ModuleUI::Draw()
 {
