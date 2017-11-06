@@ -149,13 +149,14 @@ bool CMesh::IntersectTriangle(LineSegment & picking, float& distance, float3 &hi
 	LineSegment newSegment = picking;
 	newSegment.Transform(thisTransformation->GetTransMatrix().Inverted());
 
-	Triangle tri;
-	
-	for (uint i = 0; i < nVertex;)
+	for (uint i = 0; i < nIndex;i+=3)
 	{
-		tri.a.Set(nVertex[&Index[i++]], nVertex[&Index[i]], nVertex[&Index[i]]);
+	Triangle tri(float3(Vertex[Index[i] * 3], Vertex[Index[i] * 3 + 1], Vertex[Index[i] * 3 + 2]), float3(Vertex[Index[i + 1] * 3], Vertex[Index[i + 1] * 3 + 1], Vertex[Index[i + 1] * 3 + 2]), float3(Vertex[Index[i + 2] * 3], Vertex[Index[i + 2] * 3 + 1], Vertex[Index[i + 2] * 3 + 2]));
+	
+	
+		/*tri.a.Set(nVertex[&Index[i++]], nVertex[&Index[i]], nVertex[&Index[i]]);
 		tri.b.Set(nVertex[&Index[i++]], nVertex[&Index[i]], nVertex[&Index[i]]);
-		tri.c.Set(nVertex[&Index[i++]], nVertex[&Index[i]], nVertex[&Index[i]]);
+		tri.c.Set(nVertex[&Index[i++]], nVertex[&Index[i]], nVertex[&Index[i]]);*/
 			
 		
 		if (newSegment.Intersects(tri, &distance2, &hitPoint))

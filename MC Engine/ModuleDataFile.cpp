@@ -263,7 +263,7 @@ bool DataFBX::LoadMesh(const char* path)
 				mesh->nFaces = newMesh->mNumFaces;
 
 				mesh->nIndex = newMesh->mNumFaces * 3;
-				mesh->Index = new float[mesh->nIndex]; //every face is a triangle.
+				mesh->Index = new uint[mesh->nIndex]; //every face is a triangle.
 
 				for (uint i = 0; i < newMesh->mNumFaces; ++i)
 				{

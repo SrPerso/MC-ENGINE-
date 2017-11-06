@@ -50,7 +50,7 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, uint id)
 			mesh->nFaces = newMesh->mNumFaces;
 
 			mesh->nIndex = newMesh->mNumFaces * 3;
-			mesh->Index = new float[mesh->nIndex]; //every face is a triangle.
+			mesh->Index = new uint[mesh->nIndex]; //every face is a triangle.
 
 			for (uint i = 0; i < newMesh->mNumFaces; ++i)
 			{
@@ -347,7 +347,7 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 	//---
 	cursor += bytes;
 	bytes = sizeof(float) * data->nIndex;
-	data->Index = new float[bytes*3];
+	data->Index = new uint[bytes*3];
 
 	memcpy(data->Index, cursor, bytes);
 
