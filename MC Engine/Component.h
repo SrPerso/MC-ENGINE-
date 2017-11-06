@@ -7,6 +7,7 @@
 #include "DContainer.h"
 
 class GameObject;
+class DataJSON;
 
 enum Component_Type
 {
@@ -21,8 +22,8 @@ enum Component_Type
 class Component
 {
 public:
-	Component(GameObject* object, Component_Type type = COMP_UNKNOWN);
-	Component(Component_Type type = COMP_UNKNOWN);
+	Component(GameObject* object,int UID, Component_Type type = COMP_UNKNOWN);
+	Component(int UID, Component_Type type = COMP_UNKNOWN);
 	virtual ~Component();
 
 	Component_Type getType()const;
@@ -32,10 +33,15 @@ public:
 	virtual void SetEnable(bool isEnable);
 	virtual void Enable();
 	virtual void Disable();
+
+	virtual void OnUpdate(float dt);
 	virtual void OnEditor();
 	virtual void OnInspector();
 
-	virtual void OnUpdate(float dt);
+	virtual void OnSave(DataJSON&file)const = 0;
+	virtual void OnLoad(DataJSON&file) = 0;
+
+
 	virtual const void*GetData() ;
 
 
@@ -45,6 +51,8 @@ protected:
 	DType dType;
 	GameObject* object = nullptr;
 	bool isEnable = true;
+
+	int UID;
 };
 
 #endif

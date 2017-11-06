@@ -1,8 +1,8 @@
 ﻿#include "CTexture.h"
 #include "GameObject.h"
+#include "ModuleDataFile.h"
 
-
-CTexture::CTexture(GameObject* object, Component_Type type, DTexture * data) :Component(object, type)
+CTexture::CTexture(GameObject* object,int UID, Component_Type type, DTexture * data) :Component(object, UID, type)
 {
 	if (data)
 	{
@@ -50,6 +50,20 @@ void CTexture::OnInspector()
 		ImGui::Text("\t Texture path: %s", Textname.c_str());
 		
 		
+}
+
+void CTexture::OnSave(DataJSON & file) const
+{
+
+
+
+}
+
+void CTexture::OnLoad(DataJSON & file)
+{
+
+
+
 }
 
 

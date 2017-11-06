@@ -1,7 +1,9 @@
 ﻿#include "CMesh.h"
 #include "GameObject.h"
+#include "ModuleDataFile.h"
 
-CMesh::CMesh(GameObject * object, Component_Type type, DMesh* data) : Component(object, COMP_MESH)
+
+CMesh::CMesh(GameObject * object,int UID, Component_Type type, DMesh* data) : Component( object, UID, COMP_MESH)
 {
 	if (data)
 	{
@@ -79,6 +81,15 @@ void CMesh::OnInspector()
 
 		//	ImGui::Text("Texture Coords: %i", idTexCoords);
 	
+}
+
+void CMesh::OnSave(DataJSON & file) const
+{
+
+}
+
+void CMesh::OnLoad(DataJSON & file)
+{
 }
 
 void CMesh::Move(float3 destiny, float3 start)

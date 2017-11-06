@@ -1,8 +1,8 @@
 ﻿#include "CTransformation.h"
+#include "ModuleDataFile.h"
 
 
-
-CTransformation::CTransformation(GameObject * object, Component_Type type, DTransformation* data) :Component(object, type)
+CTransformation::CTransformation(GameObject * object,int UID, Component_Type type, DTransformation* data) :Component(object, UID, type)
 {
 	
 	if (data)
@@ -125,6 +125,24 @@ void CTransformation::OnInspector() {
 		}
 	
 }
+
+
+void CTransformation::OnSave(DataJSON & file) const
+{
+
+
+}
+
+
+
+void CTransformation::OnLoad(DataJSON & file)
+{
+
+
+}
+
+
+
 void CTransformation::TransUpdate()
 {
 	eulerAngles.x *= DEGTORAD;

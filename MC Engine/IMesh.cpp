@@ -175,7 +175,7 @@ DTransformation* ImporterTrans::ImportTrans(aiNode* node, GameObject* object, ui
 
 		DTransformation* transl = new DTransformation(pos, sca, rot);
 		
-		Save(transl, nullptr, id);
+//		Save(transl, nullptr, id);
 
 		return transl;
 	}

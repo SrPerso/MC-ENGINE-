@@ -2,12 +2,12 @@
 
 
 #include "Application.h"
-Component::Component(GameObject * object, Component_Type type):object(object), Ctype(type)
+Component::Component(GameObject * object,int UID, Component_Type type):object(object), Ctype(type), UID(UID)
 {
 
 }
 
-Component::Component(Component_Type type): Ctype(type)
+Component::Component(int UID, Component_Type type): Ctype(type), UID(UID)
 {
 }
 

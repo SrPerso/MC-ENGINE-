@@ -31,15 +31,20 @@ DataJSON::DataJSON()
 {
 	value_json=json_value_init_object();
 	object_json = json_value_get_object(value_json);
-	
-	files.push_back("config.json");
-	files.push_back("uisave.json");
 
 }
 
+DataJSON::DataJSON(JSON_Object*fileobject)
+{
+	object_json = fileobject;
+
+}
+
+
 DataJSON::~DataJSON()
 {
-	json_value_free(value_json);
+	if(value_json)
+		json_value_free(value_json);
 }
 
 bool DataJSON::Init()
@@ -93,90 +98,215 @@ void DataJSON::SaveAll() const
 	}
 }
 
-int DataJSON::GetInt(JSON_Object * object, const char * name) const
+int DataJSON::GetInt( const char * name, JSON_Object * object) const
 {
 	int ret = 0;
 
-	JSON_Value* value = json_object_get_value(object, name);
+	if (object)
+	{
+		JSON_Value* value = json_object_get_value(object, name);
 
-	if (value && json_value_get_type(value) == JSONNumber) 
-		ret = json_value_get_number(value);
+		if (value && json_value_get_type(value) == JSONNumber)
+			ret = json_value_get_number(value);
+	}
+	else
+	{
+		JSON_Value* value = json_object_get_value(object_json, name);
+
+		if (value && json_value_get_type(value) == JSONNumber)
+			ret = json_value_get_number(value);
+	}
 
 	return (int)ret;
 }
 
-float DataJSON::GetFloat(JSON_Object * object, const char * name) const
+float DataJSON::GetFloat( const char * name, int arrayI, JSON_Object * object) const
 {
 	float ret = 0.0f;
 
-	JSON_Value* value = json_object_get_value(object, name);
+	
 
-	if (value && json_value_get_type(value) == JSONNumber)
-		ret = json_value_get_number(value);
+	if (object)
+	{
+		JSON_Value* value = GetValor(name, arrayI, object);
 
+		if (value && json_value_get_type(value) == JSONNumber)
+			ret = json_value_get_number(value);
+	}
+	else
+	{
+		JSON_Value* value = GetValor(name, arrayI);
+
+		if (value && json_value_get_type(value) == JSONNumber)
+			ret = json_value_get_number(value);
+	}
 	return (float)ret;
 }
 
-double DataJSON::GetDouble(JSON_Object * object, const char * name) const
+double DataJSON::GetDouble(const char * name, JSON_Object * object) const
 {
 	double ret = 0;
 
-	JSON_Value* value = json_object_get_value(object, name);
+	if (object)
+	{
+		JSON_Value* value = json_object_get_value(object, name);
 
-	if (value && json_value_get_type(value) == JSONNumber)
-		ret = json_value_get_number(value);
+		if (value && json_value_get_type(value) == JSONNumber)
+			ret = json_value_get_number(value);
+	}
+	else
+	{
+		JSON_Value* value = json_object_get_value(object_json, name);
+
+		if (value && json_value_get_type(value) == JSONNumber)
+			ret = json_value_get_number(value);
+	}
 
 	return (double)ret;
 }
 
-bool DataJSON::GetBoolean(JSON_Object * object, const char * name) const
+bool DataJSON::GetBoolean(const char * name, JSON_Object * object) const
 {
 	bool ret = true;
 
-	JSON_Value* value = json_object_get_value(object, name);
+	if (object)
+	{
+		JSON_Value* value = json_object_get_value(object, name);
 
-	if (value && json_value_get_type(value) == JSONBoolean)
-		ret = json_value_get_boolean(value);
+		if (value && json_value_get_type(value) == JSONBoolean)
+			ret = json_value_get_boolean(value);
+	}
+	else
+	{
+		JSON_Value* value = json_object_get_value(object_json, name);
 
+		if (value && json_value_get_type(value) == JSONBoolean)
+			ret = json_value_get_boolean(value);
+	}
 	return (bool)ret;
 }
 
-const char * DataJSON::GetString(JSON_Object * object, const char * name) const
+const char * DataJSON::GetString(const char * name, JSON_Object * object) const
 {
 	const char * ret = nullptr;
 
-	JSON_Value* value = json_object_get_value(object, name);
+	if (object)
+	{
+		JSON_Value* value = json_object_get_value(object, name);
 
-	if (value && json_value_get_type(value) == JSONString)
-		ret = json_value_get_string(value);
+		if (value && json_value_get_type(value) == JSONString)
+			ret = json_value_get_string(value);
+	}
+	else
+	{
+		JSON_Value* value = json_object_get_value(object_json, name);
+
+		if (value && json_value_get_type(value) == JSONString)
+			ret = json_value_get_string(value);
+	}
 
 	return ret;
 }
 
-void DataJSON::AddInt(JSON_Object * object, const char * name, int number)
+DataJSON DataJSON::GetSection(const char * name)const
 {
-	json_object_set_number(object, name, (int)number);
+	return DataJSON(json_object_dotget_object(object_json, name));
 }
 
-void DataJSON::AddFloat(JSON_Object * object, const char * name, float number)
+JSON_Value * DataJSON::GetValor(const char * field, int count, JSON_Object * object) const
 {
-	json_object_set_number(object, name, (float)number);
+	if (object) 
+	{
+		if (count == -1)
+			return json_object_get_value(object, field);
+
+		JSON_Array* arrays = json_object_get_array(object, field);
+		if (arrays != nullptr)
+		{
+			return json_array_get_value(arrays, count);
+		}
+	}
+	else
+	{
+		if (count == -1)
+			return json_object_get_value(object_json, field);
+
+		JSON_Array* arrays = json_object_get_array(object_json, field);
+		if (arrays != nullptr)
+		{
+			return json_array_get_value(arrays, count);
+		}
+	}
+
+	return nullptr;
 }
 
-void DataJSON::AddDouble(JSON_Object * object, const char * name, double number)
+DataJSON DataJSON::AddSection(const char * name, JSON_Object * object)
 {
-	json_object_set_number(object, name, (double)number);
+	if(object)
+		json_object_set_value(object, name, json_value_init_object());
+	
+	else
+		json_object_set_value(object_json, name, json_value_init_object());
+
+	return GetSection(name);
 }
 
-void DataJSON::AddBool(JSON_Object * object, const char * name, bool boolean)
+void DataJSON::AddInt(const char * name, int number, JSON_Object * object)
 {
-	json_object_set_boolean(object, name, (bool)boolean);
+	if(object)
+		json_object_set_number(object, name, (int)number);
+	else 
+		json_object_set_number(object_json, name, (int)number);
 }
 
-void DataJSON::AddString(JSON_Object * object, const char * name, const char * string)
+void DataJSON::AddFloat(const char * name, float number, JSON_Object * object)
 {
-	json_object_set_string(object, name, (const char *)string);
+	if (object)
+		json_object_set_number(object, name, (float)number);
+	else
+		json_object_set_number(object_json, name, (float)number);
+
 }
 
+void DataJSON::AddDouble(const char * name, double number, JSON_Object * object)
+{
+	if (object)
+		json_object_set_number(object, name, (double)number);
+	else
+		json_object_set_number(object_json, name, (double)number);
+}
 
+void DataJSON::AddBool( const char * name, bool boolean, JSON_Object * object)
+{
+	if (object)
+		json_object_set_boolean(object, name, (bool)boolean);
+	else
+		json_object_set_boolean(object_json, name, (bool)boolean);
+}
 
+void DataJSON::AddString( const char * name, const char * string, JSON_Object * object)
+{
+	if (object)
+		json_object_set_string(object, name, (const char *)string);
+	else
+		json_object_set_string(object_json, name, (const char *)string);
+}
+
+void DataJSON::AddArrayF(const char * name, const float * arrays, uint size)
+{
+	if (arrays != nullptr && size > 0)
+	{
+		JSON_Value* temp = json_value_init_array();
+		temp_array_json = json_value_get_array(temp);
+		json_object_set_value(object_json, name, temp);
+
+		for (int i = 0; i < size; ++i)
+		{
+			if (json_array_append_number(temp_array_json, arrays[i]) != JSONSuccess)
+			{
+				break;
+			}
+		}
+	}
+}
