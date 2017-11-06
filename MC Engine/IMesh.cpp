@@ -185,14 +185,100 @@ DTransformation* ImporterTrans::ImportTrans(aiNode* node, GameObject* object, ui
 
 DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile, uint id)
 {
-	return nullptr;
+
+	DTransformation* data = new DTransformation();
+	//data = (DMesh*)buffer;
+	std::string path; //path to load
+
+	if (loadFile == nullptr)
+	{
+		path = "Library/Mesh";
+		path.append("/");
+		path.append("m");
+		path.append(std::to_string(id));
+		path.append(".mct");
+	}
+	else
+	{
+		path = loadFile;
+	}
+
+
+	std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
+
+	char* datafile;
+
+	if (file)
+	{
+
+		file.seekg(0, file.end);
+
+		int size = file.tellg(); //size of the file
+
+		file.seekg(0, file.beg);
+
+		datafile = new char[size];
+
+
+		if (file.read(datafile, size))
+		{
+			LOGUI("[READING]- %s", path.c_str());
+		}
+		else
+		{
+			LOGUI("{Load}[ERROR]- only %ll can be read on: %s", file.gcount(), path.c_str());
+
+			RELEASE_ARRAY(datafile);
+			return nullptr;
+		}
+
+		file.close();
+	}
+	else
+		LOGUI("[ERROR]- loading %s", path);
+
+	if (datafile == nullptr)
+	{
+		return nullptr;
+	}
+
+	uint size = 0;
+	size = file.gcount();
+
+	char* cursor = datafile;
+
+
+	uint ranges[3];
+	uint bytes = sizeof(ranges);
+
+	memcpy(ranges, cursor, bytes);
+
+	uint posision = ranges[0];
+	uint scale = ranges[1];
+	uint rotation = ranges[2];
+
+	//
+	////--- 
+	//cursor += bytes;
+	//bytes = sizeof(float) *posision;
+	//data->Index = new float[posision];
+
+	//memcpy(data->Index, cursor, bytes);
+
+	//todo
+
+
+
+	LOGUI("[LOADED]{Trasformation}- %s", path.c_str());
+
+	return data;
 }
 
 bool ImporterTrans::Save(const void * buffer, const char * saverFile, uint id)
 {
 	bool ret = true;
 
-	ImporterTrans* trans = (ImporterTrans*)buffer;
+	DTransformation* trans = (DTransformation*)buffer;
 
 
 	//path to save ----------
@@ -244,6 +330,48 @@ bool ImporterTrans::Save(const void * buffer, const char * saverFile, uint id)
 	char* cursor = data;
 
 	uint allocsize = 0;
+
+	allocsize = sizeof(ranges);
+	memcpy(cursor, ranges, allocsize);						//contains the number of every thing 
+	
+	// -- Position
+
+	cursor += allocsize;
+	allocsize = sizeof(float);;
+	memcpy(cursor, &trans->position.x, allocsize);
+	cursor += allocsize;
+	allocsize = sizeof(float);
+	memcpy(cursor, &trans->position.y, allocsize);
+	cursor += allocsize;
+	allocsize = sizeof(float);
+	memcpy(cursor, &trans->position.z, allocsize);
+
+	// -- scale
+
+	cursor += allocsize;
+	allocsize = sizeof(float);;
+	memcpy(cursor, &trans->scale.x, allocsize);
+	cursor += allocsize;
+	allocsize = sizeof(float);
+	memcpy(cursor, &trans->scale.y, allocsize);
+	cursor += allocsize;
+	allocsize = sizeof(float);
+	memcpy(cursor, &trans->scale.z, allocsize);
+
+	// -- Rotation
+
+	cursor += allocsize;
+	allocsize = sizeof(float);;
+	memcpy(cursor, &trans->rotation.x, allocsize);
+	cursor += allocsize;
+	allocsize = sizeof(float);
+	memcpy(cursor, &trans->rotation.y, allocsize);
+	cursor += allocsize;
+	allocsize = sizeof(float);
+	memcpy(cursor, &trans->rotation.z, allocsize);
+	cursor += allocsize;
+	allocsize = sizeof(float);
+	memcpy(cursor, &trans->rotation.w, allocsize);
 
 	//write 
 
@@ -549,7 +677,7 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 	//---
 	//---
 
-	LOGUI("[LOADED]- %s", path.c_str());
+	LOGUI("[LOADED]{Mesh}- %s", path.c_str());
 
 	return data; 
 }
