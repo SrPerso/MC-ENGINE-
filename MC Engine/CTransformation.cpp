@@ -129,16 +129,40 @@ void CTransformation::OnInspector() {
 
 void CTransformation::OnSave(DataJSON & file) const
 {
+	file.AddInt("Component UID", UID);
+	file.AddInt("Component Type", Ctype);
 
-
+	file.AddArrayF("Position", &position.x, 3);
+	file.AddArrayF("Scale", &scale.x, 3);
+	file.AddArrayF("Rotation", &rotation.x, 4);
 }
-
-
 
 void CTransformation::OnLoad(DataJSON & file)
 {
+	UID = file.GetFloat("Component UID");
 
+	UpdateTrans = false;
 
+	position.x = file.GetFloat("Position", 0);
+	position.y = file.GetFloat("Position", 1);
+	position.z = file.GetFloat("Position", 2);
+
+	scale.x = file.GetFloat("Scale", 0);
+	scale.y = file.GetFloat("Scale", 1);
+	scale.z = file.GetFloat("Scale", 2);
+
+	rotation.x = file.GetFloat("Rotation", 0);
+	rotation.y = file.GetFloat("Rotation", 1);
+	rotation.z = file.GetFloat("Rotation", 2);
+	rotation.w = file.GetFloat("Rotation", 3);
+	
+	eulerAngles = rotation.ToEulerXYZ();
+
+	globalTransformMatrix = float4x4::FromQuat(rotation);
+	globalTransformMatrix = float4x4::Scale(scale, float3(0, 0, 0)) * globalTransformMatrix;
+	globalTransformMatrix.float4x4::SetTranslatePart(position.x, position.y, position.z);
+
+	localTransformMatrix = globalTransformMatrix;
 }
 
 

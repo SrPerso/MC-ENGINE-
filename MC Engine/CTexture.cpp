@@ -54,16 +54,15 @@ void CTexture::OnInspector()
 
 void CTexture::OnSave(DataJSON & file) const
 {
-
+	file.AddInt("Component UID", UID);
+	file.AddInt("Component Type", Ctype);
 
 
 }
 
 void CTexture::OnLoad(DataJSON & file)
 {
-
-
-
+	UID = file.GetFloat("Component UID");
 }
 
 

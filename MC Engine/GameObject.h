@@ -79,6 +79,8 @@ public:
 	void OnEditor();
 	void OnInspector();
 
+	void OnSerialize(DataJSON & file)const;
+	void OnDeserialize(DataJSON & file);
 	//DATA ------------------------------------
 
 	void SaveData();

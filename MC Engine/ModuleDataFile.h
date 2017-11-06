@@ -42,6 +42,8 @@ public:
 	void AddString(const char* name, const char* string, JSON_Object*  object = nullptr);
 
 	void AddArrayF(const char* name, const float * arrays, uint size);
+	void AddArray(const DataJSON& object);
+	void AddArray(const char* nstring);
 
 private: 
 

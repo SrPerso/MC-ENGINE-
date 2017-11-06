@@ -305,8 +305,35 @@ void DataJSON::AddArrayF(const char * name, const float * arrays, uint size)
 		{
 			if (json_array_append_number(temp_array_json, arrays[i]) != JSONSuccess)
 			{
+				LOGUI("[ERROR]- Cant add Float array to scene file number %i", i);
 				break;
 			}
 		}
 	}
+}
+
+void DataJSON::AddArray(const DataJSON& object)
+{
+	if (temp_array_json != nullptr)
+	{
+		if (json_array_append_value(temp_array_json, json_value_deep_copy(object.value_json)) == JSONSuccess)
+		{
+			LOGUI("[ERROR]- Cant add array to scene file");
+		}
+	}
+
+}
+
+void DataJSON::AddArray(const char * nstring)
+{
+	JSON_Value* tmpArray = json_value_init_array();
+
+	temp_array_json = json_value_get_array(tmpArray);
+
+	if (json_object_set_value(object_json, nstring, tmpArray) == JSONSuccess)
+	{
+		LOGUI("[ERROR]- Cant add array (string) to scene file");
+	}
+
+
 }

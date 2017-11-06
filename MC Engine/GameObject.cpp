@@ -186,25 +186,25 @@ Component * GameObject::CreateComponent(Component_Type type, const void*buffer)
 	{
 	case COMP_MESH:
 
-		ret = new CMesh(this, COMP_MESH,(DMesh*)buffer);
+		ret = new CMesh(this, App->randGen->Int(), COMP_MESH,(DMesh*)buffer);
 		this->components.push_back(ret);
 
 		break;
 	case COMP_TRANSFORMATION:
 
-		ret = new CTransformation(this,COMP_TRANSFORMATION, (DTransformation*)buffer);
+		ret = new CTransformation(this, App->randGen->Int(), COMP_TRANSFORMATION, (DTransformation*)buffer);
 		this->components.push_back(ret);
 
 		break;
 	case COMP_TEXTURE:
 	
-		ret = new CTexture(this,COMP_TEXTURE, (DTexture*)buffer);
+		ret = new CTexture(this, App->randGen->Int() , COMP_TEXTURE, (DTexture*)buffer);
 		this->components.push_back(ret);
 		
 		break;
 	case COMP_CAMERA:
 		//DCamera* camera = new DCamera();
-		ret = new CCamera(this, COMP_CAMERA, (DCamera*)buffer);
+		ret = new CCamera(this, App->randGen->Int(), COMP_CAMERA, (DCamera*)buffer);
 		this->components.push_back(ret);
 
 		break;
@@ -354,11 +354,15 @@ void GameObject::Update(float dt)
 	}
 
 	CMesh* debuger = (CMesh*)this->GetComponent(COMP_MESH);
-	if (debuger != nullptr) {
+	if (debuger != nullptr)
+	{
 		recalculatedBox = debuger->debugBox;
+
+
 		if (camera != nullptr)
 		{
-			if (camera->needToCull) {
+			if (camera->needToCull) 
+			{
 
 				if (camera->Contains(recalculatedBox))
 				{
@@ -366,11 +370,13 @@ void GameObject::Update(float dt)
 				}
 			}
 
-			else {
+			else 
+			{
 				App->renderer3D->DrawGO(this);
 			}
 		}
-		else {
+		else
+		{
 			App->renderer3D->DrawGO(this);
 		}
 	}
@@ -423,6 +429,45 @@ void GameObject::OnInspector()
 		}*/	
 }
 
+void GameObject::OnSerialize(DataJSON & file) const
+{
+	if (this != App->goManager->GetRoot())
+	{
+		DataJSON dataOnFile = nullptr;
+
+		dataOnFile.AddString("Name", name.c_str());
+
+		// --  save UID 
+		dataOnFile.AddInt("UID", GameOIbject_ID);
+
+		if (this->GetParent() != App->goManager->GetRoot())
+			dataOnFile.AddInt("Parent UID", parent->GetGOId());
+		else
+			dataOnFile.AddInt("Parent UID", -1);
+		
+		// --	components info
+		dataOnFile.AddArray("Components");
+
+		DataJSON componentData = nullptr;
+
+		for (int i = 0; i < components.size(); i++)
+		{
+			components[i]->OnSave(componentData);
+			dataOnFile.AddArray(componentData);
+		}
+
+		// -- adds the array formed by all components
+		file.AddArray(dataOnFile);
+	}
+
+	// call all childs to serialize
+	for (int i = 0; i < childs.size(); i++) //rec
+	{
+		childs[i]->OnSerialize(file);
+	}
+
+}
+
 void GameObject::SaveData()
 {
 	for (int i = 0; i < childs.size(); i++)
@@ -434,7 +479,8 @@ void GameObject::SaveData()
 	{
 		for (int i = 0; i < components.size(); i++)
 		{
-			if (components[i]->GetDataType() == D_MESH) {
+			if (components[i]->GetDataType() == D_MESH) 
+			{
 				App->datamanager->SaveData(components[i]->GetData(), components[i]->GetDataType(), this->GameOIbject_ID);
 			}			
 		}

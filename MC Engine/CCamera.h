@@ -17,7 +17,9 @@ enum Component_Type;
 class CCamera : public Component, public DCamera
 {
 public:
-	
+
+	CCamera(Component_Type type = COMP_UNKNOWN, DCamera* data = nullptr);
+
 	CCamera(int UID, Component_Type type = COMP_UNKNOWN, DCamera* data = nullptr);
 	
 	CCamera(GameObject* object, int UID, Component_Type type = COMP_TRANSFORMATION, DCamera* data = nullptr);

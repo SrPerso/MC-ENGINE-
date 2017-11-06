@@ -1,6 +1,27 @@
 #include "CCamera.h"
 #include "ModuleDataFile.h"
 
+CCamera::CCamera(Component_Type type, DCamera * data) :Component(UID, COMP_CAMERA)
+{
+
+	name = "Camera";
+	this->aspectRatio = aspectRatio;
+	this->aspectRatio = (float)16 / 9;
+	frustum.type = data->frustum.type;
+	frustum.pos = data->frustum.pos;
+	frustum.front = data->frustum.front;
+	frustum.up = data->frustum.up;
+	frustum.nearPlaneDistance = data->frustum.nearPlaneDistance;
+	frustum.farPlaneDistance = data->frustum.farPlaneDistance;
+	FOV = 15;
+	frustum.verticalFov = DEGTORAD * FOV;
+	frustum.horizontalFov = 2.f * atanf((tanf(frustum.verticalFov * 0.5f)) * (aspectRatio));
+
+	frustum.ProjectionMatrix();
+	dType = D_CAMERA;
+	//frustumCulling = true;
+
+}
 
 
 
@@ -90,13 +111,9 @@ void CCamera::OnInspector()
 
 void CCamera::OnSave(DataJSON & file) const
 {
-	//float FOV;
-	//float aspectRatio;
-	//Frustum frustum;
-	//bool Active;
-	//bool needToCull;
-
+	file.AddInt("Component UID", UID);
 	file.AddInt("Component Type", Ctype);
+
 	file.AddFloat("FOV", FOV);
 	file.AddFloat("Aspect Radio", aspectRatio);
 
@@ -113,13 +130,16 @@ void CCamera::OnSave(DataJSON & file) const
 
 void CCamera::OnLoad(DataJSON & file)
 {
-	file.AddInt("Component Type", Ctype);
-	file.AddFloat("FOV", FOV);
-	file.AddFloat("Aspect Radio", aspectRatio);
+	UID = file.GetFloat("Component UID");
 
+	FOV = file.GetFloat("FOV");
+	aspectRatio = file.GetFloat("Aspect Radio");
 
+	frustum.farPlaneDistance = file.GetFloat("Frustum Far");
+	frustum.nearPlaneDistance = file.GetFloat("Frustum Near");
 	frustum.horizontalFov = file.GetFloat("HFOV");
 	frustum.verticalFov = file.GetFloat("VFOV");
+
 	frustum.pos.x = file.GetFloat("Frustum Pos", 0);
 	frustum.pos.y = file.GetFloat("Frustum Pos", 1);
 	frustum.pos.z = file.GetFloat("Frustum Pos", 2);

@@ -15,6 +15,7 @@ public:
 	float3 scale;
 	Quat rotation;
 	float angle;
+
 	float3 GetPosition()const;
 	float3 GetScale()const;
 	Quat GetRotation()const;

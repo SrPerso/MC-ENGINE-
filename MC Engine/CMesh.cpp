@@ -74,8 +74,7 @@ void CMesh::OnInspector()
 		ImGui::Text("\t Number of Normals: %i", nNormals);
 		ImGui::Text("\t Normals ID: %i", idNormals);
 
-		ImGui::Text("\t Colors ID: %i", idColors);
-		
+		ImGui::Text("\t Colors ID: %i", idColors);		
 
 		ImGui::Text("\t ID: %i", this->object->GetGOId());
 
@@ -85,11 +84,14 @@ void CMesh::OnInspector()
 
 void CMesh::OnSave(DataJSON & file) const
 {
-
+	file.AddInt("Component UID", UID);
+	file.AddInt("Component Type", Ctype);
 }
 
 void CMesh::OnLoad(DataJSON & file)
 {
+	UID = file.GetFloat("Component UID");
+
 }
 
 void CMesh::Move(float3 destiny, float3 start)
