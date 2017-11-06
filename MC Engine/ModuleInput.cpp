@@ -220,23 +220,29 @@ void ModuleInput::SpeakersConectedDisable()
 	speakersConected = false;
 }
 
-float ModuleInput::GetNormalized_x() const
+float ModuleInput::GetNormalized_x() 
 {
+	int w;
+	w = App->window->GetWidth();
+
+
+	normalized_x = (float)(mouse_x / (float)w);
 	return normalized_x;
 }
 
-float ModuleInput::GetNormalized_y() const
+float ModuleInput::GetNormalized_y() 
 {
+	int h;
+
+	h = App->window->GetHeight();
+
+
+	normalized_y = (float)(mouse_y / (float)h);
+
 	return normalized_y;
 }
 
 void ModuleInput::NormalizeMouse()
-{
-	int w, h;
-	w = App->window->GetWidth();
-	h = App->window->GetHeight();
-
-	normalized_x = (float)(w / mouse_x);
-	normalized_y = (float)(h / mouse_y);
+{	
 
 }

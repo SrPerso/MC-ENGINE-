@@ -78,6 +78,7 @@ public:
 
 	void OnEditor();
 	void OnInspector();
+	void OnSelection();
 
 	//DATA ------------------------------------
 
@@ -89,12 +90,14 @@ public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> childs;
 	AABB recalculatedBox;
+	bool Selected;
 
 private:
 	std::string name;
 	GameObject* parent = nullptr;
 	bool isEnable = true;
 	bool isStatic;
+
 
 
 private: 

@@ -38,7 +38,7 @@ bool ModuleSceneIntro::Start()
 	App->camera->mainCam = (CCamera*)camera->GetComponent(COMP_CAMERA);
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
-	MinDistance = MINDISTANCE;
+	
 
 	return ret;
 }
@@ -149,13 +149,12 @@ GameObject* ModuleSceneIntro::SelectObject(LineSegment  picking)
 	
 	if (closest != nullptr) 
 	{
-		closest=IntersectTriangle(picking, closest);
-		
+		//closest=IntersectTriangle(picking, closest);
+		//closest->Selected = true;
 	
 	}
 	else 
-	{
-		
+	{		
 		for (std::list<GameObject*>::iterator it = DistanceList.begin(); it != DistanceList.end(); ++it)
 		{
 
@@ -168,6 +167,7 @@ GameObject* ModuleSceneIntro::SelectObject(LineSegment  picking)
 
 GameObject*  ModuleSceneIntro::IntersectAABB(LineSegment picking)
 {
+	MinDistance = MINDISTANCE;
 	GameObject* Closest = nullptr;
 	
 	CTransformation* transform= nullptr;
@@ -261,6 +261,15 @@ GameObject* ModuleSceneIntro::IntersectTriangle(LineSegment picking, GameObject 
 
 void ModuleSceneIntro::ObjectSelected(GameObject * selected)
 {
+	if (selected != nullptr && selected != sceneSelected) 
+	{
+	
+		sceneSelected = selected;
+	}
+	else 
+	{
+		sceneSelected = nullptr;
+	}
 }
 
 
@@ -292,6 +301,11 @@ update_status ModuleSceneIntro::Update(float dt)
 	p.color = White;
 	p.axis = false;
 	p.Render();
+
+	if(sceneSelected != nullptr)
+	{
+		sceneSelected->OnSelection();
+	}
 
 	return UPDATE_CONTINUE;
 

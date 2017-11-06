@@ -44,6 +44,7 @@ public:
 	GObjectManager* goManager = nullptr;
 	ModuleSceneIntro* scene_intro = nullptr;
 	DataJSON* jtsonData = nullptr;
+	DataFBX* fbxdata = nullptr;
 	ModuleTexture* texture = nullptr;
 	ModuleTimeManager* timeManager = nullptr;
 	

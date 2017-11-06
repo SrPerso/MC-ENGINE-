@@ -33,7 +33,7 @@ GameObject::GameObject()
 GameObject::GameObject(GameObject* parent): parent(parent)
 {
 	name = "GameObject_";	
-
+	Selected = false;
 
 	if (parent != nullptr)
 	{
@@ -407,6 +407,17 @@ void GameObject::OnEditor()
 
 		ImGui::TreePop();
 	}
+}
+
+void GameObject::OnSelection() 
+{
+	//if (Selected) {
+		App->ui->show_Inspector_window = true;
+		for (int i = 0; i < components.size(); i++)
+		{		
+			App->ui->ShowInspectorWindow(components[i],(bool*) true);
+		}
+	//}
 }
 
 void GameObject::OnInspector()

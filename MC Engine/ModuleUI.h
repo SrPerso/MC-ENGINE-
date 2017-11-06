@@ -7,11 +7,8 @@
 #include <string>
 #include <vector>
 #include "Component.h"
-
+//#include "ModuleAudio.h"
 #define MAX_FPSMS_COUNT 80
-#define FILE_LIMIT 250
-
-enum file_Window_Status { closed,opened,RdyToClose};
 
 class UIMenu;
 struct AudioSetings;
@@ -50,18 +47,11 @@ public:
 	IMGUI_API void ShowEditorWindow(bool* p_open = NULL);
 	IMGUI_API void ShowInspectorWindow(Component* component= NULL,bool* p_open = NULL);
 
-
-	//load file window
-	IMGUI_API void  ShowLoadFileWindow(const char* filePath, const char* dirPath);
-	const char * CloseFileWindow();
-	void DrawDirectory(const char* dir, const char* extension);
-
-	//logs
 	void AddLogToConsole(std::string toAdd);
 	void AddLogToConsole(std::string toAdd,int dataToAdd);
 	void AddLogToConsole(const char file[], int line, const char* format, ...);
 
-	bool show_Inspector_window = false;
+
 private:
 	std::vector<std::string> consoleTxt;
 	std::vector<float> FPSData;
@@ -70,7 +60,6 @@ private:
 public: //setings structure
 	WindowSetings WindowSetingsS;
 	AudioSetings AudioSetingsS;
-
 
 private:
 	// engine main menu bar
@@ -98,7 +87,9 @@ private:
 	bool show_Editor_window = true;
 	
 
-private:	//Geometry Test //TO CLEAN
+	
+
+	//Geometry Test
 	float cubex = 0, cubey = 0, cubez = 0;
 	float cubeposX = 0, cubeposY = 0, cubeposZ = 0;
 
@@ -117,17 +108,15 @@ private:	//Geometry Test //TO CLEAN
 	vec3 Cube2size;
 	vec3 Cube2pos;
 
-public:// file window
-	char selectedFile[FILE_LIMIT];
-	file_Window_Status fileWStatus = closed;
-
-public: // Drawin settings
+public: //
 	bool sb_Depth_Test = true;
 	bool sb_Cull_Face = true;
 	bool sb_Wire_Face = false;
 	bool sb_Lighting = true;
 	bool sb_Color_Material = true;
 	bool sb_Texture_2D = true;
+
+	bool show_Inspector_window = false;
 	
 //debug
 	bool debug_active;

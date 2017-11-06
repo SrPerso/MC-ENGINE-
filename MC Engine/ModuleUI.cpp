@@ -14,8 +14,7 @@
 #include "ModuleGameObjectManager.h"
 #include "GameObject.h"
 
-#include <string.h>
-#include <algorithm>
+
 
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
@@ -507,7 +506,6 @@ IMGUI_API void ModuleUI::ShowEditorWindow(bool * p_open)
 	ImGuiWindowFlags window_flags = 0;
 
 	window_flags |= ImGuiWindowFlags_NoTitleBar;
-	window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	//window_flags |= ImGuiWindowFlags_NoMove;
 	//window_flags |= ImGuiWindowFlags_NoResize;
 
@@ -569,112 +567,6 @@ IMGUI_API void ModuleUI::ShowInspectorWindow(Component* component, bool * p_open
 	return IMGUI_API void();
 }
 
-IMGUI_API void ModuleUI::ShowLoadFileWindow(const char * filePath, const char * dirPath)
-{
-	ImGuiWindowFlags window_flags = 0;
-
-	window_flags |= ImGuiWindowFlags_NoTitleBar;
-	window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-
-	ImGui::OpenPopup("Load File");
-
-	if (ImGui::BeginPopupModal("Load File", nullptr, window_flags))
-	{
-		ImGui::PushStyleVar(ImGuiStyleVar_ChildWindowRounding, 5.0f);
-		ImGui::BeginChild("File Browser", ImVec2(0, 300), true);
-
-		DrawDirectory(dirPath, filePath);
-
-		ImGui::EndChild();
-		ImGui::PopStyleVar();
-
-		ImGui::PushItemWidth(250.f);
-
-		ImGuiWindowFlags fileSelector_Flags = 0;
-
-		fileSelector_Flags |= ImGuiInputTextFlags_EnterReturnsTrue;
-		fileSelector_Flags |= ImGuiInputTextFlags_AutoSelectAll;
-
-		if (ImGui::InputText("##file_selector", selectedFile, FILE_LIMIT, fileSelector_Flags))
-			fileWStatus = RdyToClose;
-
-		ImGui::PopItemWidth();
-		ImGui::SameLine();
-
-		if (ImGui::Button("Ok", ImVec2(50, 20)))
-			fileWStatus = RdyToClose;
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Cancel", ImVec2(50, 20)))
-		{
-			fileWStatus = RdyToClose;
-			selectedFile[0] = '\0';
-		}
-
-		ImGui::EndPopup();
-	}
-
-	return IMGUI_API void();
-}
-
-const char * ModuleUI::CloseFileWindow() 
-{
-	if (this->fileWStatus == RdyToClose)
-	{
-		fileWStatus = closed;
-
-		if (selectedFile[0])
-			return selectedFile;
-		else
-			return nullptr;
-	}
-	return nullptr;
-}
-
-void ModuleUI::DrawDirectory(const char * dir, const char * extension)
-{
-	std::vector<std::string> files;
-	std::vector<std::string> dirs;
-
-	std::string dire((dir) ? dir : "");
-	dire="/";
-	
-	//make a file finders
-
-	for (std::vector<std::string> ::const_iterator it = dirs.begin(); it != dirs.end(); ++it)
-	{
-		if (ImGui::TreeNodeEx((dir + (*it)).c_str(), 0, "%s/", (*it).c_str()))
-		{
-			DrawDirectory((dir + (*it)).c_str(), extension);
-			ImGui::TreePop();
-		}
-	}
-
-	std::sort(files.begin(), files.end());
-
-	for (std::vector<std::string>::const_iterator it = files.begin(); it != files.end(); ++it)
-	{
-		const std::string& str = *it;
-
-		bool ok = true;
-
-		if (extension && str.substr(str.find_last_of(".") + 1) != extension)
-			ok = false;
-
-		if (ok && ImGui::TreeNodeEx(str.c_str(), ImGuiTreeNodeFlags_Leaf))
-		{
-			if (ImGui::IsItemClicked()) {
-				sprintf_s(selectedFile, FILE_LIMIT, "%s%s", dire.c_str(), str.c_str());
-
-				if (ImGui::IsMouseDoubleClicked(0))
-					fileWStatus = RdyToClose;
-			}
-
-			ImGui::TreePop();
-		}
-	}
-}
 
 //show the logs on Console..................................................
 void ModuleUI::AddLogToConsole(std::string toAdd)
@@ -1350,7 +1242,6 @@ update_status ModuleUI::FileMenuBar()
 
 	if (ImGui::MenuItem("Clean Scene", "Ctrl + Supr")) //TO FIX
 		App->goManager->root->DeleteChilds();
-
 
 
 	if (ImGui::MenuItem("Quit", "ESC"))

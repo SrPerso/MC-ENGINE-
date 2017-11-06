@@ -59,6 +59,8 @@ public:
 	GlobalDebugInfo sceneDebugInfo;
 
 	float MinDistance;
+
+	GameObject* sceneSelected = nullptr;
 public:
 	void CreateCylinder(const float x, const float y, const float z, const float radious, const float h);
 };

@@ -50,4 +50,20 @@ private:
 };
 
 
+class DataFBX:public Module {
+public:
+	DataFBX(Application* app, bool start_enabled = true);
+	~DataFBX();
+
+	bool Init();
+	bool Start();
+	bool CleanUp();
+public:
+	bool LoadMesh(const char* path);
+
+
+
+};
+
+
 #endif

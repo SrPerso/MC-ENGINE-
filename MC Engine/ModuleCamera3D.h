@@ -41,7 +41,7 @@ public:
 	DCamera* dcamera = nullptr;
 	CCamera* mainCam = nullptr;
 	CCamera* editorCam= nullptr;
-
+	GameObject* selected=nullptr;
 	LineSegment thispick;
 private:
 
