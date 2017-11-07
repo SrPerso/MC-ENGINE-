@@ -33,6 +33,8 @@
 class Application
 {
 public:
+	math::LCG* randGen = nullptr;
+
 	ModuleWindow* window = nullptr;
 	ModuleInput* input = nullptr;
 	ModuleAudio* audio = nullptr;
@@ -43,12 +45,9 @@ public:
 	ModulePhysics3D* physics = nullptr;
 	GObjectManager* goManager = nullptr;
 	ModuleSceneIntro* scene_intro = nullptr;
-	DataJSON* jtsonData = nullptr;
 	ModuleTexture* texture = nullptr;
 	ModuleTimeManager* timeManager = nullptr;
 	
-
-	math::LCG* randGen = nullptr;
 
 private:
 

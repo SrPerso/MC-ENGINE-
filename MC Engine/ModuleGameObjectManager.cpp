@@ -5,9 +5,7 @@
 GObjectManager::GObjectManager(Application * app, bool start_enabled):Module(app, start_enabled)
 {
 	LOG("Creating ROOT");
-	root = new GameObject(nullptr);
-	root->SetName("SceneRoot");
-
+	
 	name = "Game Object Manager";
 }
 
@@ -21,6 +19,11 @@ GObjectManager::~GObjectManager()
 bool GObjectManager::Init()
 {
 	bool ret = true;
+
+	root = new GameObject(nullptr);
+	root->SetName("SceneRoot");
+	root->SetGOUID(0); // root must have uid 0
+
 	return ret;
 }
 

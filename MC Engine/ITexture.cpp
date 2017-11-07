@@ -29,6 +29,7 @@ ImporterTexture::~ImporterTexture()
 
 DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  FilePath)
 {
+	LOGUI("-------------------------------------------");
 	DTexture* ret = new DTexture();
 
 	if (newMaterial != nullptr)
@@ -56,7 +57,8 @@ DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  F
 			ret->Textname = newpath;
 
 		}
-		else {
+		else 
+		{
 
 			int length = strlen(path.C_Str());
 			std::string namePath = path.C_Str();
@@ -81,4 +83,14 @@ DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  F
 	glBindTexture(GL_TEXTURE_2D, ret->image);
 
 	return ret;
+}
+
+DTexture * ImporterTexture::Load(const void * buffer, const char * loadFile, uint id)
+{
+	return nullptr;
+}
+
+bool ImporterTexture::Save(const void * buffer, const char * saverFile, uint id)
+{
+	return false;
 }

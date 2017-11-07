@@ -14,6 +14,9 @@
 #include "ModuleGameObjectManager.h"
 #include "GameObject.h"
 
+
+#include <fstream>
+
 #include <string.h>
 #include <algorithm>
 
@@ -674,6 +677,32 @@ void ModuleUI::DrawDirectory(const char * dir, const char * extension)
 			ImGui::TreePop();
 		}
 	}
+}
+
+void ModuleUI::SaveScene(const char*fileName)
+{
+	DataJSON dataToSave;
+	dataToSave.AddArray("Scene Game Objects");
+
+	App->goManager->root->OnSerialize(dataToSave);
+
+	char* buffer = nullptr;
+	uint fileSize = dataToSave.buffSizeSaver(&buffer, "Scene file save");
+
+	LOGUI("-------------------------------------------");
+	LOGUI("[SERIALIZE]- Creating file to save  %s", fileName);
+	
+	std::string path;
+
+	path = "Assets/";
+	path.append(fileName);
+	path.append(".MCscene");
+
+	std::ofstream file(path.c_str(), std::ofstream::out | std::ofstream::binary);
+	file.write(buffer, fileSize);
+	file.close();
+
+	RELEASE_ARRAY(buffer);
 }
 
 //show the logs on Console..................................................
@@ -1345,11 +1374,18 @@ update_status ModuleUI::FileMenuBar()
 {
 	update_status ret = UPDATE_CONTINUE;
 
-	if (ImGui::MenuItem("Save Scene", "Ctrl + S"))
+	if (ImGui::MenuItem("Save", "Ctrl + S"))
 		App->datamanager->SaveAllData();
 
 	if (ImGui::MenuItem("Clean Scene", "Ctrl + Supr")) //TO FIX
 		App->goManager->root->DeleteChilds();
+
+
+	if (ImGui::MenuItem("Save scene", "Ctrl + S + D"))
+	{
+	
+		SaveScene("scene");
+	}
 
 
 

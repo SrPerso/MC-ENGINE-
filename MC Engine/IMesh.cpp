@@ -23,7 +23,7 @@ ImporterMesh::~ImporterMesh()
 
 DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, uint id)
 {
-
+	LOGUI("-------------------------------------------");
 	aiMesh* newMesh = buffer;
 
 	if (newMesh != nullptr)
@@ -133,6 +133,8 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, uint id)
 		App->camera->CenterCameraToObject(&mesh->debugBox);
 		object->SetLocalTransform();
 
+		LOGUI("-------------------------------------------");
+
 		//delete mesh;	
 		Save(mesh, nullptr, id);
 		
@@ -186,6 +188,7 @@ DTransformation* ImporterTrans::ImportTrans(aiNode* node, GameObject* object, ui
 DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile, uint id)
 {
 
+
 	DTransformation* data = new DTransformation();
 	//data = (DMesh*)buffer;
 	std::string path; //path to load
@@ -222,6 +225,7 @@ DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile
 
 		if (file.read(datafile, size))
 		{
+	
 			LOGUI("[READING]- %s", path.c_str());
 		}
 		else

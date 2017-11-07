@@ -43,6 +43,14 @@ public:
 	uint GetParentId()const;
 	void SetGOID(uint parentID);
 	int GetGOId()const;
+
+
+	void SetParentUID(int parentUID);
+	int GetParentUID()const;
+
+	void SetGOUID(int UID);
+	int GetGOUId()const;
+	
 	//TO ADD 
 	// to move the objects and change the parent is necesary a function newparent(gameobject)
 	
@@ -103,11 +111,10 @@ private:
 	bool isEnable = true;
 	bool isStatic;
 
-
 private: 
-
 	uint Parent_ID = 0;
 	uint GameOIbject_ID = 0;
-
+	uint Parent_UID = 0;
+	uint GameOIbject_UID = 0;
 };
 #endif
