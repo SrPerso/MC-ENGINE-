@@ -20,7 +20,7 @@ Mabe by:
 - Carlos Peralta Sorolla
 [![GitHub issues](https://img.shields.io/badge/Github-Carlos-yellowgreen.svg)](https://github.com/SrPerso) 
 
-- Marc Samper TarancÛn
+- Marc Samper Taranc√≥n
 [![GitHub issues](https://img.shields.io/badge/Github-Marc-yellowgreen.svg)](https://github.com/marcsamper)
  
 # USAGE
@@ -29,11 +29,11 @@ Download the last release and execute the file "MC Engine.exe"
 
 # CONTROLS
 
-* Right click turns on ìWASDî fps-like movement.
+* Right click turns on ‚ÄúWASD‚Äù fps-like movement.
 * L.Shift to quick move.
 * Mouse wheel do zoom in and out.
 * Alt+Left click orbits the object.
-* Pressing ìfî the camera focus around the geometry.
+* Pressing ‚Äúf‚Äù the camera focus around the geometry.
 * Mouse left click to interact with the ui.
 * Drag and drop a .fbx file to import it into the scene.
 * Drag and drop a .png to change the texture.
@@ -48,7 +48,7 @@ Download the last release and execute the file "MC Engine.exe"
    - Shows Normals vectors.
    - Shows enclosing box.
 
-# LICENCE
+# LICENSE
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
