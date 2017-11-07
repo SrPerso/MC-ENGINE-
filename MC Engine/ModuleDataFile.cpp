@@ -34,10 +34,15 @@ DataJSON::DataJSON()
 
 }
 
+DataJSON::DataJSON(std::string name)
+{
+	value_json = json_parse_file(name.c_str());
+	object_json = json_value_get_object(value_json);
+}
+
 DataJSON::DataJSON(JSON_Object*fileobject)
 {
 	object_json = fileobject;
-
 }
 
 
@@ -254,10 +259,10 @@ DataJSON DataJSON::AddSection(const char * name, JSON_Object * object)
 
 void DataJSON::AddInt(const char * name, int number, JSON_Object * object)
 {
-	if(object)
-		json_object_set_number(object, name, (int)number);
+	if(object!=nullptr)
+		json_object_set_number(object, name, number);
 	else 
-		json_object_set_number(object_json, name, (int)number);
+		json_object_set_number(object_json, name, number);
 }
 
 void DataJSON::AddFloat(const char * name, float number, JSON_Object * object)
@@ -336,4 +341,14 @@ void DataJSON::AddArray(const char * nstring)
 	}
 
 
+}
+
+size_t DataJSON::buffSizeSaver(char ** buffer, const char * comment)
+{
+	size_t serSize = json_serialization_size(value_json);
+
+	*buffer = new char[serSize];
+	json_serialize_to_buffer(value_json, *buffer, serSize);
+
+	return size_t(serSize);
 }

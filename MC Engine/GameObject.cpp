@@ -16,6 +16,8 @@ GameObject::GameObject()
 
 	name = "GameObject_";
 
+	GameOIbject_UID = App->randGen->Int();
+
 
 	if (parent != nullptr)
 	{
@@ -33,8 +35,9 @@ GameObject::GameObject()
 GameObject::GameObject(GameObject* parent): parent(parent)
 {
 	name = "GameObject_";	
-
-
+	
+	GameOIbject_UID = App->randGen->Int();
+	
 	if (parent != nullptr)
 	{
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
@@ -172,6 +175,26 @@ void GameObject::SetGOID(uint newID)
 int GameObject::GetGOId()const
 {
 	return int(GameOIbject_ID);
+}
+
+void GameObject::SetParentUID(int parentUID)
+{
+	Parent_UID = parentUID;
+}
+
+int GameObject::GetParentUID() const
+{
+	return Parent_UID;
+}
+
+void GameObject::SetGOUID(int UID)
+{
+	GameOIbject_UID = UID;
+}
+
+int GameObject::GetGOUId() const
+{
+	return GameOIbject_UID;
 }
 
 Component * GameObject::CreateComponent(Component_Type type, const void*buffer)
@@ -443,12 +466,12 @@ void GameObject::OnSerialize(DataJSON & file) const
 {
 	if (this != App->goManager->GetRoot())
 	{
-		DataJSON dataOnFile = nullptr;
+		DataJSON dataOnFile;
 
 		dataOnFile.AddString("Name", name.c_str());
 
 		// --  save UID 
-		dataOnFile.AddInt("UID", GameOIbject_ID);
+		dataOnFile.AddInt("UID", GameOIbject_UID);
 
 		if (this->GetParent() != App->goManager->GetRoot())
 			dataOnFile.AddInt("Parent UID", parent->GetGOId());

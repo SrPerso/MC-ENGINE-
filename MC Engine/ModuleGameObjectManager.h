@@ -27,8 +27,6 @@ public:
 
 	GameObject* root = nullptr;
 
-
-	DataJSON* DJsonSaver;
 };
 
 #endif

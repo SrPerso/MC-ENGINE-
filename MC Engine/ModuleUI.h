@@ -56,12 +56,18 @@ public:
 	const char * CloseFileWindow();
 	void DrawDirectory(const char* dir, const char* extension);
 
+	// Save scene
+
+	void SaveScene(const char*fileName);
+
 	//logs
 	void AddLogToConsole(std::string toAdd);
 	void AddLogToConsole(std::string toAdd,int dataToAdd);
 	void AddLogToConsole(const char file[], int line, const char* format, ...);
 
 	bool show_Inspector_window = false;
+
+
 private:
 	std::vector<std::string> consoleTxt;
 	std::vector<float> FPSData;
@@ -78,6 +84,8 @@ private:
 	void EditMenuBar();
 	void HelpMenuBar();
 	void WindowMenuBar();
+
+
 	void GeometryMenuCube();
 	void GeometryMenuSphere();
 	void GeometryMenuCylinder();

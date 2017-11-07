@@ -14,6 +14,7 @@
 class DataJSON {
 public:
 	DataJSON();
+	DataJSON(std::string name);
 	DataJSON(JSON_Object*);
 	~DataJSON();
 
@@ -45,9 +46,11 @@ public:
 	void AddArray(const DataJSON& object);
 	void AddArray(const char* nstring);
 
+	size_t buffSizeSaver(char ** buffer, const char * comment);
 private: 
 
 	std::list<std::string> files;
+
 	JSON_Value* value_json = nullptr;
 	JSON_Object* object_json = nullptr;
 
