@@ -167,7 +167,27 @@ update_status ModuleInput::PreUpdate(float dt)
 
 		}
 	}
+	if (keyboard[SDL_SCANCODE_W] == KEY_DOWN) 
+	{
+		E = false;
+		R = false;
+		W = true;
+	}
 
+	if (keyboard[SDL_SCANCODE_E] == KEY_DOWN)
+	{
+		
+		R = false;
+		W = false;
+		E = true;
+	}
+
+	if (keyboard[SDL_SCANCODE_R] == KEY_DOWN)
+	{		
+		W = false;
+		E = false;
+		R = true;
+	}
 	if(quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_UP)
 		return UPDATE_STOP;
 

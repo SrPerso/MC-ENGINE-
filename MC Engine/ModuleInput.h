@@ -57,6 +57,21 @@ public:
 	{
 		return mouse_y_motion;
 	}
+
+	bool GetW()const 
+	{
+		return W;
+	}
+
+	bool GetE()const
+	{
+		return E;
+	}
+
+	bool GetR()const
+	{
+		return R;
+	}
 public: //devices
 	bool KeyBoardConected();
 	bool SpeakersConected();
@@ -70,6 +85,8 @@ public: //devices
 	float GetNormalized_x();
 	float GetNormalized_y() ;
 
+
+	
 	
 private:
 	KEY_STATE* keyboard;
@@ -80,6 +97,9 @@ private:
 	int mouse_x_motion;
 	int mouse_y_motion;
 
+	bool W;
+	bool E;
+	bool R;
 
 	//ray
 	float normalized_x;

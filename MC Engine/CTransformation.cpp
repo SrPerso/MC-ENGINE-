@@ -60,8 +60,19 @@ void CTransformation::OnGuizmo() {
 	App->window->GetWidth(w);
 	App->window->GetHeight(h);
 	ImGuizmo::SetRect(0, 0, (float)w, float(h));
+	if (App->input->GetW() == true)
+	{
+		ImGuizmo::Manipulate(mat.Transposed().ptr(), App->camera->editorCam->frustum.ViewProjMatrix().Transposed().ptr(), ImGuizmo::TRANSLATE, ImGuizmo::WORLD, globalTransformMatrix.ptr());
+	}
+	else if (App->input->GetE() == true)
+	{
+		ImGuizmo::Manipulate(mat.Transposed().ptr(), App->camera->editorCam->frustum.ViewProjMatrix().Transposed().ptr(), ImGuizmo::ROTATE, ImGuizmo::WORLD, globalTransformMatrix.ptr());
+	}
+	else if (App->input->GetR() == true)
+	{
+		ImGuizmo::Manipulate(mat.Transposed().ptr(), App->camera->editorCam->frustum.ViewProjMatrix().Transposed().ptr(), ImGuizmo::SCALE, ImGuizmo::WORLD, globalTransformMatrix.ptr());
+	}
 	
-	ImGuizmo::Manipulate(mat.Transposed().ptr(), App->camera->editorCam->frustum.ViewProjMatrix().Transposed().ptr(), ImGuizmo::ROTATE, ImGuizmo::WORLD, globalTransformMatrix.ptr());
 
 	
 
