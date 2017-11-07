@@ -16,17 +16,18 @@ GameObject::GameObject()
 
 	name = "GameObject_";
 
-	GameOIbject_UID = App->randGen->Int();
-
+	SetGOUID(App->randGen->Int());
 
 	if (parent != nullptr)
 	{
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
 		parent->AddChild(this);
+
+		SetParentUID(parent->GetGOUId());
 	}
 	else
 	{
-		this->GameOIbject_ID = 0;
+		SetParentUID(0);
 	}
 
 	name.append(std::to_string(GameOIbject_ID));
@@ -36,16 +37,17 @@ GameObject::GameObject(GameObject* parent): parent(parent)
 {
 	name = "GameObject_";	
 	
-	GameOIbject_UID = App->randGen->Int();
+	SetGOUID(App->randGen->Int());
 	
 	if (parent != nullptr)
 	{
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
 		parent->AddChild(this);
+		SetParentUID(parent->GetGOUId());
 	}
 	else 
 	{
-		this->GameOIbject_ID = 0;
+		SetParentUID(0);
 	}
 
 	name.append(std::to_string(GameOIbject_ID));
@@ -203,31 +205,32 @@ Component * GameObject::CreateComponent(Component_Type type, const void*buffer)
 		COMP_UNKNOWN,COMP_MESH,COMP_TEXTURE,COMP_CAMERA,COMP_SOUND
 	*/
 
+	int newUID = App->randGen->Int();
 	Component* ret = nullptr;
 
 	switch (type)
 	{
 	case COMP_MESH:
 
-		ret = new CMesh(this, App->randGen->Int(), COMP_MESH,(DMesh*)buffer);
+		ret = new CMesh(this, newUID, COMP_MESH,(DMesh*)buffer);
 		this->components.push_back(ret);
 
 		break;
 	case COMP_TRANSFORMATION:
 
-		ret = new CTransformation(this, App->randGen->Int(), COMP_TRANSFORMATION, (DTransformation*)buffer);
+		ret = new CTransformation(this, newUID, COMP_TRANSFORMATION, (DTransformation*)buffer);
 		this->components.push_back(ret);
 
 		break;
 	case COMP_TEXTURE:
 	
-		ret = new CTexture(this, App->randGen->Int() , COMP_TEXTURE, (DTexture*)buffer);
+		ret = new CTexture(this, newUID, COMP_TEXTURE, (DTexture*)buffer);
 		this->components.push_back(ret);
 		
 		break;
 	case COMP_CAMERA:
 		//DCamera* camera = new DCamera();
-		ret = new CCamera(this, App->randGen->Int(), COMP_CAMERA, (DCamera*)buffer);
+		ret = new CCamera(this, newUID, COMP_CAMERA, (DCamera*)buffer);
 		this->components.push_back(ret);
 
 		break;
@@ -482,20 +485,18 @@ void GameObject::OnSerialize(DataJSON & file) const
 		dataOnFile.AddString("Name", name.c_str());
 
 		// --  save UID 
-		dataOnFile.AddInt("UID", GameOIbject_UID);
-
-		if (this->GetParent() != App->goManager->GetRoot())
-			dataOnFile.AddInt("Parent UID", parent->GetGOId());
-		else
-			dataOnFile.AddInt("Parent UID", -1);
+		dataOnFile.AddInt("UID", GetGOUId());
 		
+		dataOnFile.AddInt("Parent UID", GetParentUID());
+				
 		// --	components info
 		dataOnFile.AddArray("Components");
 
-		DataJSON componentData = nullptr;
+		DataJSON componentData ;
 
 		for (int i = 0; i < components.size(); i++)
 		{
+
 			components[i]->OnSave(componentData);
 			dataOnFile.AddArray(componentData);
 		}

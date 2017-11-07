@@ -5,8 +5,7 @@
 
 
 CTransformation::CTransformation(GameObject * object,int UID, Component_Type type, DTransformation* data) :Component(object, UID, type)
-{
-	
+{	
 	if (data)
 	{
 			position = data->position;
@@ -16,11 +15,7 @@ CTransformation::CTransformation(GameObject * object,int UID, Component_Type typ
 			angle = data->angle;
 			rotation = data->rotation;
 			globalTransformMatrix = data->globalTransformMatrix;
-
-
 			localTransformMatrix = data->localTransformMatrix;
-		
-
 	}
 	if (object != nullptr)
 	{
@@ -46,9 +41,7 @@ void CTransformation::OnUpdate(float dt)
 	{		
 		position = destiny;
 		TransUpdate();
-
-		//UpdateTrans = false;
-		
+		//UpdateTrans = false;		
 	}
 
 	
@@ -161,6 +154,7 @@ void CTransformation::OnInspector() {
 void CTransformation::OnSave(DataJSON & file) const
 {
 	file.AddInt("Component UID", UID);
+
 	file.AddInt("Component Type", Ctype);
 
 	file.AddArrayF("Position", &position.x, 3);

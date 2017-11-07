@@ -33,7 +33,7 @@
 class Application
 {
 public:
-	math::LCG* randGen = nullptr;
+
 
 	ModuleWindow* window = nullptr;
 	ModuleInput* input = nullptr;
@@ -47,7 +47,8 @@ public:
 	ModuleSceneIntro* scene_intro = nullptr;
 	ModuleTexture* texture = nullptr;
 	ModuleTimeManager* timeManager = nullptr;
-	
+
+	math::LCG* randGen = nullptr;
 
 private:
 

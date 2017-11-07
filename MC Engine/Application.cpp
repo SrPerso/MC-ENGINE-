@@ -8,7 +8,7 @@
 
 Application::Application()
 {
-	randGen = new math::LCG();
+
 
 	timeManager = new ModuleTimeManager(this);
 	window = new ModuleWindow(this);
@@ -24,7 +24,7 @@ Application::Application()
 	goManager = new GObjectManager(this);
 	texture = new ModuleTexture(this);
 	
-
+	randGen = new math::LCG();
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
