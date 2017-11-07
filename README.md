@@ -8,10 +8,21 @@ APPVEYOR STATUS:
 
 [![Build status](https://ci.appveyor.com/api/projects/status/2e9av5y6o70lle38?svg=true)](https://ci.appveyor.com/project/SrPerso/mc-engine)
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+[![GitHub issues](https://img.shields.io/github/issues/SrPerso/MC-ENGINE-.svg)](https://github.com/SrPerso/MC-ENGINE-/issues)
+
+
 ## TEAM
 
-Mabe by Carlos Peralta (https://github.com/SrPerso) and Marc Samper (https://github.com/marcsamper).
+Mabe by:
 
+- Carlos Peralta Sorolla
+[![GitHub issues](https://img.shields.io/badge/Github-Carlos-yellowgreen.svg)](https://github.com/SrPerso) 
+
+- Marc Samper Tarancón
+[![GitHub issues](https://img.shields.io/badge/Github-Marc-yellowgreen.svg)](https://github.com/marcsamper)
+ 
 # USAGE
 
 Download the last release and execute the file "MC Engine.exe"
@@ -39,6 +50,8 @@ Download the last release and execute the file "MC Engine.exe"
 
 # LICENCE
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 Apache License 2.0
 
 A permissive license whose main conditions require preservation of copyright and license notices. Contributors provide an express grant of patent rights. Licensed works, modifications, and larger works may be distributed under different terms and without source code.
@@ -58,6 +71,7 @@ Limitations:
 * Warranty
 
 # CHANGELOG
+
 * V0.6
 Added: 
 - Jason update
@@ -79,6 +93,7 @@ Added:
 * V0.3 
 Adds: 
 - appveyor test
+
 *V 0.2
 Adds: 
 - Configuration Window with:
@@ -86,7 +101,8 @@ Adds:
  Window setings : Brightness, with and height. 
 	fullscreen, borderless and fulldesktop Options.
  Hardware info : SDL, CPU, RAM and caps
- .
+
+
 *V 0.1
 Adds:
 - imGui includes
