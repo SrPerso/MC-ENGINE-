@@ -12,7 +12,7 @@ class GameObject;
 class CTexture : public Component, public DTexture
 {
 public:
-	CTexture(GameObject* object,int UID, Component_Type type , DTexture* data);
+	CTexture(GameObject* object,int UID, Component_Type type = COMP_TEXTURE, DTexture* data = nullptr);
 	~CTexture();
 
 	void OnUpdate(float dt) override;

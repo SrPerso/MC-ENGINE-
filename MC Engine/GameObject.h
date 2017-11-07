@@ -38,16 +38,18 @@ public:
 	void AddChild(GameObject* child);
 	GameObject* GetFirstChild() const;
 
-
+	GameObject* FindGameObject(int UID);
+	
+	//IDs System
 	void SetParentID(uint parentID);
 	uint GetParentId()const;
 	void SetGOID(uint parentID);
 	int GetGOId()const;
 
+	//uid
 
 	void SetParentUID(int parentUID);
 	int GetParentUID()const;
-
 	void SetGOUID(int UID);
 	int GetGOUId()const;
 	
@@ -56,7 +58,7 @@ public:
 	
 	//COMPONENTS.................................
 
-	Component* CreateComponent(Component_Type type, const void*buffet = nullptr);
+	Component* CreateComponent(Component_Type type,int UID=-1, const void*buffer = nullptr);
 	Component* GetComponent(Component_Type type);
 	uint ComponentVectorSize()const;
 	uint NumComponentTypeSize(Component_Type type);

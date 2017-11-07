@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "GameObject.h"
 
+#include <fstream>
+
 GObjectManager::GObjectManager(Application * app, bool start_enabled):Module(app, start_enabled)
 {
 	LOG("Creating ROOT");
@@ -81,4 +83,57 @@ void GObjectManager::deleteGameObject(GameObject * GObject)
 			GObject->GetParent()->DeleteChild(GObject);
 		GObject->DeleteChilds();
 	}
+}
+
+void GObjectManager::SaveScene(const char * fileName)
+{
+	DataJSON dataToSave;
+	dataToSave.AddArray("Scene Game Objects");
+
+	App->goManager->root->OnSerialize(dataToSave);
+
+	char* buffer = nullptr;
+	uint fileSize = dataToSave.buffSizeSaver(&buffer, "Scene file save");
+
+	LOGUI("-------------------------------------------");
+	LOGUI("[SERIALIZE]- Creating file to save  {%s}", fileName);
+
+	std::string path;
+
+	path = "Assets/";
+	path.append(fileName);
+	path.append(".MCscene");
+
+	std::ofstream file(path.c_str(), std::ofstream::out | std::ofstream::binary);
+	file.write(buffer, fileSize);
+	file.close();
+
+	RELEASE_ARRAY(buffer);
+}
+
+void GObjectManager::LoadScene(const char * fileName)
+{
+
+	LOGUI("-------------------------------------------");
+	DataJSON dataToLoad;
+
+	if (dataToLoad.CanLoad() != true)
+	{
+		LOGUI("[ERROR]-Loading scene. Can't load file {%s}", fileName);
+		return;
+	}
+
+	root->DeleteChilds();
+
+	for (int i = 0; i < dataToLoad.GetArrayLenght("Scene Game Objects"); i++)
+	{
+		GameObject* temp = new GameObject();
+
+		DataJSON deserialize = dataToLoad.GetArray("Scene Game Objects", i);
+		temp->OnDeserialize(deserialize);
+
+	//	delete temp;
+	}
+
+	LOGUI("[DESERIALIZED]- {%s}", fileName);
 }

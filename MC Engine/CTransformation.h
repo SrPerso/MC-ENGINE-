@@ -21,8 +21,9 @@ class CTransformation : public Component, public DTransformation
 public:
 
 	//CTransformation() :Component(nullptr, COMP_TRANSFORMATION){}
-	CTransformation(GameObject* object,int UID, Component_Type type = COMP_TRANSFORMATION) :Component(object, UID, type) {}
+//	CTransformation(GameObject* object,int UID, Component_Type type = COMP_TRANSFORMATION) :Component(object, UID, type) {}
 	CTransformation(GameObject* object,int UID, Component_Type type = COMP_TRANSFORMATION, DTransformation* data = nullptr);
+
 	~CTransformation();
 
 

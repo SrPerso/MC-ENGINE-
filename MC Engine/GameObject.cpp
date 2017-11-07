@@ -106,7 +106,8 @@ void GameObject::DeleteChild(GameObject * objectToDelete)
 	{
 		std::vector<GameObject*>::iterator it = std::find(childs.begin(), childs.end(), objectToDelete);
 	
-		if (it != childs.end()) {
+		if (it != childs.end()) 
+		{
 			childs.erase(it);
 		}		
 	}
@@ -138,11 +139,10 @@ void GameObject::newParent(GameObject * newparent)
 		}
 
 		this->parent = newparent;
-
+		
 		if (newparent)
-		{
 			newparent->childs.push_back(this);
-		}
+
 	}
 }
 
@@ -157,6 +157,19 @@ void GameObject::AddChild(GameObject * child)
 GameObject * GameObject::GetFirstChild()const
 {
 	return childs[0];
+}
+
+GameObject * GameObject::FindGameObject(int UID)
+{
+	if (UID == GameOIbject_UID)
+		return this;
+
+	GameObject* ret = nullptr;
+
+	for (int i = 0; i < childs.size() && ret == nullptr; i++)
+		ret = childs[i]->FindGameObject(UID);
+
+	return ret;
 }
 
 void GameObject::SetParentID(uint parentID)
@@ -199,13 +212,21 @@ int GameObject::GetGOUId() const
 	return GameOIbject_UID;
 }
 
-Component * GameObject::CreateComponent(Component_Type type, const void*buffer)
+Component * GameObject::CreateComponent(Component_Type type, int UID, const void*buffer)
 {	
 	/*
 		COMP_UNKNOWN,COMP_MESH,COMP_TEXTURE,COMP_CAMERA,COMP_SOUND
 	*/
 
-	int newUID = App->randGen->Int();
+	//UID
+	int newUID;
+
+	if (UID == -1) //is new  
+		newUID = App->randGen->Int();
+	else
+		newUID = UID; // on deseralize
+	
+	// creator
 	Component* ret = nullptr;
 
 	switch (type)
@@ -513,12 +534,85 @@ void GameObject::OnSerialize(DataJSON & file) const
 
 }
 
+void GameObject::OnDeserialize(DataJSON & file)
+{
+	// basic data
+	SetName(file.GetString("Name"));
+	SetGOUID(file.GetInt("UID"));
+	SetParentUID(file.GetInt("Parent UID"));
+
+	// assign parent
+	if (GetParentUID() == 0)
+	{
+		App->goManager->root->AddChild(this);
+	}
+	else
+	{
+		GameObject* parent = App->goManager->GetRoot()->FindGameObject(GetParentUID());
+		if (parent != nullptr)
+		{
+			parent->AddChild(this);
+		}
+	}
+	// Create components
+
+	int nComponents = file.GetArrayLenght("Components"); 
+
+	for (uint i = 0; i < nComponents; ++i)
+	{
+		DataJSON componentConfig(file.GetArray("Components", i));
+	
+		Component_Type cType = (Component_Type)componentConfig.GetInt("Component Type");
+		int componentUID = componentConfig.GetInt("Component UID");
+
+		switch (cType)
+		{
+			case COMP_MESH: //CMesh
+			{
+				CMesh*  cMesh = new CMesh(this, componentUID);
+				cMesh->OnLoad(componentConfig);
+
+				break;
+			}
+			case COMP_TEXTURE://CTexture
+			{
+				CTexture*  cTexture = new CTexture(this, componentUID);
+				cTexture->OnLoad(componentConfig);
+
+				break;
+			}
+			case COMP_CAMERA: //CCamera
+			{
+				CCamera*  cCamera = new CCamera(this, componentUID);
+				cCamera->OnLoad(componentConfig);
+
+				break;
+			}
+			case COMP_TRANSFORMATION: //CTransformation
+			{
+				CTransformation*  cTransformation = new CTransformation(this, componentUID);
+				cTransformation->OnLoad(componentConfig);
+				break;
+			}
+
+			default: // unknown
+			{
+				LOGUI(" [ERROR]{Deserialize}- Unknown component type");
+				break;
+			}
+		}//switch
+	}//for
+}
+
 void GameObject::SaveData()
 {
+	//iterate childs
 	for (int i = 0; i < childs.size(); i++)
 	{
 		childs[i]->SaveData();
 	}
+
+	//components it
 
 	if (components.size()>0)
 	{
@@ -532,30 +626,17 @@ void GameObject::SaveData()
 	}
 }
 
-void GameObject::LoadData()
+void GameObject::LoadData() //maybe to delete
 {
-	//for (int i = 0; i < childs.size(); i++)
-	//{
-	//	childs[i]->LoadData();
-	//}
-
-	//if (components.size()>0)
-	//{
-	//	for (int i = 0; i < components.size(); i++)
-	//	{
-	//		if()
-	//			App->datamanager->LoadData(components[i]->GetData(), components[i]->GetDataType(), this->GameOIbject_ID);
-	//	}
-	//}
 }
 
 void GameObject::TriIntersection(LineSegment & line, float & distance, float3 & hitPoint)
 {
-	CMesh* Mesh = (CMesh*)GetComponent(COMP_MESH);
+	CMesh* mesh = (CMesh*)GetComponent(COMP_MESH);
 
-	if (Mesh != nullptr)
+	if (mesh != nullptr)
 	{
-		Mesh->IntersectTriangle(line, distance, hitPoint);
+		mesh->IntersectTriangle(line, distance, hitPoint);
 	}
 }
 

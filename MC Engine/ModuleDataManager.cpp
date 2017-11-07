@@ -94,13 +94,13 @@ GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*pa
 					GameObjectSon = newObject;
 				}				
 				
-				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, (DTransformation*)importerTransformations->ImportTrans(node, GameObjectSon, GameObjectSon->GetGOId()));
+				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, -1, (DTransformation*)importerTransformations->ImportTrans(node, GameObjectSon, GameObjectSon->GetGOId()));
 
 				DMesh* MeshtoCreate = (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon, GameObjectSon->GetGOId());
-				GameObjectSon->CreateComponent(COMP_MESH, MeshtoCreate);
+				GameObjectSon->CreateComponent(COMP_MESH,-1, MeshtoCreate);
 
 				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
-				GameObjectSon->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));        
+				GameObjectSon->CreateComponent(COMP_TEXTURE, -1, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));
 			}		
 
 			for (int i = 0; i < node->mNumChildren; ++i)
