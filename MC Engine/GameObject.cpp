@@ -415,6 +415,16 @@ void GameObject::OnEditor()
 	}
 }
 
+void GameObject::OnSelection()
+{
+
+	App->ui->show_Inspector_window = true;
+	for (int i = 0; i < components.size(); i++)
+	{
+		App->ui->ShowInspectorWindow(components[i], (bool*)true);
+	}
+	
+}
 void GameObject::OnInspector()
 {	
 	/*
@@ -502,6 +512,16 @@ void GameObject::LoadData()
 	//			App->datamanager->LoadData(components[i]->GetData(), components[i]->GetDataType(), this->GameOIbject_ID);
 	//	}
 	//}
+}
+
+void GameObject::TriIntersection(LineSegment & line, float & distance, float3 & hitPoint)
+{
+	CMesh* Mesh = (CMesh*)GetComponent(COMP_MESH);
+
+	if (Mesh != nullptr)
+	{
+		Mesh->IntersectTriangle(line, distance, hitPoint);
+	}
 }
 
 

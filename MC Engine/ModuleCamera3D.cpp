@@ -72,7 +72,7 @@ update_status ModuleCamera3D::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT &&  App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 	{
 		//	CenterCamera();
-		LookAt(centreB);
+		//ookAt(centreB);
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
 
@@ -189,12 +189,13 @@ update_status ModuleCamera3D::Update(float dt)
 			Position = Reference + Z * length(Position);
 		}
 
-		if(App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+		if(App->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
 		{	
-			App->input->NormalizeMouse();
-			LineSegment picking= editorCam->GetFrustum().UnProjectLineSegment(App->input->GetNormalized_x(),App->input->GetNormalized_y());
+			
+			LineSegment picking = editorCam->GetFrustum().UnProjectLineSegment(-(1 - App->input->GetNormalized_x() * 2), 1 - App->input->GetNormalized_y() * 2);
 			thispick = picking;
-			GameObject* selected= App->scene_intro->SelectObject(picking);
+			selected = App->scene_intro->SelectObject(picking);
+			App->ui->show_Inspector_window = false;
 			App->scene_intro->ObjectSelected(selected);
 		}
 		editorCam->SetPos(float3(Position.x, Position.y, Position.z), -float3(Z.x, Z.y, Z.z), float3(Y.x, Y.y, Y.z));

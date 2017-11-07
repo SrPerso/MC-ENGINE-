@@ -1,7 +1,9 @@
 ﻿#include "CMesh.h"
 #include "GameObject.h"
 #include "ModuleDataFile.h"
-
+#include "CTransformation.h"
+#include "MathGeoLib/Geometry/Triangle.h"
+#include "MathGeoLib/Geometry/LineSegment.h"
 
 CMesh::CMesh(GameObject * object,int UID, Component_Type type, DMesh* data) : Component( object, UID, COMP_MESH)
 {
@@ -148,3 +150,35 @@ const void * CMesh::GetData()
 	return (DMesh*)ret;
 }
 
+bool CMesh::IntersectTriangle(LineSegment & picking, float& distance, float3 &hitPoint)
+{
+	bool ret = false;
+	CTransformation* thisTransformation = nullptr;
+	float distance2 = distance;
+	float prevDistance = distance;
+
+	thisTransformation = (CTransformation*)object->GetComponent(COMP_TRANSFORMATION);
+
+	LineSegment newSegment = picking;
+	newSegment.Transform(thisTransformation->GetTransMatrix().Inverted());
+
+	for (uint i = 0; i < nIndex; i += 3)
+	{
+		Triangle tri(float3(Vertex[Index[i] * 3], Vertex[Index[i] * 3 + 1], Vertex[Index[i] * 3 + 2]), float3(Vertex[Index[i + 1] * 3], Vertex[Index[i + 1] * 3 + 1], Vertex[Index[i + 1] * 3 + 2]), float3(Vertex[Index[i + 2] * 3], Vertex[Index[i + 2] * 3 + 1], Vertex[Index[i + 2] * 3 + 2]));
+		
+		if (newSegment.Intersects(tri, &distance2, &hitPoint))
+		{
+			if (distance2 < prevDistance)
+			{
+				prevDistance = distance2;
+				distance = distance2;
+				ret = true;
+			}
+
+
+		}
+	}
+
+	return ret;
+
+}

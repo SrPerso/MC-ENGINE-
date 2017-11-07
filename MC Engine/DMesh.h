@@ -22,7 +22,7 @@ public:
 
 	uint nIndex = 0;
 	uint idIndex = 0;//id RAM
-	float* Index = nullptr;
+	uint* Index = nullptr;
 
 	uint nFaces = 0;
 

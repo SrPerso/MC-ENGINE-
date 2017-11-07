@@ -53,7 +53,7 @@ public:
 	uint ComponentVectorSize()const;
 	uint NumComponentTypeSize(Component_Type type);
 	void DeleteComponent(Component* comp);
-	void Move(float3 destiny, float3 position);
+	
 	//void Rotate(vec3 rotation);
 	//ENABLE/DISABLE............................
 
@@ -78,6 +78,7 @@ public:
 
 	void OnEditor();
 	void OnInspector();
+	void OnSelection();
 
 	void OnSerialize(DataJSON & file)const;
 	void OnDeserialize(DataJSON & file);
@@ -87,6 +88,9 @@ public:
 	//std::vector<const void*>* SaveData();
 	void LoadData();
 
+
+	//ray
+	void TriIntersection(LineSegment & line, float & distance, float3 & hitPoint);
 public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> childs;

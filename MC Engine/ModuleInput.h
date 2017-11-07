@@ -67,10 +67,10 @@ public: //devices
 
 	bool speakersConected = true;
 
-	float GetNormalized_x() const;
-	float GetNormalized_y() const;
+	float GetNormalized_x();
+	float GetNormalized_y() ;
 
-	void NormalizeMouse();
+	
 private:
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];

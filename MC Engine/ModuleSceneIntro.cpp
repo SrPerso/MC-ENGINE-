@@ -143,22 +143,23 @@ GameObject* ModuleSceneIntro::SelectObject(LineSegment  picking)
 {
 	
 	GameObject* closest = nullptr;
-	
-	closest=IntersectAABB(picking);
+	std::vector<GameObject*> DistanceList;
 
-	
-	if (closest != nullptr) 
+	IntersectAABB(picking, DistanceList);
+
+	if (DistanceList.size() > 0)
 	{
-		closest=IntersectTriangle(picking, closest);
-		
-	
-	}
-	else 
-	{
-		
-		for (std::list<GameObject*>::iterator it = DistanceList.begin(); it != DistanceList.end(); ++it)
+		float Lastdistance = MINDISTANCE;
+		for (uint i = 0; i < DistanceList.size(); i++)
 		{
-
+			float distance = 15000;
+			float3 hitpoint;
+			DistanceList[i]->TriIntersection(picking, distance, hitpoint);
+			if (distance < Lastdistance)
+			{
+				Lastdistance = distance;
+				closest = DistanceList[i];
+			}
 		}
 	}
 
@@ -166,24 +167,25 @@ GameObject* ModuleSceneIntro::SelectObject(LineSegment  picking)
 	
 }
 
-GameObject*  ModuleSceneIntro::IntersectAABB(LineSegment picking)
+void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObject*>& DistanceList)
 {
+
 	GameObject* Closest = nullptr;
-	
-	CTransformation* transform= nullptr;
+
+	CTransformation* transform = nullptr;
 	for (uint i = 0; i < App->goManager->GetRoot()->childs.size(); i++)
 	{
-		if (App->goManager->GetRoot()->childs[i]->childs.size() > 0) 
+		if (App->goManager->GetRoot()->childs[i]->childs.size() > 0)
 		{
 			for (uint p = 0; p < App->goManager->GetRoot()->childs[i]->childs.size(); p++)
 			{
-				CMesh* IntersectMesh =(CMesh*)App->goManager->GetRoot()->childs[i]->childs[p]->GetComponent(COMP_MESH);
+				CMesh* IntersectMesh = (CMesh*)App->goManager->GetRoot()->childs[i]->childs[p]->GetComponent(COMP_MESH);
 				if (IntersectMesh != nullptr)
 				{
 					if (picking.Intersects(IntersectMesh->debugBox) == true)
 					{
 						DistanceList.push_back(App->goManager->GetRoot()->childs[i]->childs[p]);
-						LOGUI("hit");
+
 
 					}
 				}
@@ -202,65 +204,21 @@ GameObject*  ModuleSceneIntro::IntersectAABB(LineSegment picking)
 			}
 		}
 	}
-
-	
-	if (DistanceList.size() > 0)
-	{
-		for (std::list<GameObject*>::iterator it = DistanceList.begin(); it != DistanceList.end(); ++it) 
-		{			
-			transform = ((CTransformation*)(*it)->GetComponent(COMP_TRANSFORMATION));
-			float thisDist = (transform->position - App->camera->editorCam->frustum.pos).Length();
-			if (thisDist < MinDistance) 
-			{			
-				Closest = (*it);
-				MinDistance = thisDist;
-			}
-		}
-	}
-	
-
-	return Closest;
-
 }
 
-GameObject* ModuleSceneIntro::IntersectTriangle(LineSegment picking, GameObject * closest)
-{
-	GameObject* newObj=nullptr;
-	CMesh* thisMesh = nullptr;
-	CTransformation* thisTransformation = nullptr;
-	float distance = 0;
 
-	thisMesh = (CMesh*)closest->GetComponent(COMP_MESH);
-	thisTransformation = (CTransformation*)closest ->GetComponent(COMP_TRANSFORMATION);
-
-	LineSegment newSegment = picking;
-	newSegment.Transform(thisTransformation->GetTransMatrix().Inverted());
-
-	Triangle tri;
-
-	for (uint i = 0; i < thisMesh->nVertex;)
-	{
-
-		tri.a.Set(thisMesh->nVertex[&thisMesh->Index[i++]], thisMesh->nVertex[&thisMesh->Index[i]], thisMesh->nVertex[&thisMesh->Index[i]]);
-		tri.b.Set(thisMesh->nVertex[&thisMesh->Index[i++]], thisMesh->nVertex[&thisMesh->Index[i]], thisMesh->nVertex[&thisMesh->Index[i]]);
-		tri.c.Set(thisMesh->nVertex[&thisMesh->Index[i++]], thisMesh->nVertex[&thisMesh->Index[i]], thisMesh->nVertex[&thisMesh->Index[i]]);
-
-		float* LocalDistance = 0;
-		float3 LocalHitPoint;
-		LocalHitPoint.x = 0; LocalHitPoint.y = 0; LocalHitPoint.z = 0;
-		if (newSegment.Intersects(tri, LocalDistance, &LocalHitPoint)) 
-		{
-			newObj = closest;
-			return newObj;
-		}
-	}
-
-	return newObj;
-
-}
 
 void ModuleSceneIntro::ObjectSelected(GameObject * selected)
 {
+	if (selected != nullptr && selected != sceneSelected)
+	{
+		sceneSelected = selected;
+		LOGUI("hit");
+	}
+	else
+	{
+		sceneSelected = nullptr;
+	}
 }
 
 
@@ -292,6 +250,11 @@ update_status ModuleSceneIntro::Update(float dt)
 	p.color = White;
 	p.axis = false;
 	p.Render();
+
+	if (sceneSelected != nullptr)
+	{
+		sceneSelected->OnSelection();
+	}
 
 	return UPDATE_CONTINUE;
 

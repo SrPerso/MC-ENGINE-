@@ -26,6 +26,7 @@ public:
 	void OnSave(DataJSON&file)const override;
 	void OnLoad(DataJSON&file) override;
 
+	bool IntersectTriangle(LineSegment & picking, float& distance, float3 &hitPoint);
 	void Move(float3 destiny, float3 position);
 	const void* GetData();
 	

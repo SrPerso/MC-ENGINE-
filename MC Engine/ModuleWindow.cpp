@@ -201,14 +201,14 @@ void ModuleWindow::SetFullDesktop(bool fullDesktop)
 	SDL_SetWindowFullscreen(window, flags);
 }
 
-int ModuleWindow::GetWidth() const
+void ModuleWindow::GetWidth(int& width) 
 {
-	return this->width;
+	width= this->width;
 }
 
-int ModuleWindow::GetHeight() const
+void ModuleWindow::GetHeight(int& height) 
 {
-	return this->height;
+	height= this->height;
 }
 
 

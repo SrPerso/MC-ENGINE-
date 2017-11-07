@@ -28,7 +28,6 @@ public:
 
 	void CenterCameraToObject(AABB* box);
 	void CenterCamera();
-private:
 
 	void CalculateViewMatrix();
 
@@ -41,7 +40,7 @@ public:
 	DCamera* dcamera = nullptr;
 	CCamera* mainCam = nullptr;
 	CCamera* editorCam= nullptr;
-
+	GameObject* selected = nullptr;
 	LineSegment thispick;
 private:
 
