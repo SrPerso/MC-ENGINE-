@@ -64,6 +64,7 @@ public:
 	void Enable();
 	void Disable();
 
+	void TestGizmo();
 	//STATIC............................
 
 	bool IsStatic()const;

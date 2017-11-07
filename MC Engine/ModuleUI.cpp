@@ -87,6 +87,7 @@ bool ModuleUI::Start()
 update_status ModuleUI::PreUpdate(float dt)
 {
 	ImGui_ImplSdlGL3_NewFrame(App->window->window);
+	ImGuizmo::BeginFrame();
 	return update_status(UPDATE_CONTINUE);
 }
 
@@ -561,7 +562,7 @@ IMGUI_API void ModuleUI::ShowInspectorWindow(Component* component, bool * p_open
 
 			}
 		}		//App->goManager->GetRoot()->OnInspector();
-
+		
 		ImGui::End();
 	}
 

@@ -24,7 +24,7 @@ public:
 	void Move(const vec3 &Movement);
 	const float* GetViewMatrix();
 
-	
+	void CalculateAspectRatio(float width, float height);
 
 	void CenterCameraToObject(AABB* box);
 	void CenterCamera();

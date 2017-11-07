@@ -417,13 +417,24 @@ void GameObject::OnEditor()
 
 void GameObject::OnSelection()
 {
+	CTransformation* transform = (CTransformation*)GetComponent(COMP_TRANSFORMATION);
 
 	App->ui->show_Inspector_window = true;
 	for (int i = 0; i < components.size(); i++)
 	{
 		App->ui->ShowInspectorWindow(components[i], (bool*)true);
+		
 	}
+	transform->OnGuizmo();
 	
+}
+
+void GameObject::TestGizmo()
+{
+
+	
+
+
 }
 void GameObject::OnInspector()
 {	

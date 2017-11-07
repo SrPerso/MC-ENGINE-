@@ -253,6 +253,7 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	if (sceneSelected != nullptr)
 	{
+
 		sceneSelected->OnSelection();
 	}
 

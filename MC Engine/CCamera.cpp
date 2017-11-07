@@ -212,6 +212,13 @@ Frustum CCamera::GetFrustum() const
 	return frustum;
 }
 
+void CCamera::SetFov()
+{
+	frustum.verticalFov = DEGTORAD * FOV;
+	frustum.horizontalFov = 2.f * atanf((tanf(frustum.verticalFov * 0.5f)) * (aspectRatio));
+
+}
+
 const float * CCamera::GetViewMatrix() const
 {
 	return frustum.ViewProjMatrix().Transposed().ptr();

@@ -264,7 +264,13 @@ const float* ModuleCamera3D::GetViewMatrix()
 		return editorCam->GetViewMatrix();
 	}
 	
-}	
+}
+
+void ModuleCamera3D::CalculateAspectRatio(float width, float height)
+{
+	editorCam->aspectRatio= width / height;
+	editorCam->SetFov();
+}
 
 
 void ModuleCamera3D::CenterCameraToObject(AABB * box)

@@ -1,5 +1,6 @@
 #include "DTransformation.h"
 
+
 DTransformation::DTransformation(float3 pos, float3 scales, Quat rot)
 {
 	
@@ -80,3 +81,4 @@ DTransformation::~DTransformation()
 {
 
 }
+

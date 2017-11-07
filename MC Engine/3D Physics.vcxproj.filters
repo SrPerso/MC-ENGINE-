@@ -52,6 +52,9 @@
     <Filter Include="Engine\Engine\DataContainers">
       <UniqueIdentifier>{ef91e114-2eaf-4b50-847f-3bd75d9f9442}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Tools\ImGuizmo">
+      <UniqueIdentifier>{7a8724c5-6735-4b8e-b402-622abb514659}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -372,6 +375,9 @@
     <ClInclude Include="ModuleTimeManager.h">
       <Filter>Engine\Engine\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="ImGuizmo\ImGuizmo.h">
+      <Filter>Engine\Tools\ImGuizmo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -598,6 +604,9 @@
     </ClCompile>
     <ClCompile Include="ModuleTimeManager.cpp">
       <Filter>Engine\Engine\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuizmo\ImGuizmo.cpp">
+      <Filter>Engine\Tools\ImGuizmo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

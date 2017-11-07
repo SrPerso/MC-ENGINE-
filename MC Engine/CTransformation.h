@@ -10,6 +10,7 @@
 #include "MathGeolib\Math\float3.h"
 #include "MathGeolib\Math\float4x4.h"
 #include "DTransformation.h"
+#include "ImGuizmo\ImGuizmo.h"
 
 class DataJSON;
 class GameObject;
@@ -39,6 +40,11 @@ public:
 	void SetPos(float3);
 	uint Transformation_ID;// is not necesary (?)
 	float4x4 GetTransMatrix();
+
+	void EditTransform(const CCamera camera);
+
+	void OnGuizmo();
+	//ImGuizmo::OPERATION Operator_Guiz = ImGuizmo::OPERATION::ROTATE;
 
 };
 

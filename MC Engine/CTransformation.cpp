@@ -1,5 +1,7 @@
 ﻿#include "CTransformation.h"
 #include "ModuleDataFile.h"
+#include "ImGuizmo\ImGuizmo.h"
+#include "imGUI\imgui.h"
 
 
 CTransformation::CTransformation(GameObject * object,int UID, Component_Type type, DTransformation* data) :Component(object, UID, type)
@@ -41,9 +43,10 @@ CTransformation::~CTransformation()
 void CTransformation::OnUpdate(float dt)
 {
 	if (UpdateTrans && object != nullptr)
-	{
+	{		
 		position = destiny;
 		TransUpdate();
+
 		//UpdateTrans = false;
 		
 	}
@@ -51,6 +54,34 @@ void CTransformation::OnUpdate(float dt)
 	
 }
 
+void CTransformation::OnGuizmo() {
+
+	ImGuizmo::Enable(true);
+	
+	float4x4 mat = App->camera->editorCam->frustum.ViewMatrix();
+
+	ImGuiIO& io = ImGui::GetIO();
+
+	
+	int w, h;
+	App->window->GetWidth(w);
+	App->window->GetHeight(h);
+	ImGuizmo::SetRect(0, 0, (float)w, float(h));
+	
+	ImGuizmo::Manipulate(mat.Transposed().ptr(), App->camera->editorCam->frustum.ViewProjMatrix().Transposed().ptr(), ImGuizmo::ROTATE, ImGuizmo::WORLD, globalTransformMatrix.ptr());
+
+	
+
+	if (ImGuizmo::IsUsing())
+	{
+		globalTransformMatrix.Decompose(position, rotation, scale);
+		eulerAngles=rotation.ToEulerXYZ();
+	
+		eulerAngles.x *= RADTODEG;
+		eulerAngles.y *= RADTODEG;
+		eulerAngles.z *= RADTODEG;
+	}
+}
 void CTransformation::OnEditor()
 {
 	if (ImGui::TreeNodeEx(name.c_str()))
@@ -235,3 +266,47 @@ float4x4 CTransformation::GetTransMatrix()
 	return globalTransformMatrix;
 }
 
+
+void CTransformation::EditTransform(const CCamera camera)
+{
+	static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::ROTATE);
+	static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
+	if (ImGui::IsKeyPressed(90))
+		mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+	if (ImGui::IsKeyPressed(69))
+		mCurrentGizmoOperation = ImGuizmo::ROTATE;
+	if (ImGui::IsKeyPressed(82)) // r Key
+		mCurrentGizmoOperation = ImGuizmo::SCALE;
+	if (ImGui::RadioButton("Translate", mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
+		mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Rotate", mCurrentGizmoOperation == ImGuizmo::ROTATE))
+		mCurrentGizmoOperation = ImGuizmo::ROTATE;
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Scale", mCurrentGizmoOperation == ImGuizmo::SCALE))
+		mCurrentGizmoOperation = ImGuizmo::SCALE;
+	float matrixTranslation[3], matrixRotation[3], matrixScale[3];
+	
+	ImGui::InputFloat3("Tr", matrixTranslation, 3);
+	ImGui::InputFloat3("Rt", matrixRotation, 3);
+	ImGui::InputFloat3("Sc", matrixScale, 3);
+	
+
+	if (mCurrentGizmoOperation != ImGuizmo::SCALE)
+	{
+		if (ImGui::RadioButton("Local", mCurrentGizmoMode == ImGuizmo::LOCAL))
+			mCurrentGizmoMode = ImGuizmo::LOCAL;
+		ImGui::SameLine();
+		if (ImGui::RadioButton("World", mCurrentGizmoMode == ImGuizmo::WORLD))
+			mCurrentGizmoMode = ImGuizmo::WORLD;
+	}
+	static bool useSnap(false);
+	if (ImGui::IsKeyPressed(83))
+		useSnap = !useSnap;
+	ImGui::Checkbox("", &useSnap);
+	ImGui::SameLine();
+	
+	ImGuiIO& io = ImGui::GetIO();
+	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+	
+}

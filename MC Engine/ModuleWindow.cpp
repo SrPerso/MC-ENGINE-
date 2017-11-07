@@ -159,6 +159,8 @@ void ModuleWindow::SetTitle(const char* title)
 
 void ModuleWindow::ResizeWindow(int width, int height)
 {
+	this->width = width;
+	this->height = height;
 	SDL_SetWindowSize(window, width, height);
 }
 

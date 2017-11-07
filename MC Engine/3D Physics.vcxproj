@@ -87,6 +87,7 @@
     <ClInclude Include="CTexture.h" />
     <ClInclude Include="CTransformation.h" />
     <ClInclude Include="DCamera.h" />
+    <ClInclude Include="ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="ModuleDataManager.h" />
     <ClInclude Include="DContainer.h" />
     <ClInclude Include="DMaterial.h" />
@@ -194,6 +195,7 @@
     <ClCompile Include="CTexture.cpp" />
     <ClCompile Include="CTransformation.cpp" />
     <ClCompile Include="DCamera.cpp" />
+    <ClCompile Include="ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="IScene.cpp" />
     <ClCompile Include="ModuleDataManager.cpp" />
     <ClCompile Include="DContainer.cpp" />

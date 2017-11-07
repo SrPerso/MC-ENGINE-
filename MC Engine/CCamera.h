@@ -37,6 +37,7 @@ public:
 	bool Contains(const AABB & aabb) const;
 	Frustum GetFrustum()const;
 
+	void SetFov();
 	const float* GetViewMatrix() const;
 	
 };

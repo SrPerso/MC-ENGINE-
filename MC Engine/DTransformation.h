@@ -39,6 +39,8 @@ public:
 	float4x4 localTransformMatrix;
 	float3 newPos;
 
+	bool OnTransform;
+
 protected:
 	float3 globalPosition;
 	float3 globalScale;
