@@ -114,6 +114,7 @@ void CCamera::OnInspector()
 
 
 		ImGui::Checkbox("CULLING", &needToCull);
+		ImGui::Checkbox("ACTIVE", &Active);
 	
 }
 

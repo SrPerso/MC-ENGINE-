@@ -107,7 +107,7 @@ public:
 public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> childs;
-	AABB recalculatedBox;
+	
 
 private:
 	std::string name;

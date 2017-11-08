@@ -51,9 +51,10 @@ public:
 public:
 	std::list<Primitive*> GeometryObjects;
 
-	std::list<PrimitiveLine*> NormalsLines;
 
-	bool intersects = false;	
+	std::list<PrimitiveLine*> NormalsLines;	
+	
+
 	GlobalDebugInfo sceneDebugInfo;
 	float MinDistance;
 

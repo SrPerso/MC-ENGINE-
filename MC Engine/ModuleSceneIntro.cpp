@@ -11,6 +11,7 @@
 #include "Math.h"
 #include "CMesh.h"
 #include "CTransformation.h"
+#include "MathGeoLib\Geometry\LineSegment.h"
 
 
 #pragma comment( lib, "Glew/libx86/glew32.lib" )
@@ -34,8 +35,11 @@ bool ModuleSceneIntro::Start()
 	
 	DCamera* dcamera = new DCamera();
 
+
 	camera->CreateComponent(COMP_CAMERA,-1, dcamera);
-	App->camera->mainCam = (CCamera*)camera->GetComponent(COMP_CAMERA);
+	CCamera* mainSceneCam = (CCamera*)camera->GetComponent(COMP_CAMERA);
+	App->camera->mainCam = mainSceneCam;
+
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 	MinDistance = MINDISTANCE;
@@ -171,18 +175,29 @@ void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObje
 {
 
 	GameObject* Closest = nullptr;
+	
 
-	CTransformation* transform = nullptr;
+	
+	
+
 	for (uint i = 0; i < App->goManager->GetRoot()->childs.size(); i++)
 	{
 		if (App->goManager->GetRoot()->childs[i]->childs.size() > 0)
 		{
 			for (uint p = 0; p < App->goManager->GetRoot()->childs[i]->childs.size(); p++)
 			{
+				LineSegment newSegment(picking);
 				CMesh* IntersectMesh = (CMesh*)App->goManager->GetRoot()->childs[i]->childs[p]->GetComponent(COMP_MESH);
+				CTransformation* IntersectTransform = (CTransformation*)App->goManager->GetRoot()->childs[i]->childs[p]->GetComponent(COMP_TRANSFORMATION);
+				if (IntersectTransform != nullptr) {
+
+					newSegment.Transform(IntersectTransform->GetTransMatrix().Inverted());
+					
+				}
+
 				if (IntersectMesh != nullptr)
 				{
-					if (picking.Intersects(IntersectMesh->debugBox) == true)
+					if (newSegment.Intersects(IntersectMesh->debugBox) == true)
 					{
 						DistanceList.push_back(App->goManager->GetRoot()->childs[i]->childs[p]);
 
@@ -192,10 +207,16 @@ void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObje
 			}
 		}
 		else {
+			LineSegment newSegment(picking);
 			CMesh* IntersectMesh = (CMesh*)App->goManager->GetRoot()->childs[i]->GetComponent(COMP_MESH);
+			CTransformation* IntersectTransform = (CTransformation*)App->goManager->GetRoot()->childs[i]->GetComponent(COMP_TRANSFORMATION);
+			if (IntersectTransform != nullptr) {
+
+				newSegment.Transform(IntersectTransform->GetTransMatrix().Inverted());
+			}
 			if (IntersectMesh != nullptr)
 			{
-				if (picking.Intersects(IntersectMesh->debugBox) == true)
+				if (newSegment.Intersects(IntersectMesh->debugBox) == true)
 				{
 					DistanceList.push_back(App->goManager->GetRoot()->childs[i]);
 					LOGUI("hit");

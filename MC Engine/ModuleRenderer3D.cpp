@@ -146,6 +146,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+
 	glLoadMatrixf(App->camera->GetViewMatrix());
 	glMatrixMode(GL_MODELVIEW);
 	/*
@@ -314,8 +315,8 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 		
 		if ((*it)->getType() == COMP_MESH)
 		{
-			CMesh* componentMesh = dynamic_cast<CMesh*>(*it);
-
+			CMesh* componentMesh = dynamic_cast<CMesh*>(*it);			
+			
 			if (App->ui->debug_active == true) 			{		
 				
 				DrawDebug(componentMesh);
@@ -398,6 +399,7 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 
 void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 {
+
 		if (App->ui->debug_Vertex_Normals == true && meshToDraw->nVertex > 0)
 		{
 
