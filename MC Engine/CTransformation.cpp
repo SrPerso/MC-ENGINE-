@@ -198,9 +198,11 @@ void CTransformation::OnLoad(DataJSON & file)
 	rotation.y = file.GetFloat("Rotation", 1);
 	rotation.z = file.GetFloat("Rotation", 2);
 	rotation.w = file.GetFloat("Rotation", 3);
-	
-	eulerAngles = rotation.ToEulerXYZ();
 
+	destiny = position;
+	eulerAngles = rotation.ToEulerXYZ();
+	angle = rotation.Angle();
+	rotation = rotation;
 	globalTransformMatrix = float4x4::FromQuat(rotation);
 	globalTransformMatrix = float4x4::Scale(scale, float3(0, 0, 0)) * globalTransformMatrix;
 	globalTransformMatrix.float4x4::SetTranslatePart(position.x, position.y, position.z);
