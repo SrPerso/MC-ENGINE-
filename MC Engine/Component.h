@@ -41,6 +41,7 @@ public:
 	virtual void OnSave(DataJSON&file)const = 0;
 	virtual void OnLoad(DataJSON&file) = 0;
 
+	void SetObjectParent(GameObject*);
 
 	virtual const void*GetData() ;
 

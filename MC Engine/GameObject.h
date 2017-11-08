@@ -58,12 +58,13 @@ public:
 	
 	//COMPONENTS.................................
 
-	Component* CreateComponent(Component_Type type,int UID=-1, const void*buffer = nullptr);
+	Component* CreateComponent(Component_Type type,int UID=-1, const void*buffer = nullptr);	
+
 	Component* GetComponent(Component_Type type);
 	uint ComponentVectorSize()const;
 	uint NumComponentTypeSize(Component_Type type);
 	void DeleteComponent(Component* comp);
-	
+	void AddComponent(Component* comp);
 	//void Rotate(vec3 rotation);
 	//ENABLE/DISABLE............................
 

@@ -57,6 +57,11 @@ void Component::OnUpdate(float dt)
 {
 }
 
+void Component::SetObjectParent(GameObject *obj)
+{
+	object = obj;
+}
+
 const void * Component::GetData()
 {
 	return nullptr;

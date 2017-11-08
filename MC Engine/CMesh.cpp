@@ -87,13 +87,14 @@ void CMesh::OnInspector()
 void CMesh::OnSave(DataJSON & file) const
 {
 	file.AddInt("Component UID", UID);
-	file.AddInt("Component Type", Ctype);
+	//file.AddInt("Component Type", Ctype);
 }
 
 void CMesh::OnLoad(DataJSON & file)
 {
 	UID = file.GetFloat("Component UID");
 
+	App->datamanager->importerMesh->Load(this,nullptr,this->object->GetGOUId());
 }
 
 void CMesh::Move(float3 destiny, float3 start)

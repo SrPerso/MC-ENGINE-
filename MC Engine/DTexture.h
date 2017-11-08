@@ -11,7 +11,7 @@ class DTexture : public DContainer
 public:
 
 	uint idTexCoords = 0;
-	float* texCoords = nullptr;
+	//float* texCoords = nullptr;
 	
 	uint image = 0;
 	std::string Textname;

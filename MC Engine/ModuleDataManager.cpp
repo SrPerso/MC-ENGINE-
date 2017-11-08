@@ -18,6 +18,8 @@ ModuleDataManager::ModuleDataManager(Application* app, bool start_enabled) :Modu
 	name = "Module Data Manager"; //this module is going to import all Data of the components. and future scene loader
 
 	importerMesh = new ImporterMesh();
+	importerTexture = new ImporterTexture();
+
 }
 
 
