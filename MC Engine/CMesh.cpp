@@ -5,40 +5,23 @@
 #include "MathGeoLib/Geometry/Triangle.h"
 #include "MathGeoLib/Geometry/LineSegment.h"
 
-CMesh::CMesh(GameObject * object,int UID, Component_Type type, DMesh* data) : Component( object, UID, COMP_MESH)
+CMesh::CMesh(GameObject * object, int UID, Component_Type type, DMesh* data) : Component(object, UID, COMP_MESH)
 {
-	if (data)
-	{
-		nVertex = data->nVertex;
-		idVertex = data->idVertex;
-		Vertex = data->Vertex;
-		wire = data->wire;
-		nIndex = data->nIndex;
-		idIndex = data->idIndex;
-		Index = data->Index;
-		nFaces = data->nFaces;
-		normals = data->normals;
-		idNormals = data->idNormals;
-		nNormals = data->nNormals;
-		idColors = data->idColors;
-		colors = data->colors;
-		idTexCoords = data->idTexCoords;
-		texCoords = data->texCoords;
-		debugMode = data->debugMode;
-		debugBox = data->debugBox;
-	}
 
-		if (object != nullptr)
-		{
-			this->mesh_ID = object->NumComponentTypeSize(this->Ctype) + 1;
-		}
-		else
-		{
-			this->mesh_ID = 0;
-		}
-		name= "- Component Mesh_";
-		name.append(std::to_string(mesh_ID));
-		dType = D_MESH;
+	SetData(data);
+
+	if (object != nullptr)
+	{
+		this->mesh_ID = object->NumComponentTypeSize(this->Ctype) + 1;
+	}
+	else
+	{
+		this->mesh_ID = 0;
+	}
+	name = "- Component Mesh_";
+	name.append(std::to_string(mesh_ID));
+	dType = D_MESH;
+
 }
 
 CMesh::~CMesh()
@@ -60,9 +43,6 @@ void CMesh::OnEditor()
 		
 		ImGui::TreePop();
 	}
-
-
-
 }
 
 void CMesh::OnInspector()
@@ -79,21 +59,29 @@ void CMesh::OnInspector()
 		ImGui::Text("\t Colors ID: %i", idColors);		
 
 		ImGui::Text("\t ID: %i", this->object->GetGOId());
+		ImGui::Text("\t Object UID: %i", this->object->GetGOUId());
 
-		//	ImGui::Text("Texture Coords: %i", idTexCoords);
-	
+		ImGui::Text("\t component UID: %i", UID);
+
 }
 
 void CMesh::OnSave(DataJSON & file) const
 {
 	file.AddInt("Component UID", UID);
-	file.AddInt("Component Type", Ctype);
+	//file.AddInt("Component Type", Ctype);
 }
 
 void CMesh::OnLoad(DataJSON & file)
 {
 	UID = file.GetFloat("Component UID");
 
+	DMesh* mesh = new DMesh();
+
+	mesh = App->datamanager->importerMesh->Load(this,nullptr,this->object->GetGOUId());
+
+	SetData(mesh);
+
+	delete mesh;
 }
 
 void CMesh::Move(float3 destiny, float3 start)
@@ -150,6 +138,33 @@ const void * CMesh::GetData()
 	return (DMesh*)ret;
 }
 
+void CMesh::SetData(DMesh * data)
+{
+	if (data!= nullptr)
+	{
+		nVertex = data->nVertex;
+		idVertex = data->idVertex;
+		Vertex = data->Vertex;
+		wire = data->wire;
+		nIndex = data->nIndex;
+		idIndex = data->idIndex;
+		Index = data->Index;
+		nFaces = data->nFaces;
+		normals = data->normals;
+		idNormals = data->idNormals;
+		nNormals = data->nNormals;
+		idColors = data->idColors;
+		colors = data->colors;
+		idTexCoords = data->idTexCoords;
+		texCoords = data->texCoords;
+		debugMode = data->debugMode;
+		debugBox = data->debugBox;
+	}
+	else
+		LOGUI("[ERROR]-Cant Set Data - Component Mesh");
+
+}
+
 bool CMesh::IntersectTriangle(LineSegment & picking, float& distance, float3 &hitPoint)
 {
 	bool ret = false;
@@ -174,8 +189,6 @@ bool CMesh::IntersectTriangle(LineSegment & picking, float& distance, float3 &hi
 				distance = distance2;
 				ret = true;
 			}
-
-
 		}
 	}
 

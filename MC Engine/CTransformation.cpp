@@ -173,7 +173,7 @@ void CTransformation::OnSave(DataJSON & file) const
 {
 	file.AddInt("Component UID", UID);
 
-	file.AddInt("Component Type", Ctype);
+	//file.AddInt("Component Type", Ctype);
 
 	file.AddArrayF("Position", &position.x, 3);
 	file.AddArrayF("Scale", &scale.x, 3);

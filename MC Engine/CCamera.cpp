@@ -49,16 +49,21 @@ CCamera::CCamera(int UID, Component_Type type, DCamera * data) :Component(UID,CO
 
 CCamera::CCamera(GameObject * object, int UID, Component_Type type, DCamera * data) :Component(object, UID, COMP_CAMERA)
 {
+	if (data)
+	{
+		frustum.type = data->frustum.type;
+		frustum.pos = data->frustum.pos;
+		frustum.front = data->frustum.front;
+		frustum.up = data->frustum.up;
+		frustum.nearPlaneDistance = data->frustum.nearPlaneDistance;
+		frustum.farPlaneDistance = data->frustum.farPlaneDistance;
 
-	name = "Camera";
+	}
+
+
 	this->aspectRatio = aspectRatio;
 	this->aspectRatio = (float)16 / 9;
-	frustum.type = data->frustum.type;
-	frustum.pos = data->frustum.pos;
-	frustum.front = data->frustum.front;
-	frustum.up = data->frustum.up;
-	frustum.nearPlaneDistance = data->frustum.nearPlaneDistance;
-	frustum.farPlaneDistance = data->frustum.farPlaneDistance;
+	
 	FOV = 15;
 	frustum.verticalFov = DEGTORAD * FOV;
 	frustum.horizontalFov = 2.f * atanf((tanf(frustum.verticalFov * 0.5f)) * (aspectRatio));
@@ -66,6 +71,9 @@ CCamera::CCamera(GameObject * object, int UID, Component_Type type, DCamera * da
 	frustum.ProjectionMatrix();
 	dType = D_CAMERA;
 	//frustumCulling = true;
+
+	name = "Camera";
+
 }
 
 CCamera::~CCamera()
@@ -113,7 +121,7 @@ void CCamera::OnInspector()
 void CCamera::OnSave(DataJSON & file) const
 {
 	file.AddInt("Component UID", UID);
-	file.AddInt("Component Type", Ctype);
+	//file.AddInt("Component Type", Ctype);
 
 	file.AddFloat("FOV", FOV);
 	file.AddFloat("Aspect Radio", aspectRatio);
@@ -122,8 +130,9 @@ void CCamera::OnSave(DataJSON & file) const
 	file.AddFloat("Frustum Near", frustum.nearPlaneDistance);
 	file.AddFloat("HFOV", frustum.horizontalFov);
 	file.AddFloat("VFOV", frustum.verticalFov);
-	file.AddArrayF("Frustum Position", frustum.pos.ptr(), 3);
-	file.AddArrayF("Frustum Up", frustum.up.ptr(), 3);
+	file.AddArrayF("FrustumPos", frustum.pos.ptr(), 3);
+	file.AddArrayF("FrustumUp", frustum.up.ptr(), 3);
+	file.AddArrayF("FrustumFront", frustum.front.ptr(), 3);
 
 	file.AddBool("Component Active", Active);
 	file.AddBool("needToCull", needToCull);
@@ -141,15 +150,15 @@ void CCamera::OnLoad(DataJSON & file)
 	frustum.horizontalFov = file.GetFloat("HFOV");
 	frustum.verticalFov = file.GetFloat("VFOV");
 
-	frustum.pos.x = file.GetFloat("Frustum Pos", 0);
-	frustum.pos.y = file.GetFloat("Frustum Pos", 1);
-	frustum.pos.z = file.GetFloat("Frustum Pos", 2);
-	frustum.up.x = file.GetFloat("Frustum Up", 0);
-	frustum.up.y = file.GetFloat("Frustum Up", 1);
-	frustum.up.z = file.GetFloat("Frustum Up", 2);
-	frustum.front.x = file.GetFloat("Frustum Front", 0);
-	frustum.front.y = file.GetFloat("Frustum Front", 1);
-	frustum.front.z = file.GetFloat("Frustum Front", 2);
+	frustum.pos.x = file.GetFloat("FrustumPos", 0);
+	frustum.pos.y = file.GetFloat("FrustumPos", 1);
+	frustum.pos.z = file.GetFloat("FrustumPos", 2);
+	frustum.up.x = file.GetFloat("FrustumUp", 0);
+	frustum.up.y = file.GetFloat("FrustumUp", 1);
+	frustum.up.z = file.GetFloat("FrustumUp", 2);
+	frustum.front.x = file.GetFloat("FrustumFront", 0);
+	frustum.front.y = file.GetFloat("FrustumFront", 1);
+	frustum.front.z = file.GetFloat("FrustumFront", 2);
 
 	Active = file.GetBoolean("Component Active");
 	needToCull = file.GetBoolean("needToCull");

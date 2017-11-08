@@ -15,7 +15,7 @@
 #include "GameObject.h"
 
 
-#include <fstream>
+
 
 #include <string.h>
 #include <algorithm>
@@ -47,7 +47,7 @@ bool ModuleUI::Start()
 	JSON_Object* configObject = json_value_get_object(configValue);
 	JSON_Object* data = json_object_dotget_object(configObject, this->name.c_str());
 
-	if (data) 
+	if (data) //TO IMPROVE
 	{
 
 	show_test_window = json_object_dotget_boolean(data, "show_test_window");
@@ -679,31 +679,6 @@ void ModuleUI::DrawDirectory(const char * dir, const char * extension)
 	}
 }
 
-void ModuleUI::SaveScene(const char*fileName)
-{
-	DataJSON dataToSave;
-	dataToSave.AddArray("Scene Game Objects");
-
-	App->goManager->root->OnSerialize(dataToSave);
-
-	char* buffer = nullptr;
-	uint fileSize = dataToSave.buffSizeSaver(&buffer, "Scene file save");
-
-	LOGUI("-------------------------------------------");
-	LOGUI("[SERIALIZE]- Creating file to save  %s", fileName);
-	
-	std::string path;
-
-	path = "Assets/";
-	path.append(fileName);
-	path.append(".MCscene");
-
-	std::ofstream file(path.c_str(), std::ofstream::out | std::ofstream::binary);
-	file.write(buffer, fileSize);
-	file.close();
-
-	RELEASE_ARRAY(buffer);
-}
 
 //show the logs on Console..................................................
 void ModuleUI::AddLogToConsole(std::string toAdd)
@@ -1382,11 +1357,12 @@ update_status ModuleUI::FileMenuBar()
 
 
 	if (ImGui::MenuItem("Save scene", "Ctrl + S + D"))
-	{
-	
-		SaveScene("scene");
-	}
+		App->goManager->SaveScene("scene");
 
+	if (ImGui::MenuItem("Load scene", "Ctrl + L + D"))
+		App->goManager->LoadScene("scene");
+
+	
 
 
 	if (ImGui::MenuItem("Quit", "ESC"))

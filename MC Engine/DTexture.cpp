@@ -7,9 +7,9 @@ DTexture::DTexture(DType resType): DContainer(resType)
 
 DTexture::~DTexture()
 {
-	if (texCoords != nullptr)
+	/*if (texCoords != nullptr)
 	{
 		delete texCoords;
 		texCoords = nullptr;
-	}
+	}*/
 }

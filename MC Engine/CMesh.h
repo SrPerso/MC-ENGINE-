@@ -29,7 +29,7 @@ public:
 	bool IntersectTriangle(LineSegment & picking, float& distance, float3 &hitPoint);
 	void Move(float3 destiny, float3 position);
 	const void* GetData();
-	
+	void SetData(DMesh*data);
 	uint mesh_ID;
 };
 

@@ -34,8 +34,6 @@ public:
 	bool CleanUp();
 
 	void Draw();
-	bool intersects = false;
-
 
 	void CreateCube(vec3 size, vec3 pos=vec3(0,0,0));
 	void CreateSphere(float radius, vec3 pos, int numStacks, int numSides);
@@ -53,10 +51,11 @@ public:
 public:
 	std::list<Primitive*> GeometryObjects;
 
+
 	std::list<PrimitiveLine*> NormalsLines;	
 	
-	GlobalDebugInfo sceneDebugInfo;
 
+	GlobalDebugInfo sceneDebugInfo;
 	float MinDistance;
 
 

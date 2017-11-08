@@ -21,6 +21,7 @@ public:
 	bool Init();
 	void SaveAll() const;
 
+	bool CanLoad()const;
 
 	//TODO Get & add vec4 & vec 2
 
@@ -32,6 +33,9 @@ public:
 	const char*  GetString(const char* name, JSON_Object*  object = nullptr)const;
 	DataJSON GetSection(const char*name)const;
 	JSON_Value* GetValor(const char * field, int count, JSON_Object * object = nullptr) const;
+	DataJSON GetArray(const char* name, int lenght, JSON_Object*  object = nullptr);
+	uint GetArrayLenght(const char * field);
+
 	//Style & config load and save
 
 	//add

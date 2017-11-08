@@ -25,6 +25,13 @@ public:
 	GameObject* GetRoot()const;
 	void deleteGameObject(GameObject* GObject);
 
+	//Save && load scene
+
+	void SaveScene(const char*fileName);
+	void LoadScene(const char*fileName);
+
+public:
+
 	GameObject* root = nullptr;
 
 };

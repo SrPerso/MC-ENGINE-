@@ -136,14 +136,18 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, uint id)
 		LOGUI("-------------------------------------------");
 
 		//delete mesh;	
-		Save(mesh, nullptr, id);
-		
-	/*	mesh = nullptr;
+		//Save(mesh, nullptr, id);
+	
+		////mesh = nullptr;
 
-		mesh = Load(mesh, nullptr, id);*/
-		
+		//DMesh* mesh2 = new DMesh();
+
+		//mesh2 = Load(mesh, nullptr, id);
+		//
+		//return mesh2;
 		return mesh;
-	}
+
+}
 
 	else
 	{
@@ -190,16 +194,16 @@ DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile
 
 
 	DTransformation* data = new DTransformation();
-	//data = (DMesh*)buffer;
+
 	std::string path; //path to load
 
 	if (loadFile == nullptr)
 	{
 		path = "Library/Mesh";
 		path.append("/");
-		path.append("m");
+		path.append("Tr");
 		path.append(std::to_string(id));
-		path.append(".mct");
+		path.append(".MCtransform");
 	}
 	else
 	{
@@ -209,7 +213,7 @@ DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile
 
 	std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
 
-	char* datafile;
+	char* dataFile;
 
 	if (file)
 	{
@@ -220,10 +224,10 @@ DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile
 
 		file.seekg(0, file.beg);
 
-		datafile = new char[size];
+		dataFile = new char[size];
 
 
-		if (file.read(datafile, size))
+		if (file.read(dataFile, size))
 		{
 	
 			LOGUI("[READING]- %s", path.c_str());
@@ -232,7 +236,7 @@ DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile
 		{
 			LOGUI("{Load}[ERROR]- only %ll can be read on: %s", file.gcount(), path.c_str());
 
-			RELEASE_ARRAY(datafile);
+			RELEASE_ARRAY(dataFile);
 			return nullptr;
 		}
 
@@ -241,7 +245,7 @@ DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile
 	else
 		LOGUI("[ERROR]- loading %s", path);
 
-	if (datafile == nullptr)
+	if (dataFile == nullptr)
 	{
 		return nullptr;
 	}
@@ -249,7 +253,7 @@ DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile
 	uint size = 0;
 	size = file.gcount();
 
-	char* cursor = datafile;
+	char* cursor = dataFile;
 
 
 	uint ranges[3];
@@ -291,9 +295,9 @@ bool ImporterTrans::Save(const void * buffer, const char * saverFile, uint id)
 
 	path = "Library/Mesh";
 	path.append("/");
-	path.append("m");
+	path.append("Tr");
 	path.append(std::to_string(id));
-	path.append(".mct");
+	path.append(".MCtransform");
 
 	LOGUI("[SAVING]{Transformation}- %s", path.c_str());
 
@@ -409,7 +413,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 	path.append("/");
 	path.append("m");
 	path.append(std::to_string(id));
-	path.append(".mcm");
+	path.append(".MCmesh");
 
 	LOGUI("[SAVING]{Mesh}- %s", path.c_str());
 
@@ -439,13 +443,13 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 		mesh->nIndex,/* indices */
 		mesh->nVertex,/* vertices */
 		colorSize/* colors */,
-		mesh->nNormals  /* normals*/,
-		textureCoodsSize  /* text coods*/,
+		mesh->nVertex  /* normals*/,
+		mesh->nVertex  /* text coods*/,
 	};
 
 	//size of all ----------
 
-	uint size = 0;
+	float size = 0;
 	size += sizeof(ranges);
 
 	size += mesh->nVertex * sizeof(float) * 3;	 // number of vertex
@@ -456,7 +460,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 		size += mesh->nVertex * sizeof(float) * 3;
 	
 	if (mesh->normals != nullptr)				// number of normals
-		size += mesh->nNormals * sizeof(float) * 3;
+		size += mesh->nVertex * sizeof(float) * 3;
 
 	if (mesh->texCoords != nullptr)				// number of text coods
 		size += mesh->nVertex * sizeof(float) * 3;
@@ -473,17 +477,18 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 	memcpy(cursor, ranges, allocsize);						//contains the number of every thing 
 	
 	cursor += allocsize;
-	allocsize = sizeof(float) * mesh->nVertex * 3;			//Vertices
-	memcpy(cursor, mesh->Vertex, allocsize);
-		
-	cursor += allocsize;
 	allocsize = sizeof(uint) *mesh->nIndex;					//Index
 	memcpy(cursor, mesh->Index, allocsize);
+
+	cursor += allocsize;
+	allocsize = sizeof(float) * mesh->nVertex * 3;			//Vertices
+	memcpy(cursor, mesh->Vertex, allocsize);
+
 
 	if (mesh->normals != nullptr)				
 	{
 		cursor += allocsize;
-		allocsize = sizeof(float) * mesh->nNormals * 3;		//Nortmals
+		allocsize = sizeof(float) * mesh->nVertex * 3;		//Nortmals
 		memcpy(cursor, mesh->normals, allocsize);
 	}
 
@@ -501,7 +506,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 		memcpy(cursor, mesh->colors, allocsize);
 	}
 
-	std::ofstream file_end(path.c_str(), std::ifstream::out | std::ofstream::binary);
+	std::ofstream file_end(path.c_str(), std::ofstream::out | std::ofstream::binary);
 
 	if (file_end.good()) //write file
 		file_end.write(data, size);
@@ -527,7 +532,7 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 	path.append("/");
 	path.append("m");
 	path.append(std::to_string(id));
-	path.append(".mcm");
+	path.append(".MCmesh");
 	}
 	else
 	{
@@ -535,9 +540,9 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 	}
 
 
-	std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
+	std::ifstream file(path, /*std::ifstream::in |*/ std::ifstream::binary);
 
-	char* datafile;
+	char* datafile = nullptr;
 
 	if (file) 
 	{
@@ -583,6 +588,7 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 	//uint ranges[5] = {/* indices *//* vertices *//* colors *//* normals*//* text coods*/ //};
 	
 	uint ranges[5];
+
 	uint bytes = sizeof(ranges);
 
 	memcpy(ranges, cursor, bytes);
@@ -596,21 +602,22 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 
 	//--- 
 	cursor += bytes;
-	bytes = sizeof(float) *data->nIndex;
-	data->Index = new uint[data->nIndex*3];
+	bytes = sizeof(uint) *data->nIndex;
+	data->Index = new uint[data->nIndex];
 
 	memcpy(data->Index, cursor, bytes);
 
 	glGenBuffers(1, (uint*)&(data->idIndex));
 	glBindBuffer(GL_ARRAY_BUFFER, data->idIndex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nIndex * 3, data->Index, GL_STATIC_DRAW);			// Index
-
-
+	glBufferData(GL_ARRAY_BUFFER, sizeof(uint) * data->nIndex, data->Index, GL_STATIC_DRAW);			// Index
+																											
+																											
 	//---
 	//---
+
 	cursor += bytes;
-	bytes = sizeof(float) *data->nVertex * 3;
-	data->Vertex = new float[bytes];
+	bytes = sizeof(float) *data->nVertex*3;
+	data->Vertex = new float[data->nVertex * 3];
 
 	memcpy(data->Vertex, cursor, bytes);
 
@@ -625,8 +632,8 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 	if (data->nNormals >0)
 	{
 		cursor += bytes;
-		bytes = sizeof(uint) *data->nNormals * 3;
-		data->normals = new float[bytes];
+		bytes = sizeof(uint) *data->nVertex * 3;
+		data->normals = new float[data->nVertex * 3];
 
 		memcpy(data->normals, cursor, bytes);
 
@@ -636,7 +643,7 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 		{
 			glGenBuffers(1, (uint*)&(data->idNormals));
 			glBindBuffer(GL_ARRAY_BUFFER, data->idNormals);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nNormals * 3, data->normals, GL_STATIC_DRAW);		// normals
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nVertex * 3, data->normals, GL_STATIC_DRAW);		// normals
 		}
 	}
 	
@@ -646,7 +653,7 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 	if (nColors>0)
 	{
 		cursor += bytes;
-		bytes = sizeof(float) *data->nNormals * 3;
+		bytes = sizeof(float) *data->nVertex * 3;
 		data->colors = new float[bytes];
 
 		memcpy(data->colors, cursor, bytes);
@@ -665,8 +672,8 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 	if (textureCoods > 0)
 	{
 		cursor += bytes;
-		bytes = sizeof(float) *data->nNormals * 3;
-		data->texCoords = new float[bytes];
+		bytes = sizeof(float) *data->nVertex * 3;
+		data->texCoords = new float[data->nVertex * 3];
 
 		memcpy(data->texCoords, cursor, bytes);
 
@@ -677,6 +684,9 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data->nVertex * 3, data->texCoords, GL_STATIC_DRAW);		// Texture coords
 		}
 	}
+	
+	data->debugBox.SetNegativeInfinity();//
+	data->debugBox.Enclose((float3*)data->Vertex, data->nVertex);
 
 	//---
 	//---

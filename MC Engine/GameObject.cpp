@@ -15,22 +15,26 @@ GameObject::GameObject()
 	parent = App->goManager->GetRoot();
 
 	name = "GameObject_";
-
 	SetGOUID(App->randGen->Int());
 
 	if (parent != nullptr)
 	{
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
 		parent->AddChild(this);
-
-		SetParentUID(parent->GetGOUId());
+		//	SetParentUID(parent->GetGOUId());
 	}
 	else
 	{
 		SetParentUID(0);
+		parent->AddChild(this);
 	}
 
 	name.append(std::to_string(GameOIbject_ID));
+}
+
+GameObject::GameObject(int  exem)
+{
+	name = "GameObject_";
 }
 
 GameObject::GameObject(GameObject* parent): parent(parent)
@@ -43,10 +47,11 @@ GameObject::GameObject(GameObject* parent): parent(parent)
 	{
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
 		parent->AddChild(this);
-		SetParentUID(parent->GetGOUId());
+	//	SetParentUID(parent->GetGOUId());
 	}
 	else 
 	{
+		
 		SetParentUID(0);
 	}
 
@@ -82,7 +87,16 @@ bool GameObject::SetName(const char * newName)
 {
 	bool ret = true;
 
-	name = newName;
+
+	if (newName)
+	{
+		name = newName;
+	}
+	else
+	{
+		name = "GameObject_";
+		name.append(std::to_string(GameOIbject_ID));
+	}
 
 	return ret;
 }
@@ -93,9 +107,7 @@ GameObject * GameObject::CreateChild()
 
 	ret = new GameObject(this);	
 	
-	ret->SetEnable(this->IsEnable());		
-	
-	//childs.push_back(ret);
+	ret->SetEnable(this->IsEnable());			
 
 	return ret;
 }
@@ -106,7 +118,8 @@ void GameObject::DeleteChild(GameObject * objectToDelete)
 	{
 		std::vector<GameObject*>::iterator it = std::find(childs.begin(), childs.end(), objectToDelete);
 	
-		if (it != childs.end()) {
+		if (it != childs.end()) 
+		{
 			childs.erase(it);
 		}		
 	}
@@ -114,7 +127,14 @@ void GameObject::DeleteChild(GameObject * objectToDelete)
 
 void GameObject::DeleteChilds()
 {
-	this->childs.clear();
+	while (!childs.empty())
+	{
+		delete childs.back();
+		childs.back() = nullptr;
+
+		childs.pop_back();
+	}
+	childs.clear();
 }
 
 GameObject * GameObject::GetParent() const
@@ -138,11 +158,10 @@ void GameObject::newParent(GameObject * newparent)
 		}
 
 		this->parent = newparent;
-
+		
 		if (newparent)
-		{
 			newparent->childs.push_back(this);
-		}
+
 	}
 }
 
@@ -150,6 +169,7 @@ void GameObject::AddChild(GameObject * child)
 {
 	childs.push_back(child);
 	child->SetParentID(this->GameOIbject_ID);
+	child->SetParentUID(this->GameOIbject_UID);
 	child->parent = this;
 	
 }
@@ -157,6 +177,19 @@ void GameObject::AddChild(GameObject * child)
 GameObject * GameObject::GetFirstChild()const
 {
 	return childs[0];
+}
+
+GameObject * GameObject::FindGameObject(int UID)
+{
+	if (UID == GameOIbject_UID)
+		return this;
+
+	GameObject* ret = nullptr;
+
+	for (int i = 0; i < childs.size() && ret == nullptr; i++)
+		ret = childs[i]->FindGameObject(UID);
+
+	return ret;
 }
 
 void GameObject::SetParentID(uint parentID)
@@ -199,13 +232,21 @@ int GameObject::GetGOUId() const
 	return GameOIbject_UID;
 }
 
-Component * GameObject::CreateComponent(Component_Type type, const void*buffer)
+Component * GameObject::CreateComponent(Component_Type type, int UID, const void*buffer)
 {	
 	/*
 		COMP_UNKNOWN,COMP_MESH,COMP_TEXTURE,COMP_CAMERA,COMP_SOUND
 	*/
 
-	int newUID = App->randGen->Int();
+	//UID
+	int newUID;
+
+	if (UID == -1) //is new  
+		newUID = App->randGen->Int();
+	else
+		newUID = UID; // on deseralize
+	
+	// creator
 	Component* ret = nullptr;
 
 	switch (type)
@@ -289,11 +330,21 @@ void GameObject::DeleteComponent(Component * comp)
 
 }
 
+void GameObject::AddComponent(Component * comp)
+{
+	if (comp != nullptr)
+	{
+		components.push_back(comp);
+		comp->SetObjectParent(this);
+	}
+}
+
 void GameObject::UpdateTranformChilds()
 {
 	for (int i = 0; i < childs.size(); i++)
 	{
 		CTransformation* tmp = (CTransformation*)childs[i]->GetComponent(COMP_TRANSFORMATION);
+	
 		if (tmp != nullptr)
 		{
 			tmp->UpdateTransFromParent(this);
@@ -450,11 +501,10 @@ void GameObject::OnSelection()
 	CTransformation* transform = (CTransformation*)GetComponent(COMP_TRANSFORMATION);
 
 	App->ui->show_Inspector_window = true;
+	
 	for (int i = 0; i < components.size(); i++)
-	{
-		App->ui->ShowInspectorWindow(components[i], (bool*)true);
-		
-	}
+		App->ui->ShowInspectorWindow(components[i], (bool*)true);		
+	
 	transform->OnGuizmo();
 	
 }
@@ -496,11 +546,12 @@ void GameObject::OnSerialize(DataJSON & file) const
 		// --	components info
 		dataOnFile.AddArray("Components");
 
-		DataJSON componentData ;
+	
 
 		for (int i = 0; i < components.size(); i++)
 		{
-
+			DataJSON componentData;
+			componentData.AddInt("Type", components[i]->getType());
 			components[i]->OnSave(componentData);
 			dataOnFile.AddArray(componentData);
 		}
@@ -514,15 +565,95 @@ void GameObject::OnSerialize(DataJSON & file) const
 	{
 		childs[i]->OnSerialize(file);
 	}
+}
 
+void GameObject::OnDeserialize(DataJSON & file)
+{
+	// basic data
+	SetName(file.GetString("Name"));
+	SetGOUID(file.GetInt("UID"));
+	SetParentUID(file.GetInt("Parent UID"));
+
+	// assign parent
+
+	if (GetParentUID() != 0)
+	{
+		GameObject* parent = App->goManager->GetRoot()->FindGameObject(GetParentUID());
+
+		if (parent != nullptr)
+		{
+			parent->AddChild(this);
+			parent->SetGOUID(file.GetInt("Parent UID"));
+		}
+	}
+	else
+		App->goManager->GetRoot()->AddChild(this);
+	
+
+	// Create components
+
+	int nComponents = file.GetArrayLenght("Components"); 
+
+	for (uint i = 0; i < nComponents; ++i)
+	{
+		DataJSON componentConfig(file.GetArray("Components", i));
+	
+		int cType = componentConfig.GetInt("Type");
+		int componentUID = componentConfig.GetInt("Component UID");
+
+		switch (cType)
+		{
+			case 1: //CMesh
+			{
+				CMesh*  cMesh = new CMesh(this, componentUID);
+				cMesh->OnLoad(componentConfig);
+				this->AddComponent(cMesh);
+
+				break;
+			}
+			case 2://CTexture
+			{
+				CTexture*  cTexture = new CTexture(this, componentUID);
+				cTexture->OnLoad(componentConfig);
+				this->AddComponent(cTexture);
+				break;
+			}
+
+			case 3: //CCamera
+			{
+				CCamera*  cCamera = new CCamera(this, componentUID);
+				cCamera->OnLoad(componentConfig);
+				this->AddComponent(cCamera);
+
+				break;
+			}
+			case 4: //CTransformation
+			{
+				CTransformation*  cTransformation = new CTransformation(this, componentUID);
+				cTransformation->OnLoad(componentConfig);
+				this->AddComponent(cTransformation);
+				break;
+			}
+
+			default: // unknown
+			{
+				LOGUI(" [ERROR]{Deserialize}- Unknown component type");
+				break;
+			}
+		}//switch
+
+	}//for
 }
 
 void GameObject::SaveData()
 {
+	//iterate childs
 	for (int i = 0; i < childs.size(); i++)
 	{
 		childs[i]->SaveData();
 	}
+
+	//components it
 
 	if (components.size()>0)
 	{
@@ -536,30 +667,17 @@ void GameObject::SaveData()
 	}
 }
 
-void GameObject::LoadData()
+void GameObject::LoadData() //maybe to delete
 {
-	//for (int i = 0; i < childs.size(); i++)
-	//{
-	//	childs[i]->LoadData();
-	//}
-
-	//if (components.size()>0)
-	//{
-	//	for (int i = 0; i < components.size(); i++)
-	//	{
-	//		if()
-	//			App->datamanager->LoadData(components[i]->GetData(), components[i]->GetDataType(), this->GameOIbject_ID);
-	//	}
-	//}
 }
 
 void GameObject::TriIntersection(LineSegment & line, float & distance, float3 & hitPoint)
 {
-	CMesh* Mesh = (CMesh*)GetComponent(COMP_MESH);
+	CMesh* mesh = (CMesh*)GetComponent(COMP_MESH);
 
-	if (Mesh != nullptr)
+	if (mesh != nullptr)
 	{
-		Mesh->IntersectTriangle(line, distance, hitPoint);
+		mesh->IntersectTriangle(line, distance, hitPoint);
 	}
 }
 

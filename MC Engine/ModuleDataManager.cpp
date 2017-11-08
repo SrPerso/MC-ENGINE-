@@ -10,7 +10,7 @@
 #include "DContainer.h"
 
 #include "IMesh.h"
-
+#include <fstream>
 #include "CTransformation.h"
 
 ModuleDataManager::ModuleDataManager(Application* app, bool start_enabled) :Module(app, start_enabled)
@@ -18,11 +18,22 @@ ModuleDataManager::ModuleDataManager(Application* app, bool start_enabled) :Modu
 	name = "Module Data Manager"; //this module is going to import all Data of the components. and future scene loader
 
 	importerMesh = new ImporterMesh();
+	importerTexture = new ImporterTexture();
+
 }
 
 
 ModuleDataManager::~ModuleDataManager()
 {
+}
+
+bool ModuleDataManager::Init()
+{
+	CreateDir("Library");
+	CreateDir("Library/Mesh");
+	CreateDir("Library/Material");
+
+	return true;
 }
 
 GameObject* ModuleDataManager::ImportGameObject(std::string path, GameObject * parent)
@@ -58,7 +69,9 @@ GameObject* ModuleDataManager::ImportGameObject(std::string path, GameObject * p
 		if (scene != nullptr && scene->HasMeshes())
 		{
 			LOG("Loading meshes");
-			newObject = ImportGameObject(path, newObject, scene, node);
+
+			ImportGameObject(path, newObject, scene, node); //std::string path, GameObject * parent, const aiScene * scene, aiNode * node)
+			
 			aiReleaseImport(scene);
 		}
 		else
@@ -71,49 +84,55 @@ GameObject* ModuleDataManager::ImportGameObject(std::string path, GameObject * p
 	return newObject;
 }
 
-GameObject * ModuleDataManager::ImportGameObject(std::string path, GameObject*parent,const aiScene* scene,aiNode* node )
-{	
-	GameObject* newObject = parent->CreateChild();
 
-	newObject->SetGOID(App->randGen->Int());
+bool ModuleDataManager::ImportGameObject(std::string path, GameObject * parent, const aiScene * scene, aiNode * node)
+{
+	bool ret = true;
 
-			for (int i = 0; i < node->mNumMeshes; i++)
-			{
-				 
-				aiMesh* newMesh = scene->mMeshes[node->mMeshes[i]];
-				
-				GameObject * GameObjectSon;
-				
-				if (node->mNumMeshes > 1 && i == 1 )
-				{
-					GameObjectSon = new GameObject(newObject);		
-					GameObjectSon->SetGOID(App->randGen->Int());
-				}
-				else
-				{
-					GameObjectSon = newObject;
-				}				
-				
-				GameObjectSon->CreateComponent(COMP_TRANSFORMATION, (DTransformation*)importerTransformations->ImportTrans(node, GameObjectSon, GameObjectSon->GetGOId()));
+	for (int i = 0; i < node->mNumMeshes; i++)
+	{
+		aiMesh* newMesh = scene->mMeshes[node->mMeshes[i]];
 
-				DMesh* MeshtoCreate = (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon, GameObjectSon->GetGOId());
-				GameObjectSon->CreateComponent(COMP_MESH, MeshtoCreate);
+		if (newMesh != nullptr)
+		{
+	
+			GameObject * GameObjectSon = new GameObject(parent);
 
-				aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
-				GameObjectSon->CreateComponent(COMP_TEXTURE, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));        
-			}		
 
-			for (int i = 0; i < node->mNumChildren; ++i)
-				newObject = ImportGameObject(path, parent, scene ,node->mChildren[i]);
+			GameObjectSon->SetGOID(App->randGen->Int());
 
-			return newObject;
+			GameObjectSon->CreateComponent(COMP_TRANSFORMATION, -1, (DTransformation*)importerTransformations->ImportTrans(node, GameObjectSon, GameObjectSon->GetGOId()));
+
+			DMesh* MeshtoCreate = (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon, GameObjectSon->GetGOId());
+			GameObjectSon->CreateComponent(COMP_MESH, -1, MeshtoCreate);
+
+			aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
+			GameObjectSon->CreateComponent(COMP_TEXTURE, -1, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));
+
+		}
+	}
+
+	for (int i = 0; i < node->mNumChildren; ++i)
+		ImportGameObject(path, parent, scene, node->mChildren[i]);
+
+	return ret;
+
+}
+
+void ModuleDataManager::CreateDir(const char * dirName)
+{
+	if (CreateDirectory(dirName, NULL))
+	{
+		LOGUI("[OK]-Created Dir %s", dirName);
+	}
+	else
+		LOGUI("[ERROR]- Cant create Dir %s", dirName);
 }
 
 
 void ModuleDataManager::SaveAllData()const
 {
 	//std::vector<const void*>* returned = nullptr;
-
 	App->goManager->GetRoot()->SaveData();	
 }
 

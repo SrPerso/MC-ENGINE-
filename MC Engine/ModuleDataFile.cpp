@@ -103,6 +103,14 @@ void DataJSON::SaveAll() const
 	}
 }
 
+bool DataJSON::CanLoad() const
+{
+	if (value_json != nullptr && object_json != nullptr)
+		return true;
+	
+	return false;
+}
+
 int DataJSON::GetInt( const char * name, JSON_Object * object) const
 {
 	int ret = 0;
@@ -195,7 +203,7 @@ const char * DataJSON::GetString(const char * name, JSON_Object * object) const
 {
 	const char * ret = nullptr;
 
-	if (object)
+	if (object != nullptr)
 	{
 		JSON_Value* value = json_object_get_value(object, name);
 
@@ -226,10 +234,9 @@ JSON_Value * DataJSON::GetValor(const char * field, int count, JSON_Object * obj
 			return json_object_get_value(object, field);
 
 		JSON_Array* arrays = json_object_get_array(object, field);
+
 		if (arrays != nullptr)
-		{
 			return json_array_get_value(arrays, count);
-		}
 	}
 	else
 	{
@@ -237,13 +244,40 @@ JSON_Value * DataJSON::GetValor(const char * field, int count, JSON_Object * obj
 			return json_object_get_value(object_json, field);
 
 		JSON_Array* arrays = json_object_get_array(object_json, field);
+	
 		if (arrays != nullptr)
-		{
 			return json_array_get_value(arrays, count);
-		}
 	}
+	
 
 	return nullptr;
+}
+
+
+DataJSON DataJSON::GetArray(const char * name, int lenght, JSON_Object * object)
+{
+	JSON_Array* temp;
+
+	if(object==nullptr)
+		temp = json_object_get_array(object_json, name);
+	else
+		temp = json_object_get_array(object, name);
+	
+	if (temp != nullptr)
+		return DataJSON(json_array_get_object(temp, lenght));
+
+	return DataJSON(nullptr);
+
+}
+
+uint DataJSON::GetArrayLenght(const char * field)
+{
+	JSON_Array* array = json_object_get_array(object_json, field);
+	
+	if (array != nullptr)
+		return json_array_get_count(array);
+	
+	return uint(0);
 }
 
 DataJSON DataJSON::AddSection(const char * name, JSON_Object * object)

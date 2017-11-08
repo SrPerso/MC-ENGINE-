@@ -58,7 +58,6 @@ public:
 
 	// Save scene
 
-	void SaveScene(const char*fileName);
 
 	//logs
 	void AddLogToConsole(std::string toAdd);
