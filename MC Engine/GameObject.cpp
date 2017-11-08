@@ -380,15 +380,19 @@ void GameObject::Update(float dt)
 	}
 
 	CMesh* debuger = (CMesh*)this->GetComponent(COMP_MESH);
-	if (debuger != nullptr)
+	CTransformation* transform = (CTransformation*)GetComponent(COMP_TRANSFORMATION);
+	if (debuger != nullptr && transform !=nullptr)
 	{
-		recalculatedBox = debuger->debugBox;
+		//recalculatedBox = debuger->debugBox;
 
 
 		if (camera != nullptr)
 		{
 			if (camera->needToCull) 
 			{
+				AABB recalculatedBox = debuger->debugBox;
+
+				recalculatedBox.TransformAsAABB(transform->GetTransMatrix());				
 
 				if (camera->Contains(recalculatedBox))
 				{

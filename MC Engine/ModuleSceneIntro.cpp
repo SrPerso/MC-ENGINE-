@@ -11,6 +11,7 @@
 #include "Math.h"
 #include "CMesh.h"
 #include "CTransformation.h"
+#include "MathGeoLib\Geometry\LineSegment.h"
 
 
 #pragma comment( lib, "Glew/libx86/glew32.lib" )
@@ -172,8 +173,11 @@ void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObje
 {
 
 	GameObject* Closest = nullptr;
+	
 
-	CTransformation* transform = nullptr;
+	LineSegment newSegment = picking;
+	
+
 	for (uint i = 0; i < App->goManager->GetRoot()->childs.size(); i++)
 	{
 		if (App->goManager->GetRoot()->childs[i]->childs.size() > 0)
@@ -181,6 +185,13 @@ void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObje
 			for (uint p = 0; p < App->goManager->GetRoot()->childs[i]->childs.size(); p++)
 			{
 				CMesh* IntersectMesh = (CMesh*)App->goManager->GetRoot()->childs[i]->childs[p]->GetComponent(COMP_MESH);
+				CTransformation* IntersectTransform = (CTransformation*)App->goManager->GetRoot()->childs[i]->childs[p]->GetComponent(COMP_TRANSFORMATION);
+				if (IntersectTransform != nullptr) {
+
+					newSegment.Transform(IntersectTransform->GetTransMatrix().Inverted());
+					
+				}
+
 				if (IntersectMesh != nullptr)
 				{
 					if (picking.Intersects(IntersectMesh->debugBox) == true)
@@ -193,7 +204,13 @@ void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObje
 			}
 		}
 		else {
+
 			CMesh* IntersectMesh = (CMesh*)App->goManager->GetRoot()->childs[i]->GetComponent(COMP_MESH);
+			CTransformation* IntersectTransform = (CTransformation*)App->goManager->GetRoot()->childs[i]->GetComponent(COMP_TRANSFORMATION);
+			if (IntersectTransform != nullptr) {
+
+				newSegment.Transform(IntersectTransform->GetTransMatrix().Inverted());
+			}
 			if (IntersectMesh != nullptr)
 			{
 				if (picking.Intersects(IntersectMesh->debugBox) == true)

@@ -317,6 +317,7 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 		{
 			CMesh* componentMesh = dynamic_cast<CMesh*>(*it);
 
+			
 			if (App->ui->debug_active == true) 			{		
 				
 				DrawDebug(componentMesh);
@@ -435,7 +436,7 @@ void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 
 			glPushMatrix();
 
-			glMultMatrixf((float*)float4x4::identity.Transposed().ptr());
+			
 
 			glColor3f(Green.r, Green.g, Green.b);
 
