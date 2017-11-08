@@ -98,10 +98,10 @@ private:
 	bool show_Console_window = true;
 	bool show_Configuration_window = false;
 	bool show_Config_window = false;
-	bool show_ImageView_window = true;
+	bool show_ImageView_window = false;
 	bool show_TeamInfo_window = false;
 	bool show_Geometry_window = false;
-	bool show_Debug_window = true;
+	bool show_Debug_window = false;
 	bool show_Editor_window = true;
 	
 

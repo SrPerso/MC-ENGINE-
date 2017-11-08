@@ -104,10 +104,8 @@ bool ImporterTexture::Save(const void * buffer, const char * saverFile, uint id)
 
 	path = "Library/Material";
 	path.append("/");
-//	path.append("Ma");
-//	path.append(std::to_string(id));
 	path.append(saverFile);
-	path.append(".MCtexture");
+	path.append(".dds");
 
 	LOGUI("[SAVING]{Texture}- %s", path.c_str());
 
@@ -164,10 +162,9 @@ DTexture * ImporterTexture::Load(const void * buffer, const char * loadFile, uin
 	if (loadFile == nullptr)
 	{
 		path = "Library/Material";
-		path.append("/");
-		path.append("Ma");
+		path.append("/");	
 		path.append(std::to_string(id));
-		path.append(".MCtexture");
+		path.append(".dds");
 	}
 	else
 	{

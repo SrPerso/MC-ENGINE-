@@ -129,7 +129,11 @@ void GObjectManager::LoadScene(const char * fileName)
 		return;
 	}
 
+	App->scene_intro->sceneSelected = nullptr;
+
 	// cleaning scene
+
+
 	GetRoot()->DeleteChilds();
 
 	uint size = dataToLoad.GetArrayLenght("Scene_GO");
