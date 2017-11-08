@@ -203,7 +203,7 @@ const char * DataJSON::GetString(const char * name, JSON_Object * object) const
 {
 	const char * ret = nullptr;
 
-	if (object)
+	if (object != nullptr)
 	{
 		JSON_Value* value = json_object_get_value(object, name);
 

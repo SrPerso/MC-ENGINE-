@@ -88,7 +88,7 @@ void GObjectManager::deleteGameObject(GameObject * GObject)
 void GObjectManager::SaveScene(const char * fileName)
 {
 	DataJSON dataToSave;
-	dataToSave.AddArray("Scene Game Objects");
+	dataToSave.AddArray("Scene_GO");
 
 	App->goManager->root->OnSerialize(dataToSave);
 
@@ -99,7 +99,6 @@ void GObjectManager::SaveScene(const char * fileName)
 	LOGUI("[SERIALIZE]- Creating file to save  {%s}", fileName);
 
 	std::string path;
-
 	path = "Assets/";
 	path.append(fileName);
 	path.append(".MCscene");
@@ -113,9 +112,16 @@ void GObjectManager::SaveScene(const char * fileName)
 
 void GObjectManager::LoadScene(const char * fileName)
 {
-
 	LOGUI("-------------------------------------------");
-	DataJSON dataToLoad;
+
+	
+	std::string path;
+	path = "Assets/";
+	path.append(fileName);
+	path.append(".MCscene");
+
+
+	DataJSON dataToLoad(path.c_str());
 
 	if (dataToLoad.CanLoad() != true)
 	{
@@ -123,17 +129,18 @@ void GObjectManager::LoadScene(const char * fileName)
 		return;
 	}
 
-	root->DeleteChilds();
+	// cleaning scene
+	GetRoot()->DeleteChilds();
 
-	for (int i = 0; i < dataToLoad.GetArrayLenght("Scene Game Objects"); i++)
+	uint size = dataToLoad.GetArrayLenght("Scene_GO");
+	for (int i = 0; i <size; i++)
 	{
 		GameObject* temp = new GameObject();
 
-		DataJSON deserialize = dataToLoad.GetArray("Scene Game Objects", i);
+		DataJSON deserialize = dataToLoad.GetArray("Scene_GO", i);
 		temp->OnDeserialize(deserialize);
 
-	//	delete temp;
 	}
 
-	LOGUI("[DESERIALIZED]- {%s}", fileName);
+	LOGUI("[DESERIALIZED]- deserialize {%s}", fileName);
 }

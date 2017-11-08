@@ -23,7 +23,7 @@ GameObject::GameObject()
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
 		parent->AddChild(this);
 
-		SetParentUID(parent->GetGOUId());
+	//	SetParentUID(parent->GetGOUId());
 	}
 	else
 	{
@@ -43,7 +43,7 @@ GameObject::GameObject(GameObject* parent): parent(parent)
 	{
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
 		parent->AddChild(this);
-		SetParentUID(parent->GetGOUId());
+	//	SetParentUID(parent->GetGOUId());
 	}
 	else 
 	{
@@ -82,7 +82,16 @@ bool GameObject::SetName(const char * newName)
 {
 	bool ret = true;
 
-	name = newName;
+
+	if (newName)
+	{
+		name = newName;
+	}
+	else
+	{
+		name = "GameObject_";
+		name.append(std::to_string(GameOIbject_ID));
+	}
 
 	return ret;
 }
@@ -93,9 +102,7 @@ GameObject * GameObject::CreateChild()
 
 	ret = new GameObject(this);	
 	
-	ret->SetEnable(this->IsEnable());		
-	
-	//childs.push_back(ret);
+	ret->SetEnable(this->IsEnable());			
 
 	return ret;
 }
@@ -115,7 +122,14 @@ void GameObject::DeleteChild(GameObject * objectToDelete)
 
 void GameObject::DeleteChilds()
 {
-	this->childs.clear();
+	while (!childs.empty())
+	{
+		delete childs.back();
+		childs.back() = nullptr;
+
+		childs.pop_back();
+	}
+	childs.clear();
 }
 
 GameObject * GameObject::GetParent() const
@@ -150,6 +164,7 @@ void GameObject::AddChild(GameObject * child)
 {
 	childs.push_back(child);
 	child->SetParentID(this->GameOIbject_ID);
+	child->SetParentUID(this->GameOIbject_UID);
 	child->parent = this;
 	
 }
@@ -310,11 +325,21 @@ void GameObject::DeleteComponent(Component * comp)
 
 }
 
+void GameObject::AddComponent(Component * comp)
+{
+	if (comp != nullptr)
+	{
+		components.push_back(comp);
+		comp->SetObjectParent(this);
+	}
+}
+
 void GameObject::UpdateTranformChilds()
 {
 	for (int i = 0; i < childs.size(); i++)
 	{
 		CTransformation* tmp = (CTransformation*)childs[i]->GetComponent(COMP_TRANSFORMATION);
+	
 		if (tmp != nullptr)
 		{
 			tmp->UpdateTransFromParent(this);
@@ -513,11 +538,12 @@ void GameObject::OnSerialize(DataJSON & file) const
 		// --	components info
 		dataOnFile.AddArray("Components");
 
-		DataJSON componentData ;
+	
 
 		for (int i = 0; i < components.size(); i++)
 		{
-
+			DataJSON componentData;
+			componentData.AddInt("Type", components[i]->getType());
 			components[i]->OnSave(componentData);
 			dataOnFile.AddArray(componentData);
 		}
@@ -531,7 +557,6 @@ void GameObject::OnSerialize(DataJSON & file) const
 	{
 		childs[i]->OnSerialize(file);
 	}
-
 }
 
 void GameObject::OnDeserialize(DataJSON & file)
@@ -542,17 +567,13 @@ void GameObject::OnDeserialize(DataJSON & file)
 	SetParentUID(file.GetInt("Parent UID"));
 
 	// assign parent
-	if (GetParentUID() == 0)
-	{
-		App->goManager->root->AddChild(this);
-	}
-	else
+
+	if (GetParentUID() != 0)
 	{
 		GameObject* parent = App->goManager->GetRoot()->FindGameObject(GetParentUID());
+
 		if (parent != nullptr)
-		{
-			parent->AddChild(this);
-		}
+			parent->AddChild(this);		
 	}
 	// Create components
 
@@ -562,36 +583,37 @@ void GameObject::OnDeserialize(DataJSON & file)
 	{
 		DataJSON componentConfig(file.GetArray("Components", i));
 	
-		Component_Type cType = (Component_Type)componentConfig.GetInt("Component Type");
+		int cType = componentConfig.GetInt("Type");
 		int componentUID = componentConfig.GetInt("Component UID");
 
 		switch (cType)
 		{
-			case COMP_MESH: //CMesh
+			case 1: //CMesh
 			{
 				CMesh*  cMesh = new CMesh(this, componentUID);
 				cMesh->OnLoad(componentConfig);
-
+				this->AddComponent(cMesh);
 				break;
 			}
-			case COMP_TEXTURE://CTexture
+			case 2://CTexture
 			{
 				CTexture*  cTexture = new CTexture(this, componentUID);
 				cTexture->OnLoad(componentConfig);
-
+				this->AddComponent(cTexture);
 				break;
 			}
-			case COMP_CAMERA: //CCamera
+			case 3: //CCamera
 			{
 				CCamera*  cCamera = new CCamera(this, componentUID);
 				cCamera->OnLoad(componentConfig);
-
+				this->AddComponent(cCamera);
 				break;
 			}
-			case COMP_TRANSFORMATION: //CTransformation
+			case 4: //CTransformation
 			{
 				CTransformation*  cTransformation = new CTransformation(this, componentUID);
 				cTransformation->OnLoad(componentConfig);
+				this->AddComponent(cTransformation);
 				break;
 			}
 
