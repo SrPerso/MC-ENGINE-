@@ -213,6 +213,9 @@ void CTransformation::OnLoad(DataJSON & file)
 void CTransformation::TransUpdate()
 {
 	CMesh* mesh = (CMesh*)object->GetComponent(COMP_MESH);
+	
+
+	
 
 	eulerAngles.x *= DEGTORAD;
 	eulerAngles.y *= DEGTORAD;
@@ -225,6 +228,8 @@ void CTransformation::TransUpdate()
 	globalTransformMatrix = float4x4::Scale(scale, float3(0, 0, 0)) * globalTransformMatrix;
 	globalTransformMatrix.float4x4::SetTranslatePart(position.x, position.y, position.z);
 
+
+	//mesh->debugBox.TransformAsAABB(GetTransMatrix());
 	
 	SetLocalTrans(object->GetParent());
 	object->UpdateTranformChilds();

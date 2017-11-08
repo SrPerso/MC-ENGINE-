@@ -175,7 +175,7 @@ void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObje
 	GameObject* Closest = nullptr;
 	
 
-	LineSegment newSegment = picking;
+	
 	
 
 	for (uint i = 0; i < App->goManager->GetRoot()->childs.size(); i++)
@@ -184,6 +184,7 @@ void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObje
 		{
 			for (uint p = 0; p < App->goManager->GetRoot()->childs[i]->childs.size(); p++)
 			{
+				LineSegment newSegment(picking);
 				CMesh* IntersectMesh = (CMesh*)App->goManager->GetRoot()->childs[i]->childs[p]->GetComponent(COMP_MESH);
 				CTransformation* IntersectTransform = (CTransformation*)App->goManager->GetRoot()->childs[i]->childs[p]->GetComponent(COMP_TRANSFORMATION);
 				if (IntersectTransform != nullptr) {
@@ -194,7 +195,7 @@ void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObje
 
 				if (IntersectMesh != nullptr)
 				{
-					if (picking.Intersects(IntersectMesh->debugBox) == true)
+					if (newSegment.Intersects(IntersectMesh->debugBox) == true)
 					{
 						DistanceList.push_back(App->goManager->GetRoot()->childs[i]->childs[p]);
 
@@ -204,7 +205,7 @@ void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObje
 			}
 		}
 		else {
-
+			LineSegment newSegment(picking);
 			CMesh* IntersectMesh = (CMesh*)App->goManager->GetRoot()->childs[i]->GetComponent(COMP_MESH);
 			CTransformation* IntersectTransform = (CTransformation*)App->goManager->GetRoot()->childs[i]->GetComponent(COMP_TRANSFORMATION);
 			if (IntersectTransform != nullptr) {
@@ -213,7 +214,7 @@ void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObje
 			}
 			if (IntersectMesh != nullptr)
 			{
-				if (picking.Intersects(IntersectMesh->debugBox) == true)
+				if (newSegment.Intersects(IntersectMesh->debugBox) == true)
 				{
 					DistanceList.push_back(App->goManager->GetRoot()->childs[i]);
 					LOGUI("hit");
