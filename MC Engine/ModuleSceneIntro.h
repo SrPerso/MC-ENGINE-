@@ -53,9 +53,7 @@ public:
 public:
 	std::list<Primitive*> GeometryObjects;
 
-	std::list<PrimitiveLine*> NormalsLines;
-
-	
+	std::list<PrimitiveLine*> NormalsLines;	
 	
 	GlobalDebugInfo sceneDebugInfo;
 

@@ -146,6 +146,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+
 	glLoadMatrixf(App->camera->GetViewMatrix());
 	glMatrixMode(GL_MODELVIEW);
 	/*

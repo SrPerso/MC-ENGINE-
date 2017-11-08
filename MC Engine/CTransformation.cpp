@@ -2,6 +2,7 @@
 #include "ModuleDataFile.h"
 #include "ImGuizmo\ImGuizmo.h"
 #include "imGUI\imgui.h"
+#include "CMesh.h"
 
 
 CTransformation::CTransformation(GameObject * object,int UID, Component_Type type, DTransformation* data) :Component(object, UID, type)
@@ -51,39 +52,45 @@ void CTransformation::OnGuizmo() {
 
 	ImGuizmo::Enable(true);
 	
-	float4x4 mat = App->camera->editorCam->frustum.ViewMatrix();
+
+	float* projMatrix = App->camera->editorCam->frustum.ViewProjMatrix().Transposed().ptr();
+	float* matrix = globalTransformMatrix.Transposed().ptr();
 
 	ImGuiIO& io = ImGui::GetIO();
+
 
 	
 	int w, h;
 	App->window->GetWidth(w);
 	App->window->GetHeight(h);
 	ImGuizmo::SetRect(0, 0, (float)w, float(h));
+
+	
+
+	
 	if (App->input->GetW() == true)
 	{
-		ImGuizmo::Manipulate(mat.Transposed().ptr(), App->camera->editorCam->frustum.ViewProjMatrix().Transposed().ptr(), ImGuizmo::TRANSLATE, ImGuizmo::WORLD, globalTransformMatrix.ptr());
+		ImGuizmo::Manipulate(float4x4::identity.ptr(), projMatrix, ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, matrix);
 	}
 	else if (App->input->GetE() == true)
 	{
-		ImGuizmo::Manipulate(mat.Transposed().ptr(), App->camera->editorCam->frustum.ViewProjMatrix().Transposed().ptr(), ImGuizmo::ROTATE, ImGuizmo::WORLD, globalTransformMatrix.ptr());
+		ImGuizmo::Manipulate(float4x4::identity.ptr(), projMatrix, ImGuizmo::ROTATE, ImGuizmo::LOCAL, matrix);
 	}
 	else if (App->input->GetR() == true)
 	{
-		ImGuizmo::Manipulate(mat.Transposed().ptr(), App->camera->editorCam->frustum.ViewProjMatrix().Transposed().ptr(), ImGuizmo::SCALE, ImGuizmo::WORLD, globalTransformMatrix.ptr());
+		ImGuizmo::Manipulate(float4x4::identity.ptr(), projMatrix, ImGuizmo::SCALE, ImGuizmo::LOCAL, matrix);
 	}
+	
 	
 
 	
 
 	if (ImGuizmo::IsUsing())
 	{
-		globalTransformMatrix.Decompose(position, rotation, scale);
-		eulerAngles=rotation.ToEulerXYZ();
-	
-		eulerAngles.x *= RADTODEG;
-		eulerAngles.y *= RADTODEG;
-		eulerAngles.z *= RADTODEG;
+		ImGuizmo::DecomposeMatrixToComponents(matrix,(float*)position.ptr(),(float*)eulerAngles.ptr(),(float*)scale.ptr());
+		globalTransformMatrix.Transpose();
+		ImGuizmo::RecomposeMatrixFromComponents((float*)position.ptr(), (float*)eulerAngles.ptr(), (float*)scale.ptr(),globalTransformMatrix.ptr());
+		globalTransformMatrix.Transpose();
 	}
 }
 void CTransformation::OnEditor()

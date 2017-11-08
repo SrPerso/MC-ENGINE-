@@ -35,7 +35,8 @@ bool ModuleSceneIntro::Start()
 	DCamera* dcamera = new DCamera();
 
 	camera->CreateComponent(COMP_CAMERA, dcamera);
-	App->camera->mainCam = (CCamera*)camera->GetComponent(COMP_CAMERA);
+	CCamera* mainSceneCam = (CCamera*)camera->GetComponent(COMP_CAMERA);
+	App->camera->mainCam = mainSceneCam;
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 	MinDistance = MINDISTANCE;

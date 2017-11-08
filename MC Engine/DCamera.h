@@ -25,7 +25,7 @@ public:
 	float FOV;
 	float aspectRatio;
 	Frustum frustum;
-	bool Active;
+	bool Active=false;
 	bool needToCull;
 };
 
