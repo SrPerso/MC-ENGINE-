@@ -21,7 +21,7 @@ ImporterMesh::~ImporterMesh()
 {
 }
 
-DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, uint id)
+DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, int id)
 {
 	LOGUI("-------------------------------------------");
 	aiMesh* newMesh = buffer;
@@ -136,7 +136,7 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, uint id)
 		LOGUI("-------------------------------------------");
 
 		//delete mesh;	
-		//Save(mesh, nullptr, id);
+		Save(mesh, nullptr, id);
 	
 		////mesh = nullptr;
 
@@ -398,7 +398,7 @@ bool ImporterTrans::Save(const void * buffer, const char * saverFile, uint id)
 	return ret;
 }
 
-bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
+bool ImporterMesh::Save(const void* buffer, const char * saverFile, int id)
 {
 	bool ret = true;
 	// amount of indices / vertices / colors / normals / texture_coords / AABB
@@ -520,7 +520,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, uint id)
 
 	return ret;
 }
-DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, uint id)
+DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, int id)
 {
 	DMesh* data = new DMesh();
 	//data = (DMesh*)buffer;

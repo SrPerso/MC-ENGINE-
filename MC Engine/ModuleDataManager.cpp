@@ -103,7 +103,7 @@ bool ModuleDataManager::ImportGameObject(std::string path, GameObject * parent, 
 
 			GameObjectSon->CreateComponent(COMP_TRANSFORMATION, -1, (DTransformation*)importerTransformations->ImportTrans(node, GameObjectSon, GameObjectSon->GetGOId()));
 
-			DMesh* MeshtoCreate = (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon, GameObjectSon->GetGOId());
+			DMesh* MeshtoCreate = (DMesh*)importerMesh->ImportMesh(newMesh, GameObjectSon, GameObjectSon->GetGOUId());
 			GameObjectSon->CreateComponent(COMP_MESH, -1, MeshtoCreate);
 
 			aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];

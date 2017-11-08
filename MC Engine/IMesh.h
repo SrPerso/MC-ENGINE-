@@ -19,10 +19,10 @@ public:
 	ImporterMesh();
 	~ImporterMesh();
 
-	DMesh* ImportMesh(aiMesh*buffer, GameObject* object, uint id);
+	DMesh* ImportMesh(aiMesh*buffer, GameObject* object, int id);
 
-	DMesh* Load(const void* buffer, const char* loadFile, uint id);
-	bool Save(const void* buffer, const char * saverFile, uint id) override;
+	DMesh* Load(const void* buffer, const char* loadFile, int id);
+	bool Save(const void* buffer, const char * saverFile, int id) ;
 
 };
 
