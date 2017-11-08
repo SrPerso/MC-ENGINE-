@@ -12,6 +12,7 @@ class GameObject
 {
 public:
 	GameObject();
+	GameObject(int exem);
 	GameObject(GameObject* parent );
 	virtual ~GameObject();
 

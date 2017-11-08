@@ -20,6 +20,8 @@ public:
 	ModuleDataManager(Application * app, bool start_enabled= true);
 	virtual ~ModuleDataManager();
 
+	bool Init();
+
 	update_status Update(float dt) {return UPDATE_CONTINUE;	}
 	update_status PreUpdate(float dt){ return UPDATE_CONTINUE; }
 	update_status PostUpdate(float dt){ return UPDATE_CONTINUE; }
@@ -27,8 +29,9 @@ public:
 	bool CleanUp() { return true; }
 
 	GameObject* ImportGameObject(std::string Path, GameObject*parent);
-	GameObject* ImportGameObject(std::string Path, GameObject*parent,const aiScene* scene, aiNode* node = nullptr);
+	bool ImportGameObject(std::string Path, GameObject*parent,const aiScene* scene, aiNode* node = nullptr);
 
+	void CreateDir(const char* name);
 
 	void SaveAllData()const; 
 	void SaveData(const void * buff, DType type, uint id)const;

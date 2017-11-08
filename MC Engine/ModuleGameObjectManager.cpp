@@ -133,11 +133,13 @@ void GObjectManager::LoadScene(const char * fileName)
 	GetRoot()->DeleteChilds();
 
 	uint size = dataToLoad.GetArrayLenght("Scene_GO");
+
 	for (int i = 0; i <size; i++)
 	{
-		GameObject* temp = new GameObject();
+		GameObject*  temp = new GameObject(1);
 
 		DataJSON deserialize = dataToLoad.GetArray("Scene_GO", i);
+
 		temp->OnDeserialize(deserialize);
 
 	}

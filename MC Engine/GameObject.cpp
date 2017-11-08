@@ -15,22 +15,26 @@ GameObject::GameObject()
 	parent = App->goManager->GetRoot();
 
 	name = "GameObject_";
-
 	SetGOUID(App->randGen->Int());
 
 	if (parent != nullptr)
 	{
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
 		parent->AddChild(this);
-
-	//	SetParentUID(parent->GetGOUId());
+		//	SetParentUID(parent->GetGOUId());
 	}
 	else
 	{
 		SetParentUID(0);
+		parent->AddChild(this);
 	}
 
 	name.append(std::to_string(GameOIbject_ID));
+}
+
+GameObject::GameObject(int  exem)
+{
+	name = "GameObject_";
 }
 
 GameObject::GameObject(GameObject* parent): parent(parent)
@@ -47,6 +51,7 @@ GameObject::GameObject(GameObject* parent): parent(parent)
 	}
 	else 
 	{
+		
 		SetParentUID(0);
 	}
 
@@ -492,11 +497,10 @@ void GameObject::OnSelection()
 	CTransformation* transform = (CTransformation*)GetComponent(COMP_TRANSFORMATION);
 
 	App->ui->show_Inspector_window = true;
+	
 	for (int i = 0; i < components.size(); i++)
-	{
-		App->ui->ShowInspectorWindow(components[i], (bool*)true);
-		
-	}
+		App->ui->ShowInspectorWindow(components[i], (bool*)true);		
+	
 	transform->OnGuizmo();
 	
 }
@@ -573,8 +577,15 @@ void GameObject::OnDeserialize(DataJSON & file)
 		GameObject* parent = App->goManager->GetRoot()->FindGameObject(GetParentUID());
 
 		if (parent != nullptr)
-			parent->AddChild(this);		
+		{
+			parent->AddChild(this);
+			parent->SetGOUID(file.GetInt("Parent UID"));
+		}
 	}
+	else
+		App->goManager->GetRoot()->AddChild(this);
+	
+
 	// Create components
 
 	int nComponents = file.GetArrayLenght("Components"); 
@@ -593,6 +604,7 @@ void GameObject::OnDeserialize(DataJSON & file)
 				CMesh*  cMesh = new CMesh(this, componentUID);
 				cMesh->OnLoad(componentConfig);
 				this->AddComponent(cMesh);
+
 				break;
 			}
 			case 2://CTexture
@@ -602,11 +614,13 @@ void GameObject::OnDeserialize(DataJSON & file)
 				this->AddComponent(cTexture);
 				break;
 			}
+
 			case 3: //CCamera
 			{
 				CCamera*  cCamera = new CCamera(this, componentUID);
 				cCamera->OnLoad(componentConfig);
 				this->AddComponent(cCamera);
+
 				break;
 			}
 			case 4: //CTransformation
@@ -623,6 +637,7 @@ void GameObject::OnDeserialize(DataJSON & file)
 				break;
 			}
 		}//switch
+
 	}//for
 }
 
