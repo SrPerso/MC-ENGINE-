@@ -22,6 +22,7 @@ public:
 	void OnSave(DataJSON&file)const override;
 	void OnLoad(DataJSON&file) override;
 
+	void SetData(DTexture*data);
 	uint Texture_ID; 
 };
 #endif //_TEXTURE_H
