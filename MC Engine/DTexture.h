@@ -14,7 +14,8 @@ public:
 	//float* texCoords = nullptr;
 	
 	uint image = 0;
-	std::string Textname;
+	std::string textNamePath;
+	std::string textureName;
 
 public:
 	DTexture(DType resType = D_TEXTURE);

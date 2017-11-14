@@ -423,19 +423,17 @@ void GameObject::Update(float dt)
 			if (App->goManager->GetRoot()->childs[i]->components[p]->getType() == COMP_CAMERA)
 			{
 				if (App->goManager->GetRoot()->childs[i]->components[p] != nullptr)
-				{
 					camera = (CCamera*)App->goManager->GetRoot()->childs[i]->components[p];
-				}
 			}
 		}
 	}
 
 	CMesh* debuger = (CMesh*)this->GetComponent(COMP_MESH);
 	CTransformation* transform = (CTransformation*)GetComponent(COMP_TRANSFORMATION);
+
 	if (debuger != nullptr && transform !=nullptr)
 	{
 		//recalculatedBox = debuger->debugBox;
-
 
 		if (camera != nullptr)
 		{
@@ -446,20 +444,16 @@ void GameObject::Update(float dt)
 				recalculatedBox.TransformAsAABB(transform->GetTransMatrix());				
 
 				if (camera->Contains(recalculatedBox))
-				{
 					App->renderer3D->DrawGO(this);
-				}
 			}
 
 			else 
-			{
 				App->renderer3D->DrawGO(this);
-			}
+		
 		}
 		else
-		{
 			App->renderer3D->DrawGO(this);
-		}
+		
 	}
 }
 
@@ -467,26 +461,28 @@ void GameObject::cleanUp()
 {
 
 	for (std::vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
-	{
 		(*it)->cleanUp();
-	}
+
 }
 
 void GameObject::OnEditor()
 {
-	if (ImGui::TreeNodeEx(name.c_str()))
+	if (strcmp(this->GetName(),"SceneRoot")==0)
 	{
+		for (int i = 0; i < childs.size(); i++)
+			childs[i]->OnEditor();
+		return;
+	}
 
-		App->ui->show_Inspector_window = false;
-		CMesh* meshTry = (CMesh*)GetComponent(COMP_MESH);
-		CCamera* camTry = (CCamera*)GetComponent(COMP_CAMERA);
-		if (meshTry != nullptr) 
-		{			
-			if (selecting == false) {
-				App->ui->show_Inspector_window = false;
-				App->scene_intro->ObjectSelected(this);
-			}
-			
+
+	if (ImGui::TreeNodeEx(this,NULL,name.c_str()))
+	{
+		for (int i = 0; i < components.size(); i++)
+		{
+			//components[i]->OnEditor();
+
+			if (App->ui->show_Inspector_window = true)
+				App->ui->show_Inspector_window = false;			
 			
 		}
 		else if (camTry != nullptr)
@@ -495,11 +491,9 @@ void GameObject::OnEditor()
 		}		
 	
 		for (int i = 0; i < childs.size(); i++)
-		{
-
-			childs[i]->OnEditor();
-		}
-
+    {
+      childs[i]->OnEditor();
+    }
 		ImGui::TreePop();
 	}
 }
@@ -517,13 +511,6 @@ void GameObject::OnSelection()
 	
 }
 
-void GameObject::TestGizmo()
-{
-
-	
-
-
-}
 void GameObject::OnInspector()
 {	
 	/*

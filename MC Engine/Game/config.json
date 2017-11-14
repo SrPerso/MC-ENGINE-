@@ -13,10 +13,10 @@
     "show_Console_window": true,
     "show_Configuration_window": false,
     "show_Config_window": false,
-    "show_ImageView_window": true,
+    "show_ImageView_window": false
     "show_TeamInfo_window": false,
     "show_Geometry_window": false,
-    "show_Debug_window": true,
+    "show_Debug_window": false,
     "show_Editor_window": true,
     "show_Inspector_window": false,
     "debug_active": false,

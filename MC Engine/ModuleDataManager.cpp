@@ -155,16 +155,6 @@ void ModuleDataManager::SaveData(const void * buff,DType type, uint id)const
 		LOGUI("[ON CONSTRUCTION]-MaterialData %i saved", id);
 		break;
 
-	case D_TEXTURE:
-		importerTexture->Save(buff, nullptr, id);  //(const void * buffer, const char * saverFile, uint id
-		LOGUI("[OK]-TextureData %i saved", id);
-		break;
-
-	case D_TRANSFORMATION:
-	//	LOGUI("[OK]-Transformation Data %i saved", id);
-		LOGUI("[ON CONSTRUCTION]-Transformation Data %i saved", id);
-		break;
-
 	case D_CAMERA:
 		break;
 

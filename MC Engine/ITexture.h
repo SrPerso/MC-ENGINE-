@@ -15,7 +15,7 @@ public:
 	DTexture* ImportTexture(aiMaterial* newMaterial, const char*  FilePath);
 
 	DTexture* Load(const void* buffer, const char* loadFile, uint id);
-	bool Save(const void* buffer, const char * saverFile, uint id) override;
+	bool Save(const void* buffer, const char * saverFile , uint id) override;
 };
 
 #endif

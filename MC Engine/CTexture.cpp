@@ -1,16 +1,11 @@
 ﻿#include "CTexture.h"
 #include "GameObject.h"
 #include "ModuleDataFile.h"
+#include "Application.h"
 
 CTexture::CTexture(GameObject* object,int UID, Component_Type type, DTexture * data) :Component(object, UID, type)
 {
-	if (data)
-	{
-		this->image = data->image;	
-		//this->Textname = nullptr;
-		this->Textname.clear();
-		this->Textname=data->Textname.c_str();
-	}
+	SetData(data);
 
 	if (object != nullptr)
 	{
@@ -47,22 +42,44 @@ void CTexture::OnEditor()
 void CTexture::OnInspector()
 {
 	
-		ImGui::Text("Texture path: %s", Textname.c_str());
-		
-		
+
+		ImGui::Text("\t Texture path: %s", textNamePath.c_str());
+		ImGui::Text("\t Texture name: %s", textureName.c_str());
+
 }
 
 void CTexture::OnSave(DataJSON & file) const
 {
 	file.AddInt("Component UID", UID);
-//	file.AddInt("Component Type", Ctype);
-
+	file.AddString("TextureName", textureName.c_str());
 
 }
 
 void CTexture::OnLoad(DataJSON & file)
 {
 	UID = file.GetFloat("Component UID");
+	textureName.assign(file.GetString("TextureName"));
+
+	DTexture* texture = new DTexture();
+	texture = App->datamanager->importerTexture->Load(this, textureName.c_str(), this->object->GetGOUId());
+	SetData(texture);
+
+	delete texture;
+}
+
+void CTexture::SetData(DTexture * data)
+{
+	if (data != nullptr)
+	{
+		this->image = data->image;
+		this->textNamePath.clear();
+		this->textNamePath = data->textNamePath.c_str();
+		this->textureName.clear();
+		this->textureName = data->textureName.c_str();
+	}
+	else
+		LOGUI("[ERROR]-Cant Set Data - Component texture");
+
 }
 
 
