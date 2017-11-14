@@ -54,15 +54,16 @@ DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  F
 			newpath.append(path.C_Str());
 
 			ret->image = App->texture->LoadTexture(newpath.c_str());
-			ret->Textname = newpath;
-
+			ret->textNamePath = newpath;
+			ret->textureName = path.C_Str();
+			
 		}
 		else 
 		{
 
 			int length = strlen(path.C_Str());
 			std::string namePath = path.C_Str();
-
+			ret->textureName = path.C_Str();
 			int i = namePath.find_last_of("\\") + 1;
 
 			if (length > 0 && i > 0)
@@ -74,20 +75,17 @@ DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  F
 				testM = nullptr;
 			}
 
+
 			ret->image = App->texture->LoadTexture(fullPath.c_str());
-			ret->Textname = fullPath;
+			ret->textNamePath = fullPath;		
 		}
 
+		Save(ret, path.C_Str(), 0);
 		LOGUI("[OK]- Imported Texture");
 		glBindTexture(GL_TEXTURE_2D, ret->image);
 	
-		Save(ret, path.C_Str(),0);
-
 	}
-	//glBindTexture(GL_TEXTURE_2D, ret->image);
-
-
-
+	
 	return ret;
 }
 
@@ -95,80 +93,97 @@ DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  F
 bool ImporterTexture::Save(const void * buffer, const char * saverFile, uint id)
 {
 	bool ret = true;
-
+	LOGUI("--------------");
 	DTexture * text = (DTexture*)buffer;
 
-	//path to save ----------
 
 	std::string path;
-
+	std::string dirPath;
 	path = "Library/Material";
 	path.append("/");
-	path.append(saverFile);
+
+
+	path.append(saverFile);	
 	path.append(".dds");
+
+
+	dirPath = "Assets/";
+	dirPath.append(saverFile);
 
 	LOGUI("[SAVING]{Texture}- %s", path.c_str());
 
-
-
-	// Opening ----------
-
-	FILE* file = fopen(path.c_str(), "r");
-
-	if (file != nullptr)
+	if (buffer)
 	{
-		fclose(file);
-		LOGUI("[ERROR]- %s  is already created", path.c_str());
+		ILuint ImageName;
+		ilGenImages(1, &ImageName);
+		ilBindImage(ImageName);
 
-		return false;
+
+		bool ok = ilLoadImage(dirPath.c_str()); //can load the main image
+
+		if (ok)
+		{
+			ilEnable(IL_FILE_OVERWRITE);
+
+			ILuint   size;
+			ILubyte *data;
+		
+			ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
+
+			size = ilSaveL(IL_DDS, NULL, 0); 
+
+			if (size > 0)
+			{
+				data = new ILubyte[size]; 
+
+				if (ilSaveL(IL_DDS, data, size) > 0)
+				{
+				
+					// save the file
+					std::ofstream file(path.c_str(), std::ofstream::out | std::ofstream::binary);
+					file.write((char*)data, size);
+					file.close();
+
+					RELEASE_ARRAY(data);
+					LOGUI("[OK]- saved texture");
+
+					ret = true;
+
+				}
+
+				RELEASE_ARRAY(data);
+			}
+			ilDeleteImages(1, &ImageName);
+		}
+		else
+		{
+			LOGUI("[ERROR]- ilLoadL error Texture save");
+
+		}
 	}
-
-	//save path 
-
-	uint size = path.size();
-	uint i = path.find_last_of("/") + 1; //
-								
-	char* data = new char[size - i - 3]; //
-
-	size = size - i;
-	path.copy(data, size, i);
-
-	data[size - 10] = '\0';// size - extension size
-
-
-	std::ofstream file_end(path.c_str(), std::ifstream::out | std::ofstream::binary);
-
-	if (file_end.good()) //write file
-		file_end.write(data, size);
-	else
-		LOGUI("[ERROR]- writting error ", path.c_str());
-
-	file_end.close();
-
-	//RELEASE_ARRAY(data);
-	LOGUI("[SAVED]{Texture}- %s ", path.c_str());
-
 	return ret;
 }
 
 
 DTexture * ImporterTexture::Load(const void * buffer, const char * loadFile, uint id)
 {
-
+	LOGUI("-----------------");
 	DTexture* data = new DTexture();
 
 	std::string path; //path to load
 
 	if (loadFile == nullptr)
 	{
-		path = "Library/Material";
-		path.append("/");	
-		path.append(std::to_string(id));
-		path.append(".dds");
+		return nullptr;
 	}
 	else
 	{
-		path = loadFile;
+		path = "Library/Material";
+		path.append("/");
+		path.append(loadFile);
+		path.append(".dds");
+
+		LOGUI("[LOADING]{Texture}- %s", path.c_str());
 	}
 
 
@@ -191,6 +206,8 @@ DTexture * ImporterTexture::Load(const void * buffer, const char * loadFile, uin
 		{
 
 			LOGUI("[READING]- %s", path.c_str());
+
+			data->image = App->texture->LoadTexture(path.c_str());
 		}
 		else
 		{
@@ -205,62 +222,6 @@ DTexture * ImporterTexture::Load(const void * buffer, const char * loadFile, uin
 	}
 	else
 		LOGUI("[ERROR]- loading %s", path);
-
-	if (dataFile == nullptr)
-	{
-		return nullptr;
-	}
-
-	ILuint idTextTemp;
-	glGenTextures(1, &idTextTemp);
-	glBindTexture(GL_TEXTURE_2D, idTextTemp);
-
-	data->idTexCoords = idTextTemp;
-
-	ILenum error = IL_FALSE;
-
-	ILboolean success = ilLoadImage(path.c_str());
-
-	if (success)
-	{
-
-		ILinfo ImageInfo;
-		iluGetImageInfo(&ImageInfo);
-
-		success = ilConvertImage(ilGetInteger(IL_IMAGE_FORMAT), IL_UNSIGNED_BYTE);
-
-		// Quit out if we failed the conversion
-		if (!success)
-		{
-			error = ilGetError();
-			LOG("[ERROR] on path:%s error: %s", path.c_str(), iluErrorString(error));
-			LOGUI("[ERROR] on path:%s error: %s", path.c_str(), iluErrorString(error));
-		}
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0,	
-			ilGetInteger(IL_IMAGE_FORMAT),	
-			ilGetInteger(IL_IMAGE_WIDTH),	
-			ilGetInteger(IL_IMAGE_HEIGHT),	0,								
-			ilGetInteger(IL_IMAGE_FORMAT),	
-			GL_UNSIGNED_BYTE,				
-			ilGetData());					
-
-		glGenerateMipmap(GL_TEXTURE_2D);
-		LOG(" [LOAD]{Texture}- path %s", path.c_str());
-		LOGUI(" [LOAD]{Texture}- path %s", path.c_str());
-	}
-	else
-	{
-		error = ilGetError();
-		LOG("[ERROR] on path:%s error: %s", path.c_str(), iluErrorString(error));
-		LOGUI("[ERROR] on path:%s error: %s", path.c_str(), iluErrorString(error));
-	}
-
-	glBindTexture(GL_TEXTURE_2D, 0);
 
 		return data;
 }
