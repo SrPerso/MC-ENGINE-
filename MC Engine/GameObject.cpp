@@ -474,12 +474,13 @@ void GameObject::cleanUp()
 
 void GameObject::OnEditor()
 {
-	if (ImGui::TreeNodeEx(name.c_str()))
+	if (ImGui::TreeNodeEx(this,NULL,name.c_str()))
 	{
 
 		for (int i = 0; i < components.size(); i++)
 		{
-			components[i]->OnEditor();
+		//	components[i]->OnEditor();
+
 			if (App->ui->show_Inspector_window = true) {
 				App->ui->show_Inspector_window = false;
 			}
