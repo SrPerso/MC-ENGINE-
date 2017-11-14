@@ -56,6 +56,7 @@ DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  F
 			ret->image = App->texture->LoadTexture(newpath.c_str());
 			ret->textNamePath = newpath;
 			ret->textureName = path.C_Str();
+			
 		}
 		else 
 		{
@@ -74,20 +75,17 @@ DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  F
 				testM = nullptr;
 			}
 
+
 			ret->image = App->texture->LoadTexture(fullPath.c_str());
-			ret->textNamePath = fullPath;
+			ret->textNamePath = fullPath;		
 		}
 
+		Save(ret, path.C_Str(), 0);
 		LOGUI("[OK]- Imported Texture");
 		glBindTexture(GL_TEXTURE_2D, ret->image);
 	
-		Save(ret, path.C_Str(),0);
-		Load(nullptr, path.C_Str(), 0);
 	}
-	//glBindTexture(GL_TEXTURE_2D, ret->image);
-
-
-
+	
 	return ret;
 }
 
@@ -95,59 +93,74 @@ DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  F
 bool ImporterTexture::Save(const void * buffer, const char * saverFile, uint id)
 {
 	bool ret = true;
-
+	LOGUI("--------------");
 	DTexture * text = (DTexture*)buffer;
 
-	//path to save ----------
 
 	std::string path;
-
+	std::string dirPath;
 	path = "Library/Material";
 	path.append("/");
-	path.append(saverFile);
+
+
+	path.append(saverFile);	
 	path.append(".dds");
+
+
+	dirPath = "Assets/";
+	dirPath.append(saverFile);
 
 	LOGUI("[SAVING]{Texture}- %s", path.c_str());
 
-
-
-	// Opening ----------
-
-	FILE* file = fopen(path.c_str(), "r");
-
-	if (file != nullptr)
+	if (buffer)
 	{
-		fclose(file);
-		LOGUI("[ERROR]- %s  is already created", path.c_str());
+		ILuint ImageName;
+		ilGenImages(1, &ImageName);
+		ilBindImage(ImageName);
 
-		return false;
+
+		bool ok = ilLoadImage(dirPath.c_str()); //can load the main image
+
+		if (ok)
+		{
+			ilEnable(IL_FILE_OVERWRITE);
+
+			ILuint   size;
+			ILubyte *data;
+		
+			ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
+
+			size = ilSaveL(IL_DDS, NULL, 0); 
+
+			if (size > 0)
+			{
+				data = new ILubyte[size]; 
+
+				if (ilSaveL(IL_DDS, data, size) > 0)
+				{
+				
+					// save the file
+					std::ofstream file(path.c_str(), std::ofstream::out | std::ofstream::binary);
+					file.write((char*)data, size);
+					file.close();
+
+					RELEASE_ARRAY(data);
+					LOGUI("[OK]- saved texture");
+
+					ret = true;
+
+				}
+
+				RELEASE_ARRAY(data);
+			}
+			ilDeleteImages(1, &ImageName);
+		}
+		else
+		{
+			LOGUI("[ERROR]- ilLoadL error Texture save");
+
+		}
 	}
-
-	//save path 
-
-	uint size = path.size();
-	uint i = path.find_last_of("/") + 1; //
-								
-	char* data = new char[size - i - 3]; //
-
-	size = size - i;
-	path.copy(data, size, i);
-
-	data[size - 10] = '\0';// size - extension size
-
-
-	std::ofstream file_end(path.c_str(), std::ifstream::out | std::ofstream::binary);
-
-	if (file_end.good()) //write file
-		file_end.write(data, size);
-	else
-		LOGUI("[ERROR]- writting error ", path.c_str());
-
-	file_end.close();
-
-	//RELEASE_ARRAY(data);
-	LOGUI("[SAVED]{Texture}- %s ", path.c_str());
-
 	return ret;
 }
 

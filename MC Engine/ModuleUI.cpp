@@ -1349,27 +1349,17 @@ update_status ModuleUI::FileMenuBar()
 {
 	update_status ret = UPDATE_CONTINUE;
 
-	if (ImGui::MenuItem("Save", "Ctrl + S"))
-		App->datamanager->SaveAllData();
-
 	if (ImGui::MenuItem("Clean Scene", "Ctrl + Supr")) //TO FIX
 		App->goManager->root->DeleteChilds();
-
-
+	
 	if (ImGui::MenuItem("Save scene", "Ctrl + S + D"))
 		App->goManager->SaveScene("scene");
 
 	if (ImGui::MenuItem("Load scene", "Ctrl + L + D"))
 		App->goManager->LoadScene("scene");
 
-	
-
-
 	if (ImGui::MenuItem("Quit", "ESC"))
 		return UPDATE_STOP;
-
-
-
 
 	return update_status(ret);
 }
