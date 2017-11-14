@@ -55,6 +55,9 @@
     <Filter Include="Engine\Tools\ImGuizmo">
       <UniqueIdentifier>{7a8724c5-6735-4b8e-b402-622abb514659}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Engine\Modules\QuadTree">
+      <UniqueIdentifier>{82ed52f6-4b96-4a9a-adb6-635202d397d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -378,6 +381,9 @@
     <ClInclude Include="ImGuizmo\ImGuizmo.h">
       <Filter>Engine\Tools\ImGuizmo</Filter>
     </ClInclude>
+    <ClInclude Include="QuadTree.h">
+      <Filter>Engine\Engine\Modules\QuadTree</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -607,6 +613,9 @@
     </ClCompile>
     <ClCompile Include="ImGuizmo\ImGuizmo.cpp">
       <Filter>Engine\Tools\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadTree.cpp">
+      <Filter>Engine\Engine\Modules\QuadTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
