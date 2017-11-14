@@ -231,26 +231,28 @@ void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObje
 
 void ModuleSceneIntro::ObjectSelected(GameObject * selected)
 {
-	if (selected != nullptr) {
+	
+	
+		if (selected != nullptr) {			
 		
-		if (sceneSelected != selected)
-		{
-		
-			if (this->sceneSelected != nullptr)
-			{
-				this->sceneSelected->selecting = false;
-			}
-			selected->selecting = true;
-			this->sceneSelected = selected;
-		}
-		else
-		{
+				if (sceneSelected != selected)
+				{
+					if (this->sceneSelected != nullptr)
+					{
+						this->sceneSelected->selecting = false;
+					}
+					selected->selecting = true;
+					this->sceneSelected = selected;
+				}
+				else
+				{
+
+					this->sceneSelected->selecting = false;
+					this->sceneSelected = nullptr;
+				}
 			
-			this->sceneSelected->selecting = false;
-			this->sceneSelected = nullptr;
+
 		}
-		
-	}
 	
 	
 }
