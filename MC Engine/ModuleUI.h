@@ -50,6 +50,8 @@ public:
 	IMGUI_API void ShowEditorWindow(bool* p_open = NULL);
 	IMGUI_API void ShowInspectorWindow(Component* component= NULL,bool* p_open = NULL);
 
+	IMGUI_API void ShowPlayPauseWindow( bool* p_open = NULL);
+
 
 	//load file window
 	IMGUI_API void  ShowLoadFileWindow(const char* filePath, const char* dirPath);
@@ -103,7 +105,7 @@ private:
 	bool show_Geometry_window = false;
 	bool show_Debug_window = false;
 	bool show_Editor_window = true;
-	
+	bool show_Play_window = true;
 
 private:	//Geometry Test //TO CLEAN
 	float cubex = 0, cubey = 0, cubez = 0;

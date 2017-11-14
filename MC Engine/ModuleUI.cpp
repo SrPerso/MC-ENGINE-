@@ -13,7 +13,7 @@
 #include "CCamera.h"
 #include "ModuleGameObjectManager.h"
 #include "GameObject.h"
-
+#include "ModuleTimeManager.h"
 
 
 
@@ -60,6 +60,7 @@ bool ModuleUI::Start()
 	show_Debug_window = json_object_dotget_boolean(data, "show_Debug_window");
 	show_Editor_window = json_object_dotget_boolean(data, "show_Editor_window");
 	show_Inspector_window = json_object_dotget_boolean(data, "show_Inspector_window");
+	show_Play_window = json_object_dotget_boolean(data, "show_Play_window");
 	debug_active = json_object_dotget_boolean(data, "debug_active");
 	debug_Vertex_Normals = json_object_dotget_boolean(data, "debug_Vertex_Normals");
 	debug_Box = json_object_dotget_boolean(data, "debug_Box");
@@ -144,10 +145,10 @@ update_status ModuleUI::Update(float dt)
 		{
 			AddLogToConsole("Open Console");
 		}
-
-
 		show_Console_window = !show_Console_window;
 	}
+
+
 	if (show_test_window)
 		ImGui::ShowTestWindow();
 	
@@ -162,6 +163,9 @@ update_status ModuleUI::Update(float dt)
 
 	if (show_TeamInfo_window)
 		ShowTeamInfoWindow();
+	
+	if (show_Play_window)
+		ShowPlayPauseWindow();
 
 	if (show_Geometry_window)
 		ShowGeometryWindow();
@@ -174,6 +178,7 @@ update_status ModuleUI::Update(float dt)
 
 	if (show_Inspector_window)
 		ShowInspectorWindow();
+
 
 
 	return update_status(ret);
@@ -294,8 +299,7 @@ IMGUI_API void ModuleUI::ShowConfigWindow(bool * p_open)
 		RenderSetings();
 	if (ImGui::CollapsingHeader("Input"))
 		DevicesSetingsC();
-	if (ImGui::CollapsingHeader("Time Configuration"))
-		App->timeManager->OnConfiguration();
+
 
 	ImGui::End();
 
@@ -568,6 +572,42 @@ IMGUI_API void ModuleUI::ShowInspectorWindow(Component* component, bool * p_open
 		
 		ImGui::End();
 	}
+
+	return IMGUI_API void();
+}
+
+IMGUI_API void ModuleUI::ShowPlayPauseWindow(bool * p_open)
+{
+	ImGuiWindowFlags window_flags = 0;
+	window_flags |= ImGuiWindowFlags_NoTitleBar;
+	//window_flags |= ImGuiWindowFlags_NoMove;
+	window_flags |= ImGuiWindowFlags_NoResize;
+	//	window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
+
+	if (ImGui::Begin("PlayPause", p_open, window_flags))
+	{
+		if (ImGui::Button("PLAY"))
+		{
+			App->camera->mainCam->Active = true;
+			App->timeManager->TimeStatus(true);	
+			App->goManager->SaveScene("scene");
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("PAUSE"))
+		{
+			App->camera->mainCam->Active = false;
+			App->timeManager->TimeStatus(false);
+			App->goManager->LoadScene("scene");
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("FRAME"))
+		{
+		//	App->timeManager->PlayOneFrame();
+		}
+		ImGui::End();
+	}
+
 
 	return IMGUI_API void();
 }
