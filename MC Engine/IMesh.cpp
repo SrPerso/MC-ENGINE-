@@ -201,7 +201,6 @@ DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile
 	{
 		path = "Library/Mesh";
 		path.append("/");
-		path.append("Tr");
 		path.append(std::to_string(id));
 		path.append(".MCtransform");
 	}

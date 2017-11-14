@@ -162,9 +162,3 @@ void ModuleDataManager::SaveData(const void * buff,DType type, uint id)const
 		break;
 	}
 }
-
-void ModuleDataManager::LoadAllData()
-{
-	App->goManager->GetRoot()->LoadData();
-
-}

@@ -41,7 +41,6 @@ void CTexture::OnEditor()
 
 void CTexture::OnInspector()
 {
-	
 
 		ImGui::Text("\t Texture path: %s", textNamePath.c_str());
 		ImGui::Text("\t Texture name: %s", textureName.c_str());
@@ -52,16 +51,17 @@ void CTexture::OnSave(DataJSON & file) const
 {
 	file.AddInt("Component UID", UID);
 	file.AddString("TextureName", textureName.c_str());
-
+	file.AddString("textNamePath", textNamePath.c_str());
 }
 
 void CTexture::OnLoad(DataJSON & file)
 {
 	UID = file.GetFloat("Component UID");
 	textureName.assign(file.GetString("TextureName"));
+	textNamePath.assign(file.GetString("textNamePath"));
 
 	DTexture* texture = new DTexture();
-	texture = App->datamanager->importerTexture->Load(this, textureName.c_str(), this->object->GetGOUId());
+	texture = App->datamanager->importerTexture->Load(this, textNamePath.c_str(), this->object->GetGOUId());
 	SetData(texture);
 
 	delete texture;

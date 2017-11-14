@@ -580,7 +580,7 @@ IMGUI_API void ModuleUI::ShowPlayPauseWindow(bool * p_open)
 {
 	ImGuiWindowFlags window_flags = 0;
 	window_flags |= ImGuiWindowFlags_NoTitleBar;
-	//window_flags |= ImGuiWindowFlags_NoMove;
+	window_flags |= ImGuiWindowFlags_NoMove;
 	window_flags |= ImGuiWindowFlags_NoResize;
 	//	window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
@@ -589,14 +589,14 @@ IMGUI_API void ModuleUI::ShowPlayPauseWindow(bool * p_open)
 	{
 		if (ImGui::Button("PLAY"))
 		{
-			App->camera->mainCam->Active = true;
+			//App->camera->mainCam->Active = true;
 			App->timeManager->TimeStatus(true);	
 			App->goManager->SaveScene("scene");
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("PAUSE"))
 		{
-			App->camera->mainCam->Active = false;
+		//	App->camera->mainCam->Active = false;
 			App->timeManager->TimeStatus(false);
 			App->goManager->LoadScene("scene");
 		}

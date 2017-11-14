@@ -475,8 +475,17 @@ void GameObject::OnEditor()
 	}
 
 	CCamera* camTry = (CCamera*)GetComponent(COMP_CAMERA);
-	if (ImGui::TreeNodeEx(this, NULL, name.c_str()))
+	
+	ImGuiTreeNodeFlags flagVec = 0;
+
+	if (selecting)
 	{
+		flagVec |= ImGuiTreeNodeFlags_Selected;
+	}
+
+	if (ImGui::TreeNodeEx(this, flagVec, name.c_str()))
+	{
+	
 		App->ui->show_Inspector_window = false;
 		CMesh* meshTry = (CMesh*)GetComponent(COMP_MESH);
 		CCamera* camTry = (CCamera*)GetComponent(COMP_CAMERA);
@@ -550,9 +559,7 @@ void GameObject::OnSerialize(DataJSON & file) const
 		dataOnFile.AddInt("Parent UID", GetParentUID());
 				
 		// --	components info
-		dataOnFile.AddArray("Components");
-
-	
+		dataOnFile.AddArray("Components");	
 
 		for (int i = 0; i < components.size(); i++)
 		{
@@ -671,10 +678,6 @@ void GameObject::SaveData()
 			}			
 		}
 	}
-}
-
-void GameObject::LoadData() //maybe to delete
-{
 }
 
 void GameObject::TriIntersection(LineSegment & line, float & distance, float3 & hitPoint)

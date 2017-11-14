@@ -357,8 +357,13 @@ void DataJSON::AddArray(const DataJSON& object)
 	{
 		if (json_array_append_value(temp_array_json, json_value_deep_copy(object.value_json)) == JSONSuccess)
 		{
+		//	
+		}
+		else
+		{
 			LOGUI("[ERROR]- Cant add array to scene file");
 		}
+
 	}
 
 }
@@ -371,8 +376,10 @@ void DataJSON::AddArray(const char * nstring)
 
 	if (json_object_set_value(object_json, nstring, tmpArray) == JSONSuccess)
 	{
-		LOGUI("[ERROR]- Cant add array (string) to scene file");
+		//
 	}
+	else
+		LOGUI("[ERROR]- Cant add array (string) to scene file");
 
 
 }

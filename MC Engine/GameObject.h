@@ -99,7 +99,7 @@ public:
 
 	void SaveData();
 	//std::vector<const void*>* SaveData();
-	void LoadData();
+	//void LoadData();
 
 
 	//ray

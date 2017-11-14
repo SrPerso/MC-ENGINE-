@@ -30,8 +30,6 @@ public:
 	uint idNormals = 0;
 	uint nNormals = 0;
  
-
-	// To delete
 	uint idColors = 0;
 	float* colors = nullptr;
 

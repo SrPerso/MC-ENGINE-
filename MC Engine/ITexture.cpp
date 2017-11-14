@@ -75,7 +75,6 @@ DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  F
 				testM = nullptr;
 			}
 
-
 			ret->image = App->texture->LoadTexture(fullPath.c_str());
 			ret->textNamePath = fullPath;		
 		}
@@ -95,15 +94,17 @@ bool ImporterTexture::Save(const void * buffer, const char * saverFile, uint id)
 	bool ret = true;
 	LOGUI("--------------");
 	DTexture * text = (DTexture*)buffer;
-
+	
+	text->textureName = saverFile;
+	text->textNamePath = saverFile;
 
 	std::string path;
 	std::string dirPath;
+
 	path = "Library/Material";
 	path.append("/");
-
-
 	path.append(saverFile);	
+
 	path.append(".dds");
 
 
@@ -119,7 +120,7 @@ bool ImporterTexture::Save(const void * buffer, const char * saverFile, uint id)
 		ilBindImage(ImageName);
 
 
-		bool ok = ilLoadImage(dirPath.c_str()); //can load the main image
+		bool ok = ilLoadImage(path.c_str()); //can load the main image
 
 		if (ok)
 		{
@@ -172,6 +173,24 @@ DTexture * ImporterTexture::Load(const void * buffer, const char * loadFile, uin
 
 	std::string path; //path to load
 
+	std::string temp = loadFile;
+	int length = strlen(loadFile);
+
+	data->textureName = loadFile;
+
+	int i = temp.find_last_of("\\") + 1;
+
+	if (length > 0 && i > 0)
+	{
+		char* testM = new char[length - i];
+		temp.copy(testM, length - i, i);
+
+		delete[] testM;
+		testM = nullptr;
+	}
+	data->textureName = temp;
+
+
 	if (loadFile == nullptr)
 	{
 		return nullptr;
@@ -208,6 +227,8 @@ DTexture * ImporterTexture::Load(const void * buffer, const char * loadFile, uin
 			LOGUI("[READING]- %s", path.c_str());
 
 			data->image = App->texture->LoadTexture(path.c_str());
+			data->textNamePath = loadFile;
+			data->textureName = loadFile;
 		}
 		else
 		{
