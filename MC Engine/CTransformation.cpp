@@ -106,42 +106,78 @@ void CTransformation::OnEditor()
 
 void CTransformation::OnInspector() {
 
-	
-		ImGui::Text("   Position:");
-
-		ImGui::Text("\t X = %.2f", destiny.x);
-		ImGui::Text("\t Y = %.2f", destiny.y);
-		ImGui::Text("\t Z = %.2f", destiny.z);
-
+	if (object->isStatic == true) 
+	{
 		ImGui::Text("Position:");
+
+		ImGui::Text("X = %.2f", destiny.x);
+		ImGui::SameLine();
+		ImGui::Text("  Y = %.2f", destiny.y);
+		ImGui::SameLine();
+		ImGui::Text("  Z = %.2f", destiny.z);
+
+		ImGui::Text("Rotation:");
+
+		ImGui::Text("X = %.2f", eulerAngles.x);
+		ImGui::SameLine();
+		ImGui::Text("  Y = %.2f", eulerAngles.y);
+		ImGui::SameLine();
+		ImGui::Text("  Z = %.2f", eulerAngles.z);
+
+		ImGui::Text("Scale:");
+
+		ImGui::Text("X = %.2f", scale.x);
+		ImGui::SameLine();
+		ImGui::Text("  Y = %.2f", scale.y);
+		ImGui::SameLine();
+		ImGui::Text("  Z = %.2f", scale.z);
+
+		ImGui::Checkbox("STATIC", &object->isStatic);
+	}
+	else {
+		ImGui::Text("Position:");
+
+		ImGui::Text("X = %.2f", destiny.x);
+		ImGui::SameLine();
+		ImGui::Text("  Y = %.2f", destiny.y);
+		ImGui::SameLine();
+		ImGui::Text("  Z = %.2f", destiny.z);
+
+		//ImGui::Text("Position:");
 		if (ImGui::SliderFloat("X", &destiny.x, -100, 100))
 		{
 			UpdateTrans = true;
 		}
+
 		if (ImGui::SliderFloat("Y", &destiny.y, -100, 100))
 		{
 			UpdateTrans = true;
 		}
+
 		if (ImGui::SliderFloat("Z", &destiny.z, -100, 100))
 		{
 			UpdateTrans = true;
 		}
 
-		ImGui::Text("   Rotation:");
-
-		ImGui::Text("\t X = %.2f", eulerAngles.x);
-		ImGui::Text("\t Y = %.2f", eulerAngles.y);
-		ImGui::Text("\t Z = %.2f", eulerAngles.z);	
-
 		ImGui::Text("Rotation:");
+
+		ImGui::Text("X = %.2f", eulerAngles.x);
+		ImGui::SameLine();
+		ImGui::Text("  Y = %.2f", eulerAngles.y);
+		ImGui::SameLine();
+		ImGui::Text("  Z = %.2f", eulerAngles.z);
+
+		//ImGui::Text("Rotation:");
 		if (ImGui::SliderFloat("RX", &eulerAngles.x, 0, 360))
 		{
 			UpdateTrans = true;
 		}
+
 		if (ImGui::SliderFloat("RY", &eulerAngles.y, 0, 360))
 		{
 			UpdateTrans = true;
 		}
+
 		if (ImGui::SliderFloat("RZ", &eulerAngles.z, 0, 360))
 		{
 			UpdateTrans = true;
@@ -149,9 +185,11 @@ void CTransformation::OnInspector() {
 
 		ImGui::Text("Scale:");
 
-		ImGui::Text("\t X = %.2f", scale.x);
-		ImGui::Text("\t Y = %.2f", scale.y);
-		ImGui::Text("\t Z = %.2f", scale.z);
+		ImGui::Text("X = %.2f", scale.x);
+		ImGui::SameLine();
+		ImGui::Text("  Y = %.2f", scale.y);
+		ImGui::SameLine();
+		ImGui::Text("  Z = %.2f", scale.z);
 
 		if (ImGui::SliderFloat("SX", &scale.x, 1, 100))
 		{
@@ -165,6 +203,9 @@ void CTransformation::OnInspector() {
 		{
 			UpdateTrans = true;
 		}
+
+		ImGui::Checkbox("STATIC", &object->isStatic);
+	}
 	
 }
 

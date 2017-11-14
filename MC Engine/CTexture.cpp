@@ -42,8 +42,10 @@ void CTexture::OnEditor()
 void CTexture::OnInspector()
 {
 	
+
 		ImGui::Text("\t Texture path: %s", textNamePath.c_str());
 		ImGui::Text("\t Texture name: %s", textureName.c_str());
+
 }
 
 void CTexture::OnSave(DataJSON & file) const

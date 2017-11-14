@@ -471,7 +471,6 @@ void GameObject::OnEditor()
 	{
 		for (int i = 0; i < childs.size(); i++)
 			childs[i]->OnEditor();
-
 		return;
 	}
 
@@ -483,14 +482,18 @@ void GameObject::OnEditor()
 			//components[i]->OnEditor();
 
 			if (App->ui->show_Inspector_window = true)
-				App->ui->show_Inspector_window = false;		
+				App->ui->show_Inspector_window = false;			
 			
-			App->ui->ShowInspectorWindow(components[i]);
 		}
-
+		else if (camTry != nullptr)
+		{
+			App->ui->ShowInspectorWindow(this->components[0]);
+		}		
+	
 		for (int i = 0; i < childs.size(); i++)
-			childs[i]->OnEditor();
-
+    {
+      childs[i]->OnEditor();
+    }
 		ImGui::TreePop();
 	}
 }
@@ -502,7 +505,7 @@ void GameObject::OnSelection()
 	App->ui->show_Inspector_window = true;
 	
 	for (int i = 0; i < components.size(); i++)
-		App->ui->ShowInspectorWindow(components[i], (bool*)true);		
+		App->ui->ShowInspectorWindow(components[i]);		
 	
 	transform->OnGuizmo();
 	

@@ -107,14 +107,15 @@ public:
 public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> childs;
-	
+	bool selecting = false;
+	bool isStatic = true;
 
 private:
 	std::string name;
 	GameObject* parent = nullptr;
 	bool isEnable = true;
-	bool isStatic;
-
+	
+	
 private: 
 	uint Parent_ID = 0;
 	uint GameOIbject_ID = 0;

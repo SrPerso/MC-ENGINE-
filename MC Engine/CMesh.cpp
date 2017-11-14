@@ -47,21 +47,25 @@ void CMesh::OnEditor()
 
 void CMesh::OnInspector()
 {
-		ImGui::Text("\t Number of Vertex: %i", nVertex);
-		ImGui::Text("\t Vertex ID: %i", idVertex);
+		ImGui::Text("Number of Vertex: %i", nVertex);
+		ImGui::SameLine();
+		ImGui::Text("Vertex ID: %i", idVertex);
 
-		ImGui::Text("\t Number of Index: %i", nIndex);
-		ImGui::Text("\t Index ID: %i", idIndex);
+		ImGui::Text("Number of Index: %i", nIndex);
+		ImGui::SameLine();
+		ImGui::Text("Index ID: %i", idIndex);
 
 		ImGui::Text("\t Number of Normals: %i", nNormals);
-		ImGui::Text("\t Normals ID: %i", idNormals);
+		ImGui::SameLine();
+		ImGui::Text("Normals ID: %i", idNormals);
 
-		ImGui::Text("\t Colors ID: %i", idColors);		
+		ImGui::Text("Colors ID: %i", idColors);		
 
-		ImGui::Text("\t ID: %i", this->object->GetGOId());
-		ImGui::Text("\t Object UID: %i", this->object->GetGOUId());
+		ImGui::Text("ID: %i", this->object->GetGOId());
+		ImGui::SameLine();
+		ImGui::Text("Object UID: %i", this->object->GetGOUId());
 
-		ImGui::Text("\t component UID: %i", UID);
+		ImGui::Text("component UID: %i", UID);
 
 }
 
