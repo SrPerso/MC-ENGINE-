@@ -485,8 +485,7 @@ void GameObject::OnEditor()
 			if (selecting == false) {
 
 					App->ui->show_Inspector_window = false;
-					App->scene_intro->ObjectSelected(this);
-				
+					App->scene_intro->ObjectSelected(this);		
 			
 			}
 
