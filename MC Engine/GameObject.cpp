@@ -477,18 +477,26 @@ void GameObject::OnEditor()
 	if (ImGui::TreeNodeEx(name.c_str()))
 	{
 
-		for (int i = 0; i < components.size(); i++)
-		{
-			components[i]->OnEditor();
-			if (App->ui->show_Inspector_window = true) {
+		App->ui->show_Inspector_window = false;
+		CMesh* meshTry = (CMesh*)GetComponent(COMP_MESH);
+		CCamera* camTry = (CCamera*)GetComponent(COMP_CAMERA);
+		if (meshTry != nullptr) 
+		{			
+			if (selecting == false) {
 				App->ui->show_Inspector_window = false;
+				App->scene_intro->ObjectSelected(this);
 			}
 			
-			App->ui->ShowInspectorWindow(components[i]);
+			
 		}
-
+		else if (camTry != nullptr)
+		{
+			App->ui->ShowInspectorWindow(this->components[0]);
+		}		
+	
 		for (int i = 0; i < childs.size(); i++)
 		{
+
 			childs[i]->OnEditor();
 		}
 
@@ -503,7 +511,7 @@ void GameObject::OnSelection()
 	App->ui->show_Inspector_window = true;
 	
 	for (int i = 0; i < components.size(); i++)
-		App->ui->ShowInspectorWindow(components[i], (bool*)true);		
+		App->ui->ShowInspectorWindow(components[i]);		
 	
 	transform->OnGuizmo();
 	

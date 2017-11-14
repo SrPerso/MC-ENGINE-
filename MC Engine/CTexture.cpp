@@ -47,7 +47,7 @@ void CTexture::OnEditor()
 void CTexture::OnInspector()
 {
 	
-		ImGui::Text("\t Texture path: %s", Textname.c_str());
+		ImGui::Text("Texture path: %s", Textname.c_str());
 		
 		
 }
