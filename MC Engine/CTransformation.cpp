@@ -18,43 +18,43 @@ CTransformation::CTransformation(GameObject * object,int UID, Component_Type typ
 			globalTransformMatrix = data->globalTransformMatrix;
 			localTransformMatrix = data->localTransformMatrix;
 	}
-	else
-	{
-		if (object->GetParent() != nullptr)
-		{
-			DTransformation* temp = new DTransformation;
-			temp = (DTransformation*)this->object->GetParent()->GetComponent(this->Ctype)->GetData();
+	//else
+	//{
+	//	if (object->GetParent() != nullptr)
+	//	{
+	//		DTransformation* temp = new DTransformation;
+	//		temp = (DTransformation*)this->object->GetParent()->GetComponent(this->Ctype)->GetData();
 
-			position = temp->position;
-			scale = temp->scale;
-			destiny = temp->destiny;
-			eulerAngles = temp->eulerAngles;
-			angle = temp->angle;
-			rotation = temp->rotation;
-			globalTransformMatrix = temp->globalTransformMatrix;
-			localTransformMatrix = temp->localTransformMatrix;
+	//		position = temp->position;
+	//		scale = temp->scale;
+	//		destiny = temp->destiny;
+	//		eulerAngles = temp->eulerAngles;
+	//		angle = temp->angle;
+	//		rotation = temp->rotation;
+	//		globalTransformMatrix = temp->globalTransformMatrix;
+	//		localTransformMatrix = temp->localTransformMatrix;
 
-			delete temp;
-		}
+	//		delete temp;
+	//	}
 
-		else
-		{
-			rotation = Quat{0,0,0,1};
-			position = float3{0,0,0};
-			scale = float3{1,1,1 };
+	//	else
+	//	{
+	//		rotation = Quat{0,0,0,1};
+	//		position = float3{0,0,0};
+	//		scale = float3{1,1,1 };
 
-			destiny = position;
-			eulerAngles = rotation.ToEulerXYZ();
-			angle = rotation.Angle();
-			rotation = rotation;
-			globalTransformMatrix = float4x4::FromQuat(rotation);
-			globalTransformMatrix = float4x4::Scale(scale, float3(0, 0, 0)) * globalTransformMatrix;
-			globalTransformMatrix.float4x4::SetTranslatePart(position.x, position.y, position.z);
+	//		destiny = position;
+	//		eulerAngles = rotation.ToEulerXYZ();
+	//		angle = rotation.Angle();
+	//		rotation = rotation;
+	//		globalTransformMatrix = float4x4::FromQuat(rotation);
+	//		globalTransformMatrix = float4x4::Scale(scale, float3(0, 0, 0)) * globalTransformMatrix;
+	//		globalTransformMatrix.float4x4::SetTranslatePart(position.x, position.y, position.z);
 
-			localTransformMatrix = globalTransformMatrix;
-		}
+	//		localTransformMatrix = globalTransformMatrix;
+	//	}
 
-	}
+	//}
 	if (object != nullptr)
 	{
 		this->Transformation_ID = object->NumComponentTypeSize(this->Ctype) + 1;

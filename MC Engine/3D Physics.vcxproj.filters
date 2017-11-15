@@ -55,6 +55,9 @@
     <Filter Include="Engine\Tools\ImGuizmo">
       <UniqueIdentifier>{7a8724c5-6735-4b8e-b402-622abb514659}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Tools\mmgr">
+      <UniqueIdentifier>{cdae0bb5-3ba4-4ee5-ad11-75917b1acd7e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -378,6 +381,12 @@
     <ClInclude Include="ImGuizmo\ImGuizmo.h">
       <Filter>Engine\Tools\ImGuizmo</Filter>
     </ClInclude>
+    <ClInclude Include="mmgr\mmgr.h">
+      <Filter>Engine\Tools\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="mmgr\nommgr.h">
+      <Filter>Engine\Tools\mmgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -607,6 +616,9 @@
     </ClCompile>
     <ClCompile Include="ImGuizmo\ImGuizmo.cpp">
       <Filter>Engine\Tools\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="mmgr\mmgr.cpp">
+      <Filter>Engine\Tools\mmgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

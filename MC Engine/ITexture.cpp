@@ -127,7 +127,7 @@ bool ImporterTexture::Save(const void * buffer, const char * saverFile, uint id)
 		ilBindImage(ImageName);
 
 
-		bool ok = ilLoadImage(path.c_str()); //can load the main image
+		bool ok = ilLoadImage(dirPath.c_str()); //can load the main image
 
 		if (ok)
 		{
@@ -152,7 +152,7 @@ bool ImporterTexture::Save(const void * buffer, const char * saverFile, uint id)
 					file.write((char*)data, size);
 					file.close();
 
-					RELEASE_ARRAY(data);
+				//	RELEASE_ARRAY(data);
 					LOGUI("[OK]- saved texture");
 
 					ret = true;

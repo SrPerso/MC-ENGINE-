@@ -227,8 +227,7 @@ DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile
 
 
 		if (file.read(dataFile, size))
-		{
-	
+		{	
 			LOGUI("[READING]- %s", path.c_str());
 		}
 		else

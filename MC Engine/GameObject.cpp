@@ -19,7 +19,7 @@ GameObject::GameObject()
 
 	if (parent != nullptr)
 	{
-		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
+	//	this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
 		parent->AddChild(this);
 		//	SetParentUID(parent->GetGOUId());
 	}
@@ -29,7 +29,7 @@ GameObject::GameObject()
 		parent->AddChild(this);
 	}
 
-	this->CreateComponent(COMP_TRANSFORMATION, App->randGen->Int());
+//	this->CreateComponent(COMP_TRANSFORMATION, App->randGen->Int());
 
 	name.append(std::to_string(GameOIbject_ID));
 }
@@ -51,11 +51,11 @@ GameObject::GameObject(GameObject* parent): parent(parent)
 		parent->AddChild(this);
 	//	SetParentUID(parent->GetGOUId());
 
-		this->CreateComponent(COMP_TRANSFORMATION, App->randGen->Int());
+	//	this->CreateComponent(COMP_TRANSFORMATION, App->randGen->Int());
 	}
 	else 
 	{	
-		this->CreateComponent(COMP_TRANSFORMATION, App->randGen->Int());
+		//this->CreateComponent(COMP_TRANSFORMATION, App->randGen->Int());
 		SetParentUID(0);
 	}
 
