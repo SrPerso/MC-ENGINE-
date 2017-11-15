@@ -61,25 +61,32 @@ DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  F
 		else 
 		{
 
-			int length = strlen(path.C_Str());
+			int length = strlen(path.C_Str()); // "/0"
 			std::string namePath = path.C_Str();
 			ret->textureName = path.C_Str();
 			int i = namePath.find_last_of("\\") + 1;
 
 			if (length > 0 && i > 0)
 			{
-				char* testM = new char[length - i];
-				namePath.copy(testM, length - i, i);
-
-				delete[] testM;
-				testM = nullptr;
+				char* temp = new char[length - i];
+				namePath.copy(temp, length - i, i);
+				fullPath = temp;
+				fullPath[length - i] = '\0';
+				delete[] temp;
+				temp = nullptr;
 			}
 
-			ret->image = App->texture->LoadTexture(fullPath.c_str());
-			ret->textNamePath = fullPath;		
+	
+			ret->textureName = fullPath;
+			ret->textNamePath = fullPath;	
+
+			std::string newpath = "Assets/";
+			newpath.append(fullPath);
+
+			ret->image = App->texture->LoadTexture(newpath.c_str());
 		}
 
-		Save(ret, path.C_Str(), 0);
+		Save(ret, ret->textureName.c_str(), 0);
 		LOGUI("[OK]- Imported Texture");
 		glBindTexture(GL_TEXTURE_2D, ret->image);
 	
@@ -94,7 +101,7 @@ bool ImporterTexture::Save(const void * buffer, const char * saverFile, uint id)
 	bool ret = true;
 	LOGUI("--------------");
 	DTexture * text = (DTexture*)buffer;
-	
+
 	text->textureName = saverFile;
 	text->textNamePath = saverFile;
 
@@ -103,7 +110,7 @@ bool ImporterTexture::Save(const void * buffer, const char * saverFile, uint id)
 
 	path = "Library/Material";
 	path.append("/");
-	path.append(saverFile);	
+	path.append(saverFile);
 
 	path.append(".dds");
 
@@ -128,18 +135,18 @@ bool ImporterTexture::Save(const void * buffer, const char * saverFile, uint id)
 
 			ILuint   size;
 			ILubyte *data;
-		
+
 			ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
 
-			size = ilSaveL(IL_DDS, NULL, 0); 
+			size = ilSaveL(IL_DDS, NULL, 0);
 
 			if (size > 0)
 			{
-				data = new ILubyte[size]; 
+				data = new ILubyte[size];
 
 				if (ilSaveL(IL_DDS, data, size) > 0)
 				{
-				
+
 					// save the file
 					std::ofstream file(path.c_str(), std::ofstream::out | std::ofstream::binary);
 					file.write((char*)data, size);
