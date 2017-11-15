@@ -85,6 +85,30 @@ void GObjectManager::deleteGameObject(GameObject * GObject)
 	}
 }
 
+void GObjectManager::CreateEmtyGameObject(GameObject * parent)
+{
+
+	if (parent)
+	{
+		GameObject* newGO = new GameObject(parent);
+		newGO->SetName("NewGameObject");
+		newGO->SetGOUID(App->randGen->Int());
+	}
+	else
+	{
+		GameObject* newGO = new GameObject(nullptr);
+		newGO->SetName("NewGameObject");
+		newGO->SetGOUID(App->randGen->Int());
+
+
+	}
+
+
+
+
+
+}
+
 void GObjectManager::SaveScene(const char * fileName)
 {
 	DataJSON dataToSave;
