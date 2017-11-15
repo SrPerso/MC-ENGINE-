@@ -9,32 +9,33 @@ DMesh::~DMesh()
 {
 	//if (Vertex != nullptr)
 	//{
-	//	delete Vertex;
+	//	delete[] Vertex;
 	//	Vertex = nullptr;
 	//}
 
 	//if (Index != nullptr)
 	//{
-	//	delete Index;
+	//	delete[] Index;
 	//	Index = nullptr;
 	//}
 
 	//if (normals != nullptr)
 	//{
-	//	delete normals;
+	//	delete[] normals;
 	//	normals = nullptr;
 	//}
 
 	//if (colors != nullptr)
 	//{
-	//	delete colors;
+	//	delete[] colors;
 	//	colors = nullptr;
 	//}
 
 	//if (texCoords != nullptr)
 	//{
-	//	delete texCoords;
+	//	delete[] texCoords;
 	//	texCoords = nullptr;
-	//}
+	//	}
+	
 }
 

@@ -11,7 +11,7 @@ class DMesh : public DContainer
 public:
 
 	DMesh(DType type = D_MESH);
-	~DMesh();
+	virtual ~DMesh();
 public:
 
 	uint nVertex = 0;

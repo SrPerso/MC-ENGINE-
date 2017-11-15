@@ -30,8 +30,8 @@ class ImporterTrans : public Importer
 {
 	friend class ModuleDataManager;
 public:
-	ImporterTrans();
-	~ImporterTrans(); 
+	ImporterTrans(){}
+	~ImporterTrans(){}
 
 	DTransformation* ImportTrans(aiNode* node, GameObject* object, uint id);
 

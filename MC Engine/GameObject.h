@@ -87,7 +87,7 @@ public:
 
 	//void PreUpdate();
 	void Update(float dt);
-	void cleanUp();
+	void CleanUp();
 
 	void OnEditor();
 	void OnInspector();

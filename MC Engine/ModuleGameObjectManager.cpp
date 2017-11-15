@@ -14,7 +14,7 @@ GObjectManager::GObjectManager(Application * app, bool start_enabled):Module(app
 GObjectManager::~GObjectManager()
 {
 	if (root != nullptr)
-		root->cleanUp();
+		root->CleanUp();
 
 }
 
@@ -81,6 +81,7 @@ void GObjectManager::deleteGameObject(GameObject * GObject)
 	{
 		if (GObject->GetParent())
 			GObject->GetParent()->DeleteChild(GObject);
+
 		GObject->DeleteChilds();
 	}
 }
@@ -99,13 +100,7 @@ void GObjectManager::CreateEmtyGameObject(GameObject * parent)
 		GameObject* newGO = new GameObject(nullptr);
 		newGO->SetName("NewGameObject");
 		newGO->SetGOUID(App->randGen->Int());
-
-
 	}
-
-
-
-
 
 }
 

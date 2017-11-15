@@ -22,11 +22,11 @@ public:
 
 	bool Init();
 
-	update_status Update(float dt) {return UPDATE_CONTINUE;	}
-	update_status PreUpdate(float dt){ return UPDATE_CONTINUE; }
-	update_status PostUpdate(float dt){ return UPDATE_CONTINUE; }
+	update_status Update(float dt)override {return UPDATE_CONTINUE;	}
+	update_status PreUpdate(float dt)override { return UPDATE_CONTINUE; }
+	update_status PostUpdate(float dt)override { return UPDATE_CONTINUE; }
 
-	bool CleanUp() { return true; }
+	bool CleanUp() override;
 
 	GameObject* ImportGameObject(std::string Path, GameObject*parent);
 	bool ImportGameObject(std::string Path, GameObject*parent,const aiScene* scene, aiNode* node = nullptr);
@@ -36,8 +36,6 @@ public:
 	void SaveAllData()const; 
 	void SaveData(const void * buff, DType type, uint id)const;
 
-	void LoadAllData();
-	
 	// Objects creators?
 
 public:

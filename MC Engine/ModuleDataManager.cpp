@@ -36,6 +36,15 @@ bool ModuleDataManager::Init()
 	return true;
 }
 
+bool ModuleDataManager::CleanUp()
+{
+	delete importerMesh;
+	delete importerTransformations;
+	delete importerTexture;
+
+	return true;
+}
+
 GameObject* ModuleDataManager::ImportGameObject(std::string path, GameObject * parent)
 {
 
@@ -48,12 +57,12 @@ GameObject* ModuleDataManager::ImportGameObject(std::string path, GameObject * p
 
 	if (length > 0 && i > 0)
 	{
-		char* testM = new char[length - i];
-		namePath.copy(testM, length - i, i);
-		newObject->SetName(testM);
+		char* temp = new char[length - i];
+		namePath.copy(temp, length - i, i);
+		newObject->SetName(temp);
 
-		delete[] testM;
-		testM = nullptr;
+		delete[] temp;
+		temp = nullptr;
 	}
 
 	const aiScene* scene = aiImportFile(path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
@@ -97,7 +106,6 @@ bool ModuleDataManager::ImportGameObject(std::string path, GameObject * parent, 
 		{
 	
 			GameObject * GameObjectSon = new GameObject(parent);
-
 
 			GameObjectSon->SetGOID(App->randGen->Int());
 

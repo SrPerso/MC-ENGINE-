@@ -85,6 +85,7 @@ int main(int argc, char ** argv)
 			{
 				LOG("Application CleanUp exits with ERROR");
 				//App->ui->AddLogToConsole("Application CleanUp exits with ERROR");
+
 			}
 			else
 				main_return = EXIT_SUCCESS;

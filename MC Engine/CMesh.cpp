@@ -41,6 +41,7 @@ void CMesh::OnEditor()
 	if (ImGui::TreeNodeEx(name.c_str()))
 	{	//	ImGui::Text("Texture Coords: %i", idTexCoords);
 		
+
 		ImGui::TreePop();
 	}
 }

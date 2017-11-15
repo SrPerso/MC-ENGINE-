@@ -129,6 +129,8 @@ void GameObject::DeleteChild(GameObject * objectToDelete)
 		if (it != childs.end()) 
 		{
 			childs.erase(it);
+			(*it)->CleanUp();
+			delete (*it);
 		}		
 	}
 }
@@ -137,6 +139,8 @@ void GameObject::DeleteChilds()
 {
 	while (!childs.empty())
 	{
+		childs.back()->CleanUp();
+
 		delete childs.back();
 		childs.back() = nullptr;
 
@@ -333,6 +337,7 @@ void GameObject::DeleteComponent(Component * comp)
 		if ((*it) == comp)
 		{
 			components.erase(it);
+			delete (*it);
 		}
 	}
 
@@ -465,7 +470,7 @@ void GameObject::Update(float dt)
 	}
 }
 
-void GameObject::cleanUp()
+void GameObject::CleanUp()
 {
 	while (!components.empty())
 	{
@@ -478,7 +483,7 @@ void GameObject::cleanUp()
 
 	while (!childs.empty())
 	{
-		childs.back()->cleanUp();
+		childs.back()->CleanUp();
 		delete childs.back();
 		childs.back() = nullptr;
 
