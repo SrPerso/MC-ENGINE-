@@ -17,7 +17,7 @@ public:
 
 	bool Start();
 	update_status Update(float dt);
-	bool CleanUp();
+	bool CleanUp() override;
 
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
 	void LookAt(const vec3 &Spot);

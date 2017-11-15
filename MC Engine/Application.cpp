@@ -18,7 +18,7 @@ Application::Application()
 	ui = new ModuleUI(this);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
-	physics = new ModulePhysics3D(this);
+	
 	scene_intro = new ModuleSceneIntro(this);
 	datamanager = new ModuleDataManager(this);
 	goManager = new GObjectManager(this);
@@ -37,9 +37,6 @@ Application::Application()
 	AddModule(input);
 	AddModule(audio);
 
-	AddModule(physics);
-
-
 	// Scenes
 	AddModule(goManager);
 	AddModule(datamanager);
@@ -48,6 +45,8 @@ Application::Application()
 	AddModule(ui);
 	// Renderer last!
 	AddModule(renderer3D);
+
+	
 
 }
 
@@ -149,13 +148,16 @@ update_status Application::Update()
 bool Application::CleanUp()
 {
 	bool ret = true;
-	std::list<Module*>::iterator item = list_modules.end();
+	std::list<Module*>::iterator item = list_modules.begin();
 
-	while(item != list_modules.end() && ret == true)
+	while(item != list_modules.end())
 	{
-		ret = (*item)->Init();
+		ret = (*item)->CleanUp();
 		item++;
 	}
+
+	delete randGen;
+
 	return ret;
 }
 

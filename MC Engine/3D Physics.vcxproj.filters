@@ -105,15 +105,6 @@
     <ClInclude Include="Timer.h">
       <Filter>Engine\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="ModulePhysics3D.h">
-      <Filter>Engine\Engine\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysBody3D.h">
-      <Filter>Engine\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysVehicle3D.h">
-      <Filter>Engine\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="imGUI\imgui.h">
       <Filter>Engine\Tools\ImGui</Filter>
     </ClInclude>
@@ -424,15 +415,6 @@
     </ClCompile>
     <ClCompile Include="ModuleSceneIntro.cpp">
       <Filter>Engine\Engine\Modules\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="ModulePhysics3D.cpp">
-      <Filter>Engine\Engine\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysBody3D.cpp">
-      <Filter>Engine\Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysVehicle3D.cpp">
-      <Filter>Engine\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="imGUI\imgui.cpp">
       <Filter>Engine\Tools\ImGui</Filter>

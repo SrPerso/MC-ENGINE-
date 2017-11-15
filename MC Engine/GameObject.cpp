@@ -467,10 +467,24 @@ void GameObject::Update(float dt)
 
 void GameObject::cleanUp()
 {
+	while (!components.empty())
+	{
+		delete components.back();
+		components.back() = nullptr;
 
-	for (std::vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
-		(*it)->cleanUp();
+		components.pop_back();
+	}
+	components.clear();
 
+	while (!childs.empty())
+	{
+		childs.back()->cleanUp();
+		delete childs.back();
+		childs.back() = nullptr;
+
+		childs.pop_back();
+	}
+	childs.clear();
 }
 
 void GameObject::OnEditor()

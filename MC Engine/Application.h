@@ -15,7 +15,7 @@
 #include "ModuleCamera3D.h"
 
 
-#include "ModulePhysics3D.h"
+
 #include "ModuleDataManager.h"
 #include "ModuleUI.h"
 
@@ -42,7 +42,6 @@ public:
 	ModuleUI* ui = nullptr;
 	ModuleRenderer3D* renderer3D = nullptr;
 	ModuleCamera3D* camera = nullptr;
-	ModulePhysics3D* physics = nullptr;
 	GObjectManager* goManager = nullptr;
 	ModuleSceneIntro* scene_intro = nullptr;
 	ModuleTexture* texture = nullptr;

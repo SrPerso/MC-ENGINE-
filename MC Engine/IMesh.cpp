@@ -567,6 +567,8 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, int id)
 		}
 
 		file.close();
+
+
 	}
 	else
 		LOGUI("[ERROR]- loading %s", path);
@@ -580,6 +582,7 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, int id)
 	size = file.gcount();
 
 	char* cursor = datafile;
+
 
 	// load numbers --------
 
@@ -690,6 +693,8 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, int id)
 	//---
 
 	LOGUI("[LOADED]{Mesh}- %s", path.c_str());
+	
+	delete datafile;
 
 	return data; 
 }
