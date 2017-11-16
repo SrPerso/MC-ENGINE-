@@ -202,7 +202,7 @@ void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObje
 
 				if (IntersectMesh != nullptr)
 				{
-					if (newSegment.Intersects(IntersectMesh->debugBox) == true)
+					if (newSegment.Intersects(IntersectMesh->dataMesh->debugBox) == true)
 					{
 						DistanceList.push_back(App->goManager->GetRoot()->childs[i]->childs[p]);
 
@@ -221,7 +221,7 @@ void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObje
 			}
 			if (IntersectMesh != nullptr)
 			{
-				if (newSegment.Intersects(IntersectMesh->debugBox) == true)
+				if (newSegment.Intersects(IntersectMesh->dataMesh->debugBox) == true)
 				{
 					DistanceList.push_back(App->goManager->GetRoot()->childs[i]);
 					LOGUI("hit");

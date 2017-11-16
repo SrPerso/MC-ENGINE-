@@ -452,7 +452,7 @@ void GameObject::Update(float dt)
 		{
 			if (camera->needToCull) 
 			{
-				AABB recalculatedBox = debuger->debugBox;
+				AABB recalculatedBox = debuger->dataMesh->debugBox;
 
 				recalculatedBox.TransformAsAABB(transform->GetTransMatrix());				
 
@@ -474,6 +474,7 @@ void GameObject::CleanUp()
 {
 	while (!components.empty())
 	{
+		components.back()->OnCleanUp();
 		delete components.back();
 		components.back() = nullptr;
 

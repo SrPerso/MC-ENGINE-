@@ -331,33 +331,33 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);//WIRE
 
 
-				if (componentMesh->nNormals != 0)
+				if (componentMesh->dataMesh->nNormals != 0)
 				{
 					glEnable(GL_LIGHTING);
 					glEnableClientState(GL_NORMAL_ARRAY);
-					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idNormals);
+					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->dataMesh->idNormals);
 					glNormalPointer(GL_FLOAT, 0, NULL);
 
 				}
 
 				glEnableClientState(GL_VERTEX_ARRAY);
 				glEnableClientState(GL_ELEMENT_ARRAY_BUFFER);
-				glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idVertex);
+				glBindBuffer(GL_ARRAY_BUFFER, componentMesh->dataMesh->idVertex);
 				glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 				//--------------------- MESH----------------------------------------------
 
 				//--------------------- TEXTURE----------------------------------------------
 		
-				if (componentMesh->idColors>0 && App->ui->sb_Color_Material)
+				if (componentMesh->dataMesh->idColors>0 && App->ui->sb_Color_Material)
 				{
 
 					glEnableClientState(GL_COLOR_ARRAY);
-					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idColors);
+					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->dataMesh->idColors);
 					glColorPointer(3, GL_FLOAT, 0, NULL);
 				}
 
-				if (componentMesh->idTexCoords>0 && App->ui->sb_Texture_2D)
+				if (componentMesh->dataMesh->idTexCoords>0 && App->ui->sb_Texture_2D)
 				{
 					CTexture* componentTexture = (CTexture*)GOToDraw->GetComponent(COMP_TEXTURE);
 					if (componentTexture != nullptr)
@@ -365,13 +365,13 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 						glBindTexture(GL_TEXTURE_2D, componentTexture->image);
 					}
 					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->idTexCoords);
+					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->dataMesh->idTexCoords);
 					glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 
 				}		
 
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, componentMesh->idIndex);
-				glDrawElements(GL_TRIANGLES, componentMesh->nIndex, GL_UNSIGNED_INT, NULL);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, componentMesh->dataMesh->idIndex);
+				glDrawElements(GL_TRIANGLES, componentMesh->dataMesh->nIndex, GL_UNSIGNED_INT, NULL);
 		
 				//--------------------- TEXTURE----------------------------------------------
 
@@ -400,16 +400,16 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 {
 
-		if (App->ui->debug_Vertex_Normals == true && meshToDraw->nVertex > 0)
+		if (App->ui->debug_Vertex_Normals == true && meshToDraw->dataMesh->nVertex > 0)
 		{
 
 			glLineWidth(2.0f);
 			glBegin(GL_LINES);
 
-			for (uint i = 0; i < meshToDraw->nVertex; ++i)
+			for (uint i = 0; i < meshToDraw->dataMesh->nVertex; ++i)
 			{
-				float3 vertex(&meshToDraw->Vertex[i * 3]);
-				float3 normal(&meshToDraw->normals[i * 3]);
+				float3 vertex(&meshToDraw->dataMesh->Vertex[i * 3]);
+				float3 normal(&meshToDraw->dataMesh->normals[i * 3]);
 				float3 pnormal(vertex + (normal*NORMAL_SIZE));
 
 				glColor4f(Blue.r, Blue.g, Blue.b, 255);
@@ -421,18 +421,18 @@ void ModuleRenderer3D::DrawDebug(CMesh* meshToDraw)
 				glColor4f(White.r, White.g, White.b, 0);
 			}
 			glVertexPointer(1, GL_FLOAT, 0, NULL);
-			glDrawElements(GL_LINES, meshToDraw->nIndex, GL_UNSIGNED_INT, NULL);
+			glDrawElements(GL_LINES, meshToDraw->dataMesh->nIndex, GL_UNSIGNED_INT, NULL);
 			glEnd();
 		}
 
-		else if (meshToDraw->nVertex < 0) {
+		else if (meshToDraw->dataMesh->nVertex < 0) {
 		LOGUI("[ERROR]- The number of verteh is down 0");
 		}
 
 		if (App->ui->debug_Box == true)
 		{
 			float3 vertex[8];
-			meshToDraw->debugBox.GetCornerPoints(vertex);
+			meshToDraw->dataMesh->debugBox.GetCornerPoints(vertex);
 
 			glPushMatrix();
 

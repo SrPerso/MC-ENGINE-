@@ -13,7 +13,7 @@ class DataJSON;
 class GameObject;
 enum Component_Type;
 
-class CMesh : public Component, public DMesh
+class CMesh : public Component
 {
 public:
 	CMesh(GameObject* object,int UID, Component_Type type = COMP_MESH , DMesh* data = nullptr);
@@ -22,6 +22,8 @@ public:
 	void OnUpdate(float dt) override;
 	void OnEditor() override;
 	void OnInspector() override;
+	
+	void OnCleanUp() override;
 
 	void OnSave(DataJSON&file)const override;
 	void OnLoad(DataJSON&file) override;
@@ -31,6 +33,9 @@ public:
 	const void* GetData();
 	void SetData(DMesh*data);
 	uint mesh_ID;
+
+public: 
+	DMesh*  dataMesh;
 };
 
 #endif

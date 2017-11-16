@@ -19,6 +19,8 @@ public:
 	void OnEditor() override;
 	void OnInspector() override;
 
+	void OnCleanUp() override;
+
 	void OnSave(DataJSON&file)const override;
 	void OnLoad(DataJSON&file) override;
 

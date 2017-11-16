@@ -118,6 +118,10 @@ void CCamera::OnInspector()
 	
 }
 
+void CCamera::OnCleanUp()
+{
+}
+
 void CCamera::OnSave(DataJSON & file) const
 {
 	file.AddInt("Component UID", UID);

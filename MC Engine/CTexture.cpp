@@ -47,6 +47,10 @@ void CTexture::OnInspector()
 
 }
 
+void CTexture::OnCleanUp()
+{
+}
+
 void CTexture::OnSave(DataJSON & file) const
 {
 	file.AddInt("Component UID", UID);

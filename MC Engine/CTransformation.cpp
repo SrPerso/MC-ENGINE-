@@ -246,6 +246,10 @@ void CTransformation::OnInspector() {
 	
 }
 
+void CTransformation::OnCleanUp()
+{
+}
+
 
 void CTransformation::OnSave(DataJSON & file) const
 {

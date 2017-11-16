@@ -37,6 +37,7 @@ public:
 	virtual void OnUpdate(float dt);
 	virtual void OnEditor();
 	virtual void OnInspector();
+	virtual void OnCleanUp() = 0;
 
 	virtual void OnSave(DataJSON&file)const = 0;
 	virtual void OnLoad(DataJSON&file) = 0;
