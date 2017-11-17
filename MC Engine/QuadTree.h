@@ -11,6 +11,10 @@ public:
 	void Insert(GameObject* AddObj);
 	void Remove(GameObject* QuitObj);
 	void AddChilds();	
+	template<typename TYPE>
+	void CollectIntersections(std::vector<GameObject*>& objects, const TYPE & primitive) const;
+	void OrganizeChilds();
+	void DrawDebug() const;
 	bool IsEmpty() const;
 
 public:
@@ -25,8 +29,9 @@ class QuadTree
 
 	QuadTree();
 	QuadTree(const AABB& box);
-	void Insert(GameObject* toInsert);
-	void Remove(GameObject* toRemove);
+	~QuadTree();
+	void Insert(GameObject* AddObj);
+	void Remove(GameObject* QuitObj);
 	void Clear();
 
 	void DrawDebug() const;

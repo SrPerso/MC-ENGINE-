@@ -40,6 +40,7 @@
 #include "Triangle.h"
 #include "Capsule.h"
 
+#include "../../Glew/include/glew.h"
 #ifdef MATH_GRAPHICSENGINE_INTEROP
 #include "VertexBuffer.h"
 #endif
@@ -508,6 +509,47 @@ float3 AABB::ClosestPoint(const float3 &targetPoint) const
 	return targetPoint.Clamp(minPoint, maxPoint);
 }
 
+void AABB::DrawDebug(Color color) const
+{
+	float3 corners[8];
+	GetCornerPoints(corners);
+
+	glColor3f(color.r, color.g, color.b);
+
+	glBegin(GL_QUADS);
+
+	glVertex3fv((GLfloat*)&corners[1]); 
+	glVertex3fv((GLfloat*)&corners[5]); 
+	glVertex3fv((GLfloat*)&corners[7]); 
+	glVertex3fv((GLfloat*)&corners[3]); 
+
+	glVertex3fv((GLfloat*)&corners[4]); 
+	glVertex3fv((GLfloat*)&corners[0]); 
+	glVertex3fv((GLfloat*)&corners[2]); 
+	glVertex3fv((GLfloat*)&corners[6]); 
+
+	glVertex3fv((GLfloat*)&corners[5]); 
+	glVertex3fv((GLfloat*)&corners[4]); 
+	glVertex3fv((GLfloat*)&corners[6]); 
+	glVertex3fv((GLfloat*)&corners[7]); 
+
+	glVertex3fv((GLfloat*)&corners[0]); 
+	glVertex3fv((GLfloat*)&corners[1]); 
+	glVertex3fv((GLfloat*)&corners[3]); 
+	glVertex3fv((GLfloat*)&corners[2]); 
+
+	glVertex3fv((GLfloat*)&corners[3]); 
+	glVertex3fv((GLfloat*)&corners[7]); 
+	glVertex3fv((GLfloat*)&corners[6]); 
+	glVertex3fv((GLfloat*)&corners[2]); 
+
+	glVertex3fv((GLfloat*)&corners[0]); 
+	glVertex3fv((GLfloat*)&corners[4]); 
+	glVertex3fv((GLfloat*)&corners[5]); 
+	glVertex3fv((GLfloat*)&corners[1]); 
+
+	glEnd();
+}
 float AABB::Distance(const float3 &point) const
 {
 	///@todo This function could be slightly optimized. See Christer Ericson's

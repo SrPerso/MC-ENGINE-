@@ -59,7 +59,29 @@ void QuadtreeNode::Remove(GameObject * QuitObj)
 	}
 }
 
-
+template<typename TYPE>
+inline void QuadtreeNode::CollectIntersections(std::vector<GameObject*>& Listojects, const TYPE & primitive) const
+{
+	if (primitive.Intersects(Box))
+	{
+		for (std::list<GameObject*>::const_iterator it = this->ListObjects.begin(); it != this->ListObjects.end(); ++it)
+		{
+			CMesh* TryMesh = (CMesh*)(*it)->GetComponent(COMP_MESH);
+			if (TryMesh != nullptr)
+			{
+				if (primitive.Intersects(TryMesh->debugBox))
+				{
+					Listojects.push_back(*it);
+				}
+			}
+		}
+		for (int i = 0; i < MAXIMUM; i++)
+			if (childs[i] != nullptr)
+			{
+				childs[i]->CollectIntersections(Listojects, primitive);
+			}
+	}
+}
 
 void QuadtreeNode::AddChilds()
 {
@@ -95,6 +117,44 @@ void QuadtreeNode::AddChilds()
 	}
 }
 
+void QuadtreeNode::OrganizeChilds()
+{
+	for (std::list<GameObject*>::iterator it = ListObjects.begin(); it != ListObjects.end();)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			CMesh* TryMesh = (CMesh*)(*it)->GetComponent(COMP_MESH);
+			CTransformation* TryTransform = (CTransformation*)(*it)->GetComponent(COMP_TRANSFORMATION);
+			AABB TryBox = TryMesh->debugBox;
+			TryBox.TransformAsAABB(TryTransform->globalTransformMatrix);
+			if (TryMesh != nullptr)
+			{
+				if (childs[i]->Box.Intersects(TryBox))
+				{
+					childs[i]->Insert((*it));
+				}
+			}
+		}
+		it = ListObjects.erase(it);
+	}
+}
+
+void QuadtreeNode::DrawDebug() const
+{
+	Color color = Blue;
+
+	if (IsEmpty() == true)
+	{
+		Box.DrawDebug(color);
+	}
+	else
+	{
+		for (int i = 0; i < MAXIMUM; i++)
+		{
+			childs[i]->DrawDebug();
+		}
+	}
+}
 
 bool QuadtreeNode::IsEmpty() const
 {
@@ -105,5 +165,49 @@ bool QuadtreeNode::IsEmpty() const
 	else
 	{
 		return false;
+	}
+}
+
+
+//QuadTree
+
+QuadTree::QuadTree()
+{
+}
+
+QuadTree::QuadTree(const AABB& box)
+{
+	Root = new QuadtreeNode(box);
+}
+
+QuadTree::~QuadTree()
+{
+	Clear();
+}
+
+void QuadTree::Insert(GameObject* AddObj)
+{
+	CMesh* TryMesh = (CMesh*)AddObj->GetComponent(COMP_MESH);
+	CTransformation* TryTransform = (CTransformation*)AddObj->GetComponent(COMP_TRANSFORMATION);
+
+	if (TryMesh != nullptr)
+	{
+		AABB TryBox = TryMesh->debugBox;
+		TryBox.TransformAsAABB(TryTransform->globalTransformMatrix);
+
+		if (Root != nullptr && Root->Box.Contains(TryBox))
+		{
+			Root->Insert(AddObj);
+		}
+		else if (Root != nullptr && !Root->Box.Contains(TryBox))
+		{
+			Root->Box.Enclose(TryBox);
+			Root->Insert(AddObj);
+		}
+		else if (Root == nullptr)
+		{
+			Root = new QuadtreeNode(TryBox);
+			Root->Insert(AddObj);
+		}
 	}
 }
