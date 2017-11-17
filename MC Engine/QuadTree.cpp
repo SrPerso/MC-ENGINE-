@@ -211,3 +211,27 @@ void QuadTree::Insert(GameObject* AddObj)
 		}
 	}
 }
+
+void QuadTree::Remove(GameObject* QuitObj)
+{
+	CMesh* tmp = (CMesh*)QuitObj->GetComponent(COMP_MESH);
+	if (Root != nullptr && Root->Box.Contains(tmp->debugBox))
+	{
+		Root->Remove(QuitObj);
+	}
+}
+
+void QuadTree::Clear()
+{
+	delete Root;
+	Root = nullptr;
+}
+
+void QuadTree::DrawDebug() const
+{
+	Color Colors = Blue;
+	if (Root != nullptr)
+	{
+		Root->DrawDebug();
+	}
+}
