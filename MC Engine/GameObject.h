@@ -105,7 +105,10 @@ public:
 
 
 	//ray
+	
+	void IntersectAABB(LineSegment &picking, std::vector<GameObject*>& DistanceList);
 	void TriIntersection(LineSegment & line, float & distance, float3 & hitPoint);
+	
 public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> childs;

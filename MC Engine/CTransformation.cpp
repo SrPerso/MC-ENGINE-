@@ -147,16 +147,19 @@ void CTransformation::OnInspector() {
 		if (ImGui::SliderFloat("X", &destiny.x, -100, 100))
 		{
 			UpdateTrans = true;
+			
 		}
 
 		if (ImGui::SliderFloat("Y", &destiny.y, -100, 100))
 		{
 			UpdateTrans = true;
+			
 		}
 
 		if (ImGui::SliderFloat("Z", &destiny.z, -100, 100))
 		{
 			UpdateTrans = true;
+			
 		}
 
 		ImGui::Text("Rotation:");
@@ -171,16 +174,19 @@ void CTransformation::OnInspector() {
 		if (ImGui::SliderFloat("RX", &eulerAngles.x, 0, 360))
 		{
 			UpdateTrans = true;
+			
 		}
 
 		if (ImGui::SliderFloat("RY", &eulerAngles.y, 0, 360))
 		{
 			UpdateTrans = true;
+			
 		}
 
 		if (ImGui::SliderFloat("RZ", &eulerAngles.z, 0, 360))
 		{
 			UpdateTrans = true;
+			
 		}
 
 		ImGui::Text("Scale:");
@@ -194,19 +200,22 @@ void CTransformation::OnInspector() {
 		if (ImGui::SliderFloat("SX", &scale.x, 1, 100))
 		{
 			UpdateTrans = true;
+			
 		}
 		if (ImGui::SliderFloat("SY", &scale.y, 1, 100))
 		{
 			UpdateTrans = true;
+			
 		}
 		if (ImGui::SliderFloat("SZ", &scale.z, 1, 100))
 		{
 			UpdateTrans = true;
+			
 		}
 
 		if (ImGui::Checkbox("STATIC", &object->isStatic)) 
 		{
-			object->ChangeStatic();
+			//object->ChangeStatic();
 		}
 
 	}

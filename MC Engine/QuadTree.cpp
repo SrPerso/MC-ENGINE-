@@ -141,7 +141,7 @@ void QuadtreeNode::OrganizeChilds()
 
 void QuadtreeNode::DrawDebug() const
 {
-	Color color = Blue;
+	Color color = Red;
 
 	if (IsEmpty() == true)
 	{

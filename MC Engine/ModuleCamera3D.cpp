@@ -53,7 +53,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 	vec3 newPos(0, 0, 0);
 	vec3 norm(0, 0, 0);
-	float speed = 3.0f * dt;
+	float speed = 1000.0f * dt;
 
 
 	if (App->input->GetMouseZ() == -1)

@@ -169,6 +169,7 @@ void CMesh::SetData(DMesh * data)
 
 }
 
+
 bool CMesh::IntersectTriangle(LineSegment & picking, float& distance, float3 &hitPoint)
 {
 	bool ret = false;

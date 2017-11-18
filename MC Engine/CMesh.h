@@ -31,6 +31,8 @@ public:
 	const void* GetData();
 	void SetData(DMesh*data);
 	uint mesh_ID;
+	
+	CMesh* mesh = nullptr;
 };
 
 #endif

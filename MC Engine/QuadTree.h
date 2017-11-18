@@ -22,6 +22,7 @@ public:
 	std::list<GameObject*> ListObjects;
 	QuadtreeNode* parent;
 	QuadtreeNode* childs[4];
+	
 };
 
 class Quadtree
@@ -39,7 +40,7 @@ public:
 
 public:
 	QuadtreeNode* Root = nullptr;
-
+	
 
 };
 
