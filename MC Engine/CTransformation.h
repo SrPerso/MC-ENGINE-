@@ -48,7 +48,7 @@ public:
 
 	void OnGuizmo();
 	//ImGuizmo::OPERATION Operator_Guiz = ImGuizmo::OPERATION::ROTATE;
-private:
+public:
 	DTransformation* dataTransformation;
 };
 

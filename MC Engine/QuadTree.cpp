@@ -125,8 +125,8 @@ void QuadtreeNode::OrganizeChilds()
 		{
 			CMesh* TryMesh = (CMesh*)(*it)->GetComponent(COMP_MESH);
 			CTransformation* TryTransform = (CTransformation*)(*it)->GetComponent(COMP_TRANSFORMATION);
-			AABB TryBox = TryMesh->debugBox;
-			TryBox.TransformAsAABB(TryTransform->globalTransformMatrix);
+			AABB TryBox = TryMesh->dataMesh->debugBox;
+			TryBox.TransformAsAABB(TryTransform->dataTransformation->globalTransformMatrix);
 			if (TryMesh != nullptr)
 			{
 				if (childs[i]->Box.Intersects(TryBox))
@@ -192,8 +192,8 @@ void QuadTree::Insert(GameObject* AddObj)
 
 	if (TryMesh != nullptr)
 	{
-		AABB TryBox = TryMesh->debugBox;
-		TryBox.TransformAsAABB(TryTransform->globalTransformMatrix);
+		AABB TryBox = TryMesh->dataMesh->debugBox;
+		TryBox.TransformAsAABB(TryTransform->dataTransformation->globalTransformMatrix);
 
 		if (Root != nullptr && Root->Box.Contains(TryBox))
 		{
@@ -215,7 +215,7 @@ void QuadTree::Insert(GameObject* AddObj)
 void QuadTree::Remove(GameObject* QuitObj)
 {
 	CMesh* tmp = (CMesh*)QuitObj->GetComponent(COMP_MESH);
-	if (Root != nullptr && Root->Box.Contains(tmp->debugBox))
+	if (Root != nullptr && Root->Box.Contains(tmp->dataMesh->debugBox))
 	{
 		Root->Remove(QuitObj);
 	}
