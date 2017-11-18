@@ -141,9 +141,7 @@ bool ModuleRenderer3D::Init()
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-
+	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
@@ -362,7 +360,7 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 					CTexture* componentTexture = (CTexture*)GOToDraw->GetComponent(COMP_TEXTURE);
 					if (componentTexture != nullptr)
 					{
-						glBindTexture(GL_TEXTURE_2D, componentTexture->image);
+						glBindTexture(GL_TEXTURE_2D, componentTexture->dataTexture->image);
 					}
 					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 					glBindBuffer(GL_ARRAY_BUFFER, componentMesh->dataMesh->idTexCoords);

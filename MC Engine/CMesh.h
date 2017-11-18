@@ -34,6 +34,8 @@ public:
 	void SetData(DMesh*data);
 	uint mesh_ID;
 
+	
+
 public: 
 	DMesh*  dataMesh;
 };

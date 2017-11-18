@@ -16,7 +16,7 @@ class DataJSON;
 class GameObject;
 
 
-class CTransformation : public Component, public DTransformation
+class CTransformation : public Component
 {
 public:
 
@@ -48,7 +48,8 @@ public:
 
 	void OnGuizmo();
 	//ImGuizmo::OPERATION Operator_Guiz = ImGuizmo::OPERATION::ROTATE;
-
+private:
+	DTransformation* dataTransformation;
 };
 
 #endif //__TRANSFORMATION_H__

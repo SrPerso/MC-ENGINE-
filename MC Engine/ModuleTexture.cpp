@@ -128,7 +128,7 @@ void ModuleTexture::AttatchTexture(uint texture)
 	for (std::vector<GameObject*>::iterator it = App->goManager->root->GetFirstChild()->childs.begin(); it != App->goManager->root->GetFirstChild()->childs.end(); it++)
 	{
 		
-			dynamic_cast<CTexture*>((*it)->GetComponent(COMP_TEXTURE))->image = texture;
+			dynamic_cast<CTexture*>((*it)->GetComponent(COMP_TEXTURE))->dataTexture->image = texture;
 		
 	}
 }
