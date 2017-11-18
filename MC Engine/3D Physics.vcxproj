@@ -88,6 +88,8 @@
     <ClInclude Include="CTransformation.h" />
     <ClInclude Include="DCamera.h" />
     <ClInclude Include="ImGuizmo\ImGuizmo.h" />
+    <ClInclude Include="mmgr\mmgr.h" />
+    <ClInclude Include="mmgr\nommgr.h" />
     <ClInclude Include="ModuleDataManager.h" />
     <ClInclude Include="DContainer.h" />
     <ClInclude Include="DMaterial.h" />
@@ -167,7 +169,6 @@
     <ClInclude Include="ModuleCamera3D.h" />
     <ClInclude Include="ModuleDataFile.h" />
     <ClInclude Include="ModuleGameObjectManager.h" />
-    <ClInclude Include="ModulePhysics3D.h" />
     <ClInclude Include="ModuleRenderer3D.h" />
     <ClInclude Include="ModuleTexture.h" />
     <ClInclude Include="ModuleTimeManager.h" />
@@ -181,8 +182,6 @@
     <ClInclude Include="p2DynArray.h" />
     <ClInclude Include="p2Point.h" />
     <ClInclude Include="parson\parson.h" />
-    <ClInclude Include="PhysBody3D.h" />
-    <ClInclude Include="PhysVehicle3D.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="QuadTree.h" />
     <ClInclude Include="Timer.h" />
@@ -198,6 +197,7 @@
     <ClCompile Include="DCamera.cpp" />
     <ClCompile Include="ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="IScene.cpp" />
+    <ClCompile Include="mmgr\mmgr.cpp" />
     <ClCompile Include="ModuleDataManager.cpp" />
     <ClCompile Include="DContainer.cpp" />
     <ClCompile Include="DMaterial.cpp" />
@@ -252,7 +252,6 @@
     <ClCompile Include="ModuleDataFile.cpp" />
     <ClCompile Include="ModuleGameObjectManager.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
-    <ClCompile Include="ModulePhysics3D.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleSceneIntro.cpp" />
     <ClCompile Include="ModuleTexture.cpp" />
@@ -260,8 +259,6 @@
     <ClCompile Include="ModuleUI.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="parson\parson.c" />
-    <ClCompile Include="PhysBody3D.cpp" />
-    <ClCompile Include="PhysVehicle3D.cpp" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="Timer.cpp" />

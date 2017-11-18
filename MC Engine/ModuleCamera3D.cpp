@@ -1,6 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
-#include "PhysBody3D.h"
+
 #include "ModuleCamera3D.h"
 #include "parson\parson.h"
 
@@ -42,6 +42,11 @@ bool ModuleCamera3D::CleanUp()
 {
 	LOG("-CLEANUP- Cleaning camera");
 	LOGUI("-CLEANUP- Cleaning camera");
+
+	delete dcamera;
+	delete editorCam;
+	editorCam = nullptr;
+
 	return true;
 }
 

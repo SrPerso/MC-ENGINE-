@@ -7,6 +7,7 @@
 
 CMesh::CMesh(GameObject * object, int UID, Component_Type type, DMesh* data) : Component(object, UID, COMP_MESH)
 {
+	dataMesh = new DMesh();
 
 	SetData(data);
 
@@ -16,17 +17,18 @@ CMesh::CMesh(GameObject * object, int UID, Component_Type type, DMesh* data) : C
 	}
 	else
 	{
-		this->mesh_ID = 0;
+		this->mesh_ID = 0;  
 	}
 	name = "- Component Mesh_";
 	name.append(std::to_string(mesh_ID));
 	dType = D_MESH;
+	
+
 
 }
 
 CMesh::~CMesh()
 {
-
 }
 
 void CMesh::OnUpdate(float dt)
@@ -41,25 +43,26 @@ void CMesh::OnEditor()
 	if (ImGui::TreeNodeEx(name.c_str()))
 	{	//	ImGui::Text("Texture Coords: %i", idTexCoords);
 		
+
 		ImGui::TreePop();
 	}
 }
 
 void CMesh::OnInspector()
 {
-		ImGui::Text("Number of Vertex: %i", nVertex);
+		ImGui::Text("Number of Vertex: %i", dataMesh->nVertex);
 		ImGui::SameLine();
-		ImGui::Text("Vertex ID: %i", idVertex);
+		ImGui::Text("Vertex ID: %i", dataMesh->idVertex);
 
-		ImGui::Text("Number of Index: %i", nIndex);
+		ImGui::Text("Number of Index: %i", dataMesh->nIndex);
 		ImGui::SameLine();
-		ImGui::Text("Index ID: %i", idIndex);
+		ImGui::Text("Index ID: %i", dataMesh->idIndex);
 
-		ImGui::Text("\t Number of Normals: %i", nNormals);
+		ImGui::Text("\t Number of Normals: %i", dataMesh->nNormals);
 		ImGui::SameLine();
-		ImGui::Text("Normals ID: %i", idNormals);
+		ImGui::Text("Normals ID: %i", dataMesh->idNormals);
 
-		ImGui::Text("Colors ID: %i", idColors);		
+		ImGui::Text("Colors ID: %i", dataMesh->idColors);
 
 		ImGui::Text("ID: %i", this->object->GetGOId());
 		ImGui::SameLine();
@@ -67,6 +70,12 @@ void CMesh::OnInspector()
 
 		ImGui::Text("component UID: %i", UID);
 
+}
+
+void CMesh::OnCleanUp()
+{
+	
+	delete dataMesh;
 }
 
 void CMesh::OnSave(DataJSON & file) const
@@ -79,13 +88,8 @@ void CMesh::OnLoad(DataJSON & file)
 {
 	UID = file.GetFloat("Component UID");
 
-	DMesh* mesh = new DMesh();
+	dataMesh = App->datamanager->importerMesh->Load(this,nullptr,this->object->GetGOUId());
 
-	mesh = App->datamanager->importerMesh->Load(this,nullptr,this->object->GetGOUId());
-
-	SetData(mesh);
-
-	delete mesh;
 }
 
 void CMesh::Move(float3 destiny, float3 start)
@@ -93,77 +97,31 @@ void CMesh::Move(float3 destiny, float3 start)
 
 	float3 diff = destiny - start;
 
-	for (int i = 0; i <= nVertex* 3; i += 3)
-	{
-		Vertex[i] += diff.x;
-	}
-	for (int i = 1; i <= nVertex * 3; i += 3)
-	{
-		Vertex[i] += diff.y;
-	}
-	for (int i = 2; i <= nVertex * 3; i += 3)
-	{
-		Vertex[i] += diff.z;
-	}
+	for (int i = 0; i <= dataMesh->nVertex* 3; i += 3)
+		dataMesh->Vertex[i] += diff.x;
 
-	glBindBuffer(GL_ARRAY_BUFFER, idVertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * nVertex * 3, Vertex, GL_STATIC_DRAW);
+	for (int i = 1; i <= dataMesh->nVertex * 3; i += 3)
+		dataMesh->Vertex[i] += diff.y;
+	
+	for (int i = 2; i <= dataMesh->nVertex * 3; i += 3)
+		dataMesh->Vertex[i] += diff.z;
+	
+	glBindBuffer(GL_ARRAY_BUFFER, dataMesh->idVertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * dataMesh->nVertex * 3, dataMesh->Vertex, GL_STATIC_DRAW);
 
-	debugBox.SetNegativeInfinity();
-	debugBox.Enclose((float3*)Vertex, nVertex);
+	dataMesh->debugBox.SetNegativeInfinity();
+	dataMesh->debugBox.Enclose((float3*)dataMesh->Vertex, dataMesh->nVertex);
 }
 
 const void * CMesh::GetData() 
 {
-	DMesh* data = new DMesh;
-
-	data->nVertex = nVertex;
-	data->idVertex = idVertex;
-	data->Vertex = Vertex;
-	data->wire = wire;
-	data->nIndex = nIndex;
-	data->idIndex = idIndex;
-	data->Index = Index;
-	data->nFaces = nFaces;
-	data->normals = normals;
-	data->idNormals = idNormals;
-	data->nNormals = nNormals;
-	data->idColors = idColors;
-	data->colors = colors;
-	data->idTexCoords = idTexCoords;
-	data->texCoords = texCoords;
-	data->debugMode = debugMode;
-	data->debugBox = debugBox;
-
-	DMesh* ret= data;
-
-	delete data;
-
-	return (DMesh*)ret;
+	return (DMesh*)dataMesh;
 }
 
 void CMesh::SetData(DMesh * data)
 {
 	if (data!= nullptr)
-	{
-		nVertex = data->nVertex;
-		idVertex = data->idVertex;
-		Vertex = data->Vertex;
-		wire = data->wire;
-		nIndex = data->nIndex;
-		idIndex = data->idIndex;
-		Index = data->Index;
-		nFaces = data->nFaces;
-		normals = data->normals;
-		idNormals = data->idNormals;
-		nNormals = data->nNormals;
-		idColors = data->idColors;
-		colors = data->colors;
-		idTexCoords = data->idTexCoords;
-		texCoords = data->texCoords;
-		debugMode = data->debugMode;
-		debugBox = data->debugBox;
-	}
+		dataMesh = data;
 	else
 		LOGUI("[ERROR]-Cant Set Data - Component Mesh");
 
@@ -181,9 +139,11 @@ bool CMesh::IntersectTriangle(LineSegment & picking, float& distance, float3 &hi
 	LineSegment newSegment = picking;
 	newSegment.Transform(thisTransformation->GetTransMatrix().Inverted());
 
-	for (uint i = 0; i < nIndex; i += 3)
+	for (uint i = 0; i < dataMesh->nIndex; i += 3)
 	{
-		Triangle tri(float3(Vertex[Index[i] * 3], Vertex[Index[i] * 3 + 1], Vertex[Index[i] * 3 + 2]), float3(Vertex[Index[i + 1] * 3], Vertex[Index[i + 1] * 3 + 1], Vertex[Index[i + 1] * 3 + 2]), float3(Vertex[Index[i + 2] * 3], Vertex[Index[i + 2] * 3 + 1], Vertex[Index[i + 2] * 3 + 2]));
+		Triangle tri(float3(dataMesh->Vertex[dataMesh->Index[i] * 3], dataMesh->Vertex[dataMesh->Index[i] * 3 + 1], dataMesh->Vertex[dataMesh->Index[i] * 3 + 2]),
+			float3(dataMesh->Vertex[dataMesh->Index[i + 1] * 3], dataMesh->Vertex[dataMesh->Index[i + 1] * 3 + 1], dataMesh->Vertex[dataMesh->Index[i + 1] * 3 + 2]),
+			float3(dataMesh->Vertex[dataMesh->Index[i + 2] * 3], dataMesh->Vertex[dataMesh->Index[i + 2] * 3 + 1], dataMesh->Vertex[dataMesh->Index[i + 2] * 3 + 2]));
 		
 		if (newSegment.Intersects(tri, &distance2, &hitPoint))
 		{

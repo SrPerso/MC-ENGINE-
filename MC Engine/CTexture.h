@@ -9,7 +9,7 @@
 class GameObject;
 
 
-class CTexture : public Component, public DTexture
+class CTexture : public Component
 {
 public:
 	CTexture(GameObject* object,int UID, Component_Type type = COMP_TEXTURE, DTexture* data = nullptr);
@@ -19,10 +19,14 @@ public:
 	void OnEditor() override;
 	void OnInspector() override;
 
+	void OnCleanUp() override;
+
 	void OnSave(DataJSON&file)const override;
 	void OnLoad(DataJSON&file) override;
 
 	void SetData(DTexture*data);
 	uint Texture_ID; 
+
+	DTexture* dataTexture;
 };
 #endif //_TEXTURE_H

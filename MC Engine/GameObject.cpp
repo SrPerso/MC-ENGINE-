@@ -19,7 +19,7 @@ GameObject::GameObject()
 
 	if (parent != nullptr)
 	{
-		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
+	//	this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
 		parent->AddChild(this);
 		//	SetParentUID(parent->GetGOUId());
 	}
@@ -28,6 +28,8 @@ GameObject::GameObject()
 		SetParentUID(0);
 		parent->AddChild(this);
 	}
+
+//	this->CreateComponent(COMP_TRANSFORMATION, App->randGen->Int());
 
 	name.append(std::to_string(GameOIbject_ID));
 }
@@ -48,12 +50,18 @@ GameObject::GameObject(GameObject* parent): parent(parent)
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
 		parent->AddChild(this);
 	//	SetParentUID(parent->GetGOUId());
+
+	//	this->CreateComponent(COMP_TRANSFORMATION, App->randGen->Int());
 	}
 	else 
-	{
-		
+	{	
+		//this->CreateComponent(COMP_TRANSFORMATION, App->randGen->Int());
 		SetParentUID(0);
 	}
+
+
+
+
 
 	name.append(std::to_string(GameOIbject_ID));
 
@@ -121,6 +129,8 @@ void GameObject::DeleteChild(GameObject * objectToDelete)
 		if (it != childs.end()) 
 		{
 			childs.erase(it);
+			(*it)->CleanUp();
+			delete (*it);
 		}		
 	}
 }
@@ -129,6 +139,8 @@ void GameObject::DeleteChilds()
 {
 	while (!childs.empty())
 	{
+		childs.back()->CleanUp();
+
 		delete childs.back();
 		childs.back() = nullptr;
 
@@ -325,6 +337,7 @@ void GameObject::DeleteComponent(Component * comp)
 		if ((*it) == comp)
 		{
 			components.erase(it);
+			delete (*it);
 		}
 	}
 
@@ -439,7 +452,7 @@ void GameObject::Update(float dt)
 		{
 			if (camera->needToCull) 
 			{
-				AABB recalculatedBox = debuger->debugBox;
+				AABB recalculatedBox = debuger->dataMesh->debugBox;
 
 				recalculatedBox.TransformAsAABB(transform->GetTransMatrix());				
 
@@ -457,12 +470,27 @@ void GameObject::Update(float dt)
 	}
 }
 
-void GameObject::cleanUp()
+void GameObject::CleanUp()
 {
+	while (!components.empty())
+	{
+		components.back()->OnCleanUp();
+		delete components.back();
+		components.back() = nullptr;
 
-	for (std::vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
-		(*it)->cleanUp();
+		components.pop_back();
+	}
+	components.clear();
 
+	while (!childs.empty())
+	{
+		childs.back()->CleanUp();
+		delete childs.back();
+		childs.back() = nullptr;
+
+		childs.pop_back();
+	}
+	childs.clear();
 }
 
 void GameObject::OnEditor()

@@ -9,6 +9,7 @@ class DTransformation
 public:
 	DTransformation(){}
 	DTransformation(float3 pos, float3 scale,Quat rot);
+	virtual ~DTransformation();
 
 	float3 position;
 	float3 destiny;
@@ -32,8 +33,11 @@ public:
 	void SetGlobalScale(float3);
 	void SetGlobalRotation(Quat);
 
+	bool GetUpdateTrans()const;
+	void SetUpdateTrans(bool);
+
 public:
-	DTransformation::~DTransformation();
+
 	float3 eulerAngles;
 	float4x4 globalTransformMatrix;
 	float4x4 localTransformMatrix;
@@ -41,7 +45,7 @@ public:
 
 	bool OnTransform;
 
-protected:
+private:
 	float3 globalPosition;
 	float3 globalScale;
 	Quat globalRotation;

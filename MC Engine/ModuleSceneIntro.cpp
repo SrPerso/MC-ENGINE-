@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
-#include "PhysBody3D.h"
+
 #include "Glew\include\glew.h"
 #include "imGUI\imgui.h"
 #include "imGUI\imgui_impl_sdl_gl3.h"
@@ -44,6 +44,8 @@ bool ModuleSceneIntro::Start()
 	App->camera->LookAt(vec3(0, 0, 0));
 	MinDistance = MINDISTANCE;
 
+	delete dcamera;
+
 	return ret;
 }
 
@@ -55,12 +57,19 @@ bool ModuleSceneIntro::CleanUp()
 	LOGUI("-CLEANUP- Cleaning scene Objects");
 
 
-	while (!GeometryObjects.empty()) {
-
+	while (!GeometryObjects.empty()) 
+	{
 		delete GeometryObjects.front();
 		GeometryObjects.pop_front();
 	}
 	
+	
+	while (!NormalsLines.empty())
+	{
+		delete NormalsLines.front();
+		NormalsLines.pop_front();
+	}
+
 	return true;
 }
 
@@ -73,7 +82,7 @@ void ModuleSceneIntro::CreateCube(vec3 size, vec3 pos)
 	cube->wire = true;
 	
 	GeometryObjects.push_back(cube);
-	App->physics->AddBody(*cube);
+
 
 }
 
@@ -89,7 +98,6 @@ void ModuleSceneIntro::CreateSphere(float radius, vec3 pos, int numStacks, int n
 	sphere->wire = true;
 	
 	GeometryObjects.push_back(sphere);
-	App->physics->AddBody(*sphere);
 
 }
 
@@ -103,8 +111,7 @@ void ModuleSceneIntro::CreateCylinder(float radius,float height, vec3 pos)
 
 	cylinder->wire = true;
 	GeometryObjects.push_back(cylinder);
-	App->physics->AddBody(*cylinder);
-	
+
 
 }
 
@@ -117,8 +124,6 @@ void ModuleSceneIntro::CreateCube1(vec3 size, vec3 pos)
 	cube1->SetPos(pos.x, pos.y, pos.z);
 
 	GeometryObjects.push_back(cube1);
-	App->physics->AddBody(*cube1);
-	
 
 }
 
@@ -132,7 +137,7 @@ void ModuleSceneIntro::CreateCube2(vec3 size, vec3 pos)
 
 	
 	GeometryObjects.push_back(cube2);
-	App->physics->AddBody(*cube2);
+
 
 
 }
@@ -197,7 +202,7 @@ void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObje
 
 				if (IntersectMesh != nullptr)
 				{
-					if (newSegment.Intersects(IntersectMesh->debugBox) == true)
+					if (newSegment.Intersects(IntersectMesh->dataMesh->debugBox) == true)
 					{
 						DistanceList.push_back(App->goManager->GetRoot()->childs[i]->childs[p]);
 
@@ -216,7 +221,7 @@ void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObje
 			}
 			if (IntersectMesh != nullptr)
 			{
-				if (newSegment.Intersects(IntersectMesh->debugBox) == true)
+				if (newSegment.Intersects(IntersectMesh->dataMesh->debugBox) == true)
 				{
 					DistanceList.push_back(App->goManager->GetRoot()->childs[i]);
 					LOGUI("hit");

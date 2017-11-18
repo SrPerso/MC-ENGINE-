@@ -16,7 +16,7 @@ class DataJSON;
 class GameObject;
 
 
-class CTransformation : public Component, public DTransformation
+class CTransformation : public Component
 {
 public:
 
@@ -31,6 +31,8 @@ public:
 	void OnEditor() override;
 	void OnInspector() override;
 	
+	void OnCleanUp() override;
+
 	void OnSave(DataJSON&file)const override;
 	void OnLoad(DataJSON&file) override;
 
@@ -46,7 +48,8 @@ public:
 
 	void OnGuizmo();
 	//ImGuizmo::OPERATION Operator_Guiz = ImGuizmo::OPERATION::ROTATE;
-
+private:
+	DTransformation* dataTransformation;
 };
 
 #endif //__TRANSFORMATION_H__

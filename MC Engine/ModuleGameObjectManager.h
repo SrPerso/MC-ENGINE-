@@ -25,6 +25,8 @@ public:
 	GameObject* GetRoot()const;
 	void deleteGameObject(GameObject* GObject);
 
+	void CreateEmtyGameObject(GameObject*parent);
+
 	//Save && load scene
 
 	void SaveScene(const char*fileName);

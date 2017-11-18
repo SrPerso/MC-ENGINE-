@@ -129,22 +129,14 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, int id)
 		mesh->debugBox.SetNegativeInfinity();//
 		mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
 		
-		
 		App->camera->CenterCameraToObject(&mesh->debugBox);
 		object->SetLocalTransform();
 
 		LOGUI("-------------------------------------------");
 
-		//delete mesh;	
+
 		Save(mesh, nullptr, id);
-	
-		////mesh = nullptr;
 
-		//DMesh* mesh2 = new DMesh();
-
-		//mesh2 = Load(mesh, nullptr, id);
-		//
-		//return mesh2;
 		return mesh;
 
 }
@@ -155,14 +147,6 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, int id)
 		LOGUI("[ERROR]{Importer}- The mesh has not vertices");
 	}
 	return nullptr;
-}
-
-ImporterTrans::ImporterTrans()
-{
-}
-
-ImporterTrans::~ImporterTrans()
-{
 }
 
 DTransformation* ImporterTrans::ImportTrans(aiNode* node, GameObject* object, uint id)
@@ -191,8 +175,6 @@ DTransformation* ImporterTrans::ImportTrans(aiNode* node, GameObject* object, ui
 
 DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile, uint id)
 {
-
-
 	DTransformation* data = new DTransformation();
 
 	std::string path; //path to load
@@ -227,8 +209,7 @@ DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile
 
 
 		if (file.read(dataFile, size))
-		{
-	
+		{	
 			LOGUI("[READING]- %s", path.c_str());
 		}
 		else
@@ -263,18 +244,6 @@ DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile
 	uint posision = ranges[0];
 	uint scale = ranges[1];
 	uint rotation = ranges[2];
-
-	//
-	////--- 
-	//cursor += bytes;
-	//bytes = sizeof(float) *posision;
-	//data->Index = new float[posision];
-
-	//memcpy(data->Index, cursor, bytes);
-
-	//todo
-
-
 
 	LOGUI("[LOADED]{Trasformation}- %s", path.c_str());
 
@@ -522,7 +491,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, int id)
 DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, int id)
 {
 	DMesh* data = new DMesh();
-	//data = (DMesh*)buffer;
+
 	std::string path; //path to load
 
 	if (loadFile == nullptr)
@@ -568,6 +537,8 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, int id)
 		}
 
 		file.close();
+
+
 	}
 	else
 		LOGUI("[ERROR]- loading %s", path);
@@ -581,6 +552,7 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, int id)
 	size = file.gcount();
 
 	char* cursor = datafile;
+
 
 	// load numbers --------
 

@@ -42,26 +42,30 @@ void CTexture::OnEditor()
 void CTexture::OnInspector()
 {
 
-		ImGui::Text("\t Texture path: %s", textNamePath.c_str());
-		ImGui::Text("\t Texture name: %s", textureName.c_str());
+		ImGui::Text("\t Texture path: %s", dataTexture->textNamePath.c_str());
+		ImGui::Text("\t Texture name: %s", dataTexture->textureName.c_str());
 
+}
+
+void CTexture::OnCleanUp()
+{
 }
 
 void CTexture::OnSave(DataJSON & file) const
 {
 	file.AddInt("Component UID", UID);
-	file.AddString("TextureName", textureName.c_str());
-	file.AddString("textNamePath", textNamePath.c_str());
+	file.AddString("TextureName", dataTexture->textureName.c_str());
+	file.AddString("textNamePath", dataTexture->textNamePath.c_str());
 }
 
 void CTexture::OnLoad(DataJSON & file)
 {
 	UID = file.GetFloat("Component UID");
-	textureName.assign(file.GetString("TextureName"));
-	textNamePath.assign(file.GetString("textNamePath"));
+	dataTexture->textureName.assign(file.GetString("TextureName"));
+	dataTexture->textNamePath.assign(file.GetString("textNamePath"));
 
 	DTexture* texture = new DTexture();
-	texture = App->datamanager->importerTexture->Load(this, textNamePath.c_str(), this->object->GetGOUId());
+	texture = App->datamanager->importerTexture->Load(this, dataTexture->textNamePath.c_str(), this->object->GetGOUId());
 	SetData(texture);
 
 	delete texture;
@@ -71,11 +75,7 @@ void CTexture::SetData(DTexture * data)
 {
 	if (data != nullptr)
 	{
-		this->image = data->image;
-		this->textNamePath.clear();
-		this->textNamePath = data->textNamePath.c_str();
-		this->textureName.clear();
-		this->textureName = data->textureName.c_str();
+		dataTexture = data;
 	}
 	else
 		LOGUI("[ERROR]-Cant Set Data - Component texture");

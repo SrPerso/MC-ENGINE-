@@ -77,6 +77,16 @@ void DTransformation::SetGlobalRotation(Quat newRotation)
 	globalRotation = newRotation;
 }
 
+bool DTransformation::GetUpdateTrans() const
+{
+	return UpdateTrans;
+}
+
+void DTransformation::SetUpdateTrans(bool boool)
+{
+	UpdateTrans = boool;
+}
+
 DTransformation::~DTransformation()
 {
 
