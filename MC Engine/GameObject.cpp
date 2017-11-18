@@ -396,6 +396,35 @@ void GameObject::SetNoStatic()
 	isStatic = false;
 }
 
+void GameObject::ChangeStatic()
+{
+	if (isStatic == true)
+	{
+		App->scene_intro->AddQuadTree(this);
+	}
+	else
+	{
+		App->scene_intro->recalculate = true;
+		for (int i = 0; i < childs.size(); i++)
+		{
+			childs[i]->isStatic = false;
+			childs[i]->ChangeStatic();
+		}
+	}
+}
+
+void GameObject::InsertQuadTree()
+{
+	if (isStatic)
+	{
+		App->scene_intro->AddQuadTree(this);
+	}
+	for (int i = 0; i < childs.size(); i++)
+	{
+		childs[i]->InsertQuadTree();
+	}
+}
+
 void GameObject::Update(float dt)
 {	
 

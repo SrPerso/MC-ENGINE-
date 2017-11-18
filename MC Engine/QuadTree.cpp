@@ -171,21 +171,21 @@ bool QuadtreeNode::IsEmpty() const
 
 //QuadTree
 
-QuadTree::QuadTree()
+Quadtree::Quadtree()
 {
 }
 
-QuadTree::QuadTree(const AABB& box)
+Quadtree::Quadtree(const AABB& box)
 {
 	Root = new QuadtreeNode(box);
 }
 
-QuadTree::~QuadTree()
+Quadtree::~Quadtree()
 {
 	Clear();
 }
 
-void QuadTree::Insert(GameObject* AddObj)
+void Quadtree::Insert(GameObject* AddObj)
 {
 	CMesh* TryMesh = (CMesh*)AddObj->GetComponent(COMP_MESH);
 	CTransformation* TryTransform = (CTransformation*)AddObj->GetComponent(COMP_TRANSFORMATION);
@@ -194,7 +194,7 @@ void QuadTree::Insert(GameObject* AddObj)
 	{
 		AABB TryBox = TryMesh->debugBox;
 		TryBox.TransformAsAABB(TryTransform->globalTransformMatrix);
-
+	
 		if (Root != nullptr && Root->Box.Contains(TryBox))
 		{
 			Root->Insert(AddObj);
@@ -212,7 +212,7 @@ void QuadTree::Insert(GameObject* AddObj)
 	}
 }
 
-void QuadTree::Remove(GameObject* QuitObj)
+void Quadtree::Remove(GameObject* QuitObj)
 {
 	CMesh* tmp = (CMesh*)QuitObj->GetComponent(COMP_MESH);
 	if (Root != nullptr && Root->Box.Contains(tmp->debugBox))
@@ -221,13 +221,13 @@ void QuadTree::Remove(GameObject* QuitObj)
 	}
 }
 
-void QuadTree::Clear()
+void Quadtree::Clear()
 {
 	delete Root;
 	Root = nullptr;
 }
 
-void QuadTree::DrawDebug() const
+void Quadtree::DrawDebug() const
 {
 	Color Colors = Blue;
 	if (Root != nullptr)

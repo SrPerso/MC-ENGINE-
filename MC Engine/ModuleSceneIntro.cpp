@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
+#include "Quadtree.h"
 #include "Primitive.h"
 #include "PhysBody3D.h"
 #include "Glew\include\glew.h"
@@ -44,6 +45,7 @@ bool ModuleSceneIntro::Start()
 	App->camera->LookAt(vec3(0, 0, 0));
 	MinDistance = MINDISTANCE;
 
+	mainQuad = new Quadtree();
 	return ret;
 }
 
@@ -257,6 +259,19 @@ void ModuleSceneIntro::ObjectSelected(GameObject * selected)
 	
 }
 
+void ModuleSceneIntro::AddQuadTree(GameObject * AddObj)
+{
+	mainQuad->Insert(AddObj);
+}
+
+void ModuleSceneIntro::SetNewQuad()
+{
+	delete mainQuad;
+	mainQuad = new Quadtree();
+	App->goManager->root->InsertQuadTree();
+	recalculate = false;
+}
+
 
 void ModuleSceneIntro::Draw()
 {
@@ -293,7 +308,14 @@ update_status ModuleSceneIntro::Update(float dt)
 			sceneSelected->OnSelection();
 		}
 	}
-
+	if (App->ui->debug_active == true) 
+	{
+		mainQuad->DrawDebug();
+	}
+	if (recalculate == true)
+	{
+		SetNewQuad();
+	}
 	return UPDATE_CONTINUE;
 
 }

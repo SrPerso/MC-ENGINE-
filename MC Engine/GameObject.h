@@ -82,6 +82,8 @@ public:
 	bool IsStatic()const;
 	void SetStatic();
 	void SetNoStatic();
+	void ChangeStatic();
+	void InsertQuadTree();
 
 	//ACTIONS BASIC.............................
 

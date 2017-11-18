@@ -204,7 +204,11 @@ void CTransformation::OnInspector() {
 			UpdateTrans = true;
 		}
 
-		ImGui::Checkbox("STATIC", &object->isStatic);
+		if (ImGui::Checkbox("STATIC", &object->isStatic)) 
+		{
+			object->ChangeStatic();
+		}
+
 	}
 	
 }
