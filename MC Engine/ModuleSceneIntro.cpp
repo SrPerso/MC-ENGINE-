@@ -148,13 +148,14 @@ void ModuleSceneIntro::CreateLine(vec3 Origin, vec3 destintation,Color color)
 GameObject* ModuleSceneIntro::SelectObject(LineSegment  picking)
 {
 	
-	GameObject* closest = nullptr;
+	
 	std::vector<GameObject*> DistanceList;
+	App->goManager->root->IntersectAABB(picking, DistanceList);
+	
 
-	IntersectAABB(picking, DistanceList);
-
+	GameObject* closest = nullptr;
 	if (DistanceList.size() > 0)
-	{
+	{		
 		float Lastdistance = MINDISTANCE;
 		for (uint i = 0; i < DistanceList.size(); i++)
 		{
@@ -173,61 +174,7 @@ GameObject* ModuleSceneIntro::SelectObject(LineSegment  picking)
 	
 }
 
-void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObject*>& DistanceList)
-{
 
-	GameObject* Closest = nullptr;
-	
-
-	
-	
-
-	for (uint i = 0; i < App->goManager->GetRoot()->childs.size(); i++)
-	{
-		if (App->goManager->GetRoot()->childs[i]->childs.size() > 0)
-		{
-			for (uint p = 0; p < App->goManager->GetRoot()->childs[i]->childs.size(); p++)
-			{
-				LineSegment newSegment(picking);
-				CMesh* IntersectMesh = (CMesh*)App->goManager->GetRoot()->childs[i]->childs[p]->GetComponent(COMP_MESH);
-				CTransformation* IntersectTransform = (CTransformation*)App->goManager->GetRoot()->childs[i]->childs[p]->GetComponent(COMP_TRANSFORMATION);
-				if (IntersectTransform != nullptr) {
-
-					newSegment.Transform(IntersectTransform->GetTransMatrix().Inverted());
-					
-				}
-
-				if (IntersectMesh != nullptr)
-				{
-					if (newSegment.Intersects(IntersectMesh->debugBox) == true)
-					{
-						DistanceList.push_back(App->goManager->GetRoot()->childs[i]->childs[p]);
-
-
-					}
-				}
-			}
-		}
-		else {
-			LineSegment newSegment(picking);
-			CMesh* IntersectMesh = (CMesh*)App->goManager->GetRoot()->childs[i]->GetComponent(COMP_MESH);
-			CTransformation* IntersectTransform = (CTransformation*)App->goManager->GetRoot()->childs[i]->GetComponent(COMP_TRANSFORMATION);
-			if (IntersectTransform != nullptr) {
-
-				newSegment.Transform(IntersectTransform->GetTransMatrix().Inverted());
-			}
-			if (IntersectMesh != nullptr)
-			{
-				if (newSegment.Intersects(IntersectMesh->debugBox) == true)
-				{
-					DistanceList.push_back(App->goManager->GetRoot()->childs[i]);
-					LOGUI("hit");
-
-				}
-			}
-		}
-	}
-}
 
 
 
@@ -308,7 +255,7 @@ update_status ModuleSceneIntro::Update(float dt)
 			sceneSelected->OnSelection();
 		}
 	}
-	if (App->ui->debug_active == true) 
+	if (App->ui->debug_active== true) 
 	{
 		mainQuad->DrawDebug();
 	}

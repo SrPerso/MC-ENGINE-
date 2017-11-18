@@ -67,5 +67,6 @@ public:
 public:
 
 	Quadtree* mainQuad = nullptr;
+	bool recalculate = false;
 	void CreateCylinder(const float x, const float y, const float z, const float radious, const float h);
 };
