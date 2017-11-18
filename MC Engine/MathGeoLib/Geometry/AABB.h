@@ -21,6 +21,8 @@
 #include "../Math/float3.h"
 #include "../Math/SSEMath.h"
 
+
+#include "../../Color.h"
 #ifdef MATH_OGRE_INTEROP
 #include <OgreAxisAlignedBox.h>
 #endif
@@ -63,6 +65,7 @@ public:
 	/** @see minPoint, maxPoint. */
 	AABB(const float3 &minPoint, const float3 &maxPoint);
 
+	void DrawDebug(Color color) const;
 	/// Constructs this AABB to enclose the given OBB.
 	/** This constructor computes the optimal minimum volume AABB that encloses the given OBB.
 		@note Since an AABB cannot generally represent an OBB, this conversion is not exact, but the returned AABB
