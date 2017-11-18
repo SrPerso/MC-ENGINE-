@@ -107,6 +107,7 @@ bool ModuleDataManager::ImportGameObject(std::string path, GameObject * parent, 
 	
 			GameObject * GameObjectSon = new GameObject(parent);
 
+			GameObjectSon->SetName(node->mName.C_Str());
 			GameObjectSon->SetGOID(App->randGen->Int());
 
 			GameObjectSon->CreateComponent(COMP_TRANSFORMATION, -1, (DTransformation*)importerTransformations->ImportTrans(node, GameObjectSon, GameObjectSon->GetGOId()));
