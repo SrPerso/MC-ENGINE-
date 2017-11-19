@@ -16,6 +16,11 @@ DTexture::~DTexture()
 
 bool DTexture::LoadInMemory()
 {
+	App->texture->LoadTexture(exportedFile.c_str());
+
+	if (idTexCoords == NULL)
+		return false;
+
 	return true;
 }
 

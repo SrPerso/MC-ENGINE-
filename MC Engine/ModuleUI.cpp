@@ -530,16 +530,14 @@ IMGUI_API void ModuleUI::ShowInspectorWindow(Component* component, bool * p_open
 {
 	ImGuiWindowFlags window_flags = 0;
 	
-	window_flags |= ImGuiWindowFlags_NoTitleBar;
+//	window_flags |= ImGuiWindowFlags_NoTitleBar;
 
 	if (ImGui::Begin("Inspector", p_open, window_flags))
 	{
-		ImGui::Text("INSPECTOR");
-		ImGui::SameLine;
-		ImGui::Text(component->GetParentName());
+		//ImGui::Text("INSPECTOR");
+		//ImGui::SameLine;
+		//ImGui::Text(component->GetParentName());
 		ImGui::Separator();
-
-
 
 		if (component != nullptr) {
 			Component_Type type = component->getType();
@@ -547,21 +545,33 @@ IMGUI_API void ModuleUI::ShowInspectorWindow(Component* component, bool * p_open
 			switch (type)
 			{
 			case COMP_TRANSFORMATION:
+				ImGui::Separator();
+				ImGui::Text("COMP_TRANSFORMATION");
+				ImGui::Separator();
 				component = (CTransformation*)component;
 				component->OnInspector();
 				break;
 
 			case COMP_TEXTURE:
+				ImGui::Separator();
+				ImGui::Text("COMP_TEXTURE");
+				ImGui::Separator();
 				component = (CTexture*)component;
 				component->OnInspector();
 				break;
 
 			case COMP_MESH:
+				ImGui::Separator();
+				ImGui::Text("COMP_MESH");
+				ImGui::Separator();
 				component = (CMesh*)component;
 				component->OnInspector();
 				break;
 
 			case COMP_CAMERA:
+				ImGui::Separator();
+				ImGui::Text("COMP_CAMERA");
+				ImGui::Separator();
 				component = (CCamera*)component;
 				component->OnInspector();
 				break;
@@ -569,6 +579,7 @@ IMGUI_API void ModuleUI::ShowInspectorWindow(Component* component, bool * p_open
 			}
 		}		//App->goManager->GetRoot()->OnInspector();
 		
+
 		ImGui::End();
 	}
 
