@@ -19,8 +19,8 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	GeometryCentre = nullptr;
 	name = "module camera 3d";
 
-
-	dcamera = (DCamera*)App->datamanager->CreateNewDataContainer(D_CAMERA, App->randGen->Int());
+	dcamera = new DCamera(App->randGen->Int());
+	//dcamera = (DCamera*)App->datamanager->CreateNewDataContainer(D_CAMERA, App->randGen->Int());
 	editorCam = new CCamera(App->randGen->Int(), COMP_CAMERA, dcamera);
 }
 

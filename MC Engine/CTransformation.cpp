@@ -12,43 +12,7 @@ CTransformation::CTransformation(GameObject * object,int UID, Component_Type typ
 	{
 		dataTransformation = data;
 	}
-	//else
-	//{
-	//	if (object->GetParent() != nullptr)
-	//	{
-	//		DTransformation* temp = (DTransformation*)App->datamanager->CreateNewDataContainer(D_TRANSFORMATION, App->randGen->Int());
-	//		temp = (DTransformation*)this->object->GetParent()->GetComponent(this->Ctype)->GetData();
 
-	//		position = temp->position;
-	//		scale = temp->scale;
-	//		destiny = temp->destiny;
-	//		eulerAngles = temp->eulerAngles;
-	//		angle = temp->angle;
-	//		rotation = temp->rotation;
-	//		globalTransformMatrix = temp->globalTransformMatrix;
-	//		localTransformMatrix = temp->localTransformMatrix;
-
-	//		delete temp;
-	//	}
-
-	//	else
-	//	{
-	//		rotation = Quat{0,0,0,1};
-	//		position = float3{0,0,0};
-	//		scale = float3{1,1,1 };
-
-	//		destiny = position;
-	//		eulerAngles = rotation.ToEulerXYZ();
-	//		angle = rotation.Angle();
-	//		rotation = rotation;
-	//		globalTransformMatrix = float4x4::FromQuat(rotation);
-	//		globalTransformMatrix = float4x4::Scale(scale, float3(0, 0, 0)) * globalTransformMatrix;
-	//		globalTransformMatrix.float4x4::SetTranslatePart(position.x, position.y, position.z);
-
-	//		localTransformMatrix = globalTransformMatrix;
-	//	}
-
-	//}
 	if (object != nullptr)
 	{
 		this->Transformation_ID = object->NumComponentTypeSize(this->Ctype) + 1;
@@ -296,16 +260,21 @@ void CTransformation::TransUpdate()
 	dataTransformation->eulerAngles.x *= RADTODEG;
 	dataTransformation->eulerAngles.y *= RADTODEG;
 	dataTransformation->eulerAngles.z *= RADTODEG;
+
 	dataTransformation->globalTransformMatrix = float4x4::FromQuat(dataTransformation->rotation);
 	dataTransformation->globalTransformMatrix = float4x4::Scale(dataTransformation->scale, float3(0, 0, 0)) * dataTransformation->globalTransformMatrix;
 	dataTransformation->globalTransformMatrix.float4x4::SetTranslatePart(dataTransformation->position.x, dataTransformation->position.y, dataTransformation->position.z);
 
-
-	//mesh->debugBox.TransformAsAABB(GetTransMatrix());
+	if (object != nullptr)
+	{
+		CTransformation* parentTrans = (CTransformation*)object->GetParent()->GetComponent(COMP_TRANSFORMATION);
 	
-	SetLocalTrans(object->GetParent());
-	object->UpdateTranformChilds();
+		if (parentTrans != nullptr)
+			dataTransformation->globalTransformMatrix = parentTrans->dataTransformation->globalTransformMatrix* dataTransformation->globalTransformMatrix;
+		
+	}
 
+	object->UpdateTranformChilds();
 	dataTransformation->SetUpdateTrans(false);
 }
 

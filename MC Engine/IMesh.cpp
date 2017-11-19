@@ -21,15 +21,20 @@ ImporterMesh::~ImporterMesh()
 {
 }
 
-bool ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, const char* name)
+bool ImporterMesh::ImportMesh(aiMesh * newMesh, GameObject* object, const char* name)
 {
 	LOGUI("-------------------------------------------");
-	aiMesh* newMesh = buffer;
+
 
 	if (newMesh != nullptr)
 	{
 		DMesh* mesh = (DMesh*)App->datamanager->CreateNewDataContainer(D_MESH, App->randGen->Int());
 
+		mesh->file = name;
+		mesh->exportedFile = "Library/Mesh/";
+		mesh->exportedFile += name;
+		mesh->exportedFile += ".MCmesh";
+		
 		//VERTEX------------------------------------------------------------------------------
 
 		mesh->nVertex = newMesh->mNumVertices;
@@ -135,7 +140,7 @@ bool ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, const char* n
 		LOGUI("-------------------------------------------");
 
 
-		bool ret = true;
+		bool ret = false;
 		ret = Save(mesh, name);
 		return ret;
 	}
@@ -470,7 +475,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile)
 		memcpy(cursor, mesh->colors, allocsize);
 	}
 
-	std::ofstream file_end(path.c_str(), std::ofstream::out | std::ofstream::binary);
+	std::ofstream file_end(path.c_str(),/* std::ofstream::out | */std::ofstream::binary);
 
 	if (file_end.good()) //write file
 		file_end.write(data, size);

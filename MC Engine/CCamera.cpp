@@ -9,8 +9,7 @@ CCamera::CCamera(int UID, Component_Type type, DCamera * data) :Component(UID,CO
 		dataCamera = data;
 	}
 
-
-	this->dataCamera->aspectRatio = dataCamera->aspectRatio;
+	this->dataCamera->aspectRatio = data->aspectRatio;
 	this->dataCamera->aspectRatio = (float)16 / 9;
 
 	dataCamera->FOV = 15;
@@ -32,6 +31,7 @@ CCamera::CCamera(GameObject * object, int UID, Component_Type type, DCamera * da
 	{
 		dataCamera = data;
 	}
+	this->dataCamera->aspectRatio = data->aspectRatio;
 	this->dataCamera->aspectRatio = (float)16 / 9;
 	
 	dataCamera->FOV = 15;

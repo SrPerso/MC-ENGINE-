@@ -46,7 +46,7 @@ public:
 
 	virtual const void*GetData() ;
 
-
+	void SetName(std::string name);
 protected:
 	std::string name;
 	Component_Type Ctype;

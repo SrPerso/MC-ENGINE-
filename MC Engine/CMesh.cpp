@@ -104,7 +104,7 @@ void CMesh::OnSave(DataJSON & file) const
 void CMesh::OnLoad(DataJSON & file)
 {
 	UID = file.GetFloat("Component UID");
-
+	AddResource(UID);
 	dataMesh = App->datamanager->importerMesh->Load(this,nullptr,this->object->GetName());
 
 }
@@ -142,6 +142,17 @@ void CMesh::SetData(DMesh * data)
 	else
 		LOGUI("[ERROR]-Cant Set Data - Component Mesh");
 
+}
+
+void CMesh::AddResource(int uid)
+{
+	dataMesh = (DMesh*)App->datamanager->GetContainer(uid);
+	dataMesh->LoadToMemory();
+
+}
+
+void CMesh::AddResource(std::string fName)
+{
 }
 
 bool CMesh::IntersectTriangle(LineSegment & picking, float& distance, float3 &hitPoint)

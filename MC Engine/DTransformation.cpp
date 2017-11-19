@@ -8,6 +8,7 @@ DTransformation::DTransformation(int UID,float3 pos, float3 scales, Quat rot) :D
 	destiny = pos;
 	scale = scales;
 	eulerAngles = rot.ToEulerXYZ();
+	eulerAngles *= RADTODEG;
 	angle =rot.Angle();
 	rotation = rot;
 	globalTransformMatrix = float4x4::FromQuat(rot);

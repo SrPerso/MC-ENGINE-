@@ -44,6 +44,7 @@ public:
 	// Objects creators?
 	int FindInMap(const char*name);
 	DContainer * GetContainer(int uid);
+	DContainer * GetContainerWithString(std::string Dname);
 	//void Add
 
 	int ImportFile(const char*new_file_in_assets, aiMesh * mesh);
