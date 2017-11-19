@@ -68,7 +68,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 	vec3 newPos(0, 0, 0);
 	vec3 norm(0, 0, 0);
-	float speed = 1000.0f * dt;
+	float speed = 100.0f * dt;
 
 
 	if (App->input->GetMouseZ() == -1)
@@ -316,6 +316,11 @@ void ModuleCamera3D::CenterCameraToObject(AABB * box)
 void ModuleCamera3D::CenterCamera()
 {
 	CenterCameraToObject(GeometryCentre);
+}
+
+void ModuleCamera3D::SetMainCam(CCamera * cam)
+{
+	mainCam = cam;
 }
 
 // -----------------------------------------------------------------

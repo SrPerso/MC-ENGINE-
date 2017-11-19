@@ -5,7 +5,7 @@
 #define BOX_SIZE 1	
 #define MAXIMUM 4	
 
-QuadtreeNode::QuadtreeNode(const AABB & box)
+QuadtreeNode::QuadtreeNode(const AABB & box): Box(box)
 {
 	parent = nullptr;
 	for (int i = 0; i < MAXIMUM; i++)
@@ -92,24 +92,30 @@ void QuadtreeNode::AddChilds()
 	float3 BoxSize = this->Box.Size();
 
 	
+	//Child 0
 	childBox.minPoint = float3(MinBox.x, MinBox.y, MinBox.z);
-	childBox.maxPoint = float3(MaxBox.x - BoxSize.x * 0.5f, MaxBox.y, MaxBox.z - BoxSize.z * 0.5f);
-	childs[0] = new QuadtreeNode(childBox);//0
+	childBox.maxPoint = float3(MaxBox.x - BoxSize.x, MaxBox.y - BoxSize.y, MaxBox.z - BoxSize.z);
 
+	childs[0] = new QuadtreeNode(childBox);
 
-	childBox.minPoint = float3(MinBox.x + BoxSize.x * 0.5f, MinBox.y, MinBox.z);
-	childBox.maxPoint = float3(MaxBox.x, MaxBox.y, MaxBox.z - BoxSize.z * 0.5f);
-	childs[1] = new QuadtreeNode(childBox);//1
+	//Child 1
+	childBox.minPoint = float3(MinBox.x, MinBox.y + BoxSize.y, MinBox.z);
+	childBox.maxPoint = float3(MaxBox.x - BoxSize.x, MaxBox.y, MaxBox.z - BoxSize.z);
 
+	childs[1] = new QuadtreeNode(childBox);
 
-	childBox.minPoint = float3(MinBox.x, MinBox.y, MinBox.z + BoxSize.z * 0.5f);
-	childBox.maxPoint = float3(MaxBox.x - BoxSize.x * 0.5f, MaxBox.y, MaxBox.z);
-	childs[2] = new QuadtreeNode(childBox);//2
+	//Child 2
+	childBox.minPoint = float3(MinBox.x, MinBox.y, MinBox.z + BoxSize.z);
+	childBox.maxPoint = float3(MaxBox.x - BoxSize.x, MaxBox.y - BoxSize.y, MaxBox.z);
 
+	childs[2] = new QuadtreeNode(childBox);
 
-	childBox.minPoint = float3(MaxBox.x - BoxSize.x * 0.5f, MaxBox.y, MaxBox.z - BoxSize.z * 0.5f);
-	childBox.maxPoint = float3(MaxBox.x, MaxBox.y, MaxBox.z);
-	childs[3] = new QuadtreeNode(childBox);//3
+	//Child 3
+	childBox.minPoint = float3(MinBox.x, MinBox.y + BoxSize.y, MinBox.z + BoxSize.z);
+	childBox.maxPoint = float3(MaxBox.x - BoxSize.x, MaxBox.y, MaxBox.z);
+
+	childs[3] = new QuadtreeNode(childBox);
+	
 
 	for (int i = 0; i < MAXIMUM; i++)
 	{
@@ -141,7 +147,7 @@ void QuadtreeNode::OrganizeChilds()
 
 void QuadtreeNode::DrawDebug() const
 {
-	Color color = Red;
+	Color color = Blue;
 
 	if (IsEmpty() == true)
 	{

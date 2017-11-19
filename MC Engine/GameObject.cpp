@@ -758,7 +758,7 @@ void  GameObject::IntersectAABB(LineSegment &picking, std::vector<GameObject*>& 
 
 				if (IntersectMesh != nullptr)
 				{
-					if (newSegment.Intersects(IntersectMesh->debugBox) == true)
+					if (newSegment.Intersects(IntersectMesh->dataMesh->debugBox) == true)
 					{
 						DistanceList.push_back(this);
 
