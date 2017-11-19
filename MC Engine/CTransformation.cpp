@@ -38,7 +38,7 @@ void CTransformation::OnUpdate(float dt)
 	{		
 		dataTransformation->position = dataTransformation->destiny;
 		TransUpdate();
-		//UpdateTrans = false;		
+		object->ChangeQuad();
 	}
 
 	
@@ -137,17 +137,23 @@ void CTransformation::OnInspector() {
 		//ImGui::Text("Position:");
 		if (ImGui::SliderFloat("X", &dataTransformation->destiny.x, -100, 100))
 		{
+
 			dataTransformation->SetUpdateTrans(true);
+
 		}
 
 		if (ImGui::SliderFloat("Y", &dataTransformation->destiny.y, -100, 100))
 		{
+
 			dataTransformation->SetUpdateTrans(true);
+
 		}
 
 		if (ImGui::SliderFloat("Z", &dataTransformation->destiny.z, -100, 100))
 		{
+
 			dataTransformation->SetUpdateTrans(true);
+
 		}
 
 		ImGui::Text("Rotation:");
@@ -161,17 +167,23 @@ void CTransformation::OnInspector() {
 		//ImGui::Text("Rotation:");
 		if (ImGui::SliderFloat("RX", &dataTransformation->eulerAngles.x, 0, 360))
 		{
+
 			dataTransformation->SetUpdateTrans(true);
+
 		}
 
 		if (ImGui::SliderFloat("RY", &dataTransformation->eulerAngles.y, 0, 360))
 		{
+
 			dataTransformation->SetUpdateTrans(true);
+
 		}
 
 		if (ImGui::SliderFloat("RZ", &dataTransformation->eulerAngles.z, 0, 360))
 		{
+
 			dataTransformation->SetUpdateTrans(true);
+
 		}
 
 		ImGui::Text("Scale:");
@@ -184,18 +196,27 @@ void CTransformation::OnInspector() {
 
 		if (ImGui::SliderFloat("SX", &	dataTransformation->scale.x, 1, 100))
 		{
+
 			dataTransformation->SetUpdateTrans(true);
+
 		}
 		if (ImGui::SliderFloat("SY", &dataTransformation->scale.y, 1, 100))
 		{
+
 			dataTransformation->SetUpdateTrans(true);
+
 		}
 		if (ImGui::SliderFloat("SZ", &dataTransformation->scale.z, 1, 100))
 		{
-			dataTransformation->SetUpdateTrans(true);
+    dataTransformation->SetUpdateTrans(true);
+			
 		}
 
-		ImGui::Checkbox("STATIC", &object->isStatic);
+		if (ImGui::Checkbox("STATIC", &object->isStatic)) 
+		{
+			object->ChangeQuad();
+		}
+
 	}
 	
 }

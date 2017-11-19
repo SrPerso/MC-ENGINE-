@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
+#include "Quadtree.h"
 #include "Primitive.h"
 
 #include "Glew\include\glew.h"
@@ -12,6 +13,7 @@
 #include "CMesh.h"
 #include "CTransformation.h"
 #include "MathGeoLib\Geometry\LineSegment.h"
+#include "MathGeoLib\Geometry\AABB.h"
 
 
 #pragma comment( lib, "Glew/libx86/glew32.lib" )
@@ -47,10 +49,43 @@ bool ModuleSceneIntro::Start()
 	App->camera->LookAt(vec3(0, 0, 0));
 	MinDistance = MINDISTANCE;
 
-	delete dcamera;
+
+	mainQuad = new Quadtree();
 
 	return ret;
 }
+
+
+update_status ModuleSceneIntro::Update(float dt)
+{
+	float sx = 1 * 0.5f;
+	float sy = 1 * 0.5f;
+	float sz = 1 * 0.5f;
+
+	PrimitivePlane p(0, -1, 0, 200);
+	p.color = White;
+	p.axis = false;
+	p.Render();
+
+	if (sceneSelected != nullptr)
+	{
+		if (sceneSelected->selecting == true) {
+			sceneSelected->OnSelection();
+		}
+	}
+	if (recalculate == true) 
+	{
+		SetNewQuad();
+	}
+	if (App->ui->debug_active == true)
+	{
+		mainQuad->DrawDebug();
+	}
+	
+	return UPDATE_CONTINUE;
+
+}
+
 
 // Load assets
 bool ModuleSceneIntro::CleanUp()
@@ -154,13 +189,14 @@ void ModuleSceneIntro::CreateLine(vec3 Origin, vec3 destintation,Color color)
 GameObject* ModuleSceneIntro::SelectObject(LineSegment  picking)
 {
 	
-	GameObject* closest = nullptr;
+	
 	std::vector<GameObject*> DistanceList;
+	App->goManager->root->IntersectAABB(picking, DistanceList);
+	
 
-	IntersectAABB(picking, DistanceList);
-
+	GameObject* closest = nullptr;
 	if (DistanceList.size() > 0)
-	{
+	{		
 		float Lastdistance = MINDISTANCE;
 		for (uint i = 0; i < DistanceList.size(); i++)
 		{
@@ -178,6 +214,7 @@ GameObject* ModuleSceneIntro::SelectObject(LineSegment  picking)
 	return closest;
 	
 }
+
 
 void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObject*>& DistanceList)
 {
@@ -237,6 +274,7 @@ void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObje
 
 
 
+
 void ModuleSceneIntro::ObjectSelected(GameObject * selected)
 {
 	
@@ -263,6 +301,20 @@ void ModuleSceneIntro::ObjectSelected(GameObject * selected)
 	
 }
 
+void ModuleSceneIntro::AddQuadTree(GameObject * AddObj)
+{
+	mainQuad->Insert(AddObj);
+}
+
+void ModuleSceneIntro::SetNewQuad()
+{
+	delete mainQuad;
+	mainQuad = new Quadtree();
+	App->goManager->root->InsertQuadTree();
+	recalculate = false;
+}
+
+
 
 void ModuleSceneIntro::Draw()
 {
@@ -282,25 +334,3 @@ update_status ModuleSceneIntro::PreUpdate(float dt)
 }
 
 // Update
-update_status ModuleSceneIntro::Update(float dt)
-{	
-	float sx = 1 * 0.5f;
-	float sy = 1 * 0.5f;
-	float sz = 1 * 0.5f;
-	
-	PrimitivePlane p(0, -1, 0, 200);
-	p.color = White;
-	p.axis = false;
-	p.Render();
-
-	if (sceneSelected != nullptr)
-	{
-		if (sceneSelected->selecting == true) {
-			sceneSelected->OnSelection();
-		}
-	}
-
-	return UPDATE_CONTINUE;
-
-}
-

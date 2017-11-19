@@ -22,14 +22,16 @@ public:
 	std::list<GameObject*> ListObjects;
 	QuadtreeNode* parent;
 	QuadtreeNode* childs[4];
+	
 };
 
-class QuadTree
+class Quadtree
 {
 
-	QuadTree();
-	QuadTree(const AABB& box);
-	~QuadTree();
+public:
+	Quadtree();
+	Quadtree(const AABB& box);
+	~Quadtree();
 	void Insert(GameObject* AddObj);
 	void Remove(GameObject* QuitObj);
 	void Clear();
@@ -38,7 +40,7 @@ class QuadTree
 
 public:
 	QuadtreeNode* Root = nullptr;
-
+	
 
 };
 

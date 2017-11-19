@@ -5,13 +5,14 @@
 #include "p2DynArray.h"
 #include "Globals.h"
 #include "Primitive.h"
+
 #include <list>
 #include <vector>
 
 
 struct PhysBody3D;
 struct PhysMotor3D;
-
+class Quadtree;
 
 
 struct GlobalDebugInfo
@@ -44,9 +45,15 @@ public:
 
 	GameObject* SelectObject(LineSegment picking);
 
+	
+
 	void IntersectAABB(LineSegment &picking, std::vector<GameObject*>& DistanceList);
 	
 	void ObjectSelected(GameObject* selected);
+
+	void AddQuadTree(GameObject* AddObj);
+	void SetNewQuad();
+
 
 public:
 	std::list<Primitive*> GeometryObjects;
@@ -61,5 +68,8 @@ public:
 
 	GameObject* sceneSelected = nullptr;
 public:
+
+	Quadtree* mainQuad = nullptr;
+	bool recalculate = false;
 	void CreateCylinder(const float x, const float y, const float z, const float radious, const float h);
 };

@@ -82,6 +82,11 @@ public:
 	bool IsStatic()const;
 	void SetStatic();
 	void SetNoStatic();
+	void ChangeStatic();
+	
+	
+	void ChangeQuad();
+	void InsertQuadTree();
 
 	//ACTIONS BASIC.............................
 
@@ -103,7 +108,10 @@ public:
 
 
 	//ray
+	
+	void IntersectAABB(LineSegment &picking, std::vector<GameObject*>& DistanceList);
 	void TriIntersection(LineSegment & line, float & distance, float3 & hitPoint);
+	
 public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> childs;

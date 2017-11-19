@@ -154,7 +154,9 @@ bool ModuleDataManager::ImportGameObject(std::string path, GameObject * parent, 
 	
 			aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[node->mMeshes[i]]->mMaterialIndex];
 			GameObjectSon->CreateComponent(COMP_TEXTURE, -1, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));
-			
+
+			GameObjectSon->InsertQuadTree();
+
 		}
 	}
 

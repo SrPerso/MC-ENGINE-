@@ -407,6 +407,43 @@ void GameObject::SetNoStatic()
 	isStatic = false;
 }
 
+
+void GameObject::ChangeStatic()
+{
+	if (isStatic)
+	{
+		App->scene_intro->AddQuadTree(this);
+	}
+	else
+	{
+		App->scene_intro->recalculate = true;
+		for (int i = 0; i < childs.size(); i++)
+		{
+			childs[i]->isStatic = false;
+			childs[i]->ChangeStatic();
+		}
+	}
+}
+
+
+void GameObject::ChangeQuad() 
+{
+
+	App->scene_intro->SetNewQuad();
+	
+}
+void GameObject::InsertQuadTree()
+{
+	if (isStatic)
+	{
+		App->scene_intro->AddQuadTree(this);
+	}
+	for (int i = 0; i < childs.size(); i++)
+	{
+		childs[i]->InsertQuadTree();
+	}
+}
+
 void GameObject::Update(float dt)
 {	
 
@@ -705,6 +742,34 @@ void GameObject::SaveData()
 	}
 }
 
+
+void  GameObject::IntersectAABB(LineSegment &picking, std::vector<GameObject*>& DistanceList)
+{
+
+	GameObject* Closest = nullptr;
+
+				LineSegment newSegment(picking);
+				CMesh* IntersectMesh = (CMesh*)GetComponent(COMP_MESH);
+				CTransformation* IntersectTransform = (CTransformation*)GetComponent(COMP_TRANSFORMATION);
+				if (IntersectTransform != nullptr) {
+
+					newSegment.Transform(IntersectTransform->GetTransMatrix().Inverted());
+				}
+
+				if (IntersectMesh != nullptr)
+				{
+					if (newSegment.Intersects(IntersectMesh->debugBox) == true)
+					{
+						DistanceList.push_back(this);
+
+
+					}
+				}
+				for (int i = 0; i < childs.size(); i++)
+				{
+					childs[i]->IntersectAABB(picking, DistanceList);
+				}
+}
 void GameObject::TriIntersection(LineSegment & line, float & distance, float3 & hitPoint)
 {
 	CMesh* mesh = (CMesh*)GetComponent(COMP_MESH);

@@ -35,11 +35,13 @@ public:
 	void SetData(DMesh*data);
 	uint mesh_ID;
 
+
 	void AddResource(int);
 	void AddResource(std::string fName);
 
 public: 
 	DMesh*  dataMesh;
+
 };
 
 #endif

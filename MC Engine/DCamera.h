@@ -18,7 +18,9 @@ class DCamera : public DContainer
 
 
 public:
+
 	DCamera(int UID,float3 pos = { 0, 0, 0 }, float3 front = { 0, 0, 1 }, float3 up = { 0, 1, 0 }, float nearPlaneDistance = 0.5f, float farPlaneDistance = 2000.0f, float verticalFov = 15.0f, float aspectRatio = (float)16 / 9, FrustumType type = PerspectiveFrustum);
+
 	~DCamera();
 
 	bool LoadInMemory();

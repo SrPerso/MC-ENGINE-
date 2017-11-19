@@ -516,7 +516,7 @@ void AABB::DrawDebug(Color color) const
 
 	glColor3f(color.r, color.g, color.b);
 
-	glBegin(GL_QUADS);
+	glBegin(GL_LINES);
 
 	glVertex3fv((GLfloat*)&corners[1]); 
 	glVertex3fv((GLfloat*)&corners[5]); 

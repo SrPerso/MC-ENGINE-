@@ -151,9 +151,7 @@ void CMesh::AddResource(int uid)
 
 }
 
-void CMesh::AddResource(std::string fName)
-{
-}
+
 
 bool CMesh::IntersectTriangle(LineSegment & picking, float& distance, float3 &hitPoint)
 {
