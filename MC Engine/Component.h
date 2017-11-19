@@ -47,6 +47,8 @@ public:
 	virtual const void*GetData() ;
 
 	void SetName(std::string name);
+	
+	const char* GetParentName();
 protected:
 	std::string name;
 	Component_Type Ctype;

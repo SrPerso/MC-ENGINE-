@@ -90,7 +90,7 @@ GameObject* ModuleDataManager::ImportGameObject(std::string path, GameObject * p
 
 		LOGUI("[OK]- Scene %s loaded succesfully", path);
 
-		aiNode* node = scene->mRootNode;
+		aiNode* node = scene->mRootNode; 
 	//	newObject->SetName(node->mName.C_Str());
 
 		newObject->CreateComponent(COMP_TRANSFORMATION, -1, (DTransformation*)importerTransformations->ImportTrans(node));
@@ -98,8 +98,7 @@ GameObject* ModuleDataManager::ImportGameObject(std::string path, GameObject * p
 		LOG("START-[OK] Loading meshes");
 
 		// take the basic name 
-		
-		
+			
 		std::string fullPath = path;
 		uint length = strlen(path.c_str());
 
@@ -113,7 +112,6 @@ GameObject* ModuleDataManager::ImportGameObject(std::string path, GameObject * p
 			scene->mMeshes[i]->mName = fullPath;
 			scene->mMeshes[i]->mName.Append(std::to_string(i).c_str());
 		}
-
 
 		ImportGameObject(path, newObject, scene, node); //std::string path, GameObject * parent, const aiScene * scene, aiNode * node)
 		
@@ -148,7 +146,8 @@ bool ModuleDataManager::ImportGameObject(std::string path, GameObject * parent, 
 		if (newMesh != nullptr)
 		{
 		
-			int nUID = ImportFile2(GameObjectSon, newMesh->mName.C_Str(), newMesh);
+			int nUID = ImportFile(GameObjectSon, newMesh->mName.C_Str(), newMesh);
+
 
 			GameObjectSon->CreateComponent(COMP_MESH, -1, (DMesh*)GetContainerWithString(newMesh->mName.C_Str()));
 			
@@ -216,9 +215,7 @@ int ModuleDataManager::FindInMap(const char * name)
 	for (std::map<int, DContainer*>::iterator it = dContainerMap.begin(); it != dContainerMap.end(); ++it)
 	{
 		if (strcmp(it->second->GetFile(), name) == 0)
-		{
 			return it->first;
-		}
 	}
 	return 0;
 }
@@ -273,39 +270,7 @@ DContainer * ModuleDataManager::GetContainerWithString(std::string Dname)
 		return GetContainer(uid);
 }
 
-int ModuleDataManager::ImportFile(const char * new_file_in_assets, aiMesh * mesh)
-{
-	int UID = FindInMap(new_file_in_assets);
-
-	if (UID == 0)
-	{
-		int ret = 0; bool import_ok = false;
-		int UID = App->randGen->Int();
-		std::string written_file = new_file_in_assets;
-		
-		import_ok = importerMesh->Save(mesh, new_file_in_assets);
-
-		if (import_ok == true)
-		{
-			DContainer* newResource = CreateNewDataContainer(D_MESH, UID);
-			newResource->file = new_file_in_assets;
-			newResource->exportedFile = "Library/Mesh/";
-			newResource->exportedFile += written_file;
-			newResource->exportedFile += ".MCmesh";
-		}
-		else
-		{
-			UID = -1;
-		}
-	}
-	else
-	{
-		return UID;
-	}
-
-}
-
-int ModuleDataManager::ImportFile2(GameObject * GO, const char * new_file_in_assets, aiMesh * mesh)
+int ModuleDataManager::ImportFile(GameObject * GO, const char * new_file_in_assets, aiMesh * mesh)
 {	
 
 		std::string fullPath = new_file_in_assets;
@@ -342,7 +307,7 @@ int ModuleDataManager::ImportFile2(GameObject * GO, const char * new_file_in_ass
 		if (UID == 0)
 		{
 			int ret = 0; bool import_ok = false;
-			int UID2 = App->randGen->Int();
+			int UID = App->randGen->Int();
 
 
 		std::string written_file = new_file_in_assets;
@@ -350,19 +315,23 @@ int ModuleDataManager::ImportFile2(GameObject * GO, const char * new_file_in_ass
 		//-------------		
 
 		import_ok = importerMesh->ImportMesh(mesh, GO, new_file_in_assets);
-		
+
 		if (import_ok == true)
 		{
-			DContainer* newResource = CreateNewDataContainer(D_MESH, UID2);
+			DContainer* newResource = CreateNewDataContainer(D_MESH, UID);
 			newResource->file = new_file_in_assets;
 			newResource->exportedFile = "Library/Mesh/";
 			newResource->exportedFile += written_file;
 			newResource->exportedFile += ".MCmesh";
 
-			return UID2;
+			return UID;
 		}
 		else
-			return -1;
+		{
+			UID = FindInMap(new_file_in_assets);
+			return UID;
+		}
+		
 	}
 	else
 		return UID;

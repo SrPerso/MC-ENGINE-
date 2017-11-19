@@ -8,6 +8,7 @@
 CTransformation::CTransformation(GameObject * object,int UID, Component_Type type, DTransformation* data) :Component(object, UID, type)
 {	
 	dataTransformation = (DTransformation*)App->datamanager->CreateNewDataContainer(D_TRANSFORMATION, App->randGen->Int());
+	
 	if (data)
 	{
 		dataTransformation = data;

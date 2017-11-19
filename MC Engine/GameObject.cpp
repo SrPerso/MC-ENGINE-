@@ -515,18 +515,16 @@ void GameObject::OnEditor()
 	{
 	
 		App->ui->show_Inspector_window = false;
+		CTransformation*TryTransform = (CTransformation*)GetComponent(COMP_TRANSFORMATION);
 		CMesh* meshTry = (CMesh*)GetComponent(COMP_MESH);
 		CCamera* camTry = (CCamera*)GetComponent(COMP_CAMERA);
-		if (meshTry != nullptr)
+		if (TryTransform != nullptr)
 		{
-			if (selecting == false) {
-
+			if (selecting == false) 
+			{
 					App->ui->show_Inspector_window = false;
-					App->scene_intro->ObjectSelected(this);		
-			
+					App->scene_intro->ObjectSelected(this);					
 			}
-
-
 		}
 		else if (camTry != nullptr)
 		{
@@ -664,6 +662,7 @@ void GameObject::OnDeserialize(DataJSON & file)
 			{
 				CCamera*  cCamera = new CCamera(this, componentUID);
 				cCamera->OnLoad(componentConfig);
+	
 				this->AddComponent(cCamera);
 
 				break;

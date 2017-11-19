@@ -147,16 +147,16 @@ bool ImporterMesh::ImportMesh(aiMesh * newMesh, GameObject* object, const char* 
 
 	else
 	{
-	//	return false;
+		return false;
 		LOGUI("[ERROR]{Importer}- The mesh has not vertices");
 	}
-	return true;
+
 }
 
 DTransformation* ImporterTrans::ImportTrans(aiNode* node )const
 {
-	if (node != nullptr)
-	{
+	//if (node != nullptr)
+	//{
 		aiVector3D move;
 		aiVector3D scale;
 		aiQuaternion rotation;
@@ -170,9 +170,9 @@ DTransformation* ImporterTrans::ImportTrans(aiNode* node )const
 		DTransformation* ret = new DTransformation(App->randGen->Int(),pos, sca, rot);
 
 		return ret;
-	}
+	/*}
 	return nullptr;
-
+*/
 }
 
 DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile, const char *  name)

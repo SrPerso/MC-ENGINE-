@@ -9,8 +9,8 @@
 class DTransformation : public DContainer
 {
 public:
-	DTransformation(int UID);
-	DTransformation(int UID,float3 pos, float3 scale,Quat rot);
+
+	DTransformation(int UID, float3 pos = {0,0,0}, float3 scale = {1 ,1,1 }, Quat rot = { 0,0,0,1 });
 	virtual ~DTransformation();
 	
 	bool LoadInMemory();

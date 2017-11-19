@@ -18,11 +18,6 @@ DTransformation::DTransformation(int UID,float3 pos, float3 scales, Quat rot) :D
 	localTransformMatrix = globalTransformMatrix;
 }
 
-
-DTransformation::DTransformation(int UID):DContainer(UID,D_TRANSFORMATION)
-{
-}
-
 float3 DTransformation::GetPosition() const
 {
 	return float3(destiny);

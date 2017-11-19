@@ -1,16 +1,20 @@
 #include "CCamera.h"
+#include "Application.h"
 #include "ModuleDataFile.h"
+#include "ModuleDataManager.h"
 #include "DCamera.h"
+
 
 CCamera::CCamera(int UID, Component_Type type, DCamera * data) :Component(UID,COMP_CAMERA)
 {	
+	
+
 	if (data)
 	{
 		dataCamera = data;
+		this->dataCamera->aspectRatio = data->aspectRatio;
+		this->dataCamera->aspectRatio = (float)16 / 9;
 	}
-
-	this->dataCamera->aspectRatio = data->aspectRatio;
-	this->dataCamera->aspectRatio = (float)16 / 9;
 
 	dataCamera->FOV = 15;
 	dataCamera->frustum.verticalFov = DEGTORAD * dataCamera->FOV;
@@ -27,11 +31,13 @@ CCamera::CCamera(int UID, Component_Type type, DCamera * data) :Component(UID,CO
 
 CCamera::CCamera(GameObject * object, int UID, Component_Type type, DCamera * data) :Component(object, UID, COMP_CAMERA)
 {
+
+	dataCamera = (DCamera*)App->datamanager->CreateNewDataContainer(D_CAMERA, App->randGen->Int());
 	if (data)
 	{
 		dataCamera = data;
 	}
-	this->dataCamera->aspectRatio = data->aspectRatio;
+
 	this->dataCamera->aspectRatio = (float)16 / 9;
 	
 	dataCamera->FOV = 15;
@@ -75,16 +81,8 @@ void CCamera::OnEditor()
 
 void CCamera::OnInspector()
 {
-	
-		ImGui::Text("Position:");
-		ImGui::SliderFloat("X", &dataCamera->frustum.pos.x, -100, 100);
-		ImGui::SliderFloat("Y", &dataCamera->frustum.pos.y, -100, 100);
-		ImGui::SliderFloat("Z", &dataCamera->frustum.pos.z, -100, 100);
-
-
-
-		ImGui::Checkbox("CULLING", &dataCamera->needToCull);
-		ImGui::Checkbox("ACTIVE", &dataCamera->Active);
+	ImGui::Checkbox("CULLING", &dataCamera->needToCull);
+	ImGui::Checkbox("ACTIVE", &dataCamera->Active);
 	
 }
 

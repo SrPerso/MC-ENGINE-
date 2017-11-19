@@ -47,8 +47,8 @@ public:
 	DContainer * GetContainerWithString(std::string Dname);
 	//void Add
 
-	int ImportFile(const char*new_file_in_assets, aiMesh * mesh);
-	int ImportFile2(GameObject*GO, const char* new_File_in_assets, aiMesh* mes);
+	
+	int ImportFile(GameObject*GO, const char* new_File_in_assets, aiMesh* mes);
 	//Resources
 
 	DContainer * CreateNewDataContainer(DType type, int UID);

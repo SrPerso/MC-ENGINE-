@@ -535,9 +535,12 @@ IMGUI_API void ModuleUI::ShowInspectorWindow(Component* component, bool * p_open
 	if (ImGui::Begin("Inspector", p_open, window_flags))
 	{
 		ImGui::Text("INSPECTOR");
+		ImGui::SameLine;
+		ImGui::Text(component->GetParentName());
 		ImGui::Separator();
 
-		
+
+
 		if (component != nullptr) {
 			Component_Type type = component->getType();
 		
