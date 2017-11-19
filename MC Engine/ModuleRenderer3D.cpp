@@ -315,12 +315,9 @@ void ModuleRenderer3D::DrawGO(GameObject* GOToDraw)
 		{
 			CMesh* componentMesh = dynamic_cast<CMesh*>(*it);			
 			
-			if (App->ui->debug_active == true) 			{		
-				
+			if (App->ui->debug_active == true) 			
 				DrawDebug(componentMesh);
-			}
-
-
+			
 			if (componentMesh->IsEnable() == true && componentMesh != nullptr)
 			{
 				if (App->ui->sb_Wire_Face == true)

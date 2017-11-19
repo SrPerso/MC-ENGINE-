@@ -5,9 +5,28 @@
 #include "MathGeoLib/Geometry/Triangle.h"
 #include "MathGeoLib/Geometry/LineSegment.h"
 
+CMesh::CMesh(int UID, Component_Type type) : Component(UID, type)
+{
+	dataMesh = (DMesh*)App->datamanager->CreateNewDataContainer(D_MESH, App->randGen->Int());
+
+	if (object != nullptr)
+	{
+		this->mesh_ID = object->NumComponentTypeSize(this->Ctype) + 1;
+	}
+	else
+	{
+		this->mesh_ID = 0;
+	}
+	name = "- Component Mesh_";
+	name.append(std::to_string(mesh_ID));
+	dType = D_MESH;
+
+
+}
+
 CMesh::CMesh(GameObject * object, int UID, Component_Type type, DMesh* data) : Component(object, UID, COMP_MESH)
 {
-	dataMesh = new DMesh();
+	dataMesh = (DMesh*)App->datamanager->CreateNewDataContainer(D_MESH, App->randGen->Int());
 
 	SetData(data);
 
@@ -23,8 +42,6 @@ CMesh::CMesh(GameObject * object, int UID, Component_Type type, DMesh* data) : C
 	name.append(std::to_string(mesh_ID));
 	dType = D_MESH;
 	
-
-
 }
 
 CMesh::~CMesh()
@@ -75,7 +92,7 @@ void CMesh::OnInspector()
 void CMesh::OnCleanUp()
 {
 	
-	delete dataMesh;
+	//delete dataMesh;
 }
 
 void CMesh::OnSave(DataJSON & file) const
@@ -88,7 +105,7 @@ void CMesh::OnLoad(DataJSON & file)
 {
 	UID = file.GetFloat("Component UID");
 
-	dataMesh = App->datamanager->importerMesh->Load(this,nullptr,this->object->GetGOUId());
+	dataMesh = App->datamanager->importerMesh->Load(this,nullptr,this->object->GetName());
 
 }
 

@@ -282,7 +282,7 @@ Component * GameObject::CreateComponent(Component_Type type, int UID, const void
 		
 		break;
 	case COMP_CAMERA:
-		//DCamera* camera = new DCamera();
+	
 		ret = new CCamera(this, newUID, COMP_CAMERA, (DCamera*)buffer);
 		this->components.push_back(ret);
 
@@ -450,7 +450,7 @@ void GameObject::Update(float dt)
 
 		if (camera != nullptr)
 		{
-			if (camera->needToCull) 
+			if (camera->dataCamera->needToCull) 
 			{
 				AABB recalculatedBox = debuger->dataMesh->debugBox;
 

@@ -15,6 +15,8 @@ public:
 	ModuleCamera3D(Application* app, bool start_enabled = true);
 	~ModuleCamera3D();
 
+	bool Init() override;
+
 	bool Start();
 	update_status Update(float dt);
 	bool CleanUp() override;
@@ -37,7 +39,7 @@ public:
 	AABB* GeometryCentre;
 
 	vec3 centreB;
-	DCamera* dcamera = nullptr;
+	DCamera* dcamera;
 	CCamera* mainCam = nullptr;
 	CCamera* editorCam= nullptr;
 	GameObject* selected = nullptr;

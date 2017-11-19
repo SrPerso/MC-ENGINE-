@@ -4,12 +4,17 @@
 #include "MathGeolib\Math\Quat.h"
 #include "MathGeolib\Math\float3.h"
 #include "MathGeolib\Math\float4x4.h"
-class DTransformation
+#include "DContainer.h"
+
+class DTransformation : public DContainer
 {
 public:
-	DTransformation(){}
-	DTransformation(float3 pos, float3 scale,Quat rot);
+	DTransformation(int UID);
+	DTransformation(int UID,float3 pos, float3 scale,Quat rot);
 	virtual ~DTransformation();
+	
+	bool LoadInMemory();
+	bool UnloadFromMemory();
 
 	float3 position;
 	float3 destiny;

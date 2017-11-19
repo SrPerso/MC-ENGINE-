@@ -16,6 +16,7 @@ enum Component_Type;
 class CMesh : public Component
 {
 public:
+	CMesh(int UID,Component_Type type = COMP_MESH);
 	CMesh(GameObject* object,int UID, Component_Type type = COMP_MESH , DMesh* data = nullptr);
 	~CMesh();
 

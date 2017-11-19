@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "ModuleDataFile.h"
 #include "Application.h"
+#include "ModuleDataManager.h"
 
 CTexture::CTexture(GameObject* object,int UID, Component_Type type, DTexture * data) :Component(object, UID, type)
 {
@@ -64,7 +65,7 @@ void CTexture::OnLoad(DataJSON & file)
 	dataTexture->textureName.assign(file.GetString("TextureName"));
 	dataTexture->textNamePath.assign(file.GetString("textNamePath"));
 
-	DTexture* texture = new DTexture();
+	DTexture* texture = (DTexture*)App->datamanager->CreateNewDataContainer(D_TEXTURE, App->randGen->Int());
 	texture = App->datamanager->importerTexture->Load(this, dataTexture->textNamePath.c_str(), this->object->GetGOUId());
 	SetData(texture);
 

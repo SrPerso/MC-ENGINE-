@@ -1,6 +1,6 @@
 #include "DMesh.h"
-
-DMesh::DMesh(DType resType):DContainer(D_MESH)
+#include "Application.h"
+DMesh::DMesh(int UID, DType resType):DContainer(UID,D_MESH)
 {
 
 }
@@ -37,5 +37,17 @@ DMesh::~DMesh()
 		texCoords = nullptr;
 		}
 	
+}
+
+bool DMesh::LoadInMemory()
+{
+	App->datamanager->importerMesh->Save(this,file.c_str());
+
+	return true;
+}
+
+bool DMesh::UnloadFromMemory()
+{
+	return true;
 }
 

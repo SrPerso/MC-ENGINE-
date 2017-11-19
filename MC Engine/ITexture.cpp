@@ -30,7 +30,8 @@ ImporterTexture::~ImporterTexture()
 DTexture * ImporterTexture::ImportTexture(aiMaterial* newMaterial,const char*  FilePath)
 {
 	LOGUI("-------------------------------------------");
-	DTexture* ret = new DTexture();
+	DTexture* ret = (DTexture*)App->datamanager->CreateNewDataContainer(D_TEXTURE, App->randGen->Int());
+
 
 	if (newMaterial != nullptr)
 	{
@@ -176,7 +177,7 @@ bool ImporterTexture::Save(const void * buffer, const char * saverFile, uint id)
 DTexture * ImporterTexture::Load(const void * buffer, const char * loadFile, uint id)
 {
 	LOGUI("-----------------");
-	DTexture* data = new DTexture();
+	DTexture* data = (DTexture*)App->datamanager->CreateNewDataContainer(D_TEXTURE, App->randGen->Int());
 
 	std::string path; //path to load
 

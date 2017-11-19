@@ -1,6 +1,6 @@
 #include "DCamera.h"
 
-DCamera::DCamera(float3 pos, float3 front, float3 up, float nearPlaneDistance, float farPlaneDistance, float verticalFov, float aspectRatio, FrustumType type) 
+DCamera::DCamera(int UID,float3 pos, float3 front, float3 up, float nearPlaneDistance, float farPlaneDistance, float verticalFov, float aspectRatio, FrustumType type) :DContainer(UID)
 {
 	//name = "Camera";
 	Active = false;
@@ -24,4 +24,14 @@ DCamera::DCamera(float3 pos, float3 front, float3 up, float nearPlaneDistance, f
 DCamera::~DCamera()
 {
 
+}
+
+bool DCamera::LoadInMemory()
+{
+	return true;
+}
+
+bool DCamera::UnloadFromMemory()
+{
+	return true;
 }

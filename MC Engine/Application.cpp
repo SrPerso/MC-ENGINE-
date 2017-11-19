@@ -8,23 +8,23 @@
 
 Application::Application()
 {
-
+	randGen = new math::LCG();
 
 	timeManager = new ModuleTimeManager(this);
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	audio = new ModuleAudio(this, true);
-	
+	datamanager = new ModuleDataManager(this);
 	ui = new ModuleUI(this);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	
 	scene_intro = new ModuleSceneIntro(this);
-	datamanager = new ModuleDataManager(this);
+
 	goManager = new GObjectManager(this);
 	texture = new ModuleTexture(this);
 	
-	randGen = new math::LCG();
+
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -33,13 +33,13 @@ Application::Application()
 	// Main Modules
 	AddModule(timeManager);
 	AddModule(window);
+	AddModule(datamanager);
 	AddModule(camera);
 	AddModule(input);
 	AddModule(audio);
 
 	// Scenes
 	AddModule(goManager);
-	AddModule(datamanager);
 	AddModule(texture);
 	AddModule(scene_intro);
 	AddModule(ui);

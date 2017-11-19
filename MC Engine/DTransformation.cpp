@@ -1,7 +1,7 @@
 #include "DTransformation.h"
+#include "Application.h"
 
-
-DTransformation::DTransformation(float3 pos, float3 scales, Quat rot)
+DTransformation::DTransformation(int UID,float3 pos, float3 scales, Quat rot) :DContainer(UID, D_TRANSFORMATION)
 {
 	
 	position = pos;
@@ -15,6 +15,11 @@ DTransformation::DTransformation(float3 pos, float3 scales, Quat rot)
 	globalTransformMatrix.float4x4::SetTranslatePart(pos.x, pos.y, pos.z);
 
 	localTransformMatrix = globalTransformMatrix;
+}
+
+
+DTransformation::DTransformation(int UID):DContainer(UID,D_TRANSFORMATION)
+{
 }
 
 float3 DTransformation::GetPosition() const
@@ -90,5 +95,15 @@ void DTransformation::SetUpdateTrans(bool boool)
 DTransformation::~DTransformation()
 {
 
+}
+
+bool DTransformation::LoadInMemory()
+{
+	return true;
+}
+
+bool DTransformation::UnloadFromMemory()
+{
+	return true;
 }
 

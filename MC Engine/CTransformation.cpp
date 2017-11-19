@@ -7,7 +7,7 @@
 
 CTransformation::CTransformation(GameObject * object,int UID, Component_Type type, DTransformation* data) :Component(object, UID, type)
 {	
-	dataTransformation = new DTransformation();
+	dataTransformation = (DTransformation*)App->datamanager->CreateNewDataContainer(D_TRANSFORMATION, App->randGen->Int());
 	if (data)
 	{
 		dataTransformation = data;
@@ -16,7 +16,7 @@ CTransformation::CTransformation(GameObject * object,int UID, Component_Type typ
 	//{
 	//	if (object->GetParent() != nullptr)
 	//	{
-	//		DTransformation* temp = new DTransformation;
+	//		DTransformation* temp = (DTransformation*)App->datamanager->CreateNewDataContainer(D_TRANSFORMATION, App->randGen->Int());
 	//		temp = (DTransformation*)this->object->GetParent()->GetComponent(this->Ctype)->GetData();
 
 	//		position = temp->position;
@@ -84,7 +84,7 @@ void CTransformation::OnGuizmo() {
 	ImGuizmo::Enable(true);
 	
 
-	float* projMatrix = App->camera->editorCam->frustum.ViewProjMatrix().Transposed().ptr();
+	float* projMatrix = App->camera->editorCam->dataCamera->frustum.ViewProjMatrix().Transposed().ptr();
 	float* matrix = dataTransformation->globalTransformMatrix.Transposed().ptr();
 
 	ImGuiIO& io = ImGui::GetIO();
@@ -110,11 +110,7 @@ void CTransformation::OnGuizmo() {
 	else if (App->input->GetR() == true)
 	{
 		ImGuizmo::Manipulate(float4x4::identity.ptr(), projMatrix, ImGuizmo::SCALE, ImGuizmo::LOCAL, matrix);
-	}
-	
-	
-
-	
+	}	
 
 	if (ImGuizmo::IsUsing())
 	{

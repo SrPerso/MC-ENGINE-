@@ -33,9 +33,8 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;	
 	GameObject* camera = new GameObject(App->goManager->GetRoot());
 	
-	DCamera* dcamera = new DCamera();
-
-
+	DCamera* dcamera =(DCamera*)App->datamanager->CreateNewDataContainer(D_CAMERA, App->randGen->Int());
+	
 	camera->CreateComponent(COMP_CAMERA,-1, dcamera);
 	CCamera* mainSceneCam = (CCamera*)camera->GetComponent(COMP_CAMERA);
 	App->camera->mainCam = mainSceneCam;

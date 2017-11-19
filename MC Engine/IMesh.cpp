@@ -21,14 +21,14 @@ ImporterMesh::~ImporterMesh()
 {
 }
 
-DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, int id)
+bool ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, const char* name)
 {
 	LOGUI("-------------------------------------------");
 	aiMesh* newMesh = buffer;
 
 	if (newMesh != nullptr)
 	{
-		DMesh* mesh = new DMesh();
+		DMesh* mesh = (DMesh*)App->datamanager->CreateNewDataContainer(D_MESH, App->randGen->Int());
 		
 		//VERTEX------------------------------------------------------------------------------
 
@@ -133,23 +133,22 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, int id)
 		object->SetLocalTransform();
 
 		LOGUI("-------------------------------------------");
+		
 
-
-		Save(mesh, nullptr, id);
-
-		return mesh;
-
+		bool ret = false;
+		ret = Save(mesh, name);
+		return ret;
 }
 
 	else
 	{
-		return nullptr;
+		return false;
 		LOGUI("[ERROR]{Importer}- The mesh has not vertices");
 	}
 	return nullptr;
 }
 
-DTransformation* ImporterTrans::ImportTrans(aiNode* node, GameObject* object, uint id)
+DTransformation* ImporterTrans::ImportTrans(aiNode* node )const
 {
 	if (node != nullptr)
 	{
@@ -162,20 +161,18 @@ DTransformation* ImporterTrans::ImportTrans(aiNode* node, GameObject* object, ui
 		float3 pos(move.x, move.y, move.z);
 		float3 sca(scale.x, scale.y, scale.z);
 		Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
+			
+		DTransformation* ret = new DTransformation(App->randGen->Int(),pos, sca, rot);
 
-		DTransformation* transl = new DTransformation(pos, sca, rot);
-		
-//		Save(transl, nullptr, id);
-
-		return transl;
+		return ret;
 	}
 	return nullptr;
 
 }
 
-DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile, uint id)
+DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile, const char *  name)
 {
-	DTransformation* data = new DTransformation();
+	DTransformation* data = (DTransformation*)App->datamanager->CreateNewDataContainer(D_TRANSFORMATION, App->randGen->Int());
 
 	std::string path; //path to load
 
@@ -183,7 +180,7 @@ DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile
 	{
 		path = "Library/Mesh";
 		path.append("/");
-		path.append(std::to_string(id));
+		path.append(name);
 		path.append(".MCtransform");
 	}
 	else
@@ -366,7 +363,7 @@ bool ImporterTrans::Save(const void * buffer, const char * saverFile, uint id)
 	return ret;
 }
 
-bool ImporterMesh::Save(const void* buffer, const char * saverFile, int id)
+bool ImporterMesh::Save(const void* buffer, const char * saverFile)
 {
 	bool ret = true;
 	// amount of indices / vertices / colors / normals / texture_coords / AABB
@@ -379,8 +376,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, int id)
 
 	path = "Library/Mesh";
 	path.append("/");
-	path.append("m");
-	path.append(std::to_string(id));
+	path.append(saverFile);
 	path.append(".MCmesh");
 
 	LOGUI("[SAVING]{Mesh}- %s", path.c_str());
@@ -488,9 +484,9 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, int id)
 
 	return ret;
 }
-DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, int id)
+DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, const char* name)
 {
-	DMesh* data = new DMesh();
+	DMesh* data = (DMesh*)App->datamanager->CreateNewDataContainer(D_MESH, App->randGen->Int());
 
 	std::string path; //path to load
 
@@ -498,8 +494,7 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, int id)
 	{
 	path = "Library/Mesh";
 	path.append("/");
-	path.append("m");
-	path.append(std::to_string(id));
+	path.append(name);
 	path.append(".MCmesh");
 	}
 	else
