@@ -114,7 +114,7 @@ GameObject* ModuleDataManager::ImportGameObject(std::string path, GameObject * p
 		}
 
 		ImportGameObject(path, newObject, scene, node); //std::string path, GameObject * parent, const aiScene * scene, aiNode * node)
-		
+		newObject->InsertQuadTree();
 		aiReleaseImport(scene);
 		return newObject;
 
@@ -155,11 +155,11 @@ bool ModuleDataManager::ImportGameObject(std::string path, GameObject * parent, 
 			aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[node->mMeshes[i]]->mMaterialIndex];
 			GameObjectSon->CreateComponent(COMP_TEXTURE, -1, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));
 
-			GameObjectSon->InsertQuadTree();
+			
 
 		}
 	}
-
+	GameObjectSon->InsertQuadTree();
 	for (int i = 0; i < node->mNumChildren; ++i)
 		ImportGameObject(path, GameObjectSon, scene, node->mChildren[i]);
 

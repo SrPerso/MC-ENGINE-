@@ -536,7 +536,7 @@ IMGUI_API void ModuleUI::ShowInspectorWindow(Component* component, bool * p_open
 	{
 		ImGui::Text("INSPECTOR");
 		ImGui::SameLine;
-		ImGui::Text(component->GetParentName());
+		//ImGui::Text(component->GetParentName());
 		ImGui::Separator();
 
 

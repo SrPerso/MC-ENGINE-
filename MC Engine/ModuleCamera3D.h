@@ -30,7 +30,7 @@ public:
 
 	void CenterCameraToObject(AABB* box);
 	void CenterCamera();
-
+	void SetMainCam(CCamera* cam);
 	void CalculateViewMatrix();
 
 public:

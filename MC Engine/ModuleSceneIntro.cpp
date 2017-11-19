@@ -43,48 +43,19 @@ bool ModuleSceneIntro::Start()
 
 	CCamera* mainSceneCam = (CCamera*)camera->GetComponent(COMP_CAMERA);
 
-	App->camera->mainCam = mainSceneCam;
+	App->camera->SetMainCam(mainSceneCam);
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 	MinDistance = MINDISTANCE;
 
-
-	mainQuad = new Quadtree();
+	mainQuad = new Quadtree(AABB(float3(-100, -20, -100), float3(100, 120, 100)));
 
 	return ret;
 }
 
 
-update_status ModuleSceneIntro::Update(float dt)
-{
-	float sx = 1 * 0.5f;
-	float sy = 1 * 0.5f;
-	float sz = 1 * 0.5f;
 
-	PrimitivePlane p(0, -1, 0, 200);
-	p.color = White;
-	p.axis = false;
-	p.Render();
-
-	if (sceneSelected != nullptr)
-	{
-		if (sceneSelected->selecting == true) {
-			sceneSelected->OnSelection();
-		}
-	}
-	if (recalculate == true) 
-	{
-		SetNewQuad();
-	}
-	if (App->ui->debug_active == true)
-	{
-		mainQuad->DrawDebug();
-	}
-	
-	return UPDATE_CONTINUE;
-
-}
 
 
 // Load assets
@@ -334,3 +305,32 @@ update_status ModuleSceneIntro::PreUpdate(float dt)
 }
 
 // Update
+update_status ModuleSceneIntro::Update(float dt)
+{
+	float sx = 1 * 0.5f;
+	float sy = 1 * 0.5f;
+	float sz = 1 * 0.5f;
+
+	PrimitivePlane p(0, -1, 0, 200);
+	p.color = White;
+	p.axis = false;
+	p.Render();
+
+	if (sceneSelected != nullptr)
+	{
+		if (sceneSelected->selecting == true) {
+			sceneSelected->OnSelection();
+		}
+	}
+	if (recalculate == true)
+	{
+		SetNewQuad();
+	}
+	if (App->ui->debug_active == true)
+	{
+		mainQuad->DrawDebug();
+	}
+
+	return UPDATE_CONTINUE;
+
+}
