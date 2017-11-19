@@ -33,14 +33,14 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;	
 	GameObject* camera = new GameObject(App->goManager->GetRoot());
 	
-	//DCamera* dcamera =(DCamera*)App->datamanager->CreateNewDataContainer(D_CAMERA, App->randGen->Int());
 	DCamera* dcamera = new DCamera(App->randGen->Int());
 	DTransformation*dataTransformation = (DTransformation*)App->datamanager->CreateNewDataContainer(D_TRANSFORMATION, App->randGen->Int());
 	
 	camera->CreateComponent(COMP_CAMERA,-1, dcamera);
-
 	camera->CreateComponent(COMP_TRANSFORMATION, -1, dataTransformation);
+
 	CCamera* mainSceneCam = (CCamera*)camera->GetComponent(COMP_CAMERA);
+
 	App->camera->mainCam = mainSceneCam;
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));

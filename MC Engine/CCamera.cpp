@@ -14,6 +14,7 @@ CCamera::CCamera(int UID, Component_Type type, DCamera * data) :Component(UID,CO
 		dataCamera = data;
 		this->dataCamera->aspectRatio = data->aspectRatio;
 		this->dataCamera->aspectRatio = (float)16 / 9;
+		dataCamera->Active = false;
 	}
 
 	dataCamera->FOV = 15;
@@ -33,9 +34,17 @@ CCamera::CCamera(GameObject * object, int UID, Component_Type type, DCamera * da
 {
 
 	dataCamera = (DCamera*)App->datamanager->CreateNewDataContainer(D_CAMERA, App->randGen->Int());
+
+
 	if (data)
 	{
-		dataCamera = data;
+		dataCamera->frustum.type = data->frustum.type;
+		dataCamera->frustum.pos = data->frustum.pos;
+		dataCamera->frustum.front = data->frustum.front;
+		dataCamera->frustum.up = data->frustum.up;
+		dataCamera->frustum.nearPlaneDistance = data->frustum.nearPlaneDistance;
+		dataCamera->frustum.farPlaneDistance = data->frustum.farPlaneDistance;
+		dataCamera->Active = false;
 	}
 
 	this->dataCamera->aspectRatio = (float)16 / 9;
@@ -92,7 +101,7 @@ void CCamera::OnCleanUp()
 
 void CCamera::OnSave(DataJSON & file) const
 {
-	file.AddInt("Component UID", dataCamera->UID);
+	file.AddInt("Component UID",UID);
 	//file.AddInt("Component Type", Ctype);
 
 	file.AddFloat("FOV", dataCamera->FOV);
@@ -112,7 +121,7 @@ void CCamera::OnSave(DataJSON & file) const
 
 void CCamera::OnLoad(DataJSON & file)
 {
-	dataCamera->UID = file.GetFloat("Component UID");
+	UID = file.GetFloat("Component UID");
 
 	dataCamera->FOV = file.GetFloat("FOV");
 	dataCamera->aspectRatio = file.GetFloat("Aspect Radio");
