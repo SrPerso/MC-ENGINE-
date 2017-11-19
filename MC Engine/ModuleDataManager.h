@@ -40,6 +40,7 @@ public:
 	void SaveAllData()const; 
 	void SaveData(const void * buff, DType type, uint id)const;
 
+
 	// Objects creators?
 	int FindInMap(const char*name);
 	DContainer * GetContainer(int uid);

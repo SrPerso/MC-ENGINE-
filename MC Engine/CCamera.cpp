@@ -32,9 +32,6 @@ CCamera::CCamera(GameObject * object, int UID, Component_Type type, DCamera * da
 	{
 		dataCamera = data;
 	}
-
-
-	this->dataCamera->aspectRatio = dataCamera->aspectRatio;
 	this->dataCamera->aspectRatio = (float)16 / 9;
 	
 	dataCamera->FOV = 15;

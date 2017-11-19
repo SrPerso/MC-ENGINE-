@@ -29,7 +29,7 @@ bool ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, const char* n
 	if (newMesh != nullptr)
 	{
 		DMesh* mesh = (DMesh*)App->datamanager->CreateNewDataContainer(D_MESH, App->randGen->Int());
-		
+
 		//VERTEX------------------------------------------------------------------------------
 
 		mesh->nVertex = newMesh->mNumVertices;
@@ -120,32 +120,32 @@ bool ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, const char* n
 		{
 			mesh->texCoords = new float[mesh->nVertex * 3];
 			memcpy(mesh->texCoords, newMesh->mTextureCoords[0], sizeof(float) * mesh->nVertex * 3);
-			
+
 			glGenBuffers(1, (GLuint*) &(mesh->idTexCoords));
 			glBindBuffer(GL_ARRAY_BUFFER, mesh->idTexCoords);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->texCoords, GL_STATIC_DRAW);
 		}
-		
+
 		mesh->debugBox.SetNegativeInfinity();//
 		mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
-		
+
 		App->camera->CenterCameraToObject(&mesh->debugBox);
 		object->SetLocalTransform();
 
 		LOGUI("-------------------------------------------");
-		
 
-		bool ret = false;
+
+		bool ret = true;
 		ret = Save(mesh, name);
 		return ret;
-}
+	}
 
 	else
 	{
-		return false;
+	//	return false;
 		LOGUI("[ERROR]{Importer}- The mesh has not vertices");
 	}
-	return nullptr;
+	return true;
 }
 
 DTransformation* ImporterTrans::ImportTrans(aiNode* node )const
