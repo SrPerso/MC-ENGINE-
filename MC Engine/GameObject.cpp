@@ -396,6 +396,7 @@ void GameObject::SetNoStatic()
 	isStatic = false;
 }
 
+
 void GameObject::ChangeStatic()
 {
 	if (isStatic)
@@ -413,6 +414,13 @@ void GameObject::ChangeStatic()
 	}
 }
 
+
+void GameObject::ChangeQuad() 
+{
+
+	App->scene_intro->SetNewQuad();
+	
+}
 void GameObject::InsertQuadTree()
 {
 	if (isStatic)

@@ -45,12 +45,15 @@ public:
 
 	GameObject* SelectObject(LineSegment picking);
 
+	
+
 	void IntersectAABB(LineSegment &picking, std::vector<GameObject*>& DistanceList);
 	
 	void ObjectSelected(GameObject* selected);
 
 	void AddQuadTree(GameObject* AddObj);
 	void SetNewQuad();
+
 
 public:
 	std::list<Primitive*> GeometryObjects;

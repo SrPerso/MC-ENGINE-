@@ -83,6 +83,9 @@ public:
 	void SetStatic();
 	void SetNoStatic();
 	void ChangeStatic();
+	
+	
+	void ChangeQuad();
 	void InsertQuadTree();
 
 	//ACTIONS BASIC.............................

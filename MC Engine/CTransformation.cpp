@@ -42,7 +42,7 @@ void CTransformation::OnUpdate(float dt)
 	{		
 		position = destiny;
 		TransUpdate();
-		//UpdateTrans = false;		
+		object->ChangeQuad();
 	}
 
 	
@@ -215,7 +215,7 @@ void CTransformation::OnInspector() {
 
 		if (ImGui::Checkbox("STATIC", &object->isStatic)) 
 		{
-			//object->ChangeStatic();
+			object->ChangeQuad();
 		}
 
 	}

@@ -13,6 +13,7 @@
 #include "CMesh.h"
 #include "CTransformation.h"
 #include "MathGeoLib\Geometry\LineSegment.h"
+#include "MathGeoLib\Geometry\AABB.h"
 
 
 #pragma comment( lib, "Glew/libx86/glew32.lib" )
@@ -48,6 +49,38 @@ bool ModuleSceneIntro::Start()
 	mainQuad = new Quadtree();
 	return ret;
 }
+
+
+update_status ModuleSceneIntro::Update(float dt)
+{
+	float sx = 1 * 0.5f;
+	float sy = 1 * 0.5f;
+	float sz = 1 * 0.5f;
+
+	PrimitivePlane p(0, -1, 0, 200);
+	p.color = White;
+	p.axis = false;
+	p.Render();
+
+	if (sceneSelected != nullptr)
+	{
+		if (sceneSelected->selecting == true) {
+			sceneSelected->OnSelection();
+		}
+	}
+	if (recalculate == true) 
+	{
+		SetNewQuad();
+	}
+	if (App->ui->debug_active == true)
+	{
+		mainQuad->DrawDebug();
+	}
+	
+	return UPDATE_CONTINUE;
+
+}
+
 
 // Load assets
 bool ModuleSceneIntro::CleanUp()
@@ -177,7 +210,6 @@ GameObject* ModuleSceneIntro::SelectObject(LineSegment  picking)
 
 
 
-
 void ModuleSceneIntro::ObjectSelected(GameObject * selected)
 {
 	
@@ -220,6 +252,7 @@ void ModuleSceneIntro::SetNewQuad()
 }
 
 
+
 void ModuleSceneIntro::Draw()
 {
 }
@@ -238,32 +271,3 @@ update_status ModuleSceneIntro::PreUpdate(float dt)
 }
 
 // Update
-update_status ModuleSceneIntro::Update(float dt)
-{	
-	float sx = 1 * 0.5f;
-	float sy = 1 * 0.5f;
-	float sz = 1 * 0.5f;
-	
-	PrimitivePlane p(0, -1, 0, 200);
-	p.color = White;
-	p.axis = false;
-	p.Render();
-
-	if (sceneSelected != nullptr)
-	{
-		if (sceneSelected->selecting == true) {
-			sceneSelected->OnSelection();
-		}
-	}
-	if (App->ui->debug_active== true) 
-	{
-		mainQuad->DrawDebug();
-	}
-	if (recalculate == true)
-	{
-		SetNewQuad();
-	}
-	return UPDATE_CONTINUE;
-
-}
-
