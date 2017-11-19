@@ -9,10 +9,13 @@
 class DMaterial : public DContainer
 {
 public:
-
-public:
-	DMaterial(DType);
+	DMaterial(int UID, DType);
 	~DMaterial();
+
+	bool LoadInMemory();
+	bool UnloadFromMemory();
+public:
+
 };
 
 #endif

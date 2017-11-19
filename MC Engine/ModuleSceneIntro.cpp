@@ -3,7 +3,7 @@
 #include "ModuleSceneIntro.h"
 #include "Quadtree.h"
 #include "Primitive.h"
-#include "PhysBody3D.h"
+
 #include "Glew\include\glew.h"
 #include "imGUI\imgui.h"
 #include "imGUI\imgui_impl_sdl_gl3.h"
@@ -35,18 +35,23 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;	
 	GameObject* camera = new GameObject(App->goManager->GetRoot());
 	
-	DCamera* dcamera = new DCamera();
-
-
+	DCamera* dcamera = new DCamera(App->randGen->Int());
+	DTransformation*dataTransformation = (DTransformation*)App->datamanager->CreateNewDataContainer(D_TRANSFORMATION, App->randGen->Int());
+	
 	camera->CreateComponent(COMP_CAMERA,-1, dcamera);
+	camera->CreateComponent(COMP_TRANSFORMATION, -1, dataTransformation);
+
 	CCamera* mainSceneCam = (CCamera*)camera->GetComponent(COMP_CAMERA);
+
 	App->camera->mainCam = mainSceneCam;
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 	MinDistance = MINDISTANCE;
 
+
 	mainQuad = new Quadtree();
+
 	return ret;
 }
 
@@ -90,12 +95,19 @@ bool ModuleSceneIntro::CleanUp()
 	LOGUI("-CLEANUP- Cleaning scene Objects");
 
 
-	while (!GeometryObjects.empty()) {
-
+	while (!GeometryObjects.empty()) 
+	{
 		delete GeometryObjects.front();
 		GeometryObjects.pop_front();
 	}
 	
+	
+	while (!NormalsLines.empty())
+	{
+		delete NormalsLines.front();
+		NormalsLines.pop_front();
+	}
+
 	return true;
 }
 
@@ -108,7 +120,7 @@ void ModuleSceneIntro::CreateCube(vec3 size, vec3 pos)
 	cube->wire = true;
 	
 	GeometryObjects.push_back(cube);
-	App->physics->AddBody(*cube);
+
 
 }
 
@@ -124,7 +136,6 @@ void ModuleSceneIntro::CreateSphere(float radius, vec3 pos, int numStacks, int n
 	sphere->wire = true;
 	
 	GeometryObjects.push_back(sphere);
-	App->physics->AddBody(*sphere);
 
 }
 
@@ -138,8 +149,7 @@ void ModuleSceneIntro::CreateCylinder(float radius,float height, vec3 pos)
 
 	cylinder->wire = true;
 	GeometryObjects.push_back(cylinder);
-	App->physics->AddBody(*cylinder);
-	
+
 
 }
 
@@ -152,8 +162,6 @@ void ModuleSceneIntro::CreateCube1(vec3 size, vec3 pos)
 	cube1->SetPos(pos.x, pos.y, pos.z);
 
 	GeometryObjects.push_back(cube1);
-	App->physics->AddBody(*cube1);
-	
 
 }
 
@@ -167,7 +175,7 @@ void ModuleSceneIntro::CreateCube2(vec3 size, vec3 pos)
 
 	
 	GeometryObjects.push_back(cube2);
-	App->physics->AddBody(*cube2);
+
 
 
 }
@@ -208,32 +216,87 @@ GameObject* ModuleSceneIntro::SelectObject(LineSegment  picking)
 }
 
 
+void  ModuleSceneIntro::IntersectAABB(LineSegment &picking, std::vector<GameObject*>& DistanceList)
+{
+
+	GameObject* Closest = nullptr;
+	
+
+	
+	
+
+	for (uint i = 0; i < App->goManager->GetRoot()->childs.size(); i++)
+	{
+		if (App->goManager->GetRoot()->childs[i]->childs.size() > 0)
+		{
+			for (uint p = 0; p < App->goManager->GetRoot()->childs[i]->childs.size(); p++)
+			{
+				LineSegment newSegment(picking);
+				CMesh* IntersectMesh = (CMesh*)App->goManager->GetRoot()->childs[i]->childs[p]->GetComponent(COMP_MESH);
+				CTransformation* IntersectTransform = (CTransformation*)App->goManager->GetRoot()->childs[i]->childs[p]->GetComponent(COMP_TRANSFORMATION);
+				if (IntersectTransform != nullptr) {
+
+					newSegment.Transform(IntersectTransform->GetTransMatrix().Inverted());
+					
+				}
+
+				if (IntersectMesh != nullptr)
+				{
+					if (newSegment.Intersects(IntersectMesh->dataMesh->debugBox) == true)
+					{
+						DistanceList.push_back(App->goManager->GetRoot()->childs[i]->childs[p]);
+
+
+					}
+				}
+			}
+		}
+		else {
+			LineSegment newSegment(picking);
+			CMesh* IntersectMesh = (CMesh*)App->goManager->GetRoot()->childs[i]->GetComponent(COMP_MESH);
+			CTransformation* IntersectTransform = (CTransformation*)App->goManager->GetRoot()->childs[i]->GetComponent(COMP_TRANSFORMATION);
+			if (IntersectTransform != nullptr) {
+
+				newSegment.Transform(IntersectTransform->GetTransMatrix().Inverted());
+			}
+			if (IntersectMesh != nullptr)
+			{
+				if (newSegment.Intersects(IntersectMesh->dataMesh->debugBox) == true)
+				{
+					DistanceList.push_back(App->goManager->GetRoot()->childs[i]);
+					LOGUI("hit");
+
+				}
+			}
+		}
+	}
+}
+
+
 
 
 void ModuleSceneIntro::ObjectSelected(GameObject * selected)
 {
 	
 	
-		if (selected != nullptr) {			
-		
-				if (sceneSelected != selected)
-				{
-					if (this->sceneSelected != nullptr)
-					{
-						this->sceneSelected->selecting = false;
-					}
-					selected->selecting = true;
-					this->sceneSelected = selected;
-				}
-				else
-				{
+	if (selected != nullptr) {
 
-					this->sceneSelected->selecting = false;
-					this->sceneSelected = nullptr;
-				}
-			
-
+		if (sceneSelected != selected)
+		{
+			if (this->sceneSelected != nullptr)
+			{
+				this->sceneSelected->selecting = false;
+			}
+			selected->selecting = true;
+			this->sceneSelected = selected;
 		}
+		else
+		{
+
+			this->sceneSelected->selecting = false;
+			this->sceneSelected = nullptr;
+		}
+	}
 	
 	
 }

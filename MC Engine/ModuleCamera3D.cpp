@@ -1,6 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
-#include "PhysBody3D.h"
+
 #include "ModuleCamera3D.h"
 #include "parson\parson.h"
 
@@ -19,17 +19,27 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	GeometryCentre = nullptr;
 	name = "module camera 3d";
 
-	dcamera = new DCamera();
-	editorCam = new CCamera(COMP_CAMERA, dcamera);
+//	dcamera = (DCamera*)App->datamanager->CreateNewDataContainer(D_CAMERA, App->randGen->Int());
+	//dcamera = (DCamera*)App->datamanager->CreateNewDataContainer(D_CAMERA, App->randGen->Int());
 
+
+	dcamera = new DCamera(App->randGen->Int());
+	editorCam = new CCamera(App->randGen->Int(), COMP_CAMERA, dcamera);
+	
 }
 
 ModuleCamera3D::~ModuleCamera3D()
 {}
 
+bool ModuleCamera3D::Init()
+{
+	return true;
+}
+
 // -----------------------------------------------------------------
 bool ModuleCamera3D::Start()
 {
+
 	LOG("Setting up the camera");
 	LOGUI("-START- Setting up the camera");
 	bool ret = true;
@@ -42,6 +52,11 @@ bool ModuleCamera3D::CleanUp()
 {
 	LOG("-CLEANUP- Cleaning camera");
 	LOGUI("-CLEANUP- Cleaning camera");
+
+	delete dcamera;
+	delete editorCam;
+	editorCam = nullptr;
+
 	return true;
 }
 
@@ -255,7 +270,7 @@ void ModuleCamera3D::Move(const vec3 &Movement)
 // -----------------------------------------------------------------
 const float* ModuleCamera3D::GetViewMatrix()
 {
-	if (mainCam != nullptr && mainCam->Active==true) 
+	if (mainCam != nullptr && mainCam->dataCamera->Active==true)
 	{
 		return mainCam->GetViewMatrix();
 	}
@@ -268,7 +283,7 @@ const float* ModuleCamera3D::GetViewMatrix()
 
 void ModuleCamera3D::CalculateAspectRatio(float width, float height)
 {
-	editorCam->aspectRatio= width / height;
+	editorCam->dataCamera->aspectRatio= width / height;
 	editorCam->SetFov();
 }
 

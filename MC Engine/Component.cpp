@@ -66,3 +66,14 @@ const void * Component::GetData()
 {
 	return nullptr;
 }
+
+void Component::SetName(std::string name)
+{
+	this->name = name;
+
+}
+
+const char * Component::GetParentName()
+{
+	return object->GetName();
+}

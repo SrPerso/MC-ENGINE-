@@ -4,11 +4,17 @@
 #include "MathGeolib\Math\Quat.h"
 #include "MathGeolib\Math\float3.h"
 #include "MathGeolib\Math\float4x4.h"
-class DTransformation
+#include "DContainer.h"
+
+class DTransformation : public DContainer
 {
 public:
-	DTransformation(){}
-	DTransformation(float3 pos, float3 scale,Quat rot);
+
+	DTransformation(int UID, float3 pos = {0,0,0}, float3 scale = {1 ,1,1 }, Quat rot = { 0,0,0,1 });
+	virtual ~DTransformation();
+	
+	bool LoadInMemory();
+	bool UnloadFromMemory();
 
 	float3 position;
 	float3 destiny;
@@ -32,8 +38,11 @@ public:
 	void SetGlobalScale(float3);
 	void SetGlobalRotation(Quat);
 
+	bool GetUpdateTrans()const;
+	void SetUpdateTrans(bool);
+
 public:
-	DTransformation::~DTransformation();
+
 	float3 eulerAngles;
 	float4x4 globalTransformMatrix;
 	float4x4 localTransformMatrix;
@@ -41,7 +50,7 @@ public:
 
 	bool OnTransform;
 
-protected:
+private:
 	float3 globalPosition;
 	float3 globalScale;
 	Quat globalRotation;

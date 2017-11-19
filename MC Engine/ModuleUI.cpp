@@ -148,7 +148,6 @@ update_status ModuleUI::Update(float dt)
 		show_Console_window = !show_Console_window;
 	}
 
-
 	if (show_test_window)
 		ImGui::ShowTestWindow();
 	
@@ -178,8 +177,6 @@ update_status ModuleUI::Update(float dt)
 
 	if (show_Inspector_window)
 		ShowInspectorWindow();
-
-
 
 	return update_status(ret);
 }
@@ -538,9 +535,12 @@ IMGUI_API void ModuleUI::ShowInspectorWindow(Component* component, bool * p_open
 	if (ImGui::Begin("Inspector", p_open, window_flags))
 	{
 		ImGui::Text("INSPECTOR");
+		ImGui::SameLine;
+		ImGui::Text(component->GetParentName());
 		ImGui::Separator();
 
-		
+
+
 		if (component != nullptr) {
 			Component_Type type = component->getType();
 		
@@ -565,7 +565,6 @@ IMGUI_API void ModuleUI::ShowInspectorWindow(Component* component, bool * p_open
 				component = (CCamera*)component;
 				component->OnInspector();
 				break;
-
 
 			}
 		}		//App->goManager->GetRoot()->OnInspector();
@@ -707,7 +706,8 @@ void ModuleUI::DrawDirectory(const char * dir, const char * extension)
 
 		if (ok && ImGui::TreeNodeEx(str.c_str(), ImGuiTreeNodeFlags_Leaf))
 		{
-			if (ImGui::IsItemClicked()) {
+			if (ImGui::IsItemClicked())
+			{
 				sprintf_s(selectedFile, FILE_LIMIT, "%s%s", dire.c_str(), str.c_str());
 
 				if (ImGui::IsMouseDoubleClicked(0))

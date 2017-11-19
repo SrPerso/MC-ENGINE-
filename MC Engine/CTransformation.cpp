@@ -7,17 +7,13 @@
 
 CTransformation::CTransformation(GameObject * object,int UID, Component_Type type, DTransformation* data) :Component(object, UID, type)
 {	
+	dataTransformation = (DTransformation*)App->datamanager->CreateNewDataContainer(D_TRANSFORMATION, App->randGen->Int());
+	
 	if (data)
 	{
-			position = data->position;
-			scale = data->scale;
-			destiny = data->destiny;
-			eulerAngles = data->eulerAngles;
-			angle = data->angle;
-			rotation = data->rotation;
-			globalTransformMatrix = data->globalTransformMatrix;
-			localTransformMatrix = data->localTransformMatrix;
+		dataTransformation = data;
 	}
+
 	if (object != nullptr)
 	{
 		this->Transformation_ID = object->NumComponentTypeSize(this->Ctype) + 1;
@@ -38,9 +34,9 @@ CTransformation::~CTransformation()
 
 void CTransformation::OnUpdate(float dt)
 {
-	if (UpdateTrans && object != nullptr)
+	if (dataTransformation->GetUpdateTrans() && object != nullptr)
 	{		
-		position = destiny;
+		dataTransformation->position = dataTransformation->destiny;
 		TransUpdate();
 		object->ChangeQuad();
 	}
@@ -53,8 +49,8 @@ void CTransformation::OnGuizmo() {
 	ImGuizmo::Enable(true);
 	
 
-	float* projMatrix = App->camera->editorCam->frustum.ViewProjMatrix().Transposed().ptr();
-	float* matrix = globalTransformMatrix.Transposed().ptr();
+	float* projMatrix = App->camera->editorCam->dataCamera->frustum.ViewProjMatrix().Transposed().ptr();
+	float* matrix = dataTransformation->globalTransformMatrix.Transposed().ptr();
 
 	ImGuiIO& io = ImGui::GetIO();
 
@@ -79,25 +75,20 @@ void CTransformation::OnGuizmo() {
 	else if (App->input->GetR() == true)
 	{
 		ImGuizmo::Manipulate(float4x4::identity.ptr(), projMatrix, ImGuizmo::SCALE, ImGuizmo::LOCAL, matrix);
-	}
-	
-	
-
-	
+	}	
 
 	if (ImGuizmo::IsUsing())
 	{
-		ImGuizmo::DecomposeMatrixToComponents(matrix,(float*)position.ptr(),(float*)eulerAngles.ptr(),(float*)scale.ptr());
-		globalTransformMatrix.Transpose();
-		ImGuizmo::RecomposeMatrixFromComponents((float*)position.ptr(), (float*)eulerAngles.ptr(), (float*)scale.ptr(),globalTransformMatrix.ptr());
-		globalTransformMatrix.Transpose();
+		ImGuizmo::DecomposeMatrixToComponents(matrix,(float*)dataTransformation->position.ptr(),(float*)dataTransformation->eulerAngles.ptr(),(float*)dataTransformation->scale.ptr());
+		dataTransformation->globalTransformMatrix.Transpose();
+		ImGuizmo::RecomposeMatrixFromComponents((float*)dataTransformation->position.ptr(), (float*)dataTransformation->eulerAngles.ptr(), (float*)dataTransformation->scale.ptr(), dataTransformation->globalTransformMatrix.ptr());
+		dataTransformation->globalTransformMatrix.Transpose();
 	}
 }
 void CTransformation::OnEditor()
 {
 	if (ImGui::TreeNodeEx(name.c_str()))
-	{
-		
+	{		
 		ImGui::TreePop();
 	}
 	
@@ -110,106 +101,114 @@ void CTransformation::OnInspector() {
 	{
 		ImGui::Text("Position:");
 
-		ImGui::Text("X = %.2f", destiny.x);
+		ImGui::Text("X = %.2f", dataTransformation->destiny.x);
 		ImGui::SameLine();
-		ImGui::Text("  Y = %.2f", destiny.y);
+		ImGui::Text("  Y = %.2f", dataTransformation->destiny.y);
 		ImGui::SameLine();
-		ImGui::Text("  Z = %.2f", destiny.z);
+		ImGui::Text("  Z = %.2f", dataTransformation->destiny.z);
 
 		ImGui::Text("Rotation:");
 
-		ImGui::Text("X = %.2f", eulerAngles.x);
+		ImGui::Text("X = %.2f", dataTransformation->eulerAngles.x);
 		ImGui::SameLine();
-		ImGui::Text("  Y = %.2f", eulerAngles.y);
+		ImGui::Text("  Y = %.2f", dataTransformation->eulerAngles.y);
 		ImGui::SameLine();
-		ImGui::Text("  Z = %.2f", eulerAngles.z);
+		ImGui::Text("  Z = %.2f", dataTransformation->eulerAngles.z);
 
 		ImGui::Text("Scale:");
 
-		ImGui::Text("X = %.2f", scale.x);
+		ImGui::Text("X = %.2f", dataTransformation->scale.x);
 		ImGui::SameLine();
-		ImGui::Text("  Y = %.2f", scale.y);
+		ImGui::Text("  Y = %.2f", dataTransformation->scale.y);
 		ImGui::SameLine();
-		ImGui::Text("  Z = %.2f", scale.z);
+		ImGui::Text("  Z = %.2f", dataTransformation->scale.z);
 
 		ImGui::Checkbox("STATIC", &object->isStatic);
 	}
 	else {
 		ImGui::Text("Position:");
 
-		ImGui::Text("X = %.2f", destiny.x);
+		ImGui::Text("X = %.2f", dataTransformation->destiny.x);
 		ImGui::SameLine();
-		ImGui::Text("  Y = %.2f", destiny.y);
+		ImGui::Text("  Y = %.2f", dataTransformation->destiny.y);
 		ImGui::SameLine();
-		ImGui::Text("  Z = %.2f", destiny.z);
+		ImGui::Text("  Z = %.2f", dataTransformation->destiny.z);
 
 		//ImGui::Text("Position:");
-		if (ImGui::SliderFloat("X", &destiny.x, -100, 100))
+		if (ImGui::SliderFloat("X", &dataTransformation->destiny.x, -100, 100))
 		{
-			UpdateTrans = true;
-			
+
+			dataTransformation->SetUpdateTrans(true);
+
 		}
 
-		if (ImGui::SliderFloat("Y", &destiny.y, -100, 100))
+		if (ImGui::SliderFloat("Y", &dataTransformation->destiny.y, -100, 100))
 		{
-			UpdateTrans = true;
-			
+
+			dataTransformation->SetUpdateTrans(true);
+
 		}
 
-		if (ImGui::SliderFloat("Z", &destiny.z, -100, 100))
+		if (ImGui::SliderFloat("Z", &dataTransformation->destiny.z, -100, 100))
 		{
-			UpdateTrans = true;
-			
+
+			dataTransformation->SetUpdateTrans(true);
+
 		}
 
 		ImGui::Text("Rotation:");
 
-		ImGui::Text("X = %.2f", eulerAngles.x);
+		ImGui::Text("X = %.2f", dataTransformation->eulerAngles.x);
 		ImGui::SameLine();
-		ImGui::Text("  Y = %.2f", eulerAngles.y);
+		ImGui::Text("  Y = %.2f", dataTransformation->eulerAngles.y);
 		ImGui::SameLine();
-		ImGui::Text("  Z = %.2f", eulerAngles.z);
+		ImGui::Text("  Z = %.2f", dataTransformation->eulerAngles.z);
 
 		//ImGui::Text("Rotation:");
-		if (ImGui::SliderFloat("RX", &eulerAngles.x, 0, 360))
+		if (ImGui::SliderFloat("RX", &dataTransformation->eulerAngles.x, 0, 360))
 		{
-			UpdateTrans = true;
-			
+
+			dataTransformation->SetUpdateTrans(true);
+
 		}
 
-		if (ImGui::SliderFloat("RY", &eulerAngles.y, 0, 360))
+		if (ImGui::SliderFloat("RY", &dataTransformation->eulerAngles.y, 0, 360))
 		{
-			UpdateTrans = true;
-			
+
+			dataTransformation->SetUpdateTrans(true);
+
 		}
 
-		if (ImGui::SliderFloat("RZ", &eulerAngles.z, 0, 360))
+		if (ImGui::SliderFloat("RZ", &dataTransformation->eulerAngles.z, 0, 360))
 		{
-			UpdateTrans = true;
-			
+
+			dataTransformation->SetUpdateTrans(true);
+
 		}
 
 		ImGui::Text("Scale:");
 
-		ImGui::Text("X = %.2f", scale.x);
+		ImGui::Text("X = %.2f", dataTransformation->scale.x);
 		ImGui::SameLine();
-		ImGui::Text("  Y = %.2f", scale.y);
+		ImGui::Text("  Y = %.2f", dataTransformation->scale.y);
 		ImGui::SameLine();
-		ImGui::Text("  Z = %.2f", scale.z);
+		ImGui::Text("  Z = %.2f", dataTransformation->scale.z);
 
-		if (ImGui::SliderFloat("SX", &scale.x, 1, 100))
+		if (ImGui::SliderFloat("SX", &	dataTransformation->scale.x, 1, 100))
 		{
-			UpdateTrans = true;
-			
+
+			dataTransformation->SetUpdateTrans(true);
+
 		}
-		if (ImGui::SliderFloat("SY", &scale.y, 1, 100))
+		if (ImGui::SliderFloat("SY", &dataTransformation->scale.y, 1, 100))
 		{
-			UpdateTrans = true;
-			
+
+			dataTransformation->SetUpdateTrans(true);
+
 		}
-		if (ImGui::SliderFloat("SZ", &scale.z, 1, 100))
+		if (ImGui::SliderFloat("SZ", &dataTransformation->scale.z, 1, 100))
 		{
-			UpdateTrans = true;
+    dataTransformation->SetUpdateTrans(true);
 			
 		}
 
@@ -222,6 +221,11 @@ void CTransformation::OnInspector() {
 	
 }
 
+void CTransformation::OnCleanUp()
+{
+	delete dataTransformation;
+}
+
 
 void CTransformation::OnSave(DataJSON & file) const
 {
@@ -229,39 +233,39 @@ void CTransformation::OnSave(DataJSON & file) const
 
 	//file.AddInt("Component Type", Ctype);
 
-	file.AddArrayF("Position", &position.x, 3);
-	file.AddArrayF("Scale", &scale.x, 3);
-	file.AddArrayF("Rotation", &rotation.x, 4);
+	file.AddArrayF("Position", &dataTransformation->position.x, 3);
+	file.AddArrayF("Scale", &dataTransformation->scale.x, 3);
+	file.AddArrayF("Rotation", &dataTransformation->rotation.x, 4);
 }
 
 void CTransformation::OnLoad(DataJSON & file)
 {
 	UID = file.GetFloat("Component UID");
 
-	UpdateTrans = false;
+	dataTransformation->SetUpdateTrans(false);
 
-	position.x = file.GetFloat("Position", 0);
-	position.y = file.GetFloat("Position", 1);
-	position.z = file.GetFloat("Position", 2);
+	dataTransformation->position.x = file.GetFloat("Position", 0);
+	dataTransformation->position.y = file.GetFloat("Position", 1);
+	dataTransformation->position.z = file.GetFloat("Position", 2);
 
-	scale.x = file.GetFloat("Scale", 0);
-	scale.y = file.GetFloat("Scale", 1);
-	scale.z = file.GetFloat("Scale", 2);
+	dataTransformation->scale.x = file.GetFloat("Scale", 0);
+	dataTransformation->scale.y = file.GetFloat("Scale", 1);
+	dataTransformation->scale.z = file.GetFloat("Scale", 2);
 
-	rotation.x = file.GetFloat("Rotation", 0);
-	rotation.y = file.GetFloat("Rotation", 1);
-	rotation.z = file.GetFloat("Rotation", 2);
-	rotation.w = file.GetFloat("Rotation", 3);
+	dataTransformation->rotation.x = file.GetFloat("Rotation", 0);
+	dataTransformation->rotation.y = file.GetFloat("Rotation", 1);
+	dataTransformation->rotation.z = file.GetFloat("Rotation", 2);
+	dataTransformation->rotation.w = file.GetFloat("Rotation", 3);
 
-	destiny = position;
-	eulerAngles = rotation.ToEulerXYZ();
-	angle = rotation.Angle();
-	rotation = rotation;
-	globalTransformMatrix = float4x4::FromQuat(rotation);
-	globalTransformMatrix = float4x4::Scale(scale, float3(0, 0, 0)) * globalTransformMatrix;
-	globalTransformMatrix.float4x4::SetTranslatePart(position.x, position.y, position.z);
+	dataTransformation->destiny = dataTransformation->position;
+	dataTransformation->eulerAngles = dataTransformation->rotation.ToEulerXYZ();
+	dataTransformation->angle = dataTransformation->rotation.Angle();
+	dataTransformation->rotation = dataTransformation->rotation;
+	dataTransformation->globalTransformMatrix = float4x4::FromQuat(dataTransformation->rotation);
+	dataTransformation->globalTransformMatrix = float4x4::Scale(dataTransformation->scale, float3(0, 0, 0)) * dataTransformation->globalTransformMatrix;
+	dataTransformation->globalTransformMatrix.float4x4::SetTranslatePart(dataTransformation->position.x, dataTransformation->position.y, dataTransformation->position.z);
 
-	localTransformMatrix = globalTransformMatrix;
+	dataTransformation->localTransformMatrix = dataTransformation->globalTransformMatrix;
 }
 
 
@@ -271,26 +275,29 @@ void CTransformation::TransUpdate()
 	CMesh* mesh = (CMesh*)object->GetComponent(COMP_MESH);
 	
 
+	dataTransformation->eulerAngles.x *= DEGTORAD;
+	dataTransformation->eulerAngles.y *= DEGTORAD;
+	dataTransformation->eulerAngles.z *= DEGTORAD;
+	dataTransformation->rotation = Quat::FromEulerXYZ(dataTransformation->eulerAngles.x, dataTransformation->eulerAngles.y, dataTransformation->eulerAngles.z);
+	dataTransformation->eulerAngles.x *= RADTODEG;
+	dataTransformation->eulerAngles.y *= RADTODEG;
+	dataTransformation->eulerAngles.z *= RADTODEG;
+
+	dataTransformation->globalTransformMatrix = float4x4::FromQuat(dataTransformation->rotation);
+	dataTransformation->globalTransformMatrix = float4x4::Scale(dataTransformation->scale, float3(0, 0, 0)) * dataTransformation->globalTransformMatrix;
+	dataTransformation->globalTransformMatrix.float4x4::SetTranslatePart(dataTransformation->position.x, dataTransformation->position.y, dataTransformation->position.z);
+
+	if (object != nullptr)
+	{
+		CTransformation* parentTrans = (CTransformation*)object->GetParent()->GetComponent(COMP_TRANSFORMATION);
 	
+		if (parentTrans != nullptr)
+			dataTransformation->globalTransformMatrix = parentTrans->dataTransformation->globalTransformMatrix* dataTransformation->globalTransformMatrix;
+		
+	}
 
-	eulerAngles.x *= DEGTORAD;
-	eulerAngles.y *= DEGTORAD;
-	eulerAngles.z *= DEGTORAD;
-	rotation = Quat::FromEulerXYZ(eulerAngles.x, eulerAngles.y, eulerAngles.z);
-	eulerAngles.x *= RADTODEG;
-	eulerAngles.y *= RADTODEG;
-	eulerAngles.z *= RADTODEG;
-	globalTransformMatrix = float4x4::FromQuat(rotation);
-	globalTransformMatrix = float4x4::Scale(scale, float3(0, 0, 0)) * globalTransformMatrix;
-	globalTransformMatrix.float4x4::SetTranslatePart(position.x, position.y, position.z);
-
-
-	//mesh->debugBox.TransformAsAABB(GetTransMatrix());
-	
-	SetLocalTrans(object->GetParent());
 	object->UpdateTranformChilds();
-
-	UpdateTrans = false;
+	dataTransformation->SetUpdateTrans(false);
 }
 
 void CTransformation::UpdateTransFromParent(GameObject * parent)
@@ -298,10 +305,10 @@ void CTransformation::UpdateTransFromParent(GameObject * parent)
 	CTransformation* parentTrans = (CTransformation*)parent->GetComponent(COMP_TRANSFORMATION);
 	if (parentTrans != nullptr)
 	{
-		globalTransformMatrix = parentTrans->localTransformMatrix * globalTransformMatrix;
+		dataTransformation->globalTransformMatrix = parentTrans->dataTransformation->localTransformMatrix * dataTransformation->globalTransformMatrix;
 		float4x4 temp;
-		globalTransformMatrix.Decompose(destiny, temp, scale);
-		eulerAngles = temp.ToEulerXYZ();
+		dataTransformation->globalTransformMatrix.Decompose(dataTransformation->destiny, temp, dataTransformation->scale);
+		dataTransformation->eulerAngles = temp.ToEulerXYZ();
 		TransUpdate();
 	}
 }
@@ -313,33 +320,33 @@ void CTransformation::SetLocalTrans(GameObject * parent)
 		CTransformation* parentTrans = (CTransformation*)parent->GetComponent(COMP_TRANSFORMATION);
 		if (parentTrans != nullptr)
 		{
-			float3 localPos = position - parentTrans->position;
-			Quat localRot = rotation * parentTrans->rotation.Conjugated();
-			float3 localScale = scale.Mul(parentTrans->scale.Recip());
+			float3 localPos = dataTransformation->position - parentTrans->dataTransformation->position;
+			Quat localRot = dataTransformation->rotation * parentTrans->dataTransformation->rotation.Conjugated();
+			float3 localScale = dataTransformation->scale.Mul(parentTrans->dataTransformation->scale.Recip());
 
-			localTransformMatrix = float4x4::FromQuat(localRot);
-			globalTransformMatrix = float4x4::Scale(localScale, float3(0, 0, 0)) * globalTransformMatrix;
-			globalTransformMatrix.float4x4::SetTranslatePart(localPos.x, localPos.y, localPos.z);
+			dataTransformation->localTransformMatrix = float4x4::FromQuat(localRot);
+			dataTransformation->globalTransformMatrix = float4x4::Scale(localScale, float3(0, 0, 0)) * dataTransformation->globalTransformMatrix;
+			dataTransformation->globalTransformMatrix.float4x4::SetTranslatePart(localPos.x, localPos.y, localPos.z);
 		}
 		else
 		{
-			localTransformMatrix = globalTransformMatrix;
+			dataTransformation->localTransformMatrix = dataTransformation->globalTransformMatrix;
 		}
 	}
 	else
 	{
-		localTransformMatrix = globalTransformMatrix;
+		dataTransformation->localTransformMatrix = dataTransformation->globalTransformMatrix;
 	}
 }
 
 void CTransformation::SetPos(float3 pos)
 {
-	position = pos;
+	dataTransformation->position = pos;
 }
 
 float4x4 CTransformation::GetTransMatrix()
 {
-	return globalTransformMatrix;
+	return dataTransformation->globalTransformMatrix;
 }
 
 

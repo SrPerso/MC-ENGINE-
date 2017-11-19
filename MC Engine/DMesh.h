@@ -10,8 +10,13 @@ class DMesh : public DContainer
 {
 public:
 
-	DMesh(DType type = D_MESH);
-	~DMesh();
+	DMesh(int UID, DType type = D_MESH);
+	virtual ~DMesh();
+
+
+	bool LoadInMemory();
+	bool UnloadFromMemory() ;
+
 public:
 
 	uint nVertex = 0;

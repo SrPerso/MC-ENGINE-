@@ -9,6 +9,13 @@
 class DTexture : public DContainer
 {
 public:
+	DTexture(int UID, DType resType = D_TEXTURE);
+	DTexture::~DTexture();
+
+	bool LoadInMemory();
+	bool UnloadFromMemory();
+
+public:
 
 	uint idTexCoords = 0;
 	//float* texCoords = nullptr;
@@ -16,10 +23,6 @@ public:
 	uint image = 0;
 	std::string textNamePath;
 	std::string textureName;
-
-public:
-	DTexture(DType resType = D_TEXTURE);
-	DTexture::~DTexture();
 
 };
 

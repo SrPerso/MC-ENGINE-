@@ -14,15 +14,14 @@ class DTransformation;
 class ImporterMesh : public Importer
 {
 	friend class ModuleDataManager;
-
 public:
 	ImporterMesh();
 	~ImporterMesh();
 
-	DMesh* ImportMesh(aiMesh*buffer, GameObject* object, int id);
+	bool ImportMesh(aiMesh*buffer, GameObject* object, const char* id);
 
-	DMesh* Load(const void* buffer, const char* loadFile, int id);
-	bool Save(const void* buffer, const char * saverFile, int id) ;
+	DMesh* Load(const void* buffer, const char* loadFile, const char* id);
+	bool Save(const void* buffer, const char * saverFile) ;
 
 };
 
@@ -30,12 +29,12 @@ class ImporterTrans : public Importer
 {
 	friend class ModuleDataManager;
 public:
-	ImporterTrans();
-	~ImporterTrans(); 
+	ImporterTrans(){}
+	~ImporterTrans(){}
 
-	DTransformation* ImportTrans(aiNode* node, GameObject* object, uint id);
+	DTransformation* ImportTrans(aiNode* node)const;
 
-	DTransformation* Load(const void* buffer, const char* loadFile, uint id);
+	DTransformation* Load(const void* buffer, const char* loadFile, const char *  id);
 	bool Save(const void* buffer, const char * saverFile, uint id) override;
 
 };

@@ -15,9 +15,11 @@ public:
 	ModuleCamera3D(Application* app, bool start_enabled = true);
 	~ModuleCamera3D();
 
+	bool Init() override;
+
 	bool Start();
 	update_status Update(float dt);
-	bool CleanUp();
+	bool CleanUp() override;
 
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
 	void LookAt(const vec3 &Spot);
@@ -37,7 +39,7 @@ public:
 	AABB* GeometryCentre;
 
 	vec3 centreB;
-	DCamera* dcamera = nullptr;
+	DCamera* dcamera;
 	CCamera* mainCam = nullptr;
 	CCamera* editorCam= nullptr;
 	GameObject* selected = nullptr;

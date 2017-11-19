@@ -1,13 +1,14 @@
 #include "DTransformation.h"
+#include "Application.h"
 
-
-DTransformation::DTransformation(float3 pos, float3 scales, Quat rot)
+DTransformation::DTransformation(int UID,float3 pos, float3 scales, Quat rot) :DContainer(UID, D_TRANSFORMATION)
 {
 	
 	position = pos;
 	destiny = pos;
 	scale = scales;
 	eulerAngles = rot.ToEulerXYZ();
+	eulerAngles *= RADTODEG;
 	angle =rot.Angle();
 	rotation = rot;
 	globalTransformMatrix = float4x4::FromQuat(rot);
@@ -77,8 +78,28 @@ void DTransformation::SetGlobalRotation(Quat newRotation)
 	globalRotation = newRotation;
 }
 
+bool DTransformation::GetUpdateTrans() const
+{
+	return UpdateTrans;
+}
+
+void DTransformation::SetUpdateTrans(bool boool)
+{
+	UpdateTrans = boool;
+}
+
 DTransformation::~DTransformation()
 {
 
+}
+
+bool DTransformation::LoadInMemory()
+{
+	return true;
+}
+
+bool DTransformation::UnloadFromMemory()
+{
+	return true;
 }
 

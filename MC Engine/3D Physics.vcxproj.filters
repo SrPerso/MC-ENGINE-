@@ -55,6 +55,9 @@
     <Filter Include="Engine\Tools\ImGuizmo">
       <UniqueIdentifier>{7a8724c5-6735-4b8e-b402-622abb514659}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Tools\mmgr">
+      <UniqueIdentifier>{cdae0bb5-3ba4-4ee5-ad11-75917b1acd7e}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Engine\Modules\QuadTree">
       <UniqueIdentifier>{82ed52f6-4b96-4a9a-adb6-635202d397d8}</UniqueIdentifier>
     </Filter>
@@ -104,15 +107,6 @@
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Engine\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="ModulePhysics3D.h">
-      <Filter>Engine\Engine\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysBody3D.h">
-      <Filter>Engine\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysVehicle3D.h">
-      <Filter>Engine\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="imGUI\imgui.h">
       <Filter>Engine\Tools\ImGui</Filter>
@@ -381,6 +375,13 @@
     <ClInclude Include="ImGuizmo\ImGuizmo.h">
       <Filter>Engine\Tools\ImGuizmo</Filter>
     </ClInclude>
+
+    <ClInclude Include="mmgr\mmgr.h">
+      <Filter>Engine\Tools\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="mmgr\nommgr.h">
+      <Filter>Engine\Tools\mmgr</Filter>
+    </ClInclude>
     <ClInclude Include="QuadTree.h">
       <Filter>Engine\Engine\Modules\QuadTree</Filter>
     </ClInclude>
@@ -421,15 +422,6 @@
     </ClCompile>
     <ClCompile Include="ModuleSceneIntro.cpp">
       <Filter>Engine\Engine\Modules\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="ModulePhysics3D.cpp">
-      <Filter>Engine\Engine\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysBody3D.cpp">
-      <Filter>Engine\Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysVehicle3D.cpp">
-      <Filter>Engine\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="imGUI\imgui.cpp">
       <Filter>Engine\Tools\ImGui</Filter>
@@ -613,6 +605,9 @@
     </ClCompile>
     <ClCompile Include="ImGuizmo\ImGuizmo.cpp">
       <Filter>Engine\Tools\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="mmgr\mmgr.cpp">
+      <Filter>Engine\Tools\mmgr</Filter>
     </ClCompile>
     <ClCompile Include="QuadTree.cpp">
       <Filter>Engine\Engine\Modules\QuadTree</Filter>

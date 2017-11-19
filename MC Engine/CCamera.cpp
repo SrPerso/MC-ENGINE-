@@ -1,74 +1,59 @@
 #include "CCamera.h"
+#include "Application.h"
 #include "ModuleDataFile.h"
-
-CCamera::CCamera(Component_Type type, DCamera * data) :Component(UID, COMP_CAMERA)
-{
-
-	name = "Camera";
-	this->aspectRatio = aspectRatio;
-	this->aspectRatio = (float)16 / 9;
-	frustum.type = data->frustum.type;
-	frustum.pos = data->frustum.pos;
-	frustum.front = data->frustum.front;
-	frustum.up = data->frustum.up;
-	frustum.nearPlaneDistance = data->frustum.nearPlaneDistance;
-	frustum.farPlaneDistance = data->frustum.farPlaneDistance;
-	FOV = 15;
-	frustum.verticalFov = DEGTORAD * FOV;
-	frustum.horizontalFov = 2.f * atanf((tanf(frustum.verticalFov * 0.5f)) * (aspectRatio));
-
-	frustum.ProjectionMatrix();
-	dType = D_CAMERA;
-	//frustumCulling = true;
-
-}
-
+#include "ModuleDataManager.h"
+#include "DCamera.h"
 
 
 CCamera::CCamera(int UID, Component_Type type, DCamera * data) :Component(UID,COMP_CAMERA)
-{
+{	
 	
-		name = "Camera";
-		this->aspectRatio = aspectRatio;
-		this->aspectRatio = (float)16 / 9;
-		frustum.type = data->frustum.type;
-		frustum.pos = data->frustum.pos;
-		frustum.front = data->frustum.front;
-		frustum.up = data->frustum.up;
-		frustum.nearPlaneDistance = data->frustum.nearPlaneDistance;
-		frustum.farPlaneDistance = data->frustum.farPlaneDistance;
-		FOV = 15;
-		frustum.verticalFov = DEGTORAD * FOV;
-		frustum.horizontalFov = 2.f * atanf((tanf(frustum.verticalFov * 0.5f)) * (aspectRatio));
 
-		frustum.ProjectionMatrix();
-		dType = D_CAMERA;
-		//frustumCulling = true;
+	if (data)
+	{
+		dataCamera = data;
+		this->dataCamera->aspectRatio = data->aspectRatio;
+		this->dataCamera->aspectRatio = (float)16 / 9;
+		dataCamera->Active = false;
+	}
+
+	dataCamera->FOV = 15;
+	dataCamera->frustum.verticalFov = DEGTORAD * dataCamera->FOV;
+	dataCamera->frustum.horizontalFov = 2.f * atanf((tanf(dataCamera->frustum.verticalFov * 0.5f)) * (dataCamera->aspectRatio));
+
+	dataCamera->frustum.ProjectionMatrix();
+	dType = D_CAMERA;
+	//frustumCulling = true;
+
+	name = "Camera";
+
 
 }
 
 CCamera::CCamera(GameObject * object, int UID, Component_Type type, DCamera * data) :Component(object, UID, COMP_CAMERA)
 {
+
+	dataCamera = (DCamera*)App->datamanager->CreateNewDataContainer(D_CAMERA, App->randGen->Int());
+
+
 	if (data)
 	{
-		frustum.type = data->frustum.type;
-		frustum.pos = data->frustum.pos;
-		frustum.front = data->frustum.front;
-		frustum.up = data->frustum.up;
-		frustum.nearPlaneDistance = data->frustum.nearPlaneDistance;
-		frustum.farPlaneDistance = data->frustum.farPlaneDistance;
-
+		dataCamera->frustum.type = data->frustum.type;
+		dataCamera->frustum.pos = data->frustum.pos;
+		dataCamera->frustum.front = data->frustum.front;
+		dataCamera->frustum.up = data->frustum.up;
+		dataCamera->frustum.nearPlaneDistance = data->frustum.nearPlaneDistance;
+		dataCamera->frustum.farPlaneDistance = data->frustum.farPlaneDistance;
+		dataCamera->Active = false;
 	}
 
-
-	this->aspectRatio = aspectRatio;
-	this->aspectRatio = (float)16 / 9;
+	this->dataCamera->aspectRatio = (float)16 / 9;
 	
-	FOV = 15;
-	frustum.verticalFov = DEGTORAD * FOV;
-	frustum.horizontalFov = 2.f * atanf((tanf(frustum.verticalFov * 0.5f)) * (aspectRatio));
+	dataCamera->FOV = 15;
+	dataCamera->frustum.verticalFov = DEGTORAD * dataCamera->FOV;
+	dataCamera->frustum.horizontalFov = 2.f * atanf((tanf(dataCamera->frustum.verticalFov * 0.5f)) * (dataCamera->aspectRatio));
 
-	frustum.ProjectionMatrix();
+	dataCamera->frustum.ProjectionMatrix();
 	dType = D_CAMERA;
 	//frustumCulling = true;
 
@@ -83,9 +68,9 @@ CCamera::~CCamera()
 
 void CCamera::SetPos(float3 newpos, float3 front, float3 up)
 {
-	frustum.pos = newpos;
-	frustum.front = front;
-	frustum.up = up;
+	dataCamera->frustum.pos = newpos;
+	dataCamera->frustum.front = front;
+	dataCamera->frustum.up = up;
 }
 
 void CCamera::OnUpdate(float dt)
@@ -105,63 +90,59 @@ void CCamera::OnEditor()
 
 void CCamera::OnInspector()
 {
+	ImGui::Checkbox("CULLING", &dataCamera->needToCull);
+	ImGui::Checkbox("ACTIVE", &dataCamera->Active);
 	
-		ImGui::Text("Position:");
-		ImGui::SliderFloat("X", &frustum.pos.x, -100, 100);
-		ImGui::SliderFloat("Y", &frustum.pos.y, -100, 100);
-		ImGui::SliderFloat("Z", &frustum.pos.z, -100, 100);
+}
 
-
-
-		ImGui::Checkbox("CULLING", &needToCull);
-		ImGui::Checkbox("ACTIVE", &Active);
-	
+void CCamera::OnCleanUp()
+{
 }
 
 void CCamera::OnSave(DataJSON & file) const
 {
-	file.AddInt("Component UID", UID);
+	file.AddInt("Component UID",UID);
 	//file.AddInt("Component Type", Ctype);
 
-	file.AddFloat("FOV", FOV);
-	file.AddFloat("Aspect Radio", aspectRatio);
+	file.AddFloat("FOV", dataCamera->FOV);
+	file.AddFloat("Aspect Radio", dataCamera->aspectRatio);
 
-	file.AddFloat("Frustum Far", frustum.farPlaneDistance);
-	file.AddFloat("Frustum Near", frustum.nearPlaneDistance);
-	file.AddFloat("HFOV", frustum.horizontalFov);
-	file.AddFloat("VFOV", frustum.verticalFov);
-	file.AddArrayF("FrustumPos", frustum.pos.ptr(), 3);
-	file.AddArrayF("FrustumUp", frustum.up.ptr(), 3);
-	file.AddArrayF("FrustumFront", frustum.front.ptr(), 3);
+	file.AddFloat("Frustum Far", dataCamera->frustum.farPlaneDistance);
+	file.AddFloat("Frustum Near", dataCamera->frustum.nearPlaneDistance);
+	file.AddFloat("HFOV", dataCamera->frustum.horizontalFov);
+	file.AddFloat("VFOV", dataCamera->frustum.verticalFov);
+	file.AddArrayF("FrustumPos", dataCamera->frustum.pos.ptr(), 3);
+	file.AddArrayF("FrustumUp", dataCamera->frustum.up.ptr(), 3);
+	file.AddArrayF("FrustumFront", dataCamera->frustum.front.ptr(), 3);
 
-	file.AddBool("Component Active", Active);
-	file.AddBool("needToCull", needToCull);
+	file.AddBool("Component Active", dataCamera->Active);
+	file.AddBool("needToCull", dataCamera->needToCull);
 }
 
 void CCamera::OnLoad(DataJSON & file)
 {
 	UID = file.GetFloat("Component UID");
 
-	FOV = file.GetFloat("FOV");
-	aspectRatio = file.GetFloat("Aspect Radio");
+	dataCamera->FOV = file.GetFloat("FOV");
+	dataCamera->aspectRatio = file.GetFloat("Aspect Radio");
 
-	frustum.farPlaneDistance = file.GetFloat("Frustum Far");
-	frustum.nearPlaneDistance = file.GetFloat("Frustum Near");
-	frustum.horizontalFov = file.GetFloat("HFOV");
-	frustum.verticalFov = file.GetFloat("VFOV");
+	dataCamera->frustum.farPlaneDistance = file.GetFloat("Frustum Far");
+	dataCamera->frustum.nearPlaneDistance = file.GetFloat("Frustum Near");
+	dataCamera->frustum.horizontalFov = file.GetFloat("HFOV");
+	dataCamera->frustum.verticalFov = file.GetFloat("VFOV");
 
-	frustum.pos.x = file.GetFloat("FrustumPos", 0);
-	frustum.pos.y = file.GetFloat("FrustumPos", 1);
-	frustum.pos.z = file.GetFloat("FrustumPos", 2);
-	frustum.up.x = file.GetFloat("FrustumUp", 0);
-	frustum.up.y = file.GetFloat("FrustumUp", 1);
-	frustum.up.z = file.GetFloat("FrustumUp", 2);
-	frustum.front.x = file.GetFloat("FrustumFront", 0);
-	frustum.front.y = file.GetFloat("FrustumFront", 1);
-	frustum.front.z = file.GetFloat("FrustumFront", 2);
+	dataCamera->frustum.pos.x = file.GetFloat("FrustumPos", 0);
+	dataCamera->frustum.pos.y = file.GetFloat("FrustumPos", 1);
+	dataCamera->frustum.pos.z = file.GetFloat("FrustumPos", 2);
+	dataCamera->frustum.up.x = file.GetFloat("FrustumUp", 0);
+	dataCamera->frustum.up.y = file.GetFloat("FrustumUp", 1);
+	dataCamera->frustum.up.z = file.GetFloat("FrustumUp", 2);
+	dataCamera->frustum.front.x = file.GetFloat("FrustumFront", 0);
+	dataCamera->frustum.front.y = file.GetFloat("FrustumFront", 1);
+	dataCamera->frustum.front.z = file.GetFloat("FrustumFront", 2);
 
-	Active = file.GetBoolean("Component Active");
-	needToCull = file.GetBoolean("needToCull");
+	dataCamera->Active = file.GetBoolean("Component Active");
+	dataCamera->needToCull = file.GetBoolean("needToCull");
 
 }
 
@@ -170,7 +151,7 @@ void CCamera::DrawFrustum()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	float3 vertices[8];
-	frustum.GetCornerPoints(vertices);
+	dataCamera->frustum.GetCornerPoints(vertices);
 
 	glColor3f(1.0f, 0.0f, 0.0f);
 
@@ -214,22 +195,22 @@ void CCamera::DrawFrustum()
 
 bool CCamera::Contains(const AABB & aabb) const
 {
-	return frustum.Contains(aabb);
+	return dataCamera->frustum.Contains(aabb);
 }
 
 Frustum CCamera::GetFrustum() const
 {
-	return frustum;
+	return dataCamera->frustum;
 }
 
 void CCamera::SetFov()
 {
-	frustum.verticalFov = DEGTORAD * FOV;
-	frustum.horizontalFov = 2.f * atanf((tanf(frustum.verticalFov * 0.5f)) * (aspectRatio));
+	dataCamera->frustum.verticalFov = DEGTORAD * dataCamera->FOV;
+	dataCamera->frustum.horizontalFov = 2.f * atanf((tanf(dataCamera->frustum.verticalFov * 0.5f)) * (dataCamera->aspectRatio));
 
 }
 
 const float * CCamera::GetViewMatrix() const
 {
-	return frustum.ViewProjMatrix().Transposed().ptr();
+	return dataCamera->frustum.ViewProjMatrix().Transposed().ptr();
 }

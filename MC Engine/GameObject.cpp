@@ -19,7 +19,7 @@ GameObject::GameObject()
 
 	if (parent != nullptr)
 	{
-		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
+	//	this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
 		parent->AddChild(this);
 		//	SetParentUID(parent->GetGOUId());
 	}
@@ -28,6 +28,8 @@ GameObject::GameObject()
 		SetParentUID(0);
 		parent->AddChild(this);
 	}
+
+//	this->CreateComponent(COMP_TRANSFORMATION, App->randGen->Int());
 
 	name.append(std::to_string(GameOIbject_ID));
 }
@@ -47,13 +49,17 @@ GameObject::GameObject(GameObject* parent): parent(parent)
 	{
 		this->GameOIbject_ID = parent->GameOIbject_ID + parent->childs.size() + 1;
 		parent->AddChild(this);
-	//	SetParentUID(parent->GetGOUId());
+
 	}
 	else 
-	{
-		
+	{	
+
 		SetParentUID(0);
 	}
+
+
+
+
 
 	name.append(std::to_string(GameOIbject_ID));
 
@@ -121,6 +127,8 @@ void GameObject::DeleteChild(GameObject * objectToDelete)
 		if (it != childs.end()) 
 		{
 			childs.erase(it);
+			(*it)->CleanUp();
+			delete (*it);
 		}		
 	}
 }
@@ -129,6 +137,8 @@ void GameObject::DeleteChilds()
 {
 	while (!childs.empty())
 	{
+		childs.back()->CleanUp();
+
 		delete childs.back();
 		childs.back() = nullptr;
 
@@ -270,7 +280,7 @@ Component * GameObject::CreateComponent(Component_Type type, int UID, const void
 		
 		break;
 	case COMP_CAMERA:
-		//DCamera* camera = new DCamera();
+	
 		ret = new CCamera(this, newUID, COMP_CAMERA, (DCamera*)buffer);
 		this->components.push_back(ret);
 
@@ -325,6 +335,7 @@ void GameObject::DeleteComponent(Component * comp)
 		if ((*it) == comp)
 		{
 			components.erase(it);
+			delete (*it);
 		}
 	}
 
@@ -474,9 +485,9 @@ void GameObject::Update(float dt)
 
 		if (camera != nullptr)
 		{
-			if (camera->needToCull) 
+			if (camera->dataCamera->needToCull) 
 			{
-				AABB recalculatedBox = debuger->debugBox;
+				AABB recalculatedBox = debuger->dataMesh->debugBox;
 
 				recalculatedBox.TransformAsAABB(transform->GetTransMatrix());				
 
@@ -494,12 +505,27 @@ void GameObject::Update(float dt)
 	}
 }
 
-void GameObject::cleanUp()
+void GameObject::CleanUp()
 {
+	while (!components.empty())
+	{
+		components.back()->OnCleanUp();
+		delete components.back();
+		components.back() = nullptr;
 
-	for (std::vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
-		(*it)->cleanUp();
+		components.pop_back();
+	}
+	components.clear();
 
+	while (!childs.empty())
+	{
+		childs.back()->CleanUp();
+		delete childs.back();
+		childs.back() = nullptr;
+
+		childs.pop_back();
+	}
+	childs.clear();
 }
 
 void GameObject::OnEditor()
@@ -524,18 +550,16 @@ void GameObject::OnEditor()
 	{
 	
 		App->ui->show_Inspector_window = false;
+		CTransformation*TryTransform = (CTransformation*)GetComponent(COMP_TRANSFORMATION);
 		CMesh* meshTry = (CMesh*)GetComponent(COMP_MESH);
 		CCamera* camTry = (CCamera*)GetComponent(COMP_CAMERA);
-		if (meshTry != nullptr)
+		if (TryTransform != nullptr)
 		{
-			if (selecting == false) {
-
+			if (selecting == false) 
+			{
 					App->ui->show_Inspector_window = false;
-					App->scene_intro->ObjectSelected(this);		
-			
+					App->scene_intro->ObjectSelected(this);					
 			}
-
-
 		}
 		else if (camTry != nullptr)
 		{
@@ -673,6 +697,7 @@ void GameObject::OnDeserialize(DataJSON & file)
 			{
 				CCamera*  cCamera = new CCamera(this, componentUID);
 				cCamera->OnLoad(componentConfig);
+	
 				this->AddComponent(cCamera);
 
 				break;

@@ -14,12 +14,9 @@ class GameObject;
 enum Component_Type;
 
 
-class CCamera : public Component, public DCamera
+class CCamera : public Component
 {
 public:
-
-	CCamera(Component_Type type = COMP_UNKNOWN, DCamera* data = nullptr);
-
 	CCamera(int UID, Component_Type type = COMP_UNKNOWN, DCamera* data = nullptr);
 	
 	CCamera(GameObject* object, int UID, Component_Type type = COMP_TRANSFORMATION, DCamera* data = nullptr);
@@ -28,6 +25,8 @@ public:
 	void OnUpdate(float dt) override;
 	void OnEditor() override;
 	void OnInspector() override;
+
+	void OnCleanUp() override;
 
 	void OnSave(DataJSON&file)const override;
 	void OnLoad(DataJSON&file) override;
@@ -39,7 +38,8 @@ public:
 
 	void SetFov();
 	const float* GetViewMatrix() const;
-	
+public:
+	DCamera* dataCamera;
 };
 
 #endif

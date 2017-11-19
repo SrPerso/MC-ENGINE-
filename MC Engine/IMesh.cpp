@@ -21,14 +21,19 @@ ImporterMesh::~ImporterMesh()
 {
 }
 
-DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, int id)
+bool ImporterMesh::ImportMesh(aiMesh * newMesh, GameObject* object, const char* name)
 {
 	LOGUI("-------------------------------------------");
-	aiMesh* newMesh = buffer;
+
 
 	if (newMesh != nullptr)
 	{
-		DMesh* mesh = new DMesh();
+		DMesh* mesh = (DMesh*)App->datamanager->CreateNewDataContainer(D_MESH, App->randGen->Int());
+
+		mesh->file = name;
+		mesh->exportedFile = "Library/Mesh/";
+		mesh->exportedFile += name;
+		mesh->exportedFile += ".MCmesh";
 		
 		//VERTEX------------------------------------------------------------------------------
 
@@ -120,55 +125,38 @@ DMesh* ImporterMesh::ImportMesh(aiMesh * buffer, GameObject* object, int id)
 		{
 			mesh->texCoords = new float[mesh->nVertex * 3];
 			memcpy(mesh->texCoords, newMesh->mTextureCoords[0], sizeof(float) * mesh->nVertex * 3);
-			
+
 			glGenBuffers(1, (GLuint*) &(mesh->idTexCoords));
 			glBindBuffer(GL_ARRAY_BUFFER, mesh->idTexCoords);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->nVertex * 3, mesh->texCoords, GL_STATIC_DRAW);
 		}
-		
+
 		mesh->debugBox.SetNegativeInfinity();//
 		mesh->debugBox.Enclose((float3*)mesh->Vertex, mesh->nVertex);
-		
-		
+
 		App->camera->CenterCameraToObject(&mesh->debugBox);
 		object->SetLocalTransform();
 
 		LOGUI("-------------------------------------------");
 
-		//delete mesh;	
-		Save(mesh, nullptr, id);
-	
-		////mesh = nullptr;
 
-		//DMesh* mesh2 = new DMesh();
-
-		//mesh2 = Load(mesh, nullptr, id);
-		//
-		//return mesh2;
-		return mesh;
-
-}
+		bool ret = false;
+		ret = Save(mesh, name);
+		return ret;
+	}
 
 	else
 	{
-		return nullptr;
+		return false;
 		LOGUI("[ERROR]{Importer}- The mesh has not vertices");
 	}
-	return nullptr;
+
 }
 
-ImporterTrans::ImporterTrans()
+DTransformation* ImporterTrans::ImportTrans(aiNode* node )const
 {
-}
-
-ImporterTrans::~ImporterTrans()
-{
-}
-
-DTransformation* ImporterTrans::ImportTrans(aiNode* node, GameObject* object, uint id)
-{
-	if (node != nullptr)
-	{
+	//if (node != nullptr)
+	//{
 		aiVector3D move;
 		aiVector3D scale;
 		aiQuaternion rotation;
@@ -178,22 +166,18 @@ DTransformation* ImporterTrans::ImportTrans(aiNode* node, GameObject* object, ui
 		float3 pos(move.x, move.y, move.z);
 		float3 sca(scale.x, scale.y, scale.z);
 		Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
+			
+		DTransformation* ret = new DTransformation(App->randGen->Int(),pos, sca, rot);
 
-		DTransformation* transl = new DTransformation(pos, sca, rot);
-		
-//		Save(transl, nullptr, id);
-
-		return transl;
-	}
+		return ret;
+	/*}
 	return nullptr;
-
+*/
 }
 
-DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile, uint id)
+DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile, const char *  name)
 {
-
-
-	DTransformation* data = new DTransformation();
+	DTransformation* data = (DTransformation*)App->datamanager->CreateNewDataContainer(D_TRANSFORMATION, App->randGen->Int());
 
 	std::string path; //path to load
 
@@ -201,7 +185,7 @@ DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile
 	{
 		path = "Library/Mesh";
 		path.append("/");
-		path.append(std::to_string(id));
+		path.append(name);
 		path.append(".MCtransform");
 	}
 	else
@@ -227,8 +211,7 @@ DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile
 
 
 		if (file.read(dataFile, size))
-		{
-	
+		{	
 			LOGUI("[READING]- %s", path.c_str());
 		}
 		else
@@ -263,18 +246,6 @@ DTransformation * ImporterTrans::Load(const void * buffer, const char * loadFile
 	uint posision = ranges[0];
 	uint scale = ranges[1];
 	uint rotation = ranges[2];
-
-	//
-	////--- 
-	//cursor += bytes;
-	//bytes = sizeof(float) *posision;
-	//data->Index = new float[posision];
-
-	//memcpy(data->Index, cursor, bytes);
-
-	//todo
-
-
 
 	LOGUI("[LOADED]{Trasformation}- %s", path.c_str());
 
@@ -397,7 +368,7 @@ bool ImporterTrans::Save(const void * buffer, const char * saverFile, uint id)
 	return ret;
 }
 
-bool ImporterMesh::Save(const void* buffer, const char * saverFile, int id)
+bool ImporterMesh::Save(const void* buffer, const char * saverFile)
 {
 	bool ret = true;
 	// amount of indices / vertices / colors / normals / texture_coords / AABB
@@ -410,8 +381,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, int id)
 
 	path = "Library/Mesh";
 	path.append("/");
-	path.append("m");
-	path.append(std::to_string(id));
+	path.append(saverFile);
 	path.append(".MCmesh");
 
 	LOGUI("[SAVING]{Mesh}- %s", path.c_str());
@@ -505,7 +475,7 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, int id)
 		memcpy(cursor, mesh->colors, allocsize);
 	}
 
-	std::ofstream file_end(path.c_str(), std::ofstream::out | std::ofstream::binary);
+	std::ofstream file_end(path.c_str(),/* std::ofstream::out | */std::ofstream::binary);
 
 	if (file_end.good()) //write file
 		file_end.write(data, size);
@@ -519,18 +489,17 @@ bool ImporterMesh::Save(const void* buffer, const char * saverFile, int id)
 
 	return ret;
 }
-DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, int id)
+DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, const char* name)
 {
-	DMesh* data = new DMesh();
-	//data = (DMesh*)buffer;
+	DMesh* data = (DMesh*)App->datamanager->CreateNewDataContainer(D_MESH, App->randGen->Int());
+
 	std::string path; //path to load
 
 	if (loadFile == nullptr)
 	{
 	path = "Library/Mesh";
 	path.append("/");
-	path.append("m");
-	path.append(std::to_string(id));
+	path.append(name);
 	path.append(".MCmesh");
 	}
 	else
@@ -568,6 +537,8 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, int id)
 		}
 
 		file.close();
+
+
 	}
 	else
 		LOGUI("[ERROR]- loading %s", path);
@@ -581,6 +552,7 @@ DMesh* ImporterMesh::Load(const void* buffer, const char * loadFile, int id)
 	size = file.gcount();
 
 	char* cursor = datafile;
+
 
 	// load numbers --------
 
