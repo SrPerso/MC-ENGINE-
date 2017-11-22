@@ -11,7 +11,14 @@ CTransformation::CTransformation(GameObject * object,int UID, Component_Type typ
 	
 	if (data)
 	{
-		dataTransformation = data;
+		dataTransformation->position = data->position;
+		dataTransformation->scale = data->scale;
+		dataTransformation->destiny = data->destiny;
+		dataTransformation->eulerAngles = data->eulerAngles;
+		dataTransformation->angle = data->angle;
+		dataTransformation->rotation = data->rotation;
+		dataTransformation->globalTransformMatrix = data->globalTransformMatrix;
+		dataTransformation->localTransformMatrix = data->localTransformMatrix;
 	}
 
 	if (object != nullptr)
@@ -44,7 +51,8 @@ void CTransformation::OnUpdate(float dt)
 	
 }
 
-void CTransformation::OnGuizmo() {
+void CTransformation::OnGuizmo() 
+{
 
 	ImGuizmo::Enable(true);
 	
@@ -90,9 +98,7 @@ void CTransformation::OnEditor()
 	if (ImGui::TreeNodeEx(name.c_str()))
 	{		
 		ImGui::TreePop();
-	}
-	
-	
+	}	
 }
 
 void CTransformation::OnInspector() {
@@ -293,7 +299,6 @@ void CTransformation::TransUpdate()
 	
 		if (parentTrans != nullptr)
 			dataTransformation->globalTransformMatrix = parentTrans->dataTransformation->globalTransformMatrix* dataTransformation->globalTransformMatrix;
-		
 	}
 
 	object->UpdateTranformChilds();

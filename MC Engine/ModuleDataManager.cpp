@@ -148,15 +148,11 @@ bool ModuleDataManager::ImportGameObject(std::string path, GameObject * parent, 
 		
 			int nUID = ImportFile(GameObjectSon, newMesh->mName.C_Str(), newMesh);
 
-
-			GameObjectSon->CreateComponent(COMP_MESH, -1, (DMesh*)GetContainerWithString(newMesh->mName.C_Str()));
-			
+			GameObjectSon->CreateComponent(COMP_MESH, -1, (DMesh*)GetContainer(nUID));			
 	
 			aiMaterial* newMaterial = scene->mMaterials[scene->mMeshes[node->mMeshes[i]]->mMaterialIndex];
 			GameObjectSon->CreateComponent(COMP_TEXTURE, -1, (DTexture*)importerTexture->ImportTexture(newMaterial, path.c_str()));
-
 			
-
 		}
 	}
 	GameObjectSon->InsertQuadTree();
@@ -335,8 +331,12 @@ int ModuleDataManager::ImportFile(GameObject * GO, const char * new_file_in_asse
 		}
 		
 	}
-	else
-		return UID;
+		else
+		{
+			UID = FindInMap(new_file_in_assets);
+			return UID;
+		}
+		
 
 
 	return UID;
